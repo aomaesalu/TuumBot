@@ -1,0 +1,45 @@
+#!/usr/bin/ruby
+# Copyright 2002-2007 Scott Lenser and James Bruce.
+# LICENSE: Distributed under the GNU General # Public Licence, version
+# 2, or (at your option) any later version.
+
+dir = ARGV.shift.chomp("/")
+
+obj_name = nil
+if(!ARGV[0].nil? && ARGV[0]=~/\.o$/)
+  obj_name = ARGV.shift
+end
+
+generated_h_files = ARGV
+
+line = $stdin.gets()
+parts = line.split(/:/)
+if(parts.size < 2)
+  exit 2
+end
+
+if(obj_name.nil?)
+  obj_name = File.join(dir,parts[0].strip())
+end
+dep_name = obj_name.clone()
+dep_name[-1,1] = "d"
+
+deps = parts[1]
+rest_of_file = $stdin.gets(nil)
+if(!rest_of_file.nil?)
+  deps += rest_of_file
+end
+
+print "#{obj_name} : #{deps}"
+
+deps.gsub!(%r%([^[:blank:]\\]\S+)%) {|filename|
+  if(generated_h_files.index(filename).nil?)
+    "$(wildcard #{filename})"
+  else
+    filename
+  end
+}
+
+print "\n#{dep_name} : #{deps}"
+
+exit 0
