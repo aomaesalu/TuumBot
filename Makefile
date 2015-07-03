@@ -3,7 +3,7 @@
 # Robotex 2015                                   #
 # University of Tartu                            #
 # Team:                                          #
-#   Ants-Oskar Mäesalu                           #
+#   Ants-Oskar MÃ¤esalu                           #
 #   Joonas Puura                                 #
 #   Andreas Sepp                                 #
 #   Meelik Kiik                                  #
