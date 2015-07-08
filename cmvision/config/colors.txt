@@ -1,0 +1,10 @@
+# <index> (color) "name" <min size>
+0 (  0   0   0) "Background"             1
+1 (255 128   0) "Orange (Ball)"          2
+2 (  0 128   0) "Field Green (Field)"    4
+3 (  0   0 255) "Blue (Team)"            4
+4 (255 255   0) "Yellow (Team)"          4
+5 (255 255 255) "White (Line)"           4
+6 (  0 255   0) "Bright Green (Marker)"  4
+7 (255   0 128) "Pink (Marker)"          4
+8 (  0 255 255) "Cyan (Marker)"          4
