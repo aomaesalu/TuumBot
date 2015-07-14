@@ -27,7 +27,7 @@ CFLAGS += -O2 -g
 # CFLAGS += -O2
 # CFLAGS += -O2
 
-CFLAGS += -std=c++11
+CFLAGS += -std=c++11 -march=x86-64
 
 # uncomment to turn off asserts
 # CFLAGS += -DNDEBUG

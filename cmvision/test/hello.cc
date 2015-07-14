@@ -18,7 +18,7 @@ int main(int argc,char **argv)
   Capture cap;
   LowVision vision;
 
-  const char *video_device = "/dev/video0";
+  const char *video_device = "/dev/video2";
   const int input_idx = 1;
   const int width  = 320;
   const int height = 240;
