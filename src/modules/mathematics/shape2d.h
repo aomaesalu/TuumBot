@@ -11,24 +11,18 @@
  *   Indrek Virro
  *   Mihkel Väljaots
 
- * Circle class
+ * 2-dimensional shape class
  * Contributors:
  *   Ants-Oskar Mäesalu
  */
 
-#ifndef CIRCLE_H
-#define CIRCLE_H
+#ifndef SHAPE2D_H
+#define SHAPE2D_H
 
-#include "shape2d.h"
-
-class Circle: public Shape2D {
-private:
-  double radius;
+class Shape2D {
 public:
-  Circle(const Circle&);
-  Circle(const double&);
-  void setRadius(const double&);
-  double getRadius() const;
+  virtual double getArea() const = 0;
+  virtual double getPerimeter() const = 0;
 };
 
-#endif // CIRCLE_H
+#endif // SHAPE2D_H

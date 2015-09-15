@@ -19,7 +19,9 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-class Rectangle {
+#include "shape2d.h"
+
+class Rectangle: public Shape2D {
 private:
   double x;
   double y;
@@ -28,8 +30,6 @@ public:
   Rectangle(const double&, const double&);
   void setX(const double&);
   void setY(const double&);
-  double getArea() const;
-  double getPerimeter() const;
   double getX() const;
   double getY() const;
 };
