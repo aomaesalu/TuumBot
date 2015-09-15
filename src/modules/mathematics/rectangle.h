@@ -23,15 +23,15 @@
 
 class Rectangle: public Shape2D {
 private:
-  double x;
-  double y;
+  double width;
+  double length;
 public:
   Rectangle(const Rectangle&);
   Rectangle(const double&, const double&);
-  void setX(const double&);
-  void setY(const double&);
-  double getX() const;
-  double getY() const;
+  void setWidth(const double&);
+  void setLength(const double&);
+  double getWidth() const;
+  double getLength() const;
 };
 
 #endif // RECTANGLE_H
