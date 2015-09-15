@@ -16,6 +16,8 @@
  *   Ants-Oskar Mäesalu
  */
 
+#include "point2d.h"
+
 Point2D::Point2D(const Point2D& other):
 x{other.getX()},
 y{other.getY()}
