@@ -16,6 +16,7 @@
  *   Ants-Oskar Mäesalu
  */
 
+#include "circle.h"
 #include "constants.h"
 
 Circle::Circle(const Circle& other):
