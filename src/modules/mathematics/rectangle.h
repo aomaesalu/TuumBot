@@ -29,6 +29,7 @@ public:
   void setX(const double&);
   void setY(const double&);
   double getArea() const;
+  double getPerimeter() const;
   double getX() const;
   double getY() const;
 };

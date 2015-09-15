@@ -40,6 +40,10 @@ double Rectangle::getArea() const {
   return x * y;
 }
 
+double Rectangle::getPerimeter() const {
+  return 2 * (a + b);
+}
+
 double Rectangle::getX() const {
   return x;
 }

@@ -16,6 +16,9 @@
  *   Ants-Oskar Mäesalu
  */
 
+#ifndef POINT2D_H
+#define POINT2D_H
+
 class Point2D {
 private:
   double x;
@@ -29,3 +32,5 @@ public:
   double getX() const;
   double getY() const;
 }
+
+#endif // POINT2D_H

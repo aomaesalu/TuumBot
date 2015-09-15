@@ -16,6 +16,9 @@
  *   Ants-Oskar Mäesalu
  */
 
+#ifndef LINE_H
+#define LINE_H
+
 #include "point2d.h"
 
 class Line {
@@ -34,3 +37,5 @@ public:
   Point2D* getPointA() const;
   Point2D* getPointB() const;
 };
+
+#endif // LINE_H

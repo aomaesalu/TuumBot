@@ -16,4 +16,9 @@
  *   Ants-Oskar Mäesalu
  */
 
+#ifndef MATHEMATICAL_CONSTANTS_H
+#define MATHEMATICAL_CONSTANTS_H
+
 #define PI 3.1415926536
+
+#endif // MATHEMATICAL_CONSTANTS_H
