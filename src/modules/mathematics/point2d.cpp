@@ -17,6 +17,7 @@
  */
 
 #include "point2d.h"
+#include <cmath>
 
 Point2D::Point2D(const Point2D& other):
 x{other.getX()},
@@ -34,6 +35,10 @@ void Point2D::setX(const double& x) {
 
 void Point2D::setY(const double& y) {
   this->y = y;
+}
+
+double Point2D::distanceFrom(const Point2D* other) {
+  return sqrt(x * other->getX() + y * other->getY()); // TODO: Optimise
 }
 
 double Point2D::getX() const {

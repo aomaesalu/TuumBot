@@ -21,10 +21,11 @@ private:
   double x;
   double y;
 public:
-  Point(const Point&);
-  Point(const double&, const double&);
+  Point2D(const Point2D&);
+  Point2D(const double&, const double&);
   void setX(const double&);
   void setY(const double&);
+  double distanceFrom(const Point2D*)
   double getX() const;
   double getY() const;
 }
