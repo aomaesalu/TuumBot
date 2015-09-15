@@ -3,14 +3,17 @@
  * Robotex 2015
  * University of Tartu
  * Team:
- *   Ants-Oskar M�esalu
- *   Joonas Puura
- *   Andreas Sepp
+ *   Kristjan Kanarbik
  *   Meelik Kiik
+ *   Ants-Oskar Mäesalu
+ *   Mart Müllerbeck
+ *   Kaur Viiklaid
+ *   Indrek Virro
+ *   Mihkel Väljaots
 
  * Color calibration program
  * Contributors:
- *   Ants-Oskar M�esalu
+ *   Ants-Oskar Mäesalu
 
  * main.cpp
  * The main function of the color calibration program.
@@ -19,6 +22,6 @@
 #include <cstdlib>
 
 int main() {
-	
+
 	return EXIT_SUCCESS;
 }
