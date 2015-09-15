@@ -22,15 +22,13 @@
 #include "../mathematics/circle.h"
 #include "../mathematics/point2d.h"
 
-class Ball: public Circle {
+class Ball: public Object, public Circle {
 private:
-  Point2D* position;
+
 public:
   Ball(const Ball&);
   Ball(const Point2D*, const double&); // TODO: Add default ball radius
-  void setPosition(const Point2D*);
-  void setPosition(const double&, const double&);
-  Point2D* getPosition() const;
+  Ball(const double&, const double&, const double&);
 }
 
 #endif // BALL_H
