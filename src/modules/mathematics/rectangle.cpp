@@ -36,7 +36,7 @@ void Rectangle::setY(const double& y) {
   this->y = y;
 }
 
-double Rectangle::getSize() const {
+double Rectangle::getArea() const {
   return x * y;
 }
 

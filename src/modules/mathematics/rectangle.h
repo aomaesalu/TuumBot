@@ -28,7 +28,7 @@ public:
   Rectangle(const double&, const double&);
   void setX(const double&);
   void setY(const double&);
-  double getSize() const;
+  double getArea() const;
   double getX() const;
   double getY() const;
 };
