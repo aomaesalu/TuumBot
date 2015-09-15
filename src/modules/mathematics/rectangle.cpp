@@ -19,35 +19,35 @@
 #include "rectangle.h"
 
 Rectangle::Rectangle(const Rectangle& other):
-x{other.getX()},
-y{other.getY()}
+width{other.getWidth()},
+length{other.getLength()}
 {}
 
-Rectangle::Rectangle(const double& x, const double& y):
-x{x},
-y{y}
+Rectangle::Rectangle(const double& width, const double& length):
+width{width},
+length{length}
 {}
 
-void Rectangle::setX(const double& x) {
-  this->x = x;
+void Rectangle::setWidth(const double& width) {
+  this->width = width;
 }
 
-void Rectangle::setY(const double& y) {
-  this->y = y;
+void Rectangle::setLength(const double& length) {
+  this->length = length;
 }
 
 double Rectangle::getArea() const {
-  return x * y;
+  return width * length;
 }
 
 double Rectangle::getPerimeter() const {
-  return 2 * (a + b);
+  return 2 * (width + length);
 }
 
-double Rectangle::getX() const {
-  return x;
+double Rectangle::getWidth() const {
+  return width;
 }
 
-double Rectangle::getY() const {
-  return y;
+double Rectangle::getLength() const {
+  return length;
 }
