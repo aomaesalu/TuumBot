@@ -31,6 +31,6 @@ public:
   double distanceFrom(const Point2D*)
   double getX() const;
   double getY() const;
-}
+};
 
 #endif // POINT2D_H
