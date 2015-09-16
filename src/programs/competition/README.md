@@ -2,4 +2,4 @@
 
 ## Programs
 
-### Competition Program
+### Competition Programs

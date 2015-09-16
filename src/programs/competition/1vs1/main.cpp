@@ -11,7 +11,7 @@
  *   Indrek Virro
  *   Mihkel Väljaots
 
- * Competition program
+ * 1vs1 competition program
  * Contributors:
  *   Ants-Oskar Mäesalu
 
