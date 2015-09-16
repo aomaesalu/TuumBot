@@ -29,7 +29,6 @@ public:
   Goal(const Goal&);
   Goal(const Point2D*, const double&, const double&); // TODO: Add default goal dimensions
   Goal(const double&, const double&, const double&, const double&); // TODO: Add default goal dimensions
-  void swapColor();
 }
 
 #endif // GOAL_H

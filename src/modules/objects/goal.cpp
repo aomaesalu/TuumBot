@@ -32,7 +32,3 @@ Goal::Goal(const double& x, const double& y, const double& width, const double& 
 Object(new Point2D(x, y)),
 Rectangle(width, length)
 {}
-
-void Goal::swapColor() {
-  // TODO
-}
