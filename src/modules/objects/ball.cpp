@@ -24,7 +24,7 @@ Circle(other.getRadius())
 {}
 
 Ball::Ball(const Point2D* position, const double& radius):
-Object(position)
+Object(position),
 Circle(radius)
 {}
 
