@@ -11,12 +11,12 @@
  *   Indrek Virro
  *   Mihkel Väljaots
 
- * Simulation program
+ * 2vs2 simulation program
  * Contributors:
  *   Ants-Oskar Mäesalu
 
  * main.cpp
- * The main function of the simulation program.
+ * The main function of the competition program.
  */
 
 #include <cstdlib>
