@@ -28,7 +28,7 @@ private:
 public:
   Robot(const Robot&);
   Robot(const Point2D*, const double&); // TODO: Add default maximum robot radius; can be changed midgame
-  Robot(const double&, const double&, const double&);
+  Robot(const double&, const double&, const double&); // TODO: Add default maximum robot radius; can be changed midgame
 }
 
 #endif // ROBOT_H
