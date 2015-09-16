@@ -20,23 +20,23 @@
 
 Field::Field(const Field& other):
 currentGoal{other.getCurrentGoal()},
-self{new RobotSelf(*(other.getSelf()))}
+self{other.getSelf()}
 {
   goals = new Goal*[2];
   if (other.getCurrentGoal() == 0) {
-    goals[0] = new Goal(*(other.getFriendlyGoal()));
+    goals[0] = other.getFriendlyGoal();
   } else {
-    goals[1] = new Goal(*(other.getEnemyGoal()));
+    goals[1] = other.getEnemyGoal();
   }
 }
 
 Field::Field(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self):
 currentGoal{0},
-self{new RobotSelf(*self)}
+self{self}
 {
   goals = new Goal*[2];
-  goals[0] = new Goal(*friendlyGoal);
-  goals[1] = new Goal(*enemyGoal);
+  goals[0] = friendlyGoal;
+  goals[1] = enemyGoal;
 }
 
 void Field::swapGoals() {
