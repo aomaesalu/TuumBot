@@ -36,6 +36,6 @@ public:
   Goal* getFriendlyGoal() const;
   Goal* getEnemyGoal() const;
   RobotSelf* getSelf() const;
-}
+};
 
 #endif // FIELD_H

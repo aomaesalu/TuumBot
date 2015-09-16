@@ -29,6 +29,6 @@ public:
   Ball(const Ball&);
   Ball(const Point2D*, const double&); // TODO: Add default ball radius
   Ball(const double&, const double&, const double&);
-}
+};
 
 #endif // BALL_H

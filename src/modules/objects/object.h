@@ -32,6 +32,6 @@ public:
   void setPosition(const Point2D*);
   void setPosition(const double&, const double&);
   Point2D* getPosition() const;
-}
+};
 
 #endif // OBJECT_H

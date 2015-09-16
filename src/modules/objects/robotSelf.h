@@ -31,6 +31,6 @@ public:
   // TODO: Add communication and strategy methods
   // TODO: Add movement methods
   // TODO: Add computer vision methods
-}
+};
 
 #endif // ROBOT_SELF_H

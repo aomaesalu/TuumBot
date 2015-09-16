@@ -29,6 +29,6 @@ public:
   RobotFriend(const Point2D*, const double&); // TODO: Add default robot radius
   RobotFriend(const double&, const double&, const double&); // TODO: Add default robot radius
   // TODO: Add communication and strategy methods
-}
+};
 
 #endif // ROBOT_FRIEND_H

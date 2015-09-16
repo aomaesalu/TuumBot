@@ -29,6 +29,6 @@ public:
   RobotEnemy(const Point2D*, const double&); // TODO: Add default maximum robot radius; can be changed midgame
   RobotEnemy(const double&, const double&, const double&); // TODO: Add default maximum robot radius; can be changed midgame
   // TODO: Add size, movement and strategy analysing methods
-}
+};
 
 #endif // ROBOT_ENEMY_H

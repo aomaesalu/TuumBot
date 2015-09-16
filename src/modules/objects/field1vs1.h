@@ -31,6 +31,6 @@ public:
   Field1vs1(const Goal*, const Goal*, const RobotSelf*);
   Field1vs1(const Goal*, const Goal*, const RobotSelf*, const std::vector<Ball*>);
   std::vector<Ball*> getBalls() const;
-}
+};
 
 #endif // FIELD_1VS1_H

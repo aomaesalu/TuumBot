@@ -34,6 +34,6 @@ public:
   RobotFriend* getFriend() const;
   RobotEnemy** getEnemies() const;
   Ball* getBall() const;
-}
+};
 
 #endif // FIELD_2VS2_H
