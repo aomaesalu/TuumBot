@@ -24,10 +24,17 @@ CXX=g++
 # Default compiler parameters
 # -Wall 		Shows all warnings when compiling, always use this!
 # -std=c++11 	Enables the C++11 standard mode
+# TODO: Add optimisation
 CXXFLAGS = -Wall -std=c++11
 
+DIR_SRC = src
+DIR_OBJ = obj
+DIR_LIB = lib
+DIR_BIN = bin
+DIR_TEST = test
+
 ################################################################################
-# Settings and compilation rules for the modules.                              #
+# Settings and compilation rules for the modules                               #
 ################################################################################
 
 # Compiler flag -Idir specifies, that there are includes in the 'dir' directory
@@ -40,122 +47,74 @@ LIBS = $(LIB_COILGUN) $(LIB_COMMUNICATION) $(LIB_COMPUTER_VISION) $(LIB_MATHEMAT
 # Coilgun ######################################################################
 
 LIB_COILGUN_OBJS =
-LIB_COILGUN = lib/coilgun.a
-
-# TODO: Coilgun module object compilation rules
+LIB_COILGUN = $(DIR_LIB)/coilgun.a
 
 $(LIB_COILGUN): $(LIB_COILGUN_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_COILGUN) $(LIB_COILGUN_OBJS)
 
 # Communication ################################################################
 
 LIB_COMMUNICATION_OBJS =
-LIB_COMMUNICATION = lib/communication.a
-
-# TODO: Communication module object compilation rules
+LIB_COMMUNICATION = $(DIR_LIB)/communication.a
 
 $(LIB_COMMUNICATION): $(LIB_COMMUNICATION_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_COMMUNICATION) $(LIB_COMMUNICATION_OBJS)
 
 # Computer vision ##############################################################
 
 LIB_COMPUTER_VISION_OBJS =
-LIB_COMPUTER_VISION = lib/computer-vision.a
-
-# TODO: Computer vision module object compilation rules
+LIB_COMPUTER_VISION = $(DIR_LIB)/computer-vision.a
 
 $(LIB_COMPUTER_VISION): $(LIB_COMPUTER_VISION_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_COMPUTER_VISION) $(LIB_COMPUTER_VISION_OBJS)
 
 # Mathematics ##################################################################
 
 LIB_MATHEMATICS_OBJS = obj/modules/mathematics/point2d.o obj/modules/mathematics/line.o obj/modules/mathematics/circle.o obj/modules/mathematics/rectangle.o
-LIB_MATHEMATICS = lib/mathematics.a
-
-obj/modules/mathematics/point2d.o: src/modules/mathematics/point2d.cpp
-	mkdir -p obj/modules/mathematics
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/point2d.cpp -o obj/modules/mathematics/point2d.o
-obj/modules/mathematics/line.o: src/modules/mathematics/line.cpp
-	mkdir -p obj/modules/mathematics
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/line.cpp -o obj/modules/mathematics/line.o
-obj/modules/mathematics/circle.o: src/modules/mathematics/circle.cpp
-	mkdir -p obj/modules/mathematics
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/circle.cpp -o obj/modules/mathematics/circle.o
-obj/modules/mathematics/rectangle.o: src/modules/mathematics/rectangle.cpp
-	mkdir -p obj/modules/mathematics
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/rectangle.cpp -o obj/modules/mathematics/rectangle.o
+LIB_MATHEMATICS = $(DIR_LIB)/mathematics.a
 
 $(LIB_MATHEMATICS): $(LIB_MATHEMATICS_OBJS)
-	mkdir -p lib
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_MATHEMATICS) $(LIB_MATHEMATICS_OBJS)
 
 # Movement #####################################################################
 
 LIB_MOVEMENT_OBJS =
-LIB_MOVEMENT = lib/movement.a
-
-# TODO: Movement module object compilation rules
+LIB_MOVEMENT = $(DIR_LIB)/movement.a
 
 $(LIB_MOVEMENT): $(LIB_MOVEMENT_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_MOVEMENT) $(LIB_MOVEMENT_OBJS)
 
 # Objects ######################################################################
 
-LIB_OBJECTS_OBJS = obj/modules/objects/object.o obj/modules/objects/ball.o obj/modules/objects/field.o obj/modules/objects/field1vs1.o obj/modules/objects/field2vs2.o obj/modules/objects/goal.o obj/modules/objects/robot.o obj/modules/objects/robotSelf.o obj/modules/objects/robotAlly.o obj/modules/objects/robotEnemy.o
-LIB_OBJECTS = lib/objects.a
-
-obj/modules/objects/object.o: src/modules/objects/object.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/object.cpp -o obj/modules/objects/object.o
-obj/modules/objects/ball.o: src/modules/objects/ball.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/ball.cpp -o obj/modules/objects/ball.o
-obj/modules/objects/field.o: src/modules/objects/field.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field.cpp -o obj/modules/objects/field.o
-obj/modules/objects/field1vs1.o: src/modules/objects/field1vs1.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field1vs1.cpp -o obj/modules/objects/field1vs1.o
-obj/modules/objects/field2vs2.o: src/modules/objects/field2vs2.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field2vs2.cpp -o obj/modules/objects/field2vs2.o
-obj/modules/objects/goal.o: src/modules/objects/goal.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/goal.cpp -o obj/modules/objects/goal.o
-obj/modules/objects/robot.o: src/modules/objects/robot.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robot.cpp -o obj/modules/objects/robot.o
-obj/modules/objects/robotSelf.o: src/modules/objects/robotSelf.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotSelf.cpp -o obj/modules/objects/robotSelf.o
-obj/modules/objects/robotAlly.o: src/modules/objects/robotAlly.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotAlly.cpp -o obj/modules/objects/robotAlly.o
-obj/modules/objects/robotEnemy.o: src/modules/objects/robotEnemy.cpp
-	mkdir -p obj/modules/objects
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotEnemy.cpp -o obj/modules/objects/robotEnemy.o
+LIB_OBJECTS_OBJS = $(DIR_OBJ)/modules/objects/object.o obj/modules/objects/ball.o $(DIR_OBJ)/modules/objects/field.o $(DIR_OBJ)/modules/objects/field1vs1.o $(DIR_OBJ)/modules/objects/field2vs2.o $(DIR_OBJ)/modules/objects/goal.o $(DIR_OBJ)/modules/objects/robot.o $(DIR_OBJ)/modules/objects/robotSelf.o $(DIR_OBJ)/modules/objects/robotAlly.o $(DIR_OBJ)/modules/objects/robotEnemy.o
+LIB_OBJECTS = $(DIR_LIB)/objects.a
 
 $(LIB_OBJECTS): $(LIB_OBJECTS_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_OBJECTS) $(LIB_OBJECTS_OBJS)
 
 # Tribbler #####################################################################
 
 LIB_TRIBBLER_OBJS =
-LIB_TRIBBLER = lib/tribbler.a
-
-# TODO: Tribbler module object compilation rules
+LIB_TRIBBLER = $(DIR_LIB)/tribbler.a
 
 $(LIB_TRIBBLER): $(LIB_TRIBBLER_OBJS)
+	mkdir -p $(DIR_LIB)
 	ar cr $(LIB_TRIBBLER) $(LIB_TRIBBLER_OBJS)
 
 ################################################################################
-# Settings and compilation rules for the programs.                             #
+# Settings and compilation rules for the programs                              #
 ################################################################################
 
 PROGRAMS = $(PROGRAMS_CALIBRATION) $(PROGRAMS_COMPETITION) $(PROGRAMS_SIMULATION)
 
 ################################################################################
-# Settings and compilation rules for the calibration programs.                 #
+# Settings and compilation rules for the calibration programs                  #
 ################################################################################
 
 PROGRAMS_CALIBRATION = $(PROGRAM_CALIBRATION_COLOR) $(PROGRAM_CALIBRATION_LENS) $(PROGRAM_CALIBRATION_PERSPECTIVE) $(PROGRAMS_CALIBRATION_POSITION) $(PROGRAMS_CALIBRATION_SPEED)
@@ -163,55 +122,50 @@ PROGRAMS_CALIBRATION = $(PROGRAM_CALIBRATION_COLOR) $(PROGRAM_CALIBRATION_LENS) 
 # Color ########################################################################
 
 PROGRAM_CALIBRATION_COLOR_OBJS =
-PROGRAM_CALIBRATION_COLOR = bin/calibration-color
-
-# TODO: Color calibration program object compilation rules
+PROGRAM_CALIBRATION_COLOR = $(DIR_BIN)/calibration-color
 
 $(PROGRAM_CALIBRATION_COLOR): $(PROGRAM_CALIBRATION_COLOR_OBJS)
+	mkdir -p $(DIR_BIN)
 	ar cr $(PROGRAM_CALIBRATION_COLOR) $(PROGRAM_CALIBRATION_COLOR_OBJS)
 
 # Lens #########################################################################
 
 PROGRAM_CALIBRATION_LENS_OBJS =
-PROGRAM_CALIBRATION_LENS = bin/calibration-lens
-
-# TODO: Lens calibration program object compilation rules
+PROGRAM_CALIBRATION_LENS = $(DIR_BIN)/calibration-lens
 
 $(PROGRAM_CALIBRATION_LENS): $(PROGRAM_CALIBRATION_LENS_OBJS)
+	mkdir -p $(DIR_BIN)
 	ar cr $(PROGRAM_CALIBRATION_LENS) $(PROGRAM_CALIBRATION_LENS_OBJS)
 
 # Perspective ##################################################################
 
 PROGRAM_CALIBRATION_PERSPECTIVE_OBJS =
-PROGRAM_CALIBRATION_PERSPECTIVE = bin/calibration-perspective
-
-# TODO: Perspective calibration program object compilation rules
+PROGRAM_CALIBRATION_PERSPECTIVE = $(DIR_BIN)/calibration-perspective
 
 $(PROGRAM_CALIBRATION_PERSPECTIVE): $(PROGRAM_CALIBRATION_PERSPECTIVE_OBJS)
-	ac cr $(PROGRAM_CALIBRATION_PERSPECTIVE) $(PROGRAM_CALIBRATION_PERSPECTIVE_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_CALIBRATION_PERSPECTIVE) $(PROGRAM_CALIBRATION_PERSPECTIVE_OBJS)
 
 # Position #####################################################################
 
 PROGRAM_CALIBRATION_POSITION_OBJS =
-PROGRAM_CALIBRATION_POSITION = bin/calibration-position
-
-# TODO: Position calibration program object compilation rules
+PROGRAM_CALIBRATION_POSITION = $(DIR_BIN)/calibration-position
 
 $(PROGRAM_CALIBRATION_POSITION): $(PROGRAM_CALIBRATION_POSITION_OBJS)
-	ac cr $(PROGRAM_CALIBRATION_POSITION) $(PROGRAM_CALIBRATION_POSITION_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_CALIBRATION_POSITION) $(PROGRAM_CALIBRATION_POSITION_OBJS)
 
 # Speed ########################################################################
 
 PROGRAM_CALIBRATION_SPEED_OBJS =
-PROGRAM_CALIBRATION_SPEED = bin/calibration-speed
-
-# TODO: Speed calibration program object compilation rules
+PROGRAM_CALIBRATION_SPEED = $(DIR_BIN)/calibration-speed
 
 $(PROGRAM_CALIBRATION_SPEED): $(PROGRAM_CALIBRATION_SPEED_OBJS)
-	ac cr $(PROGRAM_CALIBRATION_SPEED) $(PROGRAM_CALIBRATION_SPEED_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_CALIBRATION_SPEED) $(PROGRAM_CALIBRATION_SPEED_OBJS)
 
 ################################################################################
-# Settings and compilation rules for the competition programs.                 #
+# Settings and compilation rules for the competition programs                  #
 ################################################################################
 
 PROGRAMS_COMPETITION = $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_2VS2)
@@ -219,25 +173,23 @@ PROGRAMS_COMPETITION = $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_2VS2)
 # 1vs1 #########################################################################
 
 PROGRAM_COMPETITION_1VS1_OBJS =
-PROGRAM_COMPETITION_1VS1 = bin/competition-1vs1
-
-# TODO: 1vs1 competition program object compilation rules
+PROGRAM_COMPETITION_1VS1 = $(DIR_BIN)/competition-1vs1
 
 $(PROGRAM_COMPETITION_1VS1): $(PROGRAM_COMPETITION_1VS1_OBJS)
-	ac cr $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_1VS1_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_1VS1_OBJS)
 
 # 2vs2 #########################################################################
 
 PROGRAM_COMPETITION_2VS2_OBJS =
-PROGRAM_COMPETITION_2VS2 = bin/competition-2vs2
-
-# TODO: 2vs2 competition program object compilation rules
+PROGRAM_COMPETITION_2VS2 = $(DIR_BIN)/competition-2vs2
 
 $(PROGRAM_COMPETITION_2VS2): $(PROGRAM_COMPETITION_2VS2_OBJS)
-	ac cr $(PROGRAM_COMPETITION_2VS2) $(PROGRAM_COMPETITION_2VS2_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_COMPETITION_2VS2) $(PROGRAM_COMPETITION_2VS2_OBJS)
 
 ################################################################################
-# Settings and compilation rules for the simulation programs.                  #
+# Settings and compilation rules for the simulation programs                   #
 ################################################################################
 
 PROGRAMS_SIMULATION = $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_2VS2)
@@ -245,26 +197,30 @@ PROGRAMS_SIMULATION = $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_2VS2)
 # 1vs1 #########################################################################
 
 PROGRAM_SIMULATION_1VS1_OBJS =
-PROGRAM_SIMULATION_1VS1 = bin/simulation-1vs1
-
-# TODO: 1vs1 simulation program object compilation rules
+PROGRAM_SIMULATION_1VS1 = $(DIR_BIN)/simulation-1vs1
 
 $(PROGRAM_SIMULATION_1VS1): $(PROGRAM_SIMULATION_1VS1_OBJS)
-	ac cr $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_1VS1_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_1VS1_OBJS)
 
 # 2vs2 #########################################################################
 
 PROGRAM_SIMULATION_2VS2_OBJS =
-PROGRAM_SIMULATION_2VS2 = bin/simulation-2vs2
-
-# TODO: 2vs2 simulation program object compilation rules
+PROGRAM_SIMULATION_2VS2 = $(DIR_BIN)/simulation-2vs2
 
 $(PROGRAM_SIMULATION_2VS2): $(PROGRAM_SIMULATION_2VS2_OBJS)
-	ac cr $(PROGRAM_SIMULATION_2VS2) $(PROGRAM_SIMULATION_2VS2_OBJS)
+	mkdir -p $(DIR_BIN)
+	ar cr $(PROGRAM_SIMULATION_2VS2) $(PROGRAM_SIMULATION_2VS2_OBJS)
 
 ################################################################################
-# Make rules.                                                                  #
+# Make rules                                                                   #
 ################################################################################
+
+# Compile all of the source files into corresponding object files
+
+$(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(LIB_CXXFLAGS) -c -o $@ $<
 
 # build - Target that builds all of the necessary libraries ####################
 
@@ -309,14 +265,16 @@ all: $(LIBS) $(PROGRAMS)
 # clean - Target that cleans all of the compiled files #########################
 
 clean-obj:
-	rm -rf obj
+	rm -rf $(DIR_OBJ)
 clean-lib:
-	rm -rf lib
+	rm -rf $(DIR_LIB)
 clean-bin:
-	rm -rf bin
+	rm -rf $(DIR_BIN)
+clean-test:
+	rm -rf $(DIR_TEST)
 
 clean:
-	make clean-obj clean-lib clean-bin
+	make clean-obj clean-lib clean-bin clean-test
 
 # test - Target that builds the test application ###############################
 
