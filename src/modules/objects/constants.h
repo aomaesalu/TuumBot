@@ -29,6 +29,9 @@
 #define GOAL_WIDTH 700
 #define GOAL_LENGTH 250
 #define GOAL_HEIGHT 200 // Unused
+#define GOAL_BEACON_HEIGHT 400 // Unused
 #define BALL_RADIUS 43
+#define ROBOT_MARKER_WIDTH 20
+#define ROBOT_MARKER_MAX_HEIGHT 20
 
 #endif // ROBOT_CONSTANTS_H
