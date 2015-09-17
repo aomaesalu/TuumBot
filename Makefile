@@ -165,25 +165,50 @@ PROGRAMS_CALIBRATION = $(PROGRAM_CALIBRATION_COLOR) $(PROGRAM_CALIBRATION_LENS) 
 PROGRAM_CALIBRATION_COLOR_OBJS =
 PROGRAM_CALIBRATION_COLOR = bin/calibration-color
 
+# TODO: Color calibration program object compilation rules
+
+$(PROGRAM_CALIBRATION_COLOR): $(PROGRAM_CALIBRATION_COLOR_OBJS)
+	ar cr $(PROGRAM_CALIBRATION_COLOR) $(PROGRAM_CALIBRATION_COLOR_OBJS)
+
 # Lens #########################################################################
 
 PROGRAM_CALIBRATION_LENS_OBJS =
 PROGRAM_CALIBRATION_LENS = bin/calibration-lens
+
+# TODO: Lens calibration program object compilation rules
+
+$(PROGRAM_CALIBRATION_LENS): $(PROGRAM_CALIBRATION_LENS_OBJS)
+	ar cr $(PROGRAM_CALIBRATION_LENS) $(PROGRAM_CALIBRATION_LENS_OBJS)
 
 # Perspective ##################################################################
 
 PROGRAM_CALIBRATION_PERSPECTIVE_OBJS =
 PROGRAM_CALIBRATION_PERSPECTIVE = bin/calibration-perspective
 
+# TODO: Perspective calibration program object compilation rules
+
+$(PROGRAM_CALIBRATION_PERSPECTIVE): $(PROGRAM_CALIBRATION_PERSPECTIVE_OBJS)
+	ac cr $(PROGRAM_CALIBRATION_PERSPECTIVE) $(PROGRAM_CALIBRATION_PERSPECTIVE_OBJS)
+
 # Position #####################################################################
 
 PROGRAM_CALIBRATION_POSITION_OBJS =
 PROGRAM_CALIBRATION_POSITION = bin/calibration-position
 
+# TODO: Position calibration program object compilation rules
+
+$(PROGRAM_CALIBRATION_POSITION): $(PROGRAM_CALIBRATION_POSITION_OBJS)
+	ac cr $(PROGRAM_CALIBRATION_POSITION) $(PROGRAM_CALIBRATION_POSITION_OBJS)
+
 # Speed ########################################################################
 
 PROGRAM_CALIBRATION_SPEED_OBJS =
 PROGRAM_CALIBRATION_SPEED = bin/calibration-speed
+
+# TODO: Speed calibration program object compilation rules
+
+$(PROGRAM_CALIBRATION_SPEED): $(PROGRAM_CALIBRATION_SPEED_OBJS)
+	ac cr $(PROGRAM_CALIBRATION_SPEED) $(PROGRAM_CALIBRATION_SPEED_OBJS)
 
 ################################################################################
 # Settings and compilation rules for the competition programs.                 #
@@ -196,10 +221,20 @@ PROGRAMS_COMPETITION = $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_2VS2)
 PROGRAM_COMPETITION_1VS1_OBJS =
 PROGRAM_COMPETITION_1VS1 = bin/competition-1vs1
 
+# TODO: 1vs1 competition program object compilation rules
+
+$(PROGRAM_COMPETITION_1VS1): $(PROGRAM_COMPETITION_1VS1_OBJS)
+	ac cr $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_1VS1_OBJS)
+
 # 2vs2 #########################################################################
 
 PROGRAM_COMPETITION_2VS2_OBJS =
 PROGRAM_COMPETITION_2VS2 = bin/competition-2vs2
+
+# TODO: 2vs2 competition program object compilation rules
+
+$(PROGRAM_COMPETITION_2VS2): $(PROGRAM_COMPETITION_2VS2_OBJS)
+	ac cr $(PROGRAM_COMPETITION_2VS2) $(PROGRAM_COMPETITION_2VS2_OBJS)
 
 ################################################################################
 # Settings and compilation rules for the simulation programs.                  #
@@ -212,10 +247,20 @@ PROGRAMS_SIMULATION = $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_2VS2)
 PROGRAM_SIMULATION_1VS1_OBJS =
 PROGRAM_SIMULATION_1VS1 = bin/simulation-1vs1
 
+# TODO: 1vs1 simulation program object compilation rules
+
+$(PROGRAM_SIMULATION_1VS1): $(PROGRAM_SIMULATION_1VS1_OBJS)
+	ac cr $(PROGRAM_SIMULATION_1VS1) $(PROGRAM_SIMULATION_1VS1_OBJS)
+
 # 2vs2 #########################################################################
 
 PROGRAM_SIMULATION_2VS2_OBJS =
 PROGRAM_SIMULATION_2VS2 = bin/simulation-2vs2
+
+# TODO: 2vs2 simulation program object compilation rules
+
+$(PROGRAM_SIMULATION_2VS2): $(PROGRAM_SIMULATION_2VS2_OBJS)
+	ac cr $(PROGRAM_SIMULATION_2VS2) $(PROGRAM_SIMULATION_2VS2_OBJS)
 
 ################################################################################
 # Make rules.                                                                  #
@@ -259,15 +304,19 @@ simulation-2vs2: $(PROGRAM_SIMULATION_2VS2)
 
 # all - Target that builds all of the executables ##############################
 
-all: $(PROGRAMS)
+all: $(LIBS) $(PROGRAMS)
 
 # clean - Target that cleans all of the compiled files #########################
 
+clean-obj:
+	rm -rf obj
+clean-lib:
+	rm -rf lib
+clean-bin:
+	rm -rf bin
+
 clean:
-	rm -f $(LIB_OBJS)
-	rm -f $(LIBS)
-	rm -f $(PROGRAMS)
-# TODO
+	make clean-obj clean-lib clean-bin
 
 # test - Target that builds the test application ###############################
 
