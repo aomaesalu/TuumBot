@@ -1,5 +1,0 @@
-# TuumBot
-
-## Programs
-
-### Competition Programs
