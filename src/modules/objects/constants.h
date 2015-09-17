@@ -16,22 +16,23 @@
  *   Ants-Oskar Mäesalu
  */
 
-#ifndef ROBOT_CONSTANTS_H
-#define ROBOT_CONSTANTS_H
+#ifndef PHYSICAL_CONSTANTS_H
+#define PHYSICAL_CONSTANTS_H
 
-#define FIELD_WIDTH 3100
-#define FIELD_LENGTH 4600
-#define FIELD_CENTER_RADIUS 400 // Unused
-#define DEFENSE_AREA_LARGER_WIDTH 1250 // Unused
-#define DEFENSE_AREA_SMALLER_WIDTH 350 // Unused
-#define DEFENSE_AREA_RADIUS 500 // Unused
-#define LINE_WIDTH 50 // Unused
-#define GOAL_WIDTH 700
-#define GOAL_LENGTH 250
-#define GOAL_HEIGHT 200 // Unused
-#define GOAL_BEACON_HEIGHT 400 // Unused
-#define BALL_RADIUS 43
-#define ROBOT_MARKER_WIDTH 20
-#define ROBOT_MARKER_MAX_HEIGHT 20
+// Physical constants in millimeters
+#define FIELD_WIDTH 3100                // Football field width
+#define FIELD_LENGTH 4600               // Football field length
+#define FIELD_CENTER_RADIUS 400         // Football field center circle radius          // Unused
+#define DEFENSE_AREA_LARGER_WIDTH 1250  // Goal defense area larger width               // Unused
+#define DEFENSE_AREA_SMALLER_WIDTH 350  // Goal defense area smaller width              // Unused
+#define DEFENSE_AREA_RADIUS 500         // Goal defense area corner curve radius        // Unused
+#define LINE_WIDTH 50                   // Field line width                             // Unused
+#define GOAL_WIDTH 700                  // Goal width
+#define GOAL_LENGTH 250                 // Goal length
+#define GOAL_HEIGHT 200                 // Goal height                                  // Unused
+#define GOAL_BEACON_HEIGHT 400          // Goal beacon height                           // Unused
+#define BALL_RADIUS 43                  // Ball radius
+#define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width         // Unused
+#define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
 
-#endif // ROBOT_CONSTANTS_H
+#endif // PHYSICAL_CONSTANTS_H
