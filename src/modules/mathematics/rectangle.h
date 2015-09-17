@@ -30,6 +30,8 @@ public:
   Rectangle(const double&, const double&);
   void setWidth(const double&);
   void setLength(const double&);
+  double getArea() const;
+  double getPerimeter() const;
   double getWidth() const;
   double getLength() const;
 };

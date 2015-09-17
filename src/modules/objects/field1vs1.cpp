@@ -23,12 +23,12 @@ Field(other),
 balls{other.getBalls()}
 {}
 
-Field1vs1::Field1vs1(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self):
-Field(friendlyGoal, enemyGoal, self)
+Field1vs1::Field1vs1(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, const double& width, const double& length):
+Field(friendlyGoal, enemyGoal, robotSelf, width, length)
 {} // TODO: Decide whether to fill ball list with dummy values - probably not
 
-Field1vs1::Field1vs1(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self, const std::vector<Ball*> balls):
-Field(friendlyGoal, enemyGoal, self),
+Field1vs1::Field1vs1(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, const std::vector<Ball*>& balls, const double& width, const double& length):
+Field(friendlyGoal, enemyGoal, robotSelf, width, length),
 balls{balls}
 {}
 

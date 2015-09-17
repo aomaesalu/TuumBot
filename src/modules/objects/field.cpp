@@ -19,8 +19,9 @@
 #include "field.h"
 
 Field::Field(const Field& other):
+Rectangle(other.getWidth(), other.getLength()),
 currentGoal{other.getCurrentGoal()},
-self{other.getSelf()}
+robotSelf{other.getRobotSelf()}
 {
   goals = new Goal*[2];
   if (other.getCurrentGoal() == 0) {
@@ -30,9 +31,10 @@ self{other.getSelf()}
   }
 }
 
-Field::Field(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self):
+Field::Field(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, const double& width, const double& length):
+Rectangle(width, length),
 currentGoal{0},
-self{self}
+robotSelf{robotSelf}
 {
   goals = new Goal*[2];
   goals[0] = friendlyGoal;
@@ -48,13 +50,13 @@ int Field::getCurrentGoal() const {
 }
 
 Goal* Field::getFriendlyGoal() const {
-  return goal[currentGoal];
+  return goals[currentGoal];
 }
 
 Goal* Field::getEnemyGoal() const {
-  return goal[1 - currentGoal];
+  return goals[1 - currentGoal];
 }
 
-RobotSelf* Field::getSelf() const {
-  return self;
+RobotSelf* Field::getRobotSelf() const {
+  return robotSelf;
 }

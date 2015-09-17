@@ -21,28 +21,28 @@
 Field2vs2::Field2vs2(const Field2vs2& other):
 Field(other),
 ball{other.getBall()},
-friend{other.getFriend()},
+ally{other.getAlly()},
 enemies{other.getEnemies()}
 {}
 
-Field2vs2::Field2vs2(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self, const RobotFriend* friend, const RobotEnemy** enemies):
-Field(friendlyGoal, enemyGoal, self),
-friend{friend},
+Field2vs2::Field2vs2(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, RobotAlly* ally, RobotEnemy** enemies, const double& width, const double& length):
+Field(friendlyGoal, enemyGoal, robotSelf, width, length),
+ally{ally},
 enemies{enemies}
 {} // TODO: Decide whether to fill ball pointer with dummy value - probably not
 
-Field2vs2::Field2vs2(const Goal* friendlyGoal, const Goal* enemyGoal, const RobotSelf* self, const RobotFriend* friend, const RobotEnemy** enemies, const Ball* ball):
-Field(friendlyGoal, enemyGoal, self),
-friend{friend},
+Field2vs2::Field2vs2(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, RobotAlly* ally, RobotEnemy** enemies, Ball* ball, const double& width, const double& length):
+Field(friendlyGoal, enemyGoal, robotSelf, width, length),
+ally{ally},
 enemies{enemies},
 ball{ball}
 {}
 
-RobotFriend* Field2vs2::getFriend() const {
-  return friend;
+RobotAlly* Field2vs2::getAlly() const {
+  return ally;
 }
 
-RobotEnemies** Field2vs2::getEnemies() const {
+RobotEnemy** Field2vs2::getEnemies() const {
   return enemies;
 }
 

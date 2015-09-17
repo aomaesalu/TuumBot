@@ -28,6 +28,8 @@ public:
   Circle(const Circle&);
   Circle(const double&);
   void setRadius(const double&);
+  double getArea() const;
+  double getPerimeter() const;
   double getRadius() const;
 };
 

@@ -39,7 +39,7 @@ LIBS = $(LIB_COILGUN) $(LIB_COMMUNICATION) $(LIB_COMPUTER_VISION) $(LIB_MATHEMAT
 
 # Coilgun ######################################################################
 
-LIB_COILGUN_OBJS = ;
+LIB_COILGUN_OBJS =
 LIB_COILGUN = lib/coilgun.a
 
 # TODO: Coilgun module object compilation rules
@@ -73,15 +73,20 @@ LIB_MATHEMATICS_OBJS = obj/modules/mathematics/point2d.o obj/modules/mathematics
 LIB_MATHEMATICS = lib/mathematics.a
 
 obj/modules/mathematics/point2d.o: src/modules/mathematics/point2d.cpp
+	mkdir -p obj/modules/mathematics
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/point2d.cpp -o obj/modules/mathematics/point2d.o
 obj/modules/mathematics/line.o: src/modules/mathematics/line.cpp
+	mkdir -p obj/modules/mathematics
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/line.cpp -o obj/modules/mathematics/line.o
 obj/modules/mathematics/circle.o: src/modules/mathematics/circle.cpp
+	mkdir -p obj/modules/mathematics
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/circle.cpp -o obj/modules/mathematics/circle.o
 obj/modules/mathematics/rectangle.o: src/modules/mathematics/rectangle.cpp
+	mkdir -p obj/modules/mathematics
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/rectangle.cpp -o obj/modules/mathematics/rectangle.o
 
 $(LIB_MATHEMATICS): $(LIB_MATHEMATICS_OBJS)
+	mkdir -p lib
 	ar cr $(LIB_MATHEMATICS) $(LIB_MATHEMATICS_OBJS)
 
 # Movement #####################################################################
@@ -96,28 +101,38 @@ $(LIB_MOVEMENT): $(LIB_MOVEMENT_OBJS)
 
 # Objects ######################################################################
 
-LIB_OBJECTS_OBJS = obj/modules/objects/object.o obj/modules/objects/ball.o obj/modules/objects/field.o obj/modules/objects/field1vs1.o obj/modules/objects/field2vs2.o obj/modules/objects/goal.o obj/modules/objects/robot.o obj/modules/objects/robotSelf.o obj/modules/objects/robotFriend.o obj/modules/objects/robotEnemy.o
+LIB_OBJECTS_OBJS = obj/modules/objects/object.o obj/modules/objects/ball.o obj/modules/objects/field.o obj/modules/objects/field1vs1.o obj/modules/objects/field2vs2.o obj/modules/objects/goal.o obj/modules/objects/robot.o obj/modules/objects/robotSelf.o obj/modules/objects/robotAlly.o obj/modules/objects/robotEnemy.o
 LIB_OBJECTS = lib/objects.a
 
 obj/modules/objects/object.o: src/modules/objects/object.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/object.cpp -o obj/modules/objects/object.o
 obj/modules/objects/ball.o: src/modules/objects/ball.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/ball.cpp -o obj/modules/objects/ball.o
 obj/modules/objects/field.o: src/modules/objects/field.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field.cpp -o obj/modules/objects/field.o
 obj/modules/objects/field1vs1.o: src/modules/objects/field1vs1.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field1vs1.cpp -o obj/modules/objects/field1vs1.o
 obj/modules/objects/field2vs2.o: src/modules/objects/field2vs2.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field2vs2.cpp -o obj/modules/objects/field2vs2.o
 obj/modules/objects/goal.o: src/modules/objects/goal.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/goal.cpp -o obj/modules/objects/goal.o
 obj/modules/objects/robot.o: src/modules/objects/robot.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robot.cpp -o obj/modules/objects/robot.o
 obj/modules/objects/robotSelf.o: src/modules/objects/robotSelf.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotSelf.cpp -o obj/modules/objects/robotSelf.o
-obj/modules/objects/robotFriend.o: src/modules/objects/robotFriend.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotFriend.cpp -o obj/modules/objects/robotFriend.o
+obj/modules/objects/robotAlly.o: src/modules/objects/robotAlly.cpp
+	mkdir -p obj/modules/objects
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotAlly.cpp -o obj/modules/objects/robotAlly.o
 obj/modules/objects/robotEnemy.o: src/modules/objects/robotEnemy.cpp
+	mkdir -p obj/modules/objects
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotEnemy.cpp -o obj/modules/objects/robotEnemy.o
 
 $(LIB_OBJECTS): $(LIB_OBJECTS_OBJS)

@@ -19,6 +19,8 @@
 #ifndef BALL_H
 #define BALL_H
 
+#include "constants.h"
+#include "object.h"
 #include "../mathematics/circle.h"
 #include "../mathematics/point2d.h"
 
@@ -27,7 +29,7 @@ private:
 
 public:
   Ball(const Ball&);
-  Ball(const Point2D*, const double&); // TODO: Add default ball radius
+  Ball(const Point2D*, const double& = BALL_RADIUS);
   Ball(const double&, const double&, const double&);
 };
 

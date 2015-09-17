@@ -28,7 +28,7 @@ public:
   Point2D(const double&, const double&);
   void setX(const double&);
   void setY(const double&);
-  double distanceFrom(const Point2D*)
+  double distanceFrom(const Point2D*);
   double getX() const;
   double getY() const;
 };

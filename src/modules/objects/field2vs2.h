@@ -19,19 +19,22 @@
 #ifndef FIELD_2VS2_H
 #define FIELD_2VS2_H
 
+#include "constants.h"
 #include "field.h"
 #include "ball.h"
+#include "robotAlly.h"
+#include "robotEnemy.h"
 
 class Field2vs2: public Field {
 private:
   Ball* ball;
-  RobotFriend* friend;
+  RobotAlly* ally;
   RobotEnemy** enemies;
 public:
   Field2vs2(const Field2vs2&);
-  Field2vs2(const Goal*, const Goal*, const RobotSelf*, const RobotFriend*, const RobotEnemy**);
-  Field2vs2(const Goal*, const Goal*, const RobotSelf*, const RobotFriend*, const RobotEnemy**, const Ball*);
-  RobotFriend* getFriend() const;
+  Field2vs2(Goal*, Goal*, RobotSelf*, RobotAlly*, RobotEnemy**, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
+  Field2vs2(Goal*, Goal*, RobotSelf*, RobotAlly*, RobotEnemy**, Ball*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
+  RobotAlly* getAlly() const;
   RobotEnemy** getEnemies() const;
   Ball* getBall() const;
 };

@@ -29,9 +29,9 @@ public:
   Line(const Line&);
   Line(const Point2D*, const Point2D*);
   Line(const double&, const double&, const double&, const double&);
-  void setPointA(const PointA*);
+  void setPointA(const Point2D*);
   void setPointA(const double&, const double&);
-  void setPointB(const PointB*);
+  void setPointB(const Point2D*);
   void setPointB(const double&, const double&);
   double getLength() const;
   Point2D* getPointA() const;

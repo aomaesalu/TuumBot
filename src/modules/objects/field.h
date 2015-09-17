@@ -19,23 +19,24 @@
 #ifndef FIELD_H
 #define FIELD_H
 
-#include "../mathematics/rectangle.h"
+#include "constants.h"
 #include "goal.h"
 #include "robotSelf.h"
+#include "../mathematics/rectangle.h"
 
 class Field: public Rectangle {
 private:
   int currentGoal;
   Goal** goals;
-  RobotSelf* self;
+  RobotSelf* robotSelf;
 public:
   Field(const Field&);
-  Field(const Goal*, const Goal*, const RobotSelf*);
+  Field(Goal*, Goal*, RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH); // TODO: Add default field dimensions
   void swapGoals();
   int getCurrentGoal() const;
   Goal* getFriendlyGoal() const;
   Goal* getEnemyGoal() const;
-  RobotSelf* getSelf() const;
+  RobotSelf* getRobotSelf() const;
 };
 
 #endif // FIELD_H

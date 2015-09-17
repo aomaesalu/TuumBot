@@ -16,16 +16,16 @@
  *   Ants-Oskar Mäesalu
  */
 
-#include "robotFriend.h"
+#include "robotAlly.h"
 
-RobotFriend::RobotFriend(const RobotFriend& other):
+RobotAlly::RobotAlly(const RobotAlly& other):
 Robot(other.getPosition(), other.getRadius())
 {}
 
-RobotFriend::RobotFriend(const Point2D* position, const double& radius):
+RobotAlly::RobotAlly(const Point2D* position, const double& radius):
 Robot(position, radius)
 {}
 
-RobotFriend::RobotFriend(const double& x, const double& y, const double& radius):
+RobotAlly::RobotAlly(const double& x, const double& y, const double& radius):
 Robot(x, y, radius)
 {}

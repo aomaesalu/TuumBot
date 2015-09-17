@@ -19,6 +19,7 @@
 #ifndef FIELD_1VS1_H
 #define FIELD_1VS1_H
 
+#include "constants.h"
 #include "field.h"
 #include "ball.h"
 #include <vector>
@@ -28,8 +29,8 @@ private:
   std::vector<Ball*> balls;
 public:
   Field1vs1(const Field1vs1&);
-  Field1vs1(const Goal*, const Goal*, const RobotSelf*);
-  Field1vs1(const Goal*, const Goal*, const RobotSelf*, const std::vector<Ball*>);
+  Field1vs1(Goal*, Goal*, RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
+  Field1vs1(Goal*, Goal*, RobotSelf*, const std::vector<Ball*>&, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
   std::vector<Ball*> getBalls() const;
 };
 

@@ -19,6 +19,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include "object.h"
 #include "../mathematics/circle.h"
 #include "../mathematics/point2d.h"
 

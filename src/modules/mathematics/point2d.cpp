@@ -24,7 +24,7 @@ x{other.getX()},
 y{other.getY()}
 {}
 
-Point2D::Point2D(const dobule& x, const double& y):
+Point2D::Point2D(const double& x, const double& y):
 x{x},
 y{y}
 {}
@@ -45,6 +45,6 @@ double Point2D::getX() const {
   return x;
 }
 
-double Point2d::getY() const {
+double Point2D::getY() const {
   return y;
 }

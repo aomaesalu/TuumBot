@@ -20,10 +20,12 @@
 #include "constants.h"
 
 Circle::Circle(const Circle& other):
+Shape2D(),
 radius{other.getRadius()}
 {}
 
 Circle::Circle(const double& radius):
+Shape2D(),
 radius{radius}
 {}
 

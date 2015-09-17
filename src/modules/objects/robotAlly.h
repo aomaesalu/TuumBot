@@ -16,19 +16,19 @@
  *   Ants-Oskar Mäesalu
  */
 
-#ifndef ROBOT_FRIEND_H
-#define ROBOT_FRIEND_H
+#ifndef ROBOT_ALLY_H
+#define ROBOT_ALLY_H
 
 #include "robot.h"
 
-class RobotFriend: public Robot {
+class RobotAlly: public Robot {
 private:
 
 public:
-  RobotFriend(const RobotFriend&);
-  RobotFriend(const Point2D*, const double&); // TODO: Add default robot radius
-  RobotFriend(const double&, const double&, const double&); // TODO: Add default robot radius
+  RobotAlly(const RobotAlly&);
+  RobotAlly(const Point2D*, const double&); // TODO: Add default robot radius
+  RobotAlly(const double&, const double&, const double&); // TODO: Add default robot radius
   // TODO: Add communication and strategy methods
 };
 
-#endif // ROBOT_FRIEND_H
+#endif // ROBOT_ALLY_H

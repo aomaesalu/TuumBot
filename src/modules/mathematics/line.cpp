@@ -19,8 +19,8 @@
 #include "line.h"
 
 Line::Line(const Line& other):
-pointA{new Point2D(other->getPointA())},
-pointB{new Point2D(other->getPointB())}
+pointA{new Point2D(other.getPointA()->getX(), other.getPointB()->getY())},
+pointB{new Point2D(other.getPointB()->getX(), other.getPointB()->getY())}
 {}
 
 Line::Line(const Point2D* pointA, const Point2D* pointB):
@@ -50,7 +50,7 @@ void Line::setPointB(const double& x, const double& y) {
 }
 
 double Line::getLength() const {
-  return pointA.distanceFrom(pointB);
+  return pointA->distanceFrom(pointB);
 }
 
 Point2D* Line::getPointA() const {
