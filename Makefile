@@ -69,15 +69,15 @@ $(LIB_COMPUTER_VISION): $(LIB_COMPUTER_VISION_OBJS)
 
 # Mathematics ##################################################################
 
-LIB_MATHEMATICS_OBJS = obj/modules/mathematics/circle.o obj/modules/mathematics/line.o obj/modules/mathematics/point2d.o obj/modules/mathematics/rectangle.o
+LIB_MATHEMATICS_OBJS = obj/modules/mathematics/point2d.o obj/modules/mathematics/line.o obj/modules/mathematics/circle.o obj/modules/mathematics/rectangle.o
 LIB_MATHEMATICS = lib/mathematics.a
 
-obj/modules/mathematics/circle.o: src/modules/mathematics/circle.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/circle.cpp -o obj/modules/mathematics/circle.o
-obj/modules/mathematics/line.o: src/modules/mathematics/line.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/line.cpp -o obj/modules/mathematics/line.o
 obj/modules/mathematics/point2d.o: src/modules/mathematics/point2d.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/point2d.cpp -o obj/modules/mathematics/point2d.o
+obj/modules/mathematics/line.o: src/modules/mathematics/line.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/line.cpp -o obj/modules/mathematics/line.o
+obj/modules/mathematics/circle.o: src/modules/mathematics/circle.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/circle.cpp -o obj/modules/mathematics/circle.o
 obj/modules/mathematics/rectangle.o: src/modules/mathematics/rectangle.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/mathematics/rectangle.cpp -o obj/modules/mathematics/rectangle.o
 
@@ -96,29 +96,29 @@ $(LIB_MOVEMENT): $(LIB_MOVEMENT_OBJS)
 
 # Objects ######################################################################
 
-LIB_OBJECTS_OBJS = obj/modules/objects/ball.o obj/modules/objects/field1vs1.o obj/modules/objects/field2vs2.o obj/modules/objects/field.o obj/modules/objects/goal.o obj/modules/objects/object.o obj/modules/objects/robot.o obj/modules/objects/robotEnemy.o obj/modules/objects/robotFriend.o obj/modules/objects/robotSelf.o
+LIB_OBJECTS_OBJS = obj/modules/objects/object.o obj/modules/objects/ball.o obj/modules/objects/field.o obj/modules/objects/field1vs1.o obj/modules/objects/field2vs2.o obj/modules/objects/goal.o obj/modules/objects/robot.o obj/modules/objects/robotSelf.o obj/modules/objects/robotFriend.o obj/modules/objects/robotEnemy.o
 LIB_OBJECTS = lib/objects.a
 
+obj/modules/objects/object.o: src/modules/objects/object.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/object.cpp -o obj/modules/objects/object.o
 obj/modules/objects/ball.o: src/modules/objects/ball.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/ball.cpp -o obj/modules/objects/ball.o
+obj/modules/objects/field.o: src/modules/objects/field.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field.cpp -o obj/modules/objects/field.o
 obj/modules/objects/field1vs1.o: src/modules/objects/field1vs1.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field1vs1.cpp -o obj/modules/objects/field1vs1.o
 obj/modules/objects/field2vs2.o: src/modules/objects/field2vs2.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field2vs2.cpp -o obj/modules/objects/field2vs2.o
-obj/modules/objects/field.o: src/modules/objects/field.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/field.cpp -o obj/modules/objects/field.o
 obj/modules/objects/goal.o: src/modules/objects/goal.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/goal.cpp -o obj/modules/objects/goal.o
-obj/modules/objects/object.o: src/modules/objects/object.pp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/object.cpp -o obj/modules/objects/object.o
 obj/modules/objects/robot.o: src/modules/objects/robot.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robot.cpp -o obj/modules/objects/robot.o
-obj/modules/objects/robotEnemy.o: src/modules/objects/robotEnemy.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotEnemy.cpp -o obj/modules/objects/robotEnemy.o
-obj/modules/objects/robotFriend.o: src/modules/objects/robotFriend.cpp
-	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotFriend.cpp -o obj/modules/objects/robotFriend.o
 obj/modules/objects/robotSelf.o: src/modules/objects/robotSelf.cpp
 	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotSelf.cpp -o obj/modules/objects/robotSelf.o
+obj/modules/objects/robotFriend.o: src/modules/objects/robotFriend.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotFriend.cpp -o obj/modules/objects/robotFriend.o
+obj/modules/objects/robotEnemy.o: src/modules/objects/robotEnemy.cpp
+	$(CXX) $(LIB_CXXFLAGS) -c src/modules/objects/robotEnemy.cpp -o obj/modules/objects/robotEnemy.o
 
 $(LIB_OBJECTS): $(LIB_OBJECTS_OBJS)
 	ar cr $(LIB_OBJECTS) $(LIB_OBJECTS_OBJS)
@@ -244,10 +244,7 @@ simulation-2vs2: $(PROGRAM_SIMULATION_2VS2)
 
 # all - Target that builds all of the executables ##############################
 
-all:
-	calibration
-	competition
-	simulation
+all: $(PROGRAMS)
 
 # clean - Target that cleans all of the compiled files #########################
 
@@ -260,4 +257,4 @@ clean:
 # test - Target that builds the test application ###############################
 
 test: ;
-	# TODO
+# TODO
