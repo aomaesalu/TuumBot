@@ -65,7 +65,7 @@ $(LIB_COMMUNICATION): $(LIB_COMMUNICATION_OBJS)
 # Computer vision ##############################################################
 
 LIB_COMPUTER_VISION_OBJS =
-LIB_COMPUTER_VISION = $(DIR_LIB)/libcomputer-vision.a
+LIB_COMPUTER_VISION = $(DIR_LIB)/libcomputervision.a
 
 $(LIB_COMPUTER_VISION): $(LIB_COMPUTER_VISION_OBJS)
 	mkdir -p $(DIR_LIB)
@@ -112,7 +112,7 @@ $(LIB_TRIBBLER): $(LIB_TRIBBLER_OBJS)
 ################################################################################
 
 PROGRAMS = $(PROGRAMS_CALIBRATION) $(PROGRAMS_COMPETITION) $(PROGRAMS_SIMULATION)
-PROGRAM_COMPLETE_LFLAGS = -Llib -lcoilgun -lcommunication -lcomputer-vision -lmathematics -lmovement -lobjects -ltribbler
+PROGRAM_COMPLETE_LFLAGS = -Llib -lcoilgun -lcommunication -lcomputervision -lmathematics -lmovement -lobjects -ltribbler
 
 ################################################################################
 # Settings and compilation rules for the calibration programs                  #
