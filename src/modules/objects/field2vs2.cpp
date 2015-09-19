@@ -27,16 +27,18 @@ enemies{other.getEnemies()}
 
 Field2vs2::Field2vs2(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, RobotAlly* ally, RobotEnemy** enemies, const double& width, const double& length):
 Field(friendlyGoal, enemyGoal, robotSelf, width, length),
-ally{ally},
-enemies{enemies}
-{} // TODO: Decide whether to fill ball pointer with dummy value - probably not
+ally{ally}
+{
+  this->enemies = enemies; // Causes warning when in initialization list
+}
 
 Field2vs2::Field2vs2(Goal* friendlyGoal, Goal* enemyGoal, RobotSelf* robotSelf, RobotAlly* ally, RobotEnemy** enemies, Ball* ball, const double& width, const double& length):
 Field(friendlyGoal, enemyGoal, robotSelf, width, length),
-ally{ally},
-enemies{enemies},
-ball{ball}
-{}
+ally{ally}
+{
+  this->enemies = enemies; // Causes warning when in initialization list
+  this->ball = ball; // Causes warning when in initialization list
+}
 
 RobotAlly* Field2vs2::getAlly() const {
   return ally;
