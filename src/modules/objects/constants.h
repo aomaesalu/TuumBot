@@ -31,8 +31,17 @@
 #define GOAL_LENGTH 250                 // Goal length
 #define GOAL_HEIGHT 200                 // Goal height                                  // Unused
 #define GOAL_BEACON_HEIGHT 400          // Goal beacon height                           // Unused
+#define BLUE_GOAL_POSITION_X -1         // Blue goal's position x-coordinate            // Wrong
+#define BLUE_GOAL_POSITION_Y -1         // Blue goal's position y-coordinate            // Wrong
+#define YELLOW_GOAL_POSITION_X -1       // Yellow goal's position x-coordinate          // Wrong
+#define YELLOW_GOAL_POSITION_Y -1       // Yellow goal's position y-coordinate          // Wrong
 #define BALL_RADIUS 43                  // Ball radius
 #define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width         // Unused
 #define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
+
+// Implementation-specific physical constants in millimeters
+#define ROBOT_RADIUS 350                // Our robot's radius
+#define ROBOT_INITIAL_POSITION_X -1     // Our robot's initial position x-coordinate
+#define ROBOT_INITIAL_POSITION_Y -1     // Out robot's initial position y-coordinate
 
 #endif // PHYSICAL_CONSTANTS_H

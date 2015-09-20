@@ -31,7 +31,8 @@ private:
   RobotSelf* robotSelf;
 public:
   Field(const Field&);
-  Field(Goal*, Goal*, RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH); // TODO: Add default field dimensions
+  Field(RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
+  Field(Goal*, Goal*, RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
   void swapGoals();
   int getCurrentGoal() const;
   Goal* getFriendlyGoal() const;

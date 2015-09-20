@@ -19,6 +19,7 @@
 #ifndef ROBOT_ALLY_H
 #define ROBOT_ALLY_H
 
+#include "constants.h"
 #include "robot.h"
 
 class RobotAlly: public Robot {
@@ -26,8 +27,8 @@ private:
 
 public:
   RobotAlly(const RobotAlly&);
-  RobotAlly(const Point2D*, const double&); // TODO: Add default robot radius
-  RobotAlly(const double&, const double&, const double&); // TODO: Add default robot radius
+  RobotAlly(const Point2D*, const double& = ROBOT_RADIUS);
+  RobotAlly(const double& = ROBOT_INITIAL_POSITION_X, const double& = ROBOT_INITIAL_POSITION_Y, const double& = ROBOT_RADIUS);
   // TODO: Add communication and strategy methods
 };
 

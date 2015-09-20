@@ -19,10 +19,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "../mathematics/shape2d.h"
 #include "../mathematics/point2d.h"
 
-class Object: public Shape2D {
+class Object {
 private:
   Point2D* position;
 public:

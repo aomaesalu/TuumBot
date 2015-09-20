@@ -19,11 +19,13 @@
 #include "rectangle.h"
 
 Rectangle::Rectangle(const Rectangle& other):
+Shape2D(),
 width{other.getWidth()},
 length{other.getLength()}
 {}
 
 Rectangle::Rectangle(const double& width, const double& length):
+Shape2D(),
 width{width},
 length{length}
 {}

@@ -30,7 +30,7 @@ private:
 public:
   Ball(const Ball&);
   Ball(const Point2D*, const double& = BALL_RADIUS);
-  Ball(const double&, const double&, const double&);
+  Ball(const double&, const double&, const double& = BALL_RADIUS);
 };
 
 #endif // BALL_H

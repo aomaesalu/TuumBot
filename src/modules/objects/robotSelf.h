@@ -19,6 +19,7 @@
 #ifndef ROBOT_SELF_H
 #define ROBOT_SELF_H
 
+#include "constants.h"
 #include "robot.h"
 
 class RobotSelf: public Robot {
@@ -26,8 +27,8 @@ private:
   // TODO: Add motors, coilgun, tribbler, cameras, ...
 public:
   RobotSelf(const RobotSelf&);
-  RobotSelf(const Point2D*, const double&); // TODO: Add default robot radius; add motors, coilgun, tribbler, cameras parameters
-  RobotSelf(const double&, const double&, const double&); // TODO: Add default robot radius; add motors, coilgun, tribbler, cameras parameters
+  RobotSelf(const Point2D*, const double& = ROBOT_RADIUS); // TODO: Add motors, coilgun, tribbler, cameras parameters
+  RobotSelf(const double& = ROBOT_INITIAL_POSITION_X, const double& = ROBOT_INITIAL_POSITION_Y, const double& = ROBOT_RADIUS); // TODO: Add motors, coilgun, tribbler, cameras parameters
   // TODO: Add communication and strategy methods
   // TODO: Add movement methods
   // TODO: Add computer vision methods
