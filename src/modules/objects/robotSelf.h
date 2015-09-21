@@ -21,9 +21,11 @@
 
 #include "constants.h"
 #include "robot.h"
+#include "../movement/motor.h"
 
 class RobotSelf: public Robot {
 private:
+  Motor** motors;
   // TODO: Add motors, coilgun, tribbler, cameras, ...
 public:
   RobotSelf(const RobotSelf&);

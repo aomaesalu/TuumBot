@@ -25,7 +25,6 @@
 
 class Robot: public Object, public Circle {
 private:
-
 public:
   Robot(const Robot&);
   Robot(const Point2D*, const double&); // TODO: Add default maximum robot radius; can be changed midgame

@@ -11,17 +11,17 @@
  *   Indrek Virro
  *   Mihkel Väljaots
 
- * Movement class
+ * Motor class
  * Contributors:
  *   Ants-Oskar Mäesalu
  */
 
-#ifndef MOVEMENT_H
-#define MOVEMENT_H
+#ifndef MOTOR_H
+#define MOTOR_H
 
-class Movement {
+class Motor {
 private:
 public:
 };
 
-#endif // MOVEMENT_H
+#endif // MOTOR_H
