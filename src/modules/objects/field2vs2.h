@@ -32,6 +32,7 @@ private:
   RobotEnemy** enemies;
 public:
   Field2vs2(const Field2vs2&);
+  Field2vs2(RobotSelf*, const double& = FIELD_WIDTH, const double& = FIELD_WIDTH);
   Field2vs2(RobotSelf*, RobotAlly*, RobotEnemy**, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
   Field2vs2(Goal*, Goal*, RobotSelf*, RobotAlly*, RobotEnemy**, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
   Field2vs2(RobotSelf*, RobotAlly*, RobotEnemy**, Ball*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);

@@ -20,8 +20,12 @@
  */
 
 #include <cstdlib>
+#include "../../../modules/objects/robotSelf.h"
+#include "../../../modules/objects/field2vs2.h"
 
 int main() {
-
+	// Initialise game objects
+	RobotSelf* self = new RobotSelf();
+	Field2vs2* field = new Field2vs2(self);
 	return EXIT_SUCCESS;
 }

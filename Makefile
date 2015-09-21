@@ -121,7 +121,7 @@ $(LIB_ROBOT): $(LIB_ROBOT_OBJS)
 ################################################################################
 
 PROGRAMS = $(PROGRAMS_CALIBRATION) $(PROGRAMS_COMPETITION) $(PROGRAMS_SIMULATION)
-PROGRAM_COMPLETE_LFLAGS =
+PROGRAM_COMPLETE_LFLAGS = -Llib -lrobot
 # -Llib -lcoilgun -lcommunication -lcomputervision -lmathematics -lmovement -lobjects -ltribbler
 
 ################################################################################
@@ -189,7 +189,7 @@ PROGRAMS_COMPETITION = $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_2VS2)
 # 1vs1 #########################################################################
 
 PROGRAM_COMPETITION_1VS1_OBJS = $(DIR_OBJ)/programs/competition/1vs1/main.o
-PROGRAM_COMPETITION_1VS1_LFLAGS = -Llib -lrobot
+PROGRAM_COMPETITION_1VS1_LFLAGS = $(PROGRAM_COMPLETE_LFLAGS)
 PROGRAM_COMPETITION_1VS1 = $(DIR_BIN)/competition-1vs1
 
 $(PROGRAM_COMPETITION_1VS1): $(PROGRAM_COMPETITION_1VS1_OBJS)
