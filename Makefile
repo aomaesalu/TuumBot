@@ -42,7 +42,7 @@ LIB_CXXFLAGS = $(CXXFLAGS) -Iinclude
 
 LIB_OBJS = $(LIB_COILGUN_OBJS) $(LIB_COMMUNICATION_OBJS) $(LIB_COMPUTER_VISION_OBJS) $(LIB_MATHEMATICS_OBJS) $(LIB_MOVEMENT_OBJS) $(LIB_OBJECTS_OBJS) $(LIB_TRIBBLER_OBJS)
 
-LIBS = $(LIB_COILGUN) $(LIB_COMMUNICATION) $(LIB_COMPUTER_VISION) $(LIB_MATHEMATICS) $(LIB_MOVEMENT) $(LIB_OBJECTS) $(LIB_TRIBBLER)
+LIBS = $(LIB_COILGUN) $(LIB_COMMUNICATION) $(LIB_COMPUTER_VISION) $(LIB_MATHEMATICS) $(LIB_MOVEMENT) $(LIB_OBJECTS) $(LIB_TRIBBLER) $(LIB_ROBOT)
 
 # Coilgun ######################################################################
 
@@ -51,7 +51,7 @@ LIB_COILGUN = $(DIR_LIB)/libcoilgun.a
 
 $(LIB_COILGUN): $(LIB_COILGUN_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_COILGUN) $(LIB_COILGUN_OBJS)
+	ar cr $(LIB_COILGUN) $(LIB_COILGUN_OBJS) $@ $^
 
 # Communication ################################################################
 
@@ -60,7 +60,7 @@ LIB_COMMUNICATION = $(DIR_LIB)/libcommunication.a
 
 $(LIB_COMMUNICATION): $(LIB_COMMUNICATION_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_COMMUNICATION) $(LIB_COMMUNICATION_OBJS)
+	ar cr $(LIB_COMMUNICATION) $(LIB_COMMUNICATION_OBJS) $@ $^
 
 # Computer vision ##############################################################
 
@@ -69,7 +69,7 @@ LIB_COMPUTER_VISION = $(DIR_LIB)/libcomputervision.a
 
 $(LIB_COMPUTER_VISION): $(LIB_COMPUTER_VISION_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_COMPUTER_VISION) $(LIB_COMPUTER_VISION_OBJS)
+	ar cr $(LIB_COMPUTER_VISION) $(LIB_COMPUTER_VISION_OBJS) $@ $^
 
 # Mathematics ##################################################################
 
@@ -78,7 +78,7 @@ LIB_MATHEMATICS = $(DIR_LIB)/libmathematics.a
 
 $(LIB_MATHEMATICS): $(LIB_MATHEMATICS_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_MATHEMATICS) $(LIB_MATHEMATICS_OBJS)
+	ar cr $(LIB_MATHEMATICS) $(LIB_MATHEMATICS_OBJS) $@ $^
 
 # Movement #####################################################################
 
@@ -87,7 +87,7 @@ LIB_MOVEMENT = $(DIR_LIB)/libmovement.a
 
 $(LIB_MOVEMENT): $(LIB_MOVEMENT_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_MOVEMENT) $(LIB_MOVEMENT_OBJS)
+	ar cr $(LIB_MOVEMENT) $(LIB_MOVEMENT_OBJS) $@ $^
 
 # Objects ######################################################################
 
@@ -96,7 +96,7 @@ LIB_OBJECTS = $(DIR_LIB)/libobjects.a
 
 $(LIB_OBJECTS): $(LIB_OBJECTS_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_OBJECTS) $(LIB_OBJECTS_OBJS)
+	ar cr $(LIB_OBJECTS) $(LIB_OBJECTS_OBJS) $@ $^
 
 # Tribbler #####################################################################
 
@@ -105,14 +105,24 @@ LIB_TRIBBLER = $(DIR_LIB)/libtribbler.a
 
 $(LIB_TRIBBLER): $(LIB_TRIBBLER_OBJS)
 	mkdir -p $(DIR_LIB)
-	ar cr $(LIB_TRIBBLER) $(LIB_TRIBBLER_OBJS)
+	ar cr $(LIB_TRIBBLER) $(LIB_TRIBBLER_OBJS) $@ $^
+
+# Robot ########################################################################
+
+LIB_ROBOT_OBJS = $(LIB_COILGUN_OBJS) $(LIB_COMMUNICATION_OBJS) $(LIB_COMPUTER_VISION_OBJS) $(LIB_MATHEMATICS_OBJS) $(LIB_MOVEMENT_OBJS) $(LIB_OBJECTS_OBJS) $(LIB_TRIBBLER_OBJS)
+LIB_ROBOT = $(DIR_LIB)/librobot.a
+
+$(LIB_ROBOT): $(LIB_ROBOT_OBJS)
+	mkdir -p $(DIR_LIB)
+	ar cr $(LIB_ROBOT) $(LIB_ROBOT_OBJS)
 
 ################################################################################
 # Settings and compilation rules for the programs                              #
 ################################################################################
 
 PROGRAMS = $(PROGRAMS_CALIBRATION) $(PROGRAMS_COMPETITION) $(PROGRAMS_SIMULATION)
-PROGRAM_COMPLETE_LFLAGS = -Llib -lcoilgun -lcommunication -lcomputervision -lmathematics -lmovement -lobjects -ltribbler
+PROGRAM_COMPLETE_LFLAGS =
+# -Llib -lcoilgun -lcommunication -lcomputervision -lmathematics -lmovement -lobjects -ltribbler
 
 ################################################################################
 # Settings and compilation rules for the calibration programs                  #
@@ -179,7 +189,7 @@ PROGRAMS_COMPETITION = $(PROGRAM_COMPETITION_1VS1) $(PROGRAM_COMPETITION_2VS2)
 # 1vs1 #########################################################################
 
 PROGRAM_COMPETITION_1VS1_OBJS = $(DIR_OBJ)/programs/competition/1vs1/main.o
-PROGRAM_COMPETITION_1VS1_LFLAGS = $(PROGRAM_COMPLETE_LFLAGS)
+PROGRAM_COMPETITION_1VS1_LFLAGS = -Llib -lrobot
 PROGRAM_COMPETITION_1VS1 = $(DIR_BIN)/competition-1vs1
 
 $(PROGRAM_COMPETITION_1VS1): $(PROGRAM_COMPETITION_1VS1_OBJS)
@@ -243,6 +253,7 @@ mathematics: $(LIB_MATHEMATICS)
 movement: $(LIB_MOVEMENT)
 objects: $(LIB_OBJECTS)
 tribbler: $(LIB_TRIBBLER)
+robot: $(LIB_ROBOT)
 
 # calibration - Target that builds only the calibration programs ###############
 
