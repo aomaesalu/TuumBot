@@ -16,14 +16,14 @@
  *   Ants-Oskar Mäesalu
  */
 
-Camera::Camera(const std::string name, const int& width, const int& height):
-name{name},
+Camera::Camera(const std::string device, const int& width, const int& height):
+device{device},
 width{width},
 height{height}
 {}
 
-std::string Camera::getName() const {
-  return name;
+std::string Camera::getDevice() const {
+  return device;
 }
 
 int Camera::getWidth() const {
