@@ -32,3 +32,6 @@ bin/*
 obj/*
 lib/*
 data/*
+
+# Image files
+*.ppm
