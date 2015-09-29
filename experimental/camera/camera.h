@@ -27,29 +27,9 @@
 
 #include <string>
 
-#include "constants.h"
+#include "constants.h"    // Camera constants
 
 class Camera {
-
-private:
-  std::string device;
-  int width;
-  int height;
-
-  int fileDescriptor;
-
-  /**
-    // TODO
-  */
-  void openDevice();
-
-  /**
-    Closes the camera device. All I/O progress is terminated and resources
-    associated with the file descriptor are freed. However, data format
-    parameters, current input or output, control values or other properties
-    remain unchanged.
-  */
-  void closeDevice();
 
 public:
 
@@ -68,19 +48,67 @@ public:
   ~Camera();
 
   /**
-    Returns the camera's device path.
+    Returns the camera device's path.
   */
   std::string getDevice() const;
 
   /**
-    Returns the camera's resolution width.
+    Returns the camera resolution's width.
   */
   int getWidth() const;
 
   /**
-    Returns the camera's resolution height.
+    Returns the camera resolution's height.
   */
   int getHeight() const;
+
+private:
+
+  /**
+    The camera device's path. The default value for this variable is described
+    in the camera constants file. The value actually used in the program can be
+    set upon class initialisation.
+    In Linux operating systems, this is usually /dev/videoN, where N is the
+    video device's number.
+  */
+  std::string device;
+
+  /**
+    The camera resolution's width. The default value for this variable is
+    described in the camera constants file. The value actually used in the
+    program can be set upon class initialisation.
+  */
+  int width;
+
+  /**
+    The camera resolution's height. The default value for this variable is 
+    described in the camera constants file. The value actually used in the
+    program can be set upon class initialisation.
+  */
+  int height;
+
+  /**
+    The camera device's file descriptor. This specific value is set upon opening
+    the device and is used in input-output operations performed on the device,
+    and upon closing the device.
+  */
+  int fileDescriptor;
+
+  /**
+    // TODO
+  */
+  void openDevice();
+
+  /**
+    Closes the camera device. All I/O progress is terminated and resources
+    associated with the file descriptor are freed. However, data format
+    parameters, current input or output, control values or other properties
+    remain unchanged.
+    Throws a runtime error if the device cannot be closed. This can only happen
+    if the file descriptor used upon closing the device is not a valid open file
+    descriptor of the device.
+  */
+  void closeDevice();
 
 };
 
