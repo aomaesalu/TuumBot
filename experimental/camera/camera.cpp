@@ -16,7 +16,9 @@
  *   Ants-Oskar Mäesalu
  */
 
-Camera::Camera(const std::string device, const int& width, const int& height):
+#include "camera.h"
+
+Camera::Camera(const std::string &device, const int &width, const int &height):
 device{device},
 width{width},
 height{height}
