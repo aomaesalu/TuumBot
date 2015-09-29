@@ -37,6 +37,8 @@ public:
     Camera constructor. Receives the camera device location and the preferred
     resolution dimensions as parameters.
     Opens the device.
+    // TODO: Initialise device
+    // TODO: Start capturing
   */
   Camera(const std::string& = CAMERA_DEVICE, const int& = CAMERA_WIDTH,
          const int& = CAMERA_HEIGHT);
@@ -44,6 +46,8 @@ public:
   /**
     Camera destructor.
     Closes the device.
+    // TODO: Uninitialise device
+    // TODO: Stop capturing
   */
   ~Camera();
 
@@ -81,7 +85,7 @@ private:
   int width;
 
   /**
-    The camera resolution's height. The default value for this variable is 
+    The camera resolution's height. The default value for this variable is
     described in the camera constants file. The value actually used in the
     program can be set upon class initialisation.
   */

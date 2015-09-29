@@ -22,9 +22,10 @@
   Copyright (c) 2015 Ants-Oskar Mäesalu
 */
 
-#include "camera.h"
+#include "camera.h"             // The class header
 
 #include "unistd.h"             // Operating system API header
+#include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
 
 Camera::Camera(const std::string &device, const int &width, const int &height):
@@ -45,7 +46,7 @@ void Camera::openDevice() {
 
 void Camera::closeDevice() {
   if (close(fileDescriptor) == -1)
-    throw runtime_error("Error upon closing device.");
+    throw std::runtime_error("Error upon closing device.");
   fileDescriptor = -1;
 }
 
