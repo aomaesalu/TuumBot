@@ -21,14 +21,16 @@
 
 #include <string>
 
+#include "constants.h"
+
 class Camera {
 private:
-std::string name;
+  std::string device;
   int width;
   int height;
 public:
-  Camera(const std::string& = "/dev/video0", const int& = 480, const int& = 640);
-  std::string getName() const;
+  Camera(const std::string& = CAMERA_DEVICE, const int& = CAMERA_WIDTH, const int& = CAMERA_HEIGHT);
+  std::string getDevice() const;
   int getWidth() const;
   int getHeight() const;
 };
