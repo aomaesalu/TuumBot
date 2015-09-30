@@ -1,20 +1,24 @@
 /**
- * Tuum
- * Robotex 2015
- * University of Tartu
- * Team:
- *   Kristjan Kanarbik
- *   Meelik Kiik
- *   Ants-Oskar Mäesalu
- *   Mart Müllerbeck
- *   Kaur Viiklaid
- *   Indrek Virro
- *   Mihkel Väljaots
+  Tuum
+  Robotex 2015
+  University of Tartu
+  Team:
+    Kristjan Kanarbik
+    Meelik Kiik
+    Ants-Oskar Mäesalu
+    Mart Müllerbeck
+    Kaur Viiklaid
+    Indrek Virro
+    Mihkel Väljaots
 
- * Camera constants header
- * Contributors:
- *   Ants-Oskar Mäesalu
- */
+  Camera constants header
+    Describes all of the necessary constants for the robot's camera.
+
+  Contributors:
+    Ants-Oskar Mäesalu
+
+  Copyright (c) 2015 Ants-Oskar Mäesalu
+*/
 
 #ifndef CAMERA_CONSTANTS_H
 #define CAMERA_CONSTANTS_H

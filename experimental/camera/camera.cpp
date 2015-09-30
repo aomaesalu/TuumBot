@@ -38,9 +38,11 @@ height{height}
 {
   fileDescriptor = -1;
   openDevice();
+  initialiseDevice();
 }
 
 Camera::~Camera() {
+  uninitialiseDevice();
   closeDevice();
 }
 
@@ -95,4 +97,20 @@ void Camera::closeDevice() {
 
   // Reset the file descriptor to ensure it doesn't refer to any device anymore.
   fileDescriptor = -1;
+}
+
+void Camera::initialiseDevice() {
+  // TODO
+}
+
+void Camera::uninitialiseDevice() {
+  // TODO
+}
+
+void Camera::startCapturing() {
+  // TODO
+}
+
+void Camera::stopCapturing() {
+  // TODO
 }
