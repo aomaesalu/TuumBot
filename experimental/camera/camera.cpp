@@ -135,6 +135,13 @@ void Camera::initialiseDevice() {
   // an appropriate error message if the device is not suitable for usage in our
   // application.
   checkV4L2Capabilities();
+
+  // TODO: Select video input, video standard and tune here.
+
+  // Check the cropping capabilities of the video device. Currently does not
+  // throw any kind of exceptions.
+  // TODO: Decide on what to do with this functionality.
+  checkCroppingCapabilites();
 }
 
 void Camera::uninitialiseDevice() {
@@ -174,4 +181,44 @@ void Camera::checkV4L2Capabilities() {
   // between application and driver, the data itself is not copied.
   if (!(capabilities.capabilities & V4L2_CAP_STREAMING))
     throw runtime_error(device + " does not support streaming I/O");
+}
+
+/**
+  TODO: This method isn't necessarily needed upon camera device initialisation.
+  Decide on what to do with it, or whether to improve it.
+*/
+void Camera::checkCroppingCapabilites() {
+  // V4L2 cropping capability structure
+  struct v4l2_cropcap croppingCapabilities;
+
+  // V4L2 cropping rectangle structure
+  struct v4l2_crop croppingRectangle;
+
+  CLEAR(croppingCapabilities);
+
+  // Specify the cropping capability type to be specific for video captures.
+  // Other types possible include video outputs, overlays, and custom types.
+  croppingCapabilities.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+  // Query device cropping capabilities. On success, 0 is returned; on error -1
+  // is returned and the errno variable is set appropriately to EINVAL.
+  if (xioctl(fileDescriptor, VIDIOC_CROPCAP, &croppingCapabilities) == 0) {
+    // Specify the cropping type to be specific for video captures. Other types
+    // possible include video outputs, overlays, and custom types.
+    croppingRectangle.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+
+    // Reset the cropping rectangle to default
+    croppingRectangle.c = croppingCapabilities.defrect;
+
+    // Try to crop the video capture. On success, 0 is returned; on error, -1
+    // is returned and the errno variable is set appropriately to EINVAL.
+    if (xioctl(fileDescriptor, VIDIOC_S_CROP, &croppingRectangle) == -1) {
+      if (errno == EINVAL)
+        // Cropping is not supported. Ignore error (for now?).
+      else
+        // Errors ignored.
+    }
+  } else {
+    // Errors ignored.
+  }
 }
