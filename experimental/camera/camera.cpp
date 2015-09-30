@@ -44,6 +44,18 @@ Camera::~Camera() {
   closeDevice();
 }
 
+std::string Camera::getDevice() const {
+  return device;
+}
+
+int Camera::getWidth() const {
+  return width;
+}
+
+int Camera::getHeight() const {
+  return height;
+}
+
 void Camera::openDevice() {
   // File status structure
   struct stat status;
@@ -83,16 +95,4 @@ void Camera::closeDevice() {
 
   // Reset the file descriptor to ensure it doesn't refer to any device anymore.
   fileDescriptor = -1;
-}
-
-std::string Camera::getDevice() const {
-  return device;
-}
-
-int Camera::getWidth() const {
-  return width;
-}
-
-int Camera::getHeight() const {
-  return height;
 }
