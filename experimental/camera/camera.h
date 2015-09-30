@@ -36,18 +36,14 @@ public:
   /**
     Camera constructor. Receives the camera device location and the preferred
     resolution dimensions as parameters.
-    Opens the device.
-    // TODO: Initialise device
-    // TODO: Start capturing
+    Opens and initialises the device, and starts capturing.
   */
   Camera(const std::string& = CAMERA_DEVICE, const int& = CAMERA_WIDTH,
          const int& = CAMERA_HEIGHT);
 
   /**
     Camera destructor.
-    Closes the device.
-    // TODO: Uninitialise device
-    // TODO: Stop capturing
+    Stops capturing, uninitialises and closes the device.
   */
   ~Camera();
 
@@ -121,6 +117,26 @@ private:
     descriptor of the device.
   */
   void closeDevice();
+
+  /**
+    // TODO
+  */
+  void initialiseDevice();
+
+  /**
+    // TODO
+  */
+  void uninitialiseDevice();
+
+  /**
+    // TODO
+  */
+  void startCapturing();
+
+  /**
+    // TODO
+  */
+  void stopCapturing();
 
 };
 
