@@ -24,7 +24,10 @@
 
 #include "camera.h"             // The class header
 
-#include "unistd.h"             // Operating system API header
+#include <fcntl.h>              // File control operations (open)
+#include <sys/stat.h>           // File characteristics header (stat)
+#include <unistd.h>             // OS API header (close)
+#include <cstring>              // C string header (memset, strerror)
 #include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
 
@@ -33,6 +36,7 @@ device{device},
 width{width},
 height{height}
 {
+  fileDescriptor = -1;
   openDevice();
 }
 
@@ -41,12 +45,43 @@ Camera::~Camera() {
 }
 
 void Camera::openDevice() {
-  // TODO
+  // File status structure
+  struct stat status;
+
+  // Get device file status.
+  // Upon successful completion, 0 shall be returned. Otherwise, -1 shall be
+  // returned and errno set to indicate the error.
+  if (stat(device.c_str(), &status) == -1)
+    throw std::runtime_error(device + ": cannot identify! " +
+                             std::to_string(errno) + ": " +
+                             std::strerror(errno));
+
+  // Test if the device file is a character special file. The test returns a
+  // non-zero value if the test is true; 0 if the test is false.
+  if (!S_ISCHR(status.st_mode))
+    throw std::runtime_error(device + " is no device");
+
+  // Try to open the device.
+  // Upon successful completion, the open function shall open the file and
+  // return a non-negative integer representing the lowest numbered unused file
+  // descriptor. Otherwise, -1 shall be returned and errno set to indicate the
+  // error. No files shall be created or modified if the function returns -1.
+  // O_RDWR sets the file to be open for reading and writing.
+  // O_NONBLOCK sets the function to return without blocking for the device to
+  // be ready or available.
+  if ((fileDescriptor = open(device.c_str(), O_RDWR | O_NONBLOCK, 0)) == -1)
+    throw std::runtime_error(device + ": cannot open! " + std::to_string(errno)
+                             + ": " + std::strerror(errno));
 }
 
 void Camera::closeDevice() {
+  // Try to close the device, based on its file descriptor
+  // The close function returns -1 if the file descriptor is not a valid open
+  // device file descriptor of the device.
   if (close(fileDescriptor) == -1)
-    throw std::runtime_error("Error upon closing device.");
+    throw std::runtime_error("Error upon closing device");
+
+  // Reset the file descriptor to ensure it doesn't refer to any device anymore.
   fileDescriptor = -1;
 }
 

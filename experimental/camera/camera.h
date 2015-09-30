@@ -93,13 +93,21 @@ private:
 
   /**
     The camera device's file descriptor. This specific value is set upon opening
-    the device and is used in input-output operations performed on the device,
-    and upon closing the device.
+    the device and is used in I/O operations performed on the device, and upon
+    closing the device.
   */
   int fileDescriptor;
 
   /**
-    // TODO
+    Opens the camera device. Establishes a connection between a file and a file
+    descriptor. Creates an open file description that refers to a file and a
+    file descriptor that refers to that open file description. The file
+    descriptor is used by other I/O functions to refer to that file.
+    The file descriptor is set to the lowest file descriptor not currently open
+    for the current process. The open file description is new, and therefore the
+    file descriptor shall not share it with any other process in the system.
+    Throws a runtime error if the device cannot be identified, if it is not an
+    appropriate device, or if it cannot be opened.
   */
   void openDevice();
 
