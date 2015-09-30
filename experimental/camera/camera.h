@@ -162,6 +162,11 @@ private:
   */
   void initialiseFormat();
 
+  /**
+    // TODO
+  */
+  void initialiseBuffer();
+
 };
 
 #endif // CAMERA_H

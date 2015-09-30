@@ -70,9 +70,11 @@ height{height}
   fileDescriptor = -1;
   openDevice();
   initialiseDevice();
+  startCapturing();
 }
 
 Camera::~Camera() {
+  stopCapturing();
   uninitialiseDevice();
   closeDevice();
 }
@@ -145,6 +147,9 @@ void Camera::initialiseDevice() {
 
   // Initialise the appropriate video format for the camera device.
   initialiseFormat();
+
+  // TODO
+  initialiseBuffer();
 }
 
 void Camera::uninitialiseDevice() {
@@ -165,11 +170,12 @@ void Camera::checkV4L2Capabilities() {
 
   // Query device capabilities. If the video device driver is not compatible
   // with V4L2 specification, (x)ioctl returns an EINVAL error code.
-  if (xioctl(fileDescriptor, VIDIOC_QUERYCAP, &capabilities) == -1)
+  if (xioctl(fileDescriptor, VIDIOC_QUERYCAP, &capabilities) == -1) {
     if (errno == EINVAL)
-      throw runtime_error(device + " is no V4L2 device");
+      throw std::runtime_error(device + " is not a V4L2 device");
     else
-      throw runtime_error("VIDIOC_QUERYCAP");
+      throw std::runtime_error("VIDIOC_QUERYCAP");
+  }
 
   // Check if the device supports the Video Capture interface.
   // Video capture devices sample an analog video signal and store the digitized
@@ -177,13 +183,13 @@ void Camera::checkV4L2Capabilities() {
   // frames/second. With this interface, applications can control the capture
   // process and move images from the driver into user space.
   if (!(capabilities.capabilities & V4L2_CAP_VIDEO_CAPTURE))
-    throw runtime_error(device + " is no video capture device");
+    throw std::runtime_error(device + " is not a video capture device");
 
   // Check if the device supports the streaming I/O method.
   // Streaming is an I/O method where only pointers to buffers are exchanged
   // between application and driver, the data itself is not copied.
   if (!(capabilities.capabilities & V4L2_CAP_STREAMING))
-    throw runtime_error(device + " does not support streaming I/O");
+    throw std::runtime_error(device + " does not support streaming I/O");
 }
 
 /**
@@ -216,10 +222,11 @@ void Camera::checkCroppingCapabilites() {
     // Try to crop the video capture. On success, 0 is returned; on error, -1
     // is returned and the errno variable is set appropriately to EINVAL.
     if (xioctl(fileDescriptor, VIDIOC_S_CROP, &croppingRectangle) == -1) {
-      if (errno == EINVAL)
+      if (errno == EINVAL) {
         // Cropping is not supported. Ignore error (for now?).
-      else
+      } else {
         // Errors ignored.
+      }
     }
   } else {
     // Errors ignored.
@@ -256,10 +263,14 @@ void Camera::initialiseFormat() {
 
   // Try to set the format according to our specifications. On success, 0 is
   // returned; on error -1 and the errno variable is set appropriately.
-  if (xioctl(fd, VIDIOC_S_FMT, &format) == -1)
-    throw runtime_error("VIDIOC_S_FMT");
+  if (xioctl(fileDescriptor, VIDIOC_S_FMT, &format) == -1)
+    throw std::runtime_error("VIDIOC_S_FMT");
 
   // VIDIOC_S_FMT may change resolution width and height.
   width = format.fmt.pix.width;
   height = format.fmt.pix.height;
+}
+
+void Camera::initialiseBuffer() {
+  // TODO
 }
