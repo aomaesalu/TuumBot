@@ -26,10 +26,41 @@
 
 #include <fcntl.h>              // File control operations (open)
 #include <sys/stat.h>           // File characteristics header (stat)
+#include <sys/ioctl.h>          // I/O control device header (ioctl)
 #include <unistd.h>             // OS API header (close)
 #include <cstring>              // C string header (memset, strerror)
 #include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
+
+// Macro to set the memory of a variable to zero
+#define CLEAR(x) memset(&(x), 0, sizeof(x))
+
+/**
+  Handles ioctl function calls. Calls the ioctl multiple times until the ioctl
+  function returns an appropriate response.
+  If the ioctl function returns -1, either it failed because of a reasonable
+  argument, or it failed because of some blocking function. In this piece of
+  software, only the first option is considered to be an appropriate response
+  upon failure.
+  The first argument must be an open file descriptor.
+  The second argument is a device-dependent request code.
+  The third argument is an untyped pointer to memory.
+  Usually, on success zero is returned.  A few ioctl requests use the return
+  value as an output parameter and return a nonnegative value on success. On
+  error, -1 is returned, and errno is set appropriately.
+*/
+static int xioctl(int fileDescriptor, unsigned long int request, void *arg) {
+  int result;
+  do {
+    // The ioctl function manipulates the underlying device parameters of
+    // special files. Many operating characteristics of character special files
+    // (in this case, the video device file) may be controlled with ioctl
+    // requests.  The file descriptor used as the first argument of the function
+    // must be an open file descriptor.
+    result = ioctl(fileDescriptor, request, arg);
+  } while (result == -1 && errno == EINTR);
+  return result;
+}
 
 Camera::Camera(const std::string &device, const int &width, const int &height):
 device{device},
@@ -100,7 +131,10 @@ void Camera::closeDevice() {
 }
 
 void Camera::initialiseDevice() {
-  // TODO
+  // Check the V4L2 capabilities of the video device. Throws runtime_error with
+  // an appropriate error message if the device is not suitable for usage in our
+  // application.
+  checkV4L2Capabilities();
 }
 
 void Camera::uninitialiseDevice() {
@@ -113,4 +147,31 @@ void Camera::startCapturing() {
 
 void Camera::stopCapturing() {
   // TODO
+}
+
+void Camera::checkV4L2Capabilities() {
+  // V4L2 capability structure
+  struct v4l2_capability capabilities;
+
+  // Query device capabilities. If the video device driver is not compatible
+  // with V4L2 specification, (x)ioctl returns an EINVAL error code.
+  if (xioctl(fileDescriptor, VIDIOC_QUERYCAP, &capabilities) == -1)
+    if (errno == EINVAL)
+      throw runtime_error(device + " is no V4L2 device");
+    else
+      throw runtime_error("VIDIOC_QUERYCAP");
+
+  // Check if the device supports the Video Capture interface.
+  // Video capture devices sample an analog video signal and store the digitized
+  // images in memory. Today, nearly all devices can capture at full 25 or 30
+  // frames/second. With this interface, applications can control the capture
+  // process and move images from the driver into user space.
+  if (!(capabilities.capabilities & V4L2_CAP_VIDEO_CAPTURE))
+    throw runtime_error(device + " is no video capture device");
+
+  // Check if the device supports the streaming I/O method.
+  // Streaming is an I/O method where only pointers to buffers are exchanged
+  // between application and driver, the data itself is not copied.
+  if (!(capabilities.capabilities & V4L2_CAP_STREAMING))
+    throw runtime_error(device + " does not support streaming I/O");
 }

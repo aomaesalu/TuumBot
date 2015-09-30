@@ -119,7 +119,8 @@ private:
   void closeDevice();
 
   /**
-    // TODO
+    Initialises the camera device.
+    Checks the camera device's V4L2 capabilites, [...] TODO
   */
   void initialiseDevice();
 
@@ -137,6 +138,16 @@ private:
     // TODO
   */
   void stopCapturing();
+
+  /**
+    Checks if the camera has the necessary capabilities compatible with V4L2 to
+    be used for this application.
+    Queries the device capabilities and checks if they are compatible with the
+    V4L2 specification. Checks if the device supports the Video Capture
+    interface and the streaming I/O method. If any of these capabilities are not
+    apparent in the device, the method throws a runtime error.
+  */
+  void checkV4L2Capabilities();
 
 };
 
