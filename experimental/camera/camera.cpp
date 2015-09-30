@@ -142,6 +142,9 @@ void Camera::initialiseDevice() {
   // throw any kind of exceptions.
   // TODO: Decide on what to do with this functionality.
   checkCroppingCapabilites();
+
+  // Initialise the appropriate video format for the camera device.
+  initialiseFormat();
 }
 
 void Camera::uninitialiseDevice() {
@@ -221,4 +224,42 @@ void Camera::checkCroppingCapabilites() {
   } else {
     // Errors ignored.
   }
+}
+
+void Camera::initialiseFormat() {
+  // V4l2 data format structure
+  struct v4l2_format format;
+
+  CLEAR(format);
+
+  // Assign a format suitable for our application to the camera device.
+  // TODO: Check data integrity
+
+  // Type of the data stream - buffer of a video capture stream.
+  format.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  // Image width in pixels.
+  format.fmt.pix.width       = width;
+  // Image height in pixels.
+  format.fmt.pix.height      = height;
+  // The pixel format or type of compression, set by the application.
+  // YUYV is a packed format with 1/2 horizontal chroma resolution, also known
+  // as YUV 4:2:2. In this format each four bytes is two pixels. Each four bytes
+  // is two Y's, a Cb and a Cr. Each Y goes to one of the pixels, and the Cb and
+  // Cr belong to both pixels.
+  format.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;
+  // Video images are typically interlaced. Applications can request to capture
+  // or output only the top or bottom field, or both fields interlaced or
+  // sequentially stored in one buffer or alternating in separate buffers.
+  // Drivers return the actual field order selected.
+  // TODO: Deinterlace video to remove motion artifacts from data.
+  format.fmt.pix.field       = V4L2_FIELD_INTERLACED;
+
+  // Try to set the format according to our specifications. On success, 0 is
+  // returned; on error -1 and the errno variable is set appropriately.
+  if (xioctl(fd, VIDIOC_S_FMT, &format) == -1)
+    throw runtime_error("VIDIOC_S_FMT");
+
+  // VIDIOC_S_FMT may change resolution width and height.
+  width = format.fmt.pix.width;
+  height = format.fmt.pix.height;
 }

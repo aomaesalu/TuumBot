@@ -154,6 +154,14 @@ private:
   */
   void checkCroppingCapabilites();
 
+  /**
+    Initialises the camera device video format.
+    Sets the width and height of the image to the values passed to the class
+    constructor, sets the pixel format to YUYV and interlaces the video.
+    // TODO: Deinterlace the video if needed.
+  */
+  void initialiseFormat();
+
 };
 
 #endif // CAMERA_H
