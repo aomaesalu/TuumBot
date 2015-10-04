@@ -21,6 +21,6 @@ USER_BUILD_PATH_EXT=$(BUILD_TARGET_PLATFORM)$(USER_FLAVOR)/$(USER_BUILD_DIR)
 USER_LIB_DIR = $(BUILD_PATH_BASE)/user/$(USER_BUILD_PATH_EXT)
 USER_LIB_DEP = $(USER_LIB_DIR)/libuser.a
 
-LDFLAGS += -lboost_system # -lboost_filesystem -lboost_thread -lboost_timer -lboost_chrono
+LDFLAGS += # -lboost_system # -lboost_filesystem -lboost_thread -lboost_timer -lboost_chrono
 
 include $(call rwildcard,$(USER_MODULE_PATH)/,include.mk)
