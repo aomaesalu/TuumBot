@@ -18,7 +18,7 @@ using namespace rtx;
 
 
 int main() {
-  Vision::init();
+  //Vision::init();
 
   printf("[main()]Starting 2vs2 Teamfootball application.\n");
 
