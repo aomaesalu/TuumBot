@@ -1,0 +1,5 @@
+VISION_MODULE_PATH ?= $(PROJECT_ROOT)/vision
+include $(call rwildcard,$(VISION_MODULE_PATH)/,include.mk)
+
+VISION_LIB_DIR = $(BUILD_PATH_BASE)/vision/$(BUILD_TARGET_PLATFORM)
+VISION_LIB_DEP = $(VISION_LIB_DIR)/libvision.a

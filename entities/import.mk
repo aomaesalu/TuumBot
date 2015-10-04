@@ -1,0 +1,5 @@
+ENTITIES_MODULE_PATH ?= $(PROJECT_ROOT)/entities
+include $(call rwildcard,$(ENTITIES_MODULE_PATH)/,include.mk)
+
+ENTITIES_LIB_DIR = $(BUILD_PATH_BASE)/entities/$(BUILD_TARGET_PLATFORM)
+ENTITIES_LIB_DEP = $(ENTITIES_LIB_DIR)/libentities.a

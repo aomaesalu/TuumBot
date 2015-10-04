@@ -1,0 +1,5 @@
+GEOMETRY_MODULE_PATH ?= $(PROJECT_ROOT)/geometry
+include $(call rwildcard,$(GEOMETRY_MODULE_PATH)/,include.mk)
+
+GEOMETRY_LIB_DIR = $(BUILD_PATH_BASE)/geometry/$(BUILD_TARGET_PLATFORM)
+GEOMETRY_LIB_DEP = $(GEOMETRY_LIB_DIR)/libgeometry.a
