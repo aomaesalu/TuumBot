@@ -26,7 +26,7 @@ namespace rtx {
 
     private:
       // TODO
-  }
+  };
 
 };
 
