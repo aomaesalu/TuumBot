@@ -9,8 +9,7 @@
 #ifndef GOAL_H
 #define GOAL_H
 
-#include "entityConstants.h"
-
+#include "entityConstants.hpp"
 #include "Rectangle.hpp"
 #include "Point2D.hpp"
 #include "Entity.hpp"
