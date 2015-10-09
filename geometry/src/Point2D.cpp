@@ -2,12 +2,13 @@
  * @file Point2D.cpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
 #include <cmath>
 #include "Point2D.hpp"
+
 
 namespace rtx {
 

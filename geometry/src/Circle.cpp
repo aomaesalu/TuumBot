@@ -2,7 +2,7 @@
  * @file Field.hpp
  * Football 2vs2 application main module.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 

@@ -2,12 +2,13 @@
  * @file Shape2D.hpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
 #ifndef SHAPE2D_H
 #define SHAPE2D_H
+
 
 namespace rtx {
 
