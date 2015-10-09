@@ -36,8 +36,8 @@ namespace rtx {
     private:
       int currentGoal;
 
-      Goal** goals;
-      Robot* robotSelf;
+      Goal **goals;
+      Robot *robotSelf;
   };
 
 };

@@ -26,7 +26,7 @@ namespace rtx {
       Point2D* getPosition() const;
 
     private:
-      Point2D* position;
+      Point2D *position;
   };
 
 };
