@@ -20,7 +20,6 @@ namespace rtx {
 
   class Robot : public Entity, public Circle {
     public:
-      Robot();
       Robot(const Robot&);
       Robot(const Point2D*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
       Robot(const double&, const double&,
