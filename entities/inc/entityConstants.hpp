@@ -32,7 +32,7 @@
 #define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
 
 // Implementation-specific physical constants in millimeters
-#define ROBOT_RADIUS 350                // Our robot's radius
+#define ROBOT_DIAMETER 350              // Our robot's diameter
 #define ROBOT_INITIAL_POSITION_X -1     // Our robot's initial position x-coordinate
 #define ROBOT_INITIAL_POSITION_Y -1     // Out robot's initial position y-coordinate
 
