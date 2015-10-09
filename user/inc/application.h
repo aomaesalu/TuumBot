@@ -3,7 +3,8 @@
 
 //#include "tuum_vision.hpp"
 
-#include "rtxvision.h"
 #include "rtxgeom.h"
+#include "rtxentities.h"
+#include "rtxvision.h"
 
 #endif /* APPLICATION_H_ */
