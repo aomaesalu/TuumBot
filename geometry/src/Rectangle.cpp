@@ -2,7 +2,7 @@
  * @file Rectangle.cpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 

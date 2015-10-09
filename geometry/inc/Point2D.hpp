@@ -2,7 +2,7 @@
  * @file Point2D.hpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
@@ -10,6 +10,7 @@
 #define RTX_POINT2D_H_
 
 #include <stdint.h>
+
 
 namespace rtx {
 

@@ -2,7 +2,7 @@
  * @file Circle.hpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
