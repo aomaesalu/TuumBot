@@ -11,22 +11,22 @@
 
 namespace rtx {
 
-  RobotSelf::RobotSelf(const RobotSelf& other):
+  RobotSelf::RobotSelf(const RobotSelf &other):
     Robot(other.getPosition(), other.getRadius())
   {
 
   }
 
-  RobotSelf::RobotSelf(const Point2D* position, const double& radius):
+  RobotSelf::RobotSelf(const Point2D *position, const double &radius):
     Robot(position, radius)
   {
 
   }
 
-  RobotSelf::RobotSelf(const double& x, const double& y, const double& radius):
+  RobotSelf::RobotSelf(const double &x, const double &y, const double &radius):
     Robot(x, y, radius)
   {
-    
+
   }
 
 
