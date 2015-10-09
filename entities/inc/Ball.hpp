@@ -9,11 +9,12 @@
 #ifndef BALL_H
 #define BALL_H
 
+#include "Circle.hpp"
+#include "Point2D.h"
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
-#include "Circle.hpp"
-#include "Point2D.h"
+
 
 namespace rtx {
 

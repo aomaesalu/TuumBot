@@ -9,8 +9,9 @@
 #ifndef FIELD_H_
 #define FIELD_H_
 
-#include "entityConstants.hpp"
 #include "Rectangle.hpp"
+
+#include "entityConstants.hpp"
 #include "Goal.hpp"
 #include "Robot.hpp"
 
