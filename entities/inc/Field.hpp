@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef FIELD_H_
-#define FIELD_H_
+#ifndef RTX_ENTITIES_FIELD_H_
+#define RTX_ENTITIES_FIELD_H_
 
 #include "Rectangle.hpp"
 
@@ -41,4 +41,4 @@ namespace rtx {
 
 };
 
-#endif // FIELD_H_
+#endif // RTX_ENTITIES_FIELD_H_

@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef RTX_ENTITIES_ENTITY_H
+#define RTX_ENTITIES_ENTITY_H
 
 #include "Point2D.hpp"
 
@@ -31,4 +31,4 @@ namespace rtx {
 
 };
 
-#endif // ENTITY_H
+#endif // RTX_ENTITIES_ENTITY_H
