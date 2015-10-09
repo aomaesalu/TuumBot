@@ -13,21 +13,21 @@
 
 namespace rtx {
 
-  Circle::Circle(const Circle& other):
+  Circle::Circle(const Circle &other):
     Shape2D(),
     radius{other.getRadius()}
   {
 
   }
 
-  Circle::Circle(const double& radius):
+  Circle::Circle(const double &radius):
     Shape2D(),
     radius{radius}
   {
 
   }
 
-  void Circle::setRadius(const double& radius) {
+  void Circle::setRadius(const double &radius) {
     this->radius = radius;
   }
 
