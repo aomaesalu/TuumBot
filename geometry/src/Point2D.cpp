@@ -13,17 +13,16 @@
 
 namespace rtx {
 
-  /** Placeholder
-   *
-   */
   Point2D::Point2D(const Point2D &other):
-    x{other.getX()}, y{other.getY()}
+    x{other.getX()},
+    y{other.getY()}
   {
 
   }
 
   Point2D::Point2D(const double &x, const double &y):
-    x{x}, y{y}
+    x{x},
+    y{y}
   {
 
   }
