@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * Football 1vs1 application main module.
+ * Football 1vs1 simulation application main module.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

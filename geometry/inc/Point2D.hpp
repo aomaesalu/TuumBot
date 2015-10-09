@@ -1,26 +1,18 @@
 /**
  * @file Point2D.hpp
- * Description placeholder.
+ * 2-dimensional point class.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
-#ifndef RTX_POINT2D_H_
-#define RTX_POINT2D_H_
+#ifndef RTX_GEOMETRY_POINT2D_H
+#define RTX_GEOMETRY_POINT2D_H
 
-#include <stdint.h>
 
 namespace rtx {
 
-  /** Placeholder
-   *
-   */
   class Point2D {
-    private:
-      double x;
-      double y;
-
     public:
       Point2D(const Point2D&);
       Point2D(const double&, const double&);
@@ -31,8 +23,12 @@ namespace rtx {
       double distanceFrom(const Point2D*);
       double getX() const;
       double getY() const;
+
+    private:
+      double x;
+      double y;
   };
 
 };
 
-#endif // RTX_POINT2D_H_
+#endif // RTX_GEOMETRY_POINT2D_H_

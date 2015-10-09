@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * Football 1vs1 application main module.
+ * Football 2vs2 simulation application main module.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
@@ -9,18 +9,18 @@
 #include <cstdlib>
 
 #include "RobotSelf.hpp"
-#include "Field1vs1.hpp"
+#include "Field2vs2.hpp"
 
 using namespace rtx;
 
 
 int main() {
 
-	// Initialise game objects
+  // Initialise game objects
 	RobotSelf* self = new RobotSelf();
-	Field1vs1* field = new Field1vs1(self);
+	Field2vs2* field = new Field2vs2(self);
 
-	// TODO
+  // TODO
 
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

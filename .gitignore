@@ -26,9 +26,11 @@
 *.exe
 *.out
 *.app
+*.elf
 
 # Certain directories
 bin/*
 obj/*
 lib/*
 data/*
+build/*
