@@ -2,7 +2,7 @@
  * @file Field.hpp
  * Football 2vs2 application main module.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
@@ -20,12 +20,6 @@
 namespace rtx {
 
   class Field: public Rectangle {
-    private:
-      int currentGoal;
-
-      Goal** goals;
-      Robot* robotSelf;
-
     public:
       Field(const Field&);
       Field(Robot*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
@@ -38,6 +32,12 @@ namespace rtx {
       Goal* getEnemyGoal() const;
 
       Robot* getRobotSelf() const;
+
+    private:
+      int currentGoal;
+
+      Goal** goals;
+      Robot* robotSelf;
   };
 
 };
