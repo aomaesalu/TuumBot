@@ -11,7 +11,7 @@
 
 namespace rtx {
 
-  Rectangle::Rectangle(const Rectangle& other):
+  Rectangle::Rectangle(const Rectangle &other):
     Shape2D(),
     width{other.getWidth()},
     length{other.getLength()}
@@ -19,7 +19,7 @@ namespace rtx {
 
   }
 
-  Rectangle::Rectangle(const double& width, const double& length):
+  Rectangle::Rectangle(const double &width, const double &length):
     Shape2D(),
     width{width},
     length{length}
@@ -27,11 +27,11 @@ namespace rtx {
 
   }
 
-  void Rectangle::setWidth(const double& width) {
+  void Rectangle::setWidth(const double &width) {
     this->width = width;
   }
 
-  void Rectangle::setLength(const double& length) {
+  void Rectangle::setLength(const double &length) {
     this->length = length;
   }
 
