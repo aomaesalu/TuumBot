@@ -1,6 +1,6 @@
 /**
  * @file Ball.hpp
- * Description placeholder.
+ * Ball class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
@@ -29,7 +29,7 @@ namespace rtx {
     Entity(new Point2D(x, y)),
     Circle(radius)
   {
-    
+
   }
 
 };

@@ -1,6 +1,6 @@
 /**
  * @file Robot.cpp
- * Description placeholder.
+ * Robot class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

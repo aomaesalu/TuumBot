@@ -1,6 +1,6 @@
 /**
  * @file Field.cpp
- * Description placeholder.
+ * Field class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

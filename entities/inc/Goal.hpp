@@ -1,6 +1,6 @@
 /**
  * @file Goal.hpp
- * Description placeholder.
+ * Goal class.
  *
  * @authors
  * @version 0.1
