@@ -14,6 +14,8 @@
 
 #include "Rectangle.hpp"
 #include "Point2D.hpp"
+
+#include "entityConstants.hpp"
 #include "Entity.hpp"
 
 

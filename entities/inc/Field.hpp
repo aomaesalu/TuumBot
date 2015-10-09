@@ -13,6 +13,8 @@
 #include "entityConstants.hpp"
 
 #include "Rectangle.hpp"
+
+#include "entityConstants.hpp"
 #include "Goal.hpp"
 #include "Robot.hpp"
 
