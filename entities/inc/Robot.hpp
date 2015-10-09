@@ -12,6 +12,7 @@
 #include "Circle.hpp"
 #include "Point2D.hpp"
 
+#include "entityConstants.hpp"
 #include "Entity.hpp"
 
 
@@ -21,10 +22,9 @@ namespace rtx {
     public:
       Robot();
       Robot(const Robot&);
-      Robot(const Point2D*, const double&);
-      // TODO: Add default maximum robot radius; can be changed midgame
-      Robot(const double&, const double&, const double&);
-      // TODO: Add default maximum robot radius; can be changed midgame
+      Robot(const Point2D*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
+      Robot(const double&, const double&,
+            const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
     private:
       // TODO
