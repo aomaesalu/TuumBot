@@ -1,13 +1,13 @@
 /**
- * @file Transform.hpp
- * Description placeholder.
+ * @file Rectangle.hpp
+ * Rectangle class.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef RTX_GEOMETRY_RECTANGLE_H
+#define RTX_GEOMETRY_RECTANGLE_H
 
 #include "Shape2D.hpp"
 
@@ -15,10 +15,6 @@
 namespace rtx {
 
   class Rectangle: public Shape2D {
-    private:
-      double width;
-      double length;
-
     public:
       Rectangle(const Rectangle&);
       Rectangle(const double&, const double&);
@@ -30,8 +26,12 @@ namespace rtx {
       double getPerimeter() const;
       double getWidth() const;
       double getLength() const;
+
+    private:
+      double width;
+      double length;
   };
 
 };
 
-#endif // RECTANGLE_H
+#endif // RTX_GEOMETRY_RECTANGLE_H

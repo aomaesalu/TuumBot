@@ -1,8 +1,8 @@
 /**
- * @file Field.hpp
- * Football 2vs2 application main module.
+ * @file Circle.cpp
+ * Circle class.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
@@ -13,21 +13,21 @@
 
 namespace rtx {
 
-  Circle::Circle(const Circle& other):
+  Circle::Circle(const Circle &other):
     Shape2D(),
     radius{other.getRadius()}
   {
 
   }
 
-  Circle::Circle(const double& radius):
+  Circle::Circle(const double &radius):
     Shape2D(),
     radius{radius}
   {
 
   }
 
-  void Circle::setRadius(const double& radius) {
+  void Circle::setRadius(const double &radius) {
     this->radius = radius;
   }
 
