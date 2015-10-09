@@ -21,14 +21,14 @@ namespace rtx {
     public:
       Field(const Field&);
       Field(Robot*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
-      Field(Goal*, Goal*, Robot*, const double& = FIELD_WIDTH, const double& = FIELD_LENGTH);
+      Field(Goal*, Goal*, Robot*, const double& = FIELD_WIDTH,
+            const double& = FIELD_LENGTH);
 
       void swapGoals();
       int getCurrentGoal() const;
 
       Goal* getFriendlyGoal() const;
       Goal* getEnemyGoal() const;
-
       Robot* getRobotSelf() const;
 
     private:

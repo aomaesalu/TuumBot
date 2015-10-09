@@ -12,7 +12,8 @@
 namespace rtx {
 
   Entity::Entity(const Entity &other):
-    position{new Point2D(other.getPosition()->getX(), other.getPosition()->getY())}
+    position{new Point2D(other.getPosition()->getX(),
+             other.getPosition()->getY())}
   {
 
   }
