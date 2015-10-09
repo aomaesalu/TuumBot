@@ -10,7 +10,7 @@
 #define RTX_ENTITIES_BALL_H
 
 #include "Circle.hpp"
-#include "Point2D.h"
+#include "Point2D.hpp"
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"

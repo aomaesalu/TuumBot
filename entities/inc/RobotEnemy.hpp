@@ -10,7 +10,7 @@
 #define RTX_ENTITIES_ROBOT_ENEMY_H
 
 #include "entityConstants.hpp"
-#include "Robot.h"
+#include "Robot.hpp"
 
 
 namespace rtx {
