@@ -36,3 +36,5 @@ data/*
 
 # Image files
 *.ppm
+=======
+build/*
