@@ -1,6 +1,6 @@
 /**
  * @file Transform.hpp
- * Description placeholder.
+ * Goal class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

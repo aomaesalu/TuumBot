@@ -1,6 +1,6 @@
 /**
  * @file Ball.hpp
- * Description placeholder.
+ * Ball class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

@@ -1,6 +1,6 @@
 /**
  * @file Entity.cpp
- * Description placeholder.
+ * Entity class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
