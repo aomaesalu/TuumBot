@@ -18,10 +18,6 @@ namespace rtx {
    *
    */
   class Point2D {
-    private:
-      double x;
-      double y;
-
     public:
       Point2D(const Point2D&);
       Point2D(const double&, const double&);
@@ -32,6 +28,10 @@ namespace rtx {
       double distanceFrom(const Point2D*);
       double getX() const;
       double getY() const;
+    
+    private:
+      double x;
+      double y;
   };
 
 };

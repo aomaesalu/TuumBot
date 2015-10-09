@@ -15,9 +15,6 @@
 namespace rtx {
 
   class Circle: public Shape2D {
-    private:
-      double radius;
-
     public:
       Circle(const Circle&);
       Circle(const double&);
@@ -27,6 +24,9 @@ namespace rtx {
       double getArea() const;
       double getPerimeter() const;
       double getRadius() const;
+    
+    private:
+      double radius;
   };
 
 };
