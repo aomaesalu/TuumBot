@@ -12,9 +12,6 @@
 
 namespace rtx {
 
-  /** Placeholder
-   *
-   */
   class Point2D {
     public:
       Point2D(const Point2D&);
