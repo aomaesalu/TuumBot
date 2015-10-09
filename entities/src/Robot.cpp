@@ -17,19 +17,19 @@ namespace rtx {
 
   }
 
-  Robot::Robot(const Robot& other):
+  Robot::Robot(const Robot &other):
     Entity(other.getPosition()), Circle(other.getRadius())
   {
 
   }
 
-  Robot::Robot(const Point2D* position, const double& radius):
+  Robot::Robot(const Point2D *position, const double &radius):
     Entity(position), Circle(radius)
   {
 
   }
 
-  Robot::Robot(const double& x, const double& y, const double& radius):
+  Robot::Robot(const double &x, const double &y, const double &radius):
     Entity(new Point2D(x, y)), Circle(radius)
   {
 

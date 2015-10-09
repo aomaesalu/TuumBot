@@ -11,7 +11,7 @@
 
 namespace rtx {
 
-  Field::Field(const Field& other):
+  Field::Field(const Field &other):
     Rectangle(other.getWidth(), other.getLength()),
     currentGoal{other.getCurrentGoal()},
     robotSelf{other.getRobotSelf()}
@@ -24,7 +24,7 @@ namespace rtx {
     }
   }
 
-  Field::Field(Robot* robotSelf, const double& width, const double& length):
+  Field::Field(Robot *robotSelf, const double &width, const double &length):
     Rectangle(width, length),
     currentGoal{0},
     robotSelf{robotSelf}
@@ -34,7 +34,7 @@ namespace rtx {
     goals[1] = new Goal(YELLOW_GOAL_POSITION_X, YELLOW_GOAL_POSITION_Y); // TODO: Add goal color information
   }
 
-  Field::Field(Goal* friendlyGoal, Goal* enemyGoal, Robot* robotSelf, const double& width, const double& length):
+  Field::Field(Goal *friendlyGoal, Goal *enemyGoal, Robot *robotSelf, const double &width, const double &length):
     Rectangle(width, length),
     currentGoal{0},
     robotSelf{robotSelf}
