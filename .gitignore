@@ -33,3 +33,4 @@ bin/*
 obj/*
 lib/*
 data/*
+build/*
