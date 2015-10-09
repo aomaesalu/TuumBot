@@ -10,7 +10,7 @@
 #define RTX_ENTITIES_ROBOT_ALLY_H
 
 #include "entityConstants.hpp"
-#include "Robot.h"
+#include "Robot.hpp"
 
 
 namespace rtx {
@@ -18,10 +18,10 @@ namespace rtx {
   class RobotAlly: public Robot {
     public:
       RobotAlly(const RobotAlly&);
-      RobotAlly(const Point2D*, const double& = ROBOT_RADIUS);
+      RobotAlly(const Point2D*, const double& = ROBOT_DIAMETER / 2);
       RobotAlly(const double& = ROBOT_INITIAL_POSITION_X,
                 const double& = ROBOT_INITIAL_POSITION_Y,
-                const double& = ROBOT_RADIUS);
+                const double& = ROBOT_DIAMETER / 2);
       // TODO: Add communication and strategy methods
 
     private:

@@ -10,7 +10,7 @@
 #define RTX_ENTITIES_ROBOT_SELF_H
 
 #include "entityConstants.hpp"
-#include "Robot.h"
+#include "Robot.hpp"
 
 
 namespace rtx {
