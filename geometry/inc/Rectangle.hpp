@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef RTX_GEOMETRY_RECTANGLE_H
+#define RTX_GEOMETRY_RECTANGLE_H
 
 #include "Shape2D.hpp"
 
@@ -34,4 +34,4 @@ namespace rtx {
 
 };
 
-#endif // RECTANGLE_H
+#endif // RTX_GEOMETRY_RECTANGLE_H
