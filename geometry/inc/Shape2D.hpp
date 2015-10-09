@@ -1,13 +1,14 @@
 /**
  * @file Shape2D.hpp
- * Description placeholder.
+ * 2-dimensional shape class.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
-#ifndef SHAPE2D_H
-#define SHAPE2D_H
+#ifndef RTX_GEOMETRY_SHAPE2D_H
+#define RTX_GEOMETRY_SHAPE2D_H
+
 
 namespace rtx {
 
@@ -19,4 +20,4 @@ namespace rtx {
 
 };
 
-#endif // SHAPE2D_H
+#endif // RTX_GEOMETRY_SHAPE2D_H
