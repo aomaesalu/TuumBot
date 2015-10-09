@@ -9,8 +9,6 @@
 #ifndef RTX_GEOMETRY_POINT2D_H
 #define RTX_GEOMETRY_POINT2D_H
 
-#include <stdint.h>
-
 
 namespace rtx {
 
