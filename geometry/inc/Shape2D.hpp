@@ -1,6 +1,6 @@
 /**
  * @file Shape2D.hpp
- * Description placeholder.
+ * 2-dimensional shape class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

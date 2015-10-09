@@ -1,6 +1,6 @@
 /**
  * @file Circle.cpp
- * Description placeholder.
+ * Circle class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

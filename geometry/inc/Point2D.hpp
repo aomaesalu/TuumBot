@@ -1,6 +1,6 @@
 /**
  * @file Point2D.hpp
- * Description placeholder.
+ * 2-dimensional point class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
