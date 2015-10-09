@@ -1,6 +1,6 @@
 /**
- * @file Field.hpp
- * Football 2vs2 application main module.
+ * @file Circle.cpp
+ * Description placeholder.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

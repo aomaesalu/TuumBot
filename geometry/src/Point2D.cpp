@@ -7,6 +7,7 @@
  */
 
 #include <cmath>
+
 #include "Point2D.hpp"
 
 
