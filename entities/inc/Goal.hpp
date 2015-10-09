@@ -9,7 +9,8 @@
 #ifndef GOAL_H
 #define GOAL_H
 
-#include "rtxc.h"
+//#include "rtxc.h"
+#include "entityConstants.h"
 
 #include "Rectangle.hpp"
 #include "Point2D.hpp"
@@ -23,7 +24,7 @@ namespace rtx {
       Goal(const Goal&);
       Goal(const Point2D*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
       Goal(const double&, const double&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
-    
+
     private:
       // TODO: Add color
   };

@@ -9,7 +9,8 @@
 #ifndef FIELD_H_
 #define FIELD_H_
 
-#include "rtxc.h"
+//#include "rtxc.h"
+#include "entityConstants.h"
 
 #include "Rectangle.hpp"
 

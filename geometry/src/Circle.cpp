@@ -6,7 +6,8 @@
  * @version 0.1
  */
 
-#include "rtxc.h"
+//#include "rtxc.h"
+#include "mathematicalConstants.h"
 
 #include "Circle.hpp"
 
