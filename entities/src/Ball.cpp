@@ -1,31 +1,31 @@
 /**
- * @file Robot.cpp
- * Robot class.
+ * @file Ball.cpp
+ * Ball class.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
-#include "Robot.hpp"
+#include "Ball.hpp"
 
 
 namespace rtx {
 
-  Robot::Robot(const Robot &other):
+  Ball::Ball(const Ball &other):
     Entity(other.getPosition()),
     Circle(other.getRadius())
   {
 
   }
 
-  Robot::Robot(const Point2D *position, const double &radius):
+  Ball::Ball(const Point2D *position, const double &radius):
     Entity(position),
     Circle(radius)
   {
 
   }
 
-  Robot::Robot(const double &x, const double &y, const double &radius):
+  Ball::Ball(const double &x, const double &y, const double &radius):
     Entity(new Point2D(x, y)),
     Circle(radius)
   {

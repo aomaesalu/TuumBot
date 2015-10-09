@@ -1,8 +1,8 @@
 /**
- * @file Transform.hpp
- * Description placeholder.
+ * @file Goal.cpp
+ * Goal class.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
@@ -11,21 +11,23 @@
 
 namespace rtx {
 
-  Goal::Goal(const Goal& other):
+  Goal::Goal(const Goal &other):
     Entity(other.getPosition()),
     Rectangle(other.getWidth(), other.getLength())
   {
 
   }
 
-  Goal::Goal(const Point2D* position, const double& width, const double& length):
+  Goal::Goal(const Point2D *position, const double &width,
+             const double &length):
     Entity(position),
     Rectangle(width, length)
   {
 
   }
 
-  Goal::Goal(const double& x, const double& y, const double& width, const double& length):
+  Goal::Goal(const double &x, const double &y, const double &width,
+             const double &length):
     Entity(new Point2D(x, y)),
     Rectangle(width, length)
   {
