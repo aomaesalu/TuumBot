@@ -11,22 +11,23 @@
 
 namespace rtx {
 
-  RobotEnemy::RobotEnemy(const RobotEnemy& other):
+  RobotEnemy::RobotEnemy(const RobotEnemy &other):
     Robot(other.getPosition(), other.getRadius())
   {
 
   }
 
-  RobotEnemy::RobotEnemy(const Point2D* position, const double& radius):
+  RobotEnemy::RobotEnemy(const Point2D *position, const double &radius):
     Robot(position, radius)
   {
 
   }
 
-  RobotEnemy::RobotEnemy(const double& x, const double& y, const double& radius):
+  RobotEnemy::RobotEnemy(const double &x, const double &y,
+                         const double &radius):
     Robot(x, y, radius)
   {
-    
+
   }
 
 
