@@ -10,7 +10,7 @@
 #define GOAL_H
 
 //#include "rtxc.h"
-#include "entityConstants.h"
+#include "entityConstants.hpp"
 
 #include "Rectangle.hpp"
 #include "Point2D.hpp"

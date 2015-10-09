@@ -10,9 +10,9 @@
 #define BALL_H
 
 
-#include "entityConstants.h"
-#include "Entity.h"
-#include "Circle.h"
+#include "entityConstants.hpp"
+#include "Entity.hpp"
+#include "Circle.hpp"
 #include "Point2D.h"
 
 namespace rtx {

@@ -10,10 +10,9 @@
 #define FIELD_H_
 
 //#include "rtxc.h"
-#include "entityConstants.h"
+#include "entityConstants.hpp"
 
 #include "Rectangle.hpp"
-
 #include "Goal.hpp"
 #include "Robot.hpp"
 
