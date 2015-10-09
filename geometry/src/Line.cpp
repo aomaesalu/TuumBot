@@ -25,7 +25,8 @@ namespace rtx {
 
   }
 
-  Line::Line(const double &pointAx, const double &pointAy, const double &pointBx, const double &pointBy):
+  Line::Line(const double &pointAx, const double &pointAy,
+             const double &pointBx, const double &pointBy):
     pointA{new Point2D(pointAx, pointAy)},
     pointB{new Point2D(pointBx, pointBy)}
   {
