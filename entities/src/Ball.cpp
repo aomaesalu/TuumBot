@@ -1,5 +1,5 @@
 /**
- * @file Ball.hpp
+ * @file Ball.cpp
  * Ball class.
  *
  * @authors Ants-Oskar Mäesalu

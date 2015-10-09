@@ -1,5 +1,5 @@
 /**
- * @file Transform.hpp
+ * @file Goal.cpp
  * Goal class.
  *
  * @authors Ants-Oskar Mäesalu
