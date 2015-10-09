@@ -15,10 +15,6 @@
 namespace rtx {
 
   class Rectangle: public Shape2D {
-    private:
-      double width;
-      double length;
-
     public:
       Rectangle(const Rectangle&);
       Rectangle(const double&, const double&);
@@ -30,6 +26,10 @@ namespace rtx {
       double getPerimeter() const;
       double getWidth() const;
       double getLength() const;
+
+    private:
+      double width;
+      double length;
   };
 
 };

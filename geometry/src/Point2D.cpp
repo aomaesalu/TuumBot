@@ -47,5 +47,4 @@ namespace rtx {
     return y;
   }
 
-
 };
