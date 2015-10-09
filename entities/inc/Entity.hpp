@@ -2,7 +2,7 @@
  * @file Entity.hpp
  * Description placeholder.
  *
- * @authors
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
@@ -11,12 +11,10 @@
 
 #include "Point2D.hpp"
 
+
 namespace rtx {
 
   class Entity {
-    private:
-      Point2D* position;
-
     public:
       Entity(const Entity&);
       Entity(const Point2D*);
@@ -26,6 +24,9 @@ namespace rtx {
       void setPosition(const double&, const double&);
 
       Point2D* getPosition() const;
+
+    private:
+      Point2D* position;
   };
 
 };
