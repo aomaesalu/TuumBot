@@ -36,8 +36,8 @@ namespace rtx {
     // TODO: Add goal color information
   }
 
-  Field::Field(Goal *friendlyGoal, Goal *enemyGoal, Robot *robotSelf, const
-               double &width, const double &length):
+  Field::Field(Goal *friendlyGoal, Goal *enemyGoal, Robot *robotSelf,
+               const double &width, const double &length):
     Rectangle(width, length),
     currentGoal{0},
     robotSelf{robotSelf}
