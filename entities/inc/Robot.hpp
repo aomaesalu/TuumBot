@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef ROBOT_H
-#define ROBOT_H
+#ifndef RTX_ENTITIES_ROBOT_H
+#define RTX_ENTITIES_ROBOT_H
 
 #include "Circle.hpp"
 #include "Point2D.hpp"
@@ -32,4 +32,4 @@ namespace rtx {
 
 };
 
-#endif // ROBOT_H
+#endif // RTX_ENTITIES_ROBOT_H

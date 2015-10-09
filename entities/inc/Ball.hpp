@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef BALL_H
-#define BALL_H
+#ifndef RTX_ENTITIES_BALL_H
+#define RTX_ENTITIES_BALL_H
 
 #include "Circle.hpp"
 #include "Point2D.h"
@@ -30,4 +30,4 @@ namespace rtx {
 
 };
 
-#endif // BALL_H
+#endif // RTX_ENTITIES_BALL_H

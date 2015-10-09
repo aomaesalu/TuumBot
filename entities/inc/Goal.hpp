@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef GOAL_H
-#define GOAL_H
+#ifndef RTX_ENTITIES_GOAL_H
+#define RTX_ENTITIES_GOAL_H
 
 //#include "rtxc.h"
 #include "entityConstants.hpp"
@@ -35,4 +35,4 @@ namespace rtx {
 
 };
 
-#endif // GOAL_H
+#endif // RTX_ENTITIES_GOAL_H
