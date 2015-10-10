@@ -38,3 +38,5 @@ data/*
 *.ppm
 =======
 build/*
+=======
+build/target/*
