@@ -24,7 +24,7 @@ CXX=g++
 # -std=c++11 	Enables the C++11 standard mode
 CXXFLAGS = -Wall -std=c++11
 
-PROGRAM = camera
+PROGRAM = main
 SRCS = main.cpp camera.cpp
 OBJS = main.o camera.o
 
