@@ -29,6 +29,14 @@
 
 #include "constants.h"    // Camera constants
 
+/**
+  Camera image buffer structure.
+*/
+struct buffer {
+  void *data;
+  size_t size;
+};
+
 class Camera {
 
 public:
@@ -93,6 +101,9 @@ private:
     closing the device.
   */
   int fileDescriptor;
+
+  struct buffer *buffers;
+  unsigned int numberOfBuffers;
 
   /**
     Opens the camera device. Establishes a connection between a file and a file

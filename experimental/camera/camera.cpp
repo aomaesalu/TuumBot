@@ -27,6 +27,7 @@
 #include <fcntl.h>              // File control operations (open)
 #include <sys/stat.h>           // File characteristics header (stat)
 #include <sys/ioctl.h>          // I/O control device header (ioctl)
+#include <sys/mman.h>           // Memory management declarations (mmap)
 #include <unistd.h>             // OS API header (close)
 #include <cstring>              // C string header (memset, strerror)
 #include <stdexcept>            // Exception header (runtime_error)
@@ -153,15 +154,41 @@ void Camera::initialiseDevice() {
 }
 
 void Camera::uninitialiseDevice() {
-  // TODO
+  unsigned int i;
+
+  for (i = 0; i < numberOfBuffers; ++i)
+    if (munmap(buffers[i].data, buffers[i].size) == -1)
+      throw std::runtime_error("munmap");
+
+  free(buffers);
 }
 
 void Camera::startCapturing() {
-  // TODO
+  unsigned int i;
+  enum v4l2_buf_type type;
+
+  for (i = 0; i < numberOfBuffers; ++i) {
+    struct v4l2_buffer buf;
+
+    CLEAR(buf);
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    buf.index = i;
+
+    if (xioctl(fileDescriptor, VIDIOC_QBUF, &buf) == -1)
+      throw std::runtime_error("VIDIOC_QBUF");
+  }
+  type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  if (xioctl(fileDescriptor, VIDIOC_STREAMON, &type) == -1)
+    throw std::runtime_error("VIDIOC_STREAMON");
 }
 
 void Camera::stopCapturing() {
-  // TODO
+  enum v4l2_buf_type type;
+
+  type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  if (xioctl(fileDescriptor, VIDIOC_STREAMOFF, &type) == -1)
+    throw std::runtime_error("VIDIOC_STREAMOFF");
 }
 
 void Camera::checkV4L2Capabilities() {
@@ -269,8 +296,59 @@ void Camera::initialiseFormat() {
   // VIDIOC_S_FMT may change resolution width and height.
   width = format.fmt.pix.width;
   height = format.fmt.pix.height;
+
+  // TODO: Add stride?
 }
 
 void Camera::initialiseBuffer() {
-  // TODO
+  // V4L2 buffer request structure
+  struct v4l2_requestbuffers request;
+
+  CLEAR(request);
+
+  request.count = 4;
+  request.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  request.memory = V4L2_MEMORY_MMAP;
+
+  if (xioctl(fileDescriptor, VIDIOC_REQBUFS, &request) == -1) {
+    if (errno == EINVAL) {
+      throw std::runtime_error(device + " does not support memory mapping");
+    } else {
+      throw std::runtime_error("VIDIOC_REQBUFS");
+    }
+  }
+
+  if (request.count < 2) {
+    throw std::runtime_error(std::string("Insufficient buffer memory on ") + device);
+  }
+
+  buffers = (buffer*) calloc(request.count, sizeof(*buffers));
+
+  if (!buffers) {
+    throw std::runtime_error("Out of memory");
+  }
+
+  for (numberOfBuffers = 0; numberOfBuffers < request.count; ++numberOfBuffers) {
+    struct v4l2_buffer buffer;
+
+    CLEAR(buffer);
+
+    buffer.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buffer.memory      = V4L2_MEMORY_MMAP;
+    buffer.index       = numberOfBuffers;
+
+    if (xioctl(fileDescriptor, VIDIOC_QUERYBUF, &request) == -1)
+      throw std::runtime_error("VIDIOC_QUERYBUF");
+
+    buffers[numberOfBuffers].size = buffer.length;
+    buffers[numberOfBuffers].data =
+      mmap(NULL /* start anywhere */,
+           buffer.length,
+           PROT_READ | PROT_WRITE /* required */,
+           MAP_SHARED /* recommended */,
+           fileDescriptor, buffer.m.offset);
+
+    if (buffers[numberOfBuffers].data == MAP_FAILED)
+      throw std::runtime_error("mmap");
+  }
 }
