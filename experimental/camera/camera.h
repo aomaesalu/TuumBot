@@ -104,7 +104,6 @@ private:
 
   struct buffer *buffers;
   unsigned int numberOfBuffers;
-  size_t stride;
 
   /**
     Opens the camera device. Establishes a connection between a file and a file
@@ -178,6 +177,11 @@ private:
     // TODO
   */
   void initialiseBuffer();
+
+  /**
+    // TODO
+  */
+  bool readFrame();
 
 };
 
