@@ -352,3 +352,37 @@ void Camera::initialiseBuffer() {
       throw std::runtime_error("mmap");
   }
 }
+
+bool Camera::readFrame()
+{
+  struct v4l2_buffer buffer;
+
+  CLEAR(buffer);
+
+  buffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+  buffer.memory = V4L2_MEMORY_MMAP;
+
+  if (xioctl(fileDescriptor, VIDIOC_DQBUF, &buffer) == -1) {
+    switch (errno) {
+      case EAGAIN:
+        return -1;
+
+      case EIO:
+        /* Could ignore EIO, see spec. */
+
+        /* fall through */
+
+      default:
+        throw std::runtime_error("VIDIOC_DQBUF");
+    }
+  }
+
+  //assert(buffer.index < numberOfBuffers);
+
+  // TODO: Process image
+
+  if (xioctl(fileDescriptor, VIDIOC_QBUF, &buffer) == -1)
+      throw std::runtime_error("VIDIOC_QBUF");
+
+  return buffer.index;
+}
