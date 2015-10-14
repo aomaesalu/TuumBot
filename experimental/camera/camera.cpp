@@ -22,8 +22,6 @@
   Copyright (c) 2015 Ants-Oskar Mäesalu
 */
 
-#include "camera.h"             // The class header
-
 #include <fcntl.h>              // File control operations (open)
 #include <sys/stat.h>           // File characteristics header (stat)
 #include <sys/ioctl.h>          // I/O control device header (ioctl)
@@ -32,6 +30,8 @@
 #include <cstring>              // C string header (memset, strerror)
 #include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
+
+#include "camera.h"             // The class header
 
 // Macro to set the memory of a variable to zero
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
@@ -64,9 +64,9 @@ static int xioctl(int fileDescriptor, unsigned long int request, void *arg) {
 }
 
 Camera::Camera(const std::string &device, const int &width, const int &height):
-device{device},
-width{width},
-height{height}
+device(device),
+width(width),
+height(height)
 {
   fileDescriptor = -1;
   openDevice();
@@ -84,11 +84,11 @@ std::string Camera::getDevice() const {
   return device;
 }
 
-int Camera::getWidth() const {
+size_t Camera::getWidth() const {
   return width;
 }
 
-int Camera::getHeight() const {
+size_t Camera::getHeight() const {
   return height;
 }
 

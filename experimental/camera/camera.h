@@ -63,12 +63,12 @@ public:
   /**
     Returns the camera resolution's width.
   */
-  int getWidth() const;
+  size_t getWidth() const;
 
   /**
     Returns the camera resolution's height.
   */
-  int getHeight() const;
+  size_t getHeight() const;
 
 private:
 
@@ -86,14 +86,14 @@ private:
     described in the camera constants file. The value actually used in the
     program can be set upon class initialisation.
   */
-  int width;
+  size_t width;
 
   /**
     The camera resolution's height. The default value for this variable is
     described in the camera constants file. The value actually used in the
     program can be set upon class initialisation.
   */
-  int height;
+  size_t height;
 
   /**
     The camera device's file descriptor. This specific value is set upon opening
@@ -104,6 +104,7 @@ private:
 
   struct buffer *buffers;
   unsigned int numberOfBuffers;
+  size_t stride;
 
   /**
     Opens the camera device. Establishes a connection between a file and a file
