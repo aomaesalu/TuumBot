@@ -19,9 +19,18 @@
   Copyright (c) 2015 Ants-Oskar Mäesalu
 */
 
+#include <QApplication>
+
 #include "gui.h"
 
-int main() {
-  GUI *window = new GUI();
-  return 0;
+int main(int argc, char *argv[]) {
+  // Initialise a Qt application
+  QApplication app(argc, argv);
+
+  // Create window and mark it as visible
+  GUI window;
+  window.show();
+
+  // Enter message loop
+  return app.exec();
 }
