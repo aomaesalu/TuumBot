@@ -1,7 +1,7 @@
 
-#ifndef RTXVISION_H_
-#define RTXVISION_H_
+#ifndef RTXVISION_H
+#define RTXVISION_H
 
-#include "line_detect.hpp"
+#include "vision.hpp"
 
-#endif // RTXVISION_H_
+#endif // RTXVISION_H
