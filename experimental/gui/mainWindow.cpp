@@ -19,11 +19,14 @@
   Copyright (c) 2015 Ants-Oskar Mäesalu
 */
 
-#ifndef GUI_H
-#define GUI_H
+#include "gui.h"
 
-class GUI {
+GUI::GUI(QWidget *parent):
+  QMainWindow(parent)
+{
 
-};
+}
 
-#endif // GUI_H
+GUI::~GUI() {
+
+}
