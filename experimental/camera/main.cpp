@@ -23,9 +23,17 @@
 #include "camera.h"
 
 #include <iostream>
+#include <fstream>
 
 int main() {
   Camera *camera = new Camera();
   std::cout << camera->getDevice() << " " << camera->getWidth() << " " << camera->getHeight() << std::endl;
+
+  Frame frame = camera->getFrame();
+  std::ofstream image;
+  image.open("frame.yuv");
+  image.write((char *) frame.data, frame.size);
+  image.close();
+
   return 0;
 }
