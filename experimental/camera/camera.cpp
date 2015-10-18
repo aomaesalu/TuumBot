@@ -337,7 +337,7 @@ void Camera::initialiseBuffer() {
     buffer.memory      = V4L2_MEMORY_MMAP;
     buffer.index       = numberOfBuffers;
 
-    if (xioctl(fileDescriptor, VIDIOC_QUERYBUF, &request) == -1)
+    if (xioctl(fileDescriptor, VIDIOC_QUERYBUF, &buffer) == -1)
       throw std::runtime_error("VIDIOC_QUERYBUF");
 
     buffers[numberOfBuffers].size = buffer.length;
