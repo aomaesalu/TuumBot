@@ -10,11 +10,12 @@
 #define RTX_VISION_VISION_H
 
 #include <vector>
+#include "Point2D.hpp"
 
 
 namespace rtx {
 
-  class Vision() {
+  class Vision {
 
     public:
       Vision();
@@ -37,6 +38,7 @@ namespace rtx {
       void goalDetection();
       void cornerDetection();
       void robotDetection();
+
   };
 
 };
