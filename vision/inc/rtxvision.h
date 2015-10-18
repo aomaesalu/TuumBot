@@ -1,14 +1,7 @@
 
-#ifndef RTXVISION_H_
-#define RTXVISION_H_
+#ifndef RTXVISION_H
+#define RTXVISION_H
 
-#include "line_detection.hpp"
-#include "corner_detection.hpp"
+#include "vision.hpp"
 
-#include "blob_detection.hpp"
-#include "ball_detection.hpp"
-#include "goal_detection.hpp"
-
-#include "robot_detection.hpp"
-
-#endif // RTXVISION_H_
+#endif // RTXVISION_H
