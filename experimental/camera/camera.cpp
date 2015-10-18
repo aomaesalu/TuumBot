@@ -86,6 +86,7 @@ height(height)
   fileDescriptor = -1;
   openDevice();
   initialiseDevice();
+  initialiseFrame();
   startCapturing();
 }
 
@@ -93,6 +94,7 @@ Camera::~Camera() {
   stopCapturing();
   uninitialiseDevice();
   closeDevice();
+  free(frame.data);
 }
 
 std::string Camera::getDevice() const {
@@ -176,6 +178,13 @@ void Camera::uninitialiseDevice() {
       throw std::runtime_error("munmap");
 
   free(buffers);
+}
+
+void Camera::initialiseFrame() {
+  frame.width = width;
+  frame.height = height;
+  frame.size = width * height * 3;
+  frame.data = (unsigned char *) malloc(frame.size * sizeof(char));
 }
 
 void Camera::startCapturing() {
@@ -431,6 +440,7 @@ const Frame& Camera::getFrame(unsigned int timeout) {
     if (index != -1)
       formatFrame((unsigned char *) buffers[index].data, frame.data, width,
                   height, stride);
+      return frame;
     /* EAGAIN - continue select loop. */
   }
 }

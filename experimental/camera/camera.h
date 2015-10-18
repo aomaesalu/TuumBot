@@ -41,7 +41,7 @@ struct Frame {
   unsigned char   *data;
   size_t          width;
   size_t          height;
-  size_t          size;     // Width * height * 3
+  size_t          size;     // width * height * 3
 };
 
 class Camera {
@@ -150,6 +150,11 @@ private:
     // TODO
   */
   void uninitialiseDevice();
+
+  /**
+    // TODO
+  */
+  void initialiseFrame();
 
   /**
     // TODO
