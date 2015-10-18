@@ -3,7 +3,8 @@
  * Camera implementation proxy.
  *
  * @authors Meelik Kiik
+ * @authors Ants-Oskar Mäesalu
  * @version 0.1
  */
 
-#include "VirtualCamera.hpp"
+#include "V4L2Camera.hpp"
