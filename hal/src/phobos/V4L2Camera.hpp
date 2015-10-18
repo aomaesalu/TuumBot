@@ -1,33 +1,21 @@
 /**
-  Tuum
-  Robotex 2015
-  University of Tartu
-  Team:
-    Kristjan Kanarbik
-    Meelik Kiik
-    Ants-Oskar Mäesalu
-    Mart Müllerbeck
-    Kaur Viiklaid
-    Indrek Virro
-    Mihkel Väljaots
+ * @file V4L2Camera.hpp
+ * Camera class
+ * Class for communication with the robot's cameras, based on the V4L2 API.
+ * The video capture example provided with the V4L2 API has been used as a
+ * model for the class.
+ *
+ * @authors Ants-Oskar Mäesalu
+ * @version 0.1
+ */
 
-  Camera class
-    Class for communication with the robot's cameras, based on the V4L2 API.
-    The video capture example provided with the V4L2 API has been used as a
-    model for the class.
-
-  Contributors:
-    Ants-Oskar Mäesalu
-
-  Copyright (c) 2015 Ants-Oskar Mäesalu
-*/
-
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef RTX_V4L2_CAMERA_H
+#define RTX_V4L2_CAMERA_H
 
 #include <string>
 
 #include "cameraConstants.h"    // Camera constants
+
 
 /**
   Camera image buffer structure.
@@ -201,4 +189,4 @@ private:
 
 };
 
-#endif // CAMERA_H
+#endif // RTX_V4L2_CAMERA_H

@@ -1,26 +1,13 @@
 /**
-  Tuum
-  Robotex 2015
-  University of Tartu
-  Team:
-    Kristjan Kanarbik
-    Meelik Kiik
-    Ants-Oskar Mäesalu
-    Mart Müllerbeck
-    Kaur Viiklaid
-    Indrek Virro
-    Mihkel Väljaots
-
-  Camera class
-    Class for communication with the robot's cameras, based on the V4L2 API.
-    The video capture example provided with the V4L2 API has been used as a
-    model for the class.
-
-  Contributors:
-    Ants-Oskar Mäesalu
-
-  Copyright (c) 2015 Ants-Oskar Mäesalu
-*/
+ * @file V4L2Camera.hpp
+ * Camera class
+ * Class for communication with the robot's cameras, based on the V4L2 API.
+ * The video capture example provided with the V4L2 API has been used as a
+ * model for the class.
+ *
+ * @authors Ants-Oskar Mäesalu
+ * @version 0.1
+ */
 
 #include <fcntl.h>              // File control operations (open)
 #include <sys/stat.h>           // File characteristics header (stat)
@@ -31,7 +18,8 @@
 #include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
 
-#include "camera.h"             // The class header
+#include "V4L2Camera.hpp"             // The class header
+
 
 // Macro to set the memory of a variable to zero
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
