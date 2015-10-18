@@ -37,6 +37,13 @@ struct buffer {
   size_t size;
 };
 
+struct Frame {
+  unsigned char   *data;
+  size_t          width;
+  size_t          height;
+  size_t          size;     // Width * height * 3
+};
+
 class Camera {
 
 public:
@@ -69,6 +76,8 @@ public:
     Returns the camera resolution's height.
   */
   size_t getHeight() const;
+
+  const Frame& getFrame(unsigned int = 1);
 
 private:
 
@@ -104,6 +113,8 @@ private:
 
   struct buffer *buffers;
   unsigned int numberOfBuffers;
+  Frame frame;
+  size_t stride;
 
   /**
     Opens the camera device. Establishes a connection between a file and a file

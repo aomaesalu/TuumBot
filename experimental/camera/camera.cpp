@@ -63,6 +63,21 @@ static int xioctl(int fileDescriptor, unsigned long int request, void *arg) {
   return result;
 }
 
+static void formatFrame(const unsigned char *source, unsigned char *destination,
+                        int width, int height, int stride) {
+  while (--height >= 0) {
+    for (int i = 0; i < width - 1; i += 2) {
+      for (int j = 0; j < 2; ++j) {
+        *destination++ = source[j * 2];
+        *destination++ = source[1];
+        *destination++ = source[3];
+      }
+      source += 4;
+    }
+    source += stride - width * 2;
+  }
+}
+
 Camera::Camera(const std::string &device, const int &width, const int &height):
 device(device),
 width(width),
@@ -297,7 +312,7 @@ void Camera::initialiseFormat() {
   width = format.fmt.pix.width;
   height = format.fmt.pix.height;
 
-  // TODO: Add stride?
+  stride = format.fmt.pix.bytesperline;
 }
 
 void Camera::initialiseBuffer() {
@@ -385,4 +400,37 @@ bool Camera::readFrame()
       throw std::runtime_error("VIDIOC_QBUF");
 
   return buffer.index;
+}
+
+const Frame& Camera::getFrame(unsigned int timeout) {
+  while (true) {
+    fd_set fileDescriptors;
+    struct timeval timeValue;
+
+    FD_ZERO(&fileDescriptors);
+    FD_SET(fileDescriptor, &fileDescriptors);
+
+    /* Timeout. */
+    timeValue.tv_sec = 2;
+    timeValue.tv_usec = 0;
+
+    int returnValue = select(fileDescriptor + 1, &fileDescriptors, NULL, NULL,
+                             &timeValue);
+
+    if (returnValue == -1) {
+      if (errno == EINTR)
+        continue;
+      throw std::runtime_error("select");
+    }
+
+    if (returnValue == 0) {
+      throw std::runtime_error(device + ": select timeout");
+    }
+
+    int index = readFrame();
+    if (index != -1)
+      formatFrame((unsigned char *) buffers[index].data, frame.data, width,
+                  height, stride);
+    /* EAGAIN - continue select loop. */
+  }
 }
