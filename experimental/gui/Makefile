@@ -11,7 +11,7 @@
 #   Indrek Virro                                                               #
 #   Mihkel Väljaots                                                            #
 ################################################################################
-# Experimental camera makefile                                                 #
+# Experimental GUI makefile                                                    #
 # Contributors:                                                                #
 #   Ants-Oskar Mäesalu                                                         #
 ################################################################################
@@ -25,11 +25,11 @@ CXX=g++
 CXXFLAGS = -Wall -std=c++11
 
 PROGRAM = main
-SRCS = main.cpp camera.cpp
-OBJS = main.o camera.o
+SRCS = main.cpp gui.cpp
+OBJS = main.o gui.o
 
-main.o: main.cpp camera.h
-camera.o: cameraConstants.h camera.h camera.cpp
+main.o: main.cpp gui.h
+gui.o: gui.h gui.cpp
 
 all: build
 
