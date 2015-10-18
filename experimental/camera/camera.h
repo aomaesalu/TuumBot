@@ -27,7 +27,7 @@
 
 #include <string>
 
-#include "constants.h"    // Camera constants
+#include "cameraConstants.h"    // Camera constants
 
 /**
   Camera image buffer structure.

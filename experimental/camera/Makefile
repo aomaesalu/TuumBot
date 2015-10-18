@@ -29,7 +29,7 @@ SRCS = main.cpp camera.cpp
 OBJS = main.o camera.o
 
 main.o: main.cpp camera.h
-camera.o: constants.h camera.h camera.cpp
+camera.o: cameraConstants.h camera.h camera.cpp
 
 all: build
 
