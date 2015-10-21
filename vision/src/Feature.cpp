@@ -60,4 +60,28 @@ namespace rtx {
     this->type = type;
   }
 
+  bool isCorner() const {
+    return type == CORNER;
+  }
+
+  bool isGoal() const {
+    return type == GOAL;
+  }
+
+  bool isBall() const {
+    return type == BALL;
+  }
+
+  bool isRobot() const {
+    return type == ROBOT;
+  }
+
+  bool isStatic() const {
+    return type == CORNER || type == GOAL;
+  }
+
+  bool isMoving() const {
+    return type == BALL || type == ROBOT;
+  }
+
 }

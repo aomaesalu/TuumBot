@@ -39,6 +39,14 @@ namespace rtx {
       void setAngle(const double&);
       void setType(const FeatureType&);
 
+      bool isCorner() const;
+      bool isGoal() const;
+      bool isBall() const;
+      bool isRobot() const;
+
+      bool isStatic() const;
+      bool isMoving() const;
+
     private:
       unsigned int distance;
       double angle;
