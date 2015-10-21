@@ -1,5 +1,5 @@
 /**
- * @file Feature.hpp
+ * @file Feature.cpp
  * Field feature seen on the camera.
  *
  * @authors Ants-Oskar Mäesalu
@@ -80,7 +80,7 @@ namespace rtx {
     return type == CORNER || type == GOAL;
   }
 
-  bool isMoving() const {
+  bool isMovable() const {
     return type == BALL || type == ROBOT;
   }
 
