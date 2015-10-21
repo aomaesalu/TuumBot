@@ -47,8 +47,8 @@ namespace rtx {
     return staticFeatures;
   }
 
-  std::vector<Feature*> Vision::getMovingFeatures() const {
-    return movingFeatures;
+  std::vector<Feature*> Vision::getMovableFeatures() const {
+    return movableFeatures;
   }
 
   std::vector<Feature*> Vision::getAllFeatures() const {
@@ -95,8 +95,8 @@ namespace rtx {
     staticFeatures.insert(features.end, goals.begin(), goals.end());
   }
 
-  void updateMovingFeatures() {
-    emptyVector(movingFeatures);
+  void updateMovableFeatures() {
+    emptyVector(movableFeatures);
     staticFeatures.insert(features.end(), balls.begin(), balls.end());
     staticFeatures.insert(features.end, robots.begin(), robots.end());
   }
@@ -105,13 +105,13 @@ namespace rtx {
     emptyVector(allFeatures);
     staticFeatures.insert(features.end(), staticFeatures.begin(),
                           staticFeatures.end());
-    staticFeatures.insert(features.end, movingFeatures.begin(),
-                          movingFeatures.end());
+    staticFeatures.insert(features.end, movableFeatures.begin(),
+                          movableFeatures.end());
   }
 
   void updateFeatures() {
     updateStaticFeatures();
-    updateMovingFeatures();
+    updateMovableFeatures();
     updateAllFeatures();
   }
 
