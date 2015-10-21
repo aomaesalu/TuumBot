@@ -27,7 +27,7 @@ namespace rtx {
       std::vector<Feature*> getRobots() const;
 
       std::vector<Feature*> getStaticFeatures() const;
-      std::vector<Feature*> getMovingFeatures() const;
+      std::vector<Feature*> getMovableFeatures() const;
       std::vector<Feature*> getAllFeatures() const;
 
       void process();
@@ -39,7 +39,7 @@ namespace rtx {
       std::vector<Feature*> robots;
 
       std::vector<Feature*> staticFeatures;
-      std::vector<Feature*> movingFeatures;
+      std::vector<Feature*> movableFeatures;
       std::vector<Feature*> allFeatures;
 
       void lineDetection();
@@ -50,7 +50,7 @@ namespace rtx {
       void robotDetection();
 
       void updateStaticFeatures();
-      void updateMovingFeatures();
+      void updateMovableFeatures();
       void updateAllFeatures();
       void updateFeatures();
 

@@ -45,7 +45,7 @@ namespace rtx {
       bool isRobot() const;
 
       bool isStatic() const;
-      bool isMoving() const;
+      bool isMovable() const;
 
     private:
       unsigned int distance;
