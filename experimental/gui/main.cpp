@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * Experimental GUI application using gtkmm.
+ *
+ * @authors Ants-Oskar Mäesalu
+ * @version 0.1
+ */
+
 #include <gtkmm.h>
 
 int main(int argc, char *argv[]) {
