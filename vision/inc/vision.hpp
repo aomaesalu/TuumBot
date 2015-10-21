@@ -10,7 +10,7 @@
 #define RTX_VISION_VISION_H
 
 #include <vector>
-#include "Point2D.hpp"
+#include "Feature.hpp"
 
 
 namespace rtx {
@@ -20,18 +20,23 @@ namespace rtx {
     public:
       Vision();
       ~Vision();
-      std::vector<Point2D*> getBalls() const;
-      std::vector<Point2D*> getGoals() const;
-      std::vector<Point2D*> getCorners() const;
-      std::vector<Point2D*> getRobots() const;
+
+      std::vector<Feature*> getBalls() const;
+      std::vector<Feature*> getGoals() const;
+      std::vector<Feature*> getCorners() const;
+      std::vector<Feature*> getRobots() const;
+
+      std::vector<Feature*> getStaticFeatures() const;
+      std::vector<Feature*> getMovingFeatures() const;
+
+      void process();
 
     private:
-      std::vector<Point2D*> balls;
-      std::vector<Point2D*> goals;
-      std::vector<Point2D*> corners;
-      std::vector<Point2D*> robots;
+      std::vector<Feature*> balls;
+      std::vector<Feature*> goals;
+      std::vector<Feature*> corners;
+      std::vector<Feature*> robots;
 
-      void analyse();
       void lineDetection();
       void blobDetection();
       void ballDetection();
