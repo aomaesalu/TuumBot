@@ -15,24 +15,34 @@
 
 namespace rtx {
 
+  enum FeatureType {
+    CORNER,
+    GOAL,
+    BALL,
+    ROBOT
+  }
+
   class Feature {
 
     public:
       Feature(const Feature&);
-      Feature(const unsigned int&, const double&);
+      Feature(const unsigned int&, const double&, const FeatureType&);
       ~Feature();
 
       // Point2D* getPosition() const; // TODO
       std::pair<unsigned int, double> getDeltaVector() const; // (mm, rad)
       unsigned int getDistance() const;
       double getAngle() const;
+      FeatureType getType() const;
 
       void setDistance(const unsigned int&);
       void setAngle(const double&);
+      void setType(const FeatureType&);
 
     private:
       unsigned int distance;
       double angle;
+      FeatureType type;
 
   }
 

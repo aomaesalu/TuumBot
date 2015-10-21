@@ -28,6 +28,7 @@ namespace rtx {
 
       std::vector<Feature*> getStaticFeatures() const;
       std::vector<Feature*> getMovingFeatures() const;
+      std::vector<Feature*> getAllFeatures() const;
 
       void process();
 
@@ -36,6 +37,10 @@ namespace rtx {
       std::vector<Feature*> goals;
       std::vector<Feature*> corners;
       std::vector<Feature*> robots;
+
+      std::vector<Feature*> staticFeatures;
+      std::vector<Feature*> movingFeatures;
+      std::vector<Feature*> allFeatures;
 
       void lineDetection();
       void blobDetection();

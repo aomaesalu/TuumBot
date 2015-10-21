@@ -9,13 +9,19 @@
 #include "Feature.hpp"
 
 
-Feature::Feature(const Feature &other) {
-
+Feature::Feature(const Feature &other):
+  distance{other.getDistance()},
+  angle{other.getAngle()},
+  type{other.getType()}
+{
+  // Nothing to do here
 }
 
-Feature::Feature(const unsigned int &distance, const double &angle):
+Feature::Feature(const unsigned int &distance, const double &angle,
+                 const FeatureType &type):
   distance{distance},
-  angle{angle}
+  angle{angle},
+  type{type}
 {
   // Nothing to do here
 }
@@ -36,10 +42,18 @@ double getAngle() const {
   return angle;
 }
 
+FeatureType getType() const {
+  return type;
+}
+
 void setDistance(const unsigned int &distance) {
   this->distance = distance;
 }
 
 void setAngle(const unsigned int &angle) {
   this->angle = angle;
+}
+
+void setType(const FeatureType &type) {
+  this->type = type;
 }
