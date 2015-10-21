@@ -49,6 +49,11 @@ namespace rtx {
       void cornerDetection();
       void robotDetection();
 
+      void updateStaticFeatures();
+      void updateMovingFeatures();
+      void updateAllFeatures();
+      void updateFeatures();
+
   };
 
 };

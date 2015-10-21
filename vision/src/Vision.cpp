@@ -9,6 +9,14 @@
 #include "vision.hpp"
 
 
+void emptyVector(std::vector<Feature*> &vector) {
+  for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
+       ++i) {
+    delete *i;
+  }
+  vector.clear();
+}
+
 namespace rtx {
 
   Vision::Vision() {
@@ -36,17 +44,15 @@ namespace rtx {
   }
 
   std::vector<Feature*> Vision::getStaticFeatures() const {
-    std::vector<Feature*> features;
-    features.insert(features.end(), corners.begin(), corners.end());
-    features.insert(features.end(), goals.begin(), goals.end());
-    return features;
+    return staticFeatures;
   }
 
   std::vector<Feature*> Vision::getMovingFeatures() const {
-    std::vector<Feature*> features;
-    features.insert(features.end(), balls.begin(), balls.end());
-    features.insert(features.end, robots.begin(), robots.end());
-    return features;
+    return movingFeatures;
+  }
+
+  std::vector<Feature*> Vision::getAllFeatures() const {
+    return allFeatures;
   }
 
   void Vision::process() {
@@ -56,6 +62,7 @@ namespace rtx {
     ballDetection();
     goalDetection();
     robotDetection();
+    updateFeatures();
   }
 
   void Vision::lineDetection() {
@@ -80,6 +87,32 @@ namespace rtx {
 
   void Vision::robotDetection() {
     // TODO
+  }
+
+  void updateStaticFeatures() {
+    emptyVector(staticFeatures);
+    staticFeatures.insert(features.end(), corners.begin(), corners.end());
+    staticFeatures.insert(features.end, goals.begin(), goals.end());
+  }
+
+  void updateMovingFeatures() {
+    emptyVector(movingFeatures);
+    staticFeatures.insert(features.end(), balls.begin(), balls.end());
+    staticFeatures.insert(features.end, robots.begin(), robots.end());
+  }
+
+  void updateAllFeatures() {
+    emptyVector(allFeatures);
+    staticFeatures.insert(features.end(), staticFeatures.begin(),
+                          staticFeatures.end());
+    staticFeatures.insert(features.end, movingFeatures.begin(),
+                          movingFeatures.end());
+  }
+
+  void updateFeatures() {
+    updateStaticFeatures();
+    updateMovingFeatures();
+    updateAllFeatures();
   }
 
 };
