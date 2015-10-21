@@ -1,5 +1,5 @@
 /**
- * @file Feature.hpp
+ * @file Feature.cpp
  * Field feature seen on the camera.
  *
  * @authors Ants-Oskar Mäesalu
