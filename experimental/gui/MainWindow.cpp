@@ -47,6 +47,7 @@ void MainWindow::constructGrid() {
 void MainWindow::constructDrawingButtonsBox() {
   constructEntityChooseComboBox(drawingButtonsBox);
   constructBrushSizeScale(drawingButtonsBox);
+  constructDeltaChooseScale(drawingButtonsBox);
   drawingButtonsBox.set_spacing(10);
   grid.attach(drawingButtonsBox, 0, 0, 1, 1);
 }
@@ -60,15 +61,19 @@ void MainWindow::constructGeneralButtonsBox() {
 }
 
 void MainWindow::constructImageBeforeFrame() {
+  imageBeforeFrame.add(imageBeforeArea);
   imageBeforeFrame.set_label("Before");
   imageBeforeFrame.set_size_request(640, 480);
   grid.attach(imageBeforeFrame, 0, 1, 1, 1);
+  drawImageBefore();
 }
 
 void MainWindow::constructImageAfterFrame() {
+  imageAfterFrame.add(imageAfterArea);
   imageAfterFrame.set_label("After");
   imageAfterFrame.set_size_request(640, 480);
   grid.attach(imageAfterFrame, 1, 1, 1, 1);
+  drawImageAfter();
 }
 
 void MainWindow::constructImageBeforeOptionsBox() {
@@ -103,9 +108,19 @@ void MainWindow::constructEntityChooseComboBox(Gtk::Container &parentContainer) 
 void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {
   brushSizeLabel.set_text("Brush size:");
   parentContainer.add(brushSizeLabel);
-  brushSizeScale.set_adjustment(Gtk::Adjustment::create(10.0, 1.0, 50.0, 1.0, 5.0));
+  brushSizeScale.set_adjustment(Gtk::Adjustment::create(10, 1, 50, 1, 5));
+  brushSizeScale.set_digits(0);
   brushSizeScale.set_size_request(100);
   parentContainer.add(brushSizeScale);
+}
+
+void MainWindow::constructDeltaChooseScale(Gtk::Container &parentContainer) {
+deltaChooseLabel.set_text("Delta:");
+parentContainer.add(deltaChooseLabel);
+deltaChooseScale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
+deltaChooseScale.set_digits(0);
+deltaChooseScale.set_size_request(100);
+parentContainer.add(deltaChooseScale);
 }
 
 void MainWindow::constructFileChooseComboBox(Gtk::Container &parentContainer) {
@@ -123,4 +138,12 @@ void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
 void MainWindow::constructExitButton(Gtk::Container &parentContainer) {
   exitButton.set_label("Exit");
   parentContainer.add(exitButton);
+}
+
+void MainWindow::drawImageBefore() {
+  // TODO
+}
+
+void MainWindow::drawImageAfter() {
+  // TODO
 }

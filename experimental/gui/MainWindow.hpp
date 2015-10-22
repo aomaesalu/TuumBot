@@ -34,6 +34,8 @@ class MainWindow: public Gtk::Window {
     Gtk::ComboBoxText entityChooseComboBox;
     Gtk::Label brushSizeLabel;
     Gtk::Scale brushSizeScale;
+    Gtk::Label deltaChooseLabel;
+    Gtk::Scale deltaChooseScale;
 
     // General buttons
     Gtk::ComboBoxText fileChooseComboBox;
@@ -43,6 +45,14 @@ class MainWindow: public Gtk::Window {
     // Options buttons
     Gtk::CheckButton displayMaskBeforeButton;
     Gtk::CheckButton displayMaskAfterButton;
+
+    // Image drawing areas
+    Gtk::DrawingArea imageBeforeArea;
+    Gtk::DrawingArea imageAfterArea;
+
+    // Images
+    Glib::RefPtr<Gdk::Pixbuf> imageBefore;
+    Glib::RefPtr<Gdk::Pixbuf> imageAfter;
 
   private:
     void setProperties();
@@ -59,9 +69,13 @@ class MainWindow: public Gtk::Window {
 
     void constructEntityChooseComboBox(Gtk::Container&);
     void constructBrushSizeScale(Gtk::Container&);
+    void constructDeltaChooseScale(Gtk::Container&);
     void constructFileChooseComboBox(Gtk::Container&);
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
+
+    void drawImageBefore();
+    void drawImageAfter();
 
 };
 
