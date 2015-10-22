@@ -21,8 +21,45 @@ class MainWindow: public Gtk::Window {
   protected:
     Gtk::Grid grid;
 
+    // Frames and boxes for the layout
+    Gtk::Box drawingButtonsBox;
+    Gtk::Box generalButtonsBox;
+    Gtk::Frame imageBeforeFrame;
+    Gtk::Frame imageAfterFrame;
+    Gtk::Box imageBeforeOptionsBox;
+    Gtk::Box imageAfterOptionsBox;
+
+    // Drawing buttons
+    Gtk::ComboBox entityChooseButton;
+    Gtk::ComboBox brushSizeButton;
+
+    // General buttons
+    Gtk::ComboBox fileChooseButton;
+    Gtk::Button saveButton;
+    Gtk::Button exitButton;
+
+    // Options buttons
+    Gtk::CheckButton displayMaskBeforeButton;
+    Gtk::CheckButton displayMaskAfterButton;
+
   private:
     void setProperties();
+
+    void construct();
+    void constructGrid();
+
+    void constructDrawingButtonsBox();
+    void constructGeneralButtonsBox();
+    void constructImageBeforeFrame();
+    void constructImageAfterFrame();
+    void constructImageBeforeOptionsBox();
+    void constructImageAfterOptionsBox();
+
+    void constructEntityChooseButton();
+    void constructBrushSizeButton();
+    void constructFileChooseButton();
+    void constructSaveButton();
+    void constructExitButton();
 
 };
 
