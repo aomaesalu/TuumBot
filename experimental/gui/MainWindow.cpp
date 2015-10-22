@@ -48,6 +48,8 @@ void MainWindow::constructDrawingButtonsBox() {
   constructEntityChooseComboBox(drawingButtonsBox);
   constructBrushSizeScale(drawingButtonsBox);
   constructDeltaChooseScale(drawingButtonsBox);
+  constructPlayButton(drawingButtonsBox);
+  constructStopButton(drawingButtonsBox);
   drawingButtonsBox.set_spacing(10);
   grid.attach(drawingButtonsBox, 0, 0, 1, 1);
 }
@@ -115,18 +117,29 @@ void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {
 }
 
 void MainWindow::constructDeltaChooseScale(Gtk::Container &parentContainer) {
-deltaChooseLabel.set_text("Delta:");
-parentContainer.add(deltaChooseLabel);
-deltaChooseScale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
-deltaChooseScale.set_digits(0);
-deltaChooseScale.set_size_request(100);
-parentContainer.add(deltaChooseScale);
+  deltaChooseLabel.set_text("Delta:");
+  parentContainer.add(deltaChooseLabel);
+  deltaChooseScale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
+  deltaChooseScale.set_digits(0);
+  deltaChooseScale.set_size_request(100);
+  parentContainer.add(deltaChooseScale);
+}
+
+void MainWindow::constructPlayButton(Gtk::Container &parentContainer) {
+  playButton.set_label("Play");
+  parentContainer.add(playButton);
+}
+
+void MainWindow::constructStopButton(Gtk::Container &parentContainer) {
+  stopButton.set_label("Stop");
+  parentContainer.add(stopButton);
 }
 
 void MainWindow::constructFileChooseComboBox(Gtk::Container &parentContainer) {
   fileChooseComboBox.append("New...");
   // TODO: Add other files
   fileChooseComboBox.set_active(0);
+  fileChooseComboBox.set_hexpand();
   parentContainer.add(fileChooseComboBox);
 }
 
