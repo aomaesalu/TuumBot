@@ -29,12 +29,14 @@ class MainWindow: public Gtk::Window {
     Gtk::Box imageBeforeOptionsBox;
     Gtk::Box imageAfterOptionsBox;
 
-    // Drawing buttons
-    Gtk::ComboBox entityChooseButton;
-    Gtk::ComboBox brushSizeButton;
+    // Drawing buttons and labels
+    Gtk::Label entityChooseLabel;
+    Gtk::ComboBoxText entityChooseComboBox;
+    Gtk::Label brushSizeLabel;
+    Gtk::Scale brushSizeScale;
 
     // General buttons
-    Gtk::ComboBox fileChooseButton;
+    Gtk::ComboBoxText fileChooseComboBox;
     Gtk::Button saveButton;
     Gtk::Button exitButton;
 
@@ -55,9 +57,9 @@ class MainWindow: public Gtk::Window {
     void constructImageBeforeOptionsBox();
     void constructImageAfterOptionsBox();
 
-    void constructEntityChooseButton(Gtk::Container&);
-    void constructBrushSizeButton(Gtk::Container&);
-    void constructFileChooseButton(Gtk::Container&);
+    void constructEntityChooseComboBox(Gtk::Container&);
+    void constructBrushSizeScale(Gtk::Container&);
+    void constructFileChooseComboBox(Gtk::Container&);
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
 
