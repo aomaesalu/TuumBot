@@ -55,11 +55,11 @@ class MainWindow: public Gtk::Window {
     void constructImageBeforeOptionsBox();
     void constructImageAfterOptionsBox();
 
-    void constructEntityChooseButton();
-    void constructBrushSizeButton();
-    void constructFileChooseButton();
-    void constructSaveButton();
-    void constructExitButton();
+    void constructEntityChooseButton(Gtk::Container&);
+    void constructBrushSizeButton(Gtk::Container&);
+    void constructFileChooseButton(Gtk::Container&);
+    void constructSaveButton(Gtk::Container&);
+    void constructExitButton(Gtk::Container&);
 
 };
 
