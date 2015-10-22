@@ -17,26 +17,40 @@
 ################################################################################
 
 # Compiler
-CXX=g++
-
-LIBFLAGS = `pkg-config gtkmm-3.0 --cflags --libs`
+CXX = g++
 
 # Default compiler parameters
 # -Wall 		Shows all warnings when compiling, always use this!
 # -std=c++11 	Enables the C++11 standard mode
-CXXFLAGS = -Wall -std=c++11 $(LIBFLAGS)
+CXXFLAGS = -Wall -std=c++11 `pkg-config gtkmm-3.0 --cflags`
+
+# gtkmm library flags
+LDLIBS = `pkg-config gtkmm-3.0 --libs`
 
 PROGRAM = main
-SRCS =
-OBJS = main.o
-MAINSRC = main.cpp
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+DEPEND = .depend
 
-all: build
+.PHONY: clean
 
-build:
-	$(CXX) $(MAINSRC) -o $(PROGRAM) $(LIBFLAGS)
+$(PROGRAM): $(OBJS)
+	$(CXX) $^ -o $@ $(LDLIBS)
 
+# Object file rules:
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $<
+
+# Dependencies
+.depend:
+	rm -f ./.depend
+	$(CXX) $(CXXFLAGS) -MM $(SRCS) > $(DEPEND)
+
+all: .depend $(PROGRAM)
 
 clean:
 	rm -f $(OBJS)
 	rm -f $(PROGRAM)
+	rm -f $(DEPEND)
+
+-include $(DEPEND)
