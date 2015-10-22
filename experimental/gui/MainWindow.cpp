@@ -45,15 +45,15 @@ void MainWindow::constructGrid() {
 }
 
 void MainWindow::constructDrawingButtonsBox() {
-  constructEntityChooseButton();
-  constructBrushSizeButton();
+  constructEntityChooseButton(drawingButtonsBox);
+  constructBrushSizeButton(drawingButtonsBox);
   grid.attach(drawingButtonsBox, 0, 0, 1, 1);
 }
 
 void MainWindow::constructGeneralButtonsBox() {
-  constructFileChooseButton();
-  constructSaveButton();
-  constructExitButton();
+  constructFileChooseButton(generalButtonsBox);
+  constructSaveButton(generalButtonsBox);
+  constructExitButton(generalButtonsBox);
   grid.attach(generalButtonsBox, 1, 0, 1, 1);
 }
 
@@ -85,27 +85,27 @@ void MainWindow::constructImageAfterOptionsBox() {
   grid.attach(imageAfterOptionsBox, 1, 2, 1, 1);
 }
 
-void MainWindow::constructEntityChooseButton() {
+void MainWindow::constructEntityChooseButton(Gtk::Container &parentContainer) {
   // TODO
-  drawingButtonsBox.add(entityChooseButton);
+  parentContainer.add(entityChooseButton);
 }
 
-void MainWindow::constructBrushSizeButton() {
+void MainWindow::constructBrushSizeButton(Gtk::Container &parentContainer) {
   // TODO
-  drawingButtonsBox.add(brushSizeButton);
+  parentContainer.add(brushSizeButton);
 }
 
-void MainWindow::constructFileChooseButton() {
+void MainWindow::constructFileChooseButton(Gtk::Container &parentContainer) {
   // TODO
-  generalButtonsBox.add(fileChooseButton);
+  parentContainer.add(fileChooseButton);
 }
 
-void MainWindow::constructSaveButton() {
+void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
   saveButton.set_label("Save");
-  generalButtonsBox.add(saveButton);
+  parentContainer.add(saveButton);
 }
 
-void MainWindow::constructExitButton() {
+void MainWindow::constructExitButton(Gtk::Container &parentContainer) {
   exitButton.set_label("Exit");
-  generalButtonsBox.add(exitButton);
+  parentContainer.add(exitButton);
 }
