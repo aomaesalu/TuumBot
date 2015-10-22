@@ -37,6 +37,10 @@ class MainWindow: public Gtk::Window {
     Gtk::Label deltaChooseLabel;
     Gtk::Scale deltaChooseScale;
 
+    // Video control buttons
+    Gtk::Button playButton;
+    Gtk::Button stopButton;
+
     // General buttons
     Gtk::ComboBoxText fileChooseComboBox;
     Gtk::Button saveButton;
@@ -70,6 +74,10 @@ class MainWindow: public Gtk::Window {
     void constructEntityChooseComboBox(Gtk::Container&);
     void constructBrushSizeScale(Gtk::Container&);
     void constructDeltaChooseScale(Gtk::Container&);
+
+    void constructPlayButton(Gtk::Container&);
+    void constructStopButton(Gtk::Container&);
+
     void constructFileChooseComboBox(Gtk::Container&);
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
