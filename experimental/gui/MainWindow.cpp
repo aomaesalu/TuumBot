@@ -66,16 +66,16 @@ void MainWindow::constructImageBeforeFrame() {
   imageBeforeFrame.add(imageBeforeArea);
   imageBeforeFrame.set_label("Before");
   imageBeforeFrame.set_size_request(640, 480);
+  imageBeforeFrame.set_border_width(0);
   grid.attach(imageBeforeFrame, 0, 1, 1, 1);
-  drawImageBefore();
 }
 
 void MainWindow::constructImageAfterFrame() {
   imageAfterFrame.add(imageAfterArea);
   imageAfterFrame.set_label("After");
   imageAfterFrame.set_size_request(640, 480);
+  imageAfterFrame.set_border_width(0);
   grid.attach(imageAfterFrame, 1, 1, 1, 1);
-  drawImageAfter();
 }
 
 void MainWindow::constructImageBeforeOptionsBox() {
@@ -151,12 +151,4 @@ void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
 void MainWindow::constructExitButton(Gtk::Container &parentContainer) {
   exitButton.set_label("Exit");
   parentContainer.add(exitButton);
-}
-
-void MainWindow::drawImageBefore() {
-  // TODO
-}
-
-void MainWindow::drawImageAfter() {
-  // TODO
 }

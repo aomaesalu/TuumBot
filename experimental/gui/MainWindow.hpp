@@ -10,6 +10,10 @@
 #define GUI_MAIN_WINDOW_H
 
 #include <gtkmm.h>
+#include <gtkmm/window.h>
+
+#include "ImageBeforeDrawingArea.hpp"
+#include "ImageAfterDrawingArea.hpp"
 
 
 class MainWindow: public Gtk::Window {
@@ -50,9 +54,9 @@ class MainWindow: public Gtk::Window {
     Gtk::CheckButton displayMaskBeforeButton;
     Gtk::CheckButton displayMaskAfterButton;
 
-    // Image drawing areas
-    Gtk::DrawingArea imageBeforeArea;
-    Gtk::DrawingArea imageAfterArea;
+    // Image drawing areas and contexts
+    ImageBeforeDrawingArea imageBeforeArea;
+    ImageAfterDrawingArea imageAfterArea;
 
     // Images
     Glib::RefPtr<Gdk::Pixbuf> imageBefore;
@@ -81,9 +85,6 @@ class MainWindow: public Gtk::Window {
     void constructFileChooseComboBox(Gtk::Container&);
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
-
-    void drawImageBefore();
-    void drawImageAfter();
 
 };
 
