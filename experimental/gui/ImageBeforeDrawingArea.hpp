@@ -25,13 +25,19 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
+    virtual bool on_button_press_event(GdkEventButton*);
+    virtual bool on_button_release_event(GdkEventButton*);
+    virtual bool on_scroll_event(GdkEventScroll*);
 
   private:
     Glib::RefPtr<Gdk::Pixbuf> image;
 
+    unsigned int brushSize;
     std::vector<std::vector<bool>> mask;
 
+    void initialiseBrush();
     void initialiseMask();
+    
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
     bool applyMask();
 
