@@ -27,6 +27,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
     virtual bool on_button_press_event(GdkEventButton*);
     virtual bool on_button_release_event(GdkEventButton*);
+    virtual bool on_motion_notify_event(GdkEventMotion*);
     virtual bool on_scroll_event(GdkEventScroll*);
 
   private:
@@ -38,6 +39,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     bool addingMode;
     bool erasingMode;
 
+    void initialiseProperties();
+    void initialiseImage();
     void initialiseBrush();
     void initialiseMask();
     void initialiseDrawingModes();
