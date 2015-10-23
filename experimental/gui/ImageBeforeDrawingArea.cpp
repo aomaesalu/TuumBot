@@ -74,8 +74,18 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
   return true;
 }
 
-bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *releaseEvent) {
-  // TODO
+bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent) {
+  if (buttonEvent->type == GDK_BUTTON_RELEASE) {
+    if (buttonEvent->button == 1) { // Left mouse button
+      if (addingMode) {
+        addingMode = false;
+      }
+    } else if (buttonEvent->button == 3) { // Right mouse button
+      if (erasingMode) {
+        erasingMode = false;
+      }
+    }
+  }
   return true;
 }
 
