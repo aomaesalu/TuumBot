@@ -88,6 +88,8 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
 }
 
 bool ImageBeforeDrawingArea::on_motion_notify_event(GdkEventMotion *motionEvent) {
+  if (!drawBrush(motionEvent->x, motionEvent->y))
+    return false;
   if (addingMode) {
     addToMask(motionEvent->x, motionEvent->y);
   } else if (erasingMode) {
@@ -147,6 +149,31 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
 
   Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
   cairo->paint();
+
+  return true;
+}
+
+bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int &y) {
+  guint8 *pixels = image->get_pixels();
+  unsigned int channels = image->get_n_channels();
+  unsigned int stride = image->get_rowstride();
+
+  // Color pixels
+  unsigned int radiusSquared = (brushSize / 2) * (brushSize / 2);
+  for (unsigned int i = 0; i < brushSize; ++i) {
+    for (unsigned int j = 0; j < brushSize; ++j) {
+      unsigned int dx = i - x;
+      unsigned int dy = j - y;
+      unsigned int distanceSquared = dx * dx + dy * dy;
+      if (distanceSquared <= radiusSquared) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        pixel[0] *= 2;
+      }
+    }
+  }
+
+  // Redraw
+  queue_draw();
 
   return true;
 }
