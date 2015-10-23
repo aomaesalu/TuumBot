@@ -20,12 +20,8 @@
 ImageBeforeDrawingArea::ImageBeforeDrawingArea():
   ImageDrawingArea()
 {
-  image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
-
-  // Show the whole image
-  if (image)
-    set_size_request(image->get_width(), image->get_height());
-
+  initialiseProperties();
+  initialiseImage();
   initialiseBrush();
   initialiseMask();
   initialiseDrawingModes();
@@ -71,6 +67,7 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
       }
     }
   }
+  std::cout << "Press" << std::endl;
   return true;
 }
 
@@ -86,6 +83,16 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
       }
     }
   }
+  std::cout << "Release" << std::endl;
+  return true;
+}
+
+bool ImageBeforeDrawingArea::on_motion_notify_event(GdkEventMotion *motionEvent) {
+  if (addingMode) {
+    addToMask(motionEvent->x, motionEvent->y);
+  } else if (erasingMode) {
+    eraseFromMask(motionEvent->x, motionEvent->y);
+  }
   return true;
 }
 
@@ -100,7 +107,20 @@ bool ImageBeforeDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
       brushSize--;
     }
   }
+  std::cout << brushSize << std::endl;
   return true;
+}
+
+void ImageBeforeDrawingArea::initialiseProperties() {
+  set_size_request(640, 480);
+}
+
+void ImageBeforeDrawingArea::initialiseImage() {
+  image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
+
+  // Show the whole image
+  if (image)
+    set_size_request(image->get_width(), image->get_height());
 }
 
 void ImageBeforeDrawingArea::initialiseBrush() {
