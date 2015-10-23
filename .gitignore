@@ -35,3 +35,4 @@ data/*
 
 # Image files
 *.ppm
+*.png
