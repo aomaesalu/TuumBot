@@ -32,6 +32,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     std::vector<std::vector<bool>> mask;
 
     void initialiseMask();
+    bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+    bool applyMask();
 
 };
 
