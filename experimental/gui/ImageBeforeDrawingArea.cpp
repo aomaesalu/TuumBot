@@ -14,6 +14,8 @@
 #include <glibmm/refptr.h>
 #include <glibmm/fileutils.h>
 
+#include <iostream>
+
 
 ImageBeforeDrawingArea::ImageBeforeDrawingArea():
   ImageDrawingArea()
@@ -24,6 +26,7 @@ ImageBeforeDrawingArea::ImageBeforeDrawingArea():
   if (image)
     set_size_request(image->get_width(), image->get_height());
 
+  initialiseBrush();
   initialiseMask();
 }
 
@@ -50,6 +53,35 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
     return false;
 
   return true;
+}
+
+bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) {
+  // TODO
+  return true;
+}
+
+bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *releaseEvent) {
+  // TODO
+  return true;
+}
+
+bool ImageBeforeDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
+  // TODO: Fix
+  if (scrollEvent->direction == GDK_SCROLL_UP) {
+    if (brushSize < 50) {
+      brushSize++;
+    }
+  } else if (scrollEvent->direction == GDK_SCROLL_DOWN) {
+    if (brushSize > 1) {
+      brushSize--;
+    }
+  }
+  return true;
+}
+
+void ImageBeforeDrawingArea::initialiseBrush() {
+  brushSize = 10;
+  // TODO: Different brush types, precalculate relative pixels
 }
 
 void ImageBeforeDrawingArea::initialiseMask() {
