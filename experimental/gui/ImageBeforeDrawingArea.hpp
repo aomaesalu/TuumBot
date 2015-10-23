@@ -35,11 +35,18 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     unsigned int brushSize;
     std::vector<std::vector<bool>> mask;
 
+    bool addingMode;
+    bool erasingMode;
+
     void initialiseBrush();
     void initialiseMask();
-    
+    void initialiseDrawingModes();
+
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
     bool applyMask();
+
+    void addToMask(const unsigned int&, const unsigned int&);
+    void eraseFromMask(const unsigned int&, const unsigned int&);
 
 };
 

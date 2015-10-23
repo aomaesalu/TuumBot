@@ -28,6 +28,7 @@ ImageBeforeDrawingArea::ImageBeforeDrawingArea():
 
   initialiseBrush();
   initialiseMask();
+  initialiseDrawingModes();
 }
 
 ImageBeforeDrawingArea::~ImageBeforeDrawingArea() {
@@ -56,7 +57,20 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
 }
 
 bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) {
-  // TODO
+  if (buttonEvent->type == GDK_BUTTON_PRESS) {
+    setPlaying(false);
+    if (buttonEvent->button == 1) { // Left mouse button
+      if (!erasingMode) {
+        addingMode = true;
+        addToMask(buttonEvent->x, buttonEvent->y);
+      }
+    } else if (buttonEvent->button == 3) { // Right mouse button
+      if (!addingMode) {
+        erasingMode = true;
+        eraseFromMask(buttonEvent->x, buttonEvent->y);
+      }
+    }
+  }
   return true;
 }
 
@@ -92,6 +106,11 @@ void ImageBeforeDrawingArea::initialiseMask() {
   }
 }
 
+void ImageBeforeDrawingArea::initialiseDrawingModes() {
+  addingMode = false;
+  erasingMode = false;
+}
+
 bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
   if (!image)
     return false;
@@ -123,4 +142,13 @@ bool ImageBeforeDrawingArea::applyMask() {
   queue_draw();
 
   return true;
+}
+
+void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
+  // TODO
+  std::cout << "Add to mask: " << x << " " << y << std::endl;
+}
+
+void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned int &y) {
+  std::cout << "Erase from mask: " << x << " " << y << std::endl;
 }
