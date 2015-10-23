@@ -145,10 +145,25 @@ bool ImageBeforeDrawingArea::applyMask() {
 }
 
 void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
-  // TODO
-  std::cout << "Add to mask: " << x << " " << y << std::endl;
+  std::cout << "Add to mask: " << x << " " << y << std::endl; // TODO: Remove
+  changeValueInMask(x, y, true);
 }
 
 void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned int &y) {
-  std::cout << "Erase from mask: " << x << " " << y << std::endl;
+  std::cout << "Add to mask: " << x << " " << y << std::endl; // TODO: Remove
+  changeValueInMask(x, y, false);
+}
+
+void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
+  unsigned int radiusSquared = (brushSize / 2) * (brushSize / 2);
+  for (unsigned int i = 0; i < brushSize; ++i) {
+    for (unsigned int j = 0; j < brushSize; ++j) {
+      unsigned int dx = i - x;
+      unsigned int dy = j - y;
+      unsigned int distanceSquared = dx * dx + dy * dy;
+      if (distanceSquared <= radiusSquared) {
+        mask[i][j] = value;
+      }
+    }
+  }
 }

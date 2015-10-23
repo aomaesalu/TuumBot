@@ -47,6 +47,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
     void addToMask(const unsigned int&, const unsigned int&);
     void eraseFromMask(const unsigned int&, const unsigned int&);
+    void changeValueInMask(const unsigned int&, const unsigned int&, const bool&);
 
 };
 
