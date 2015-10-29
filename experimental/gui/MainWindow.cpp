@@ -8,8 +8,12 @@
 
 #include "MainWindow.hpp"
 
+#include <iostream>
 
-MainWindow::MainWindow() {
+
+MainWindow::MainWindow():
+  imageBeforeArea(&brushSizeScale)
+{
   setProperties();
   construct();
   show_all_children();
@@ -17,22 +21,6 @@ MainWindow::MainWindow() {
 
 MainWindow::~MainWindow() {
   // Nothing to do here
-}
-
-bool on_button_press_event(GdkEventButton *buttonEvent) {
-  // TODO
-}
-
-bool on_button_release_event(GdkEventButton *buttonEvent) {
-  // TODO
-}
-
-bool on_motion_notify_event(GdkEventMotion *motionEvent) {
-  // TODO
-}
-
-bool on_scroll_event(GdkEventScroll *scrollEvent) {
-  // TODO
 }
 
 void MainWindow::setProperties() {
@@ -79,6 +67,7 @@ void MainWindow::constructGeneralButtonsBox() {
 }
 
 void MainWindow::constructImageBeforeFrame() {
+  imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::BUTTON_MOTION_MASK | Gdk::SCROLL_MASK);
   imageBeforeFrame.add(imageBeforeArea);
   imageBeforeFrame.set_label("Before");
   imageBeforeFrame.set_size_request(640, 480);
