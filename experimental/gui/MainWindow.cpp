@@ -19,6 +19,22 @@ MainWindow::~MainWindow() {
   // Nothing to do here
 }
 
+bool on_button_press_event(GdkEventButton *buttonEvent) {
+  // TODO
+}
+
+bool on_button_release_event(GdkEventButton *buttonEvent) {
+  // TODO
+}
+
+bool on_motion_notify_event(GdkEventMotion *motionEvent) {
+  // TODO
+}
+
+bool on_scroll_event(GdkEventScroll *scrollEvent) {
+  // TODO
+}
+
 void MainWindow::setProperties() {
   // Set window properties
   set_title("Color calibration program");
