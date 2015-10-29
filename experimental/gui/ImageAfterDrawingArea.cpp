@@ -15,7 +15,7 @@
 #include <glibmm/fileutils.h>
 
 
-ImageAfterDrawingArea::ImageAfterDrawingArea():
+ImageAfterDrawingArea::ImageAfterDrawingArea(Gtk::Scale *deltaScale):
   ImageDrawingArea()
 {
   image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
@@ -23,6 +23,8 @@ ImageAfterDrawingArea::ImageAfterDrawingArea():
   // Show the whole image
   if (image)
     set_size_request(image->get_width(), image->get_height());
+
+  this->deltaScale = deltaScale;
 }
 
 ImageAfterDrawingArea::~ImageAfterDrawingArea() {
@@ -36,5 +38,18 @@ bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) 
   Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
   cairo->paint();
 
+  return true;
+}
+
+bool ImageAfterDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
+  if (scrollEvent->direction == GDK_SCROLL_UP) {
+    if (deltaScale->get_value() < deltaScale->get_adjustment()->property_upper()) {
+      deltaScale->set_value(deltaScale->get_value() + deltaScale->get_adjustment()->get_step_increment());
+    }
+  } else if (scrollEvent->direction == GDK_SCROLL_DOWN) {
+    if (deltaScale->get_value() > deltaScale->get_adjustment()->property_lower()) {
+      deltaScale->set_value(deltaScale->get_value() - deltaScale->get_adjustment()->get_step_increment());
+    }
+  }
   return true;
 }
