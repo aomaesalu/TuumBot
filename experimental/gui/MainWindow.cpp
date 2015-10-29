@@ -12,7 +12,8 @@
 
 
 MainWindow::MainWindow():
-  imageBeforeArea(&brushSizeScale)
+  imageBeforeArea(&brushSizeScale),
+  imageAfterArea(&deltaChooseScale)
 {
   setProperties();
   construct();
@@ -76,6 +77,7 @@ void MainWindow::constructImageBeforeFrame() {
 }
 
 void MainWindow::constructImageAfterFrame() {
+  imageAfterArea.add_events(Gdk::SCROLL_MASK);
   imageAfterFrame.add(imageAfterArea);
   imageAfterFrame.set_label("After");
   imageAfterFrame.set_size_request(640, 480);
