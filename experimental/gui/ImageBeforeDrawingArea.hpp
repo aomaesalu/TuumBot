@@ -10,6 +10,7 @@
 #define GUI_IMAGE_BEFORE_DRAWING_AREA_H
 
 #include <vector>
+#include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
 
 #include "ImageDrawingArea.hpp"
@@ -18,7 +19,7 @@
 class ImageBeforeDrawingArea: public ImageDrawingArea {
 
   public:
-    ImageBeforeDrawingArea();
+    ImageBeforeDrawingArea(Gtk::Scale*);
     virtual ~ImageBeforeDrawingArea();
 
     bool maskEmpty() const;
@@ -33,7 +34,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
   private:
     Glib::RefPtr<Gdk::Pixbuf> image;
 
-    unsigned int brushSize;
+    Gtk::Scale *brushSize;
     std::vector<std::vector<bool>> mask;
 
     bool addingMode;
@@ -41,7 +42,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
     void initialiseProperties();
     void initialiseImage();
-    void initialiseBrush();
+    void initialiseBrush(Gtk::Scale*);
     void initialiseMask();
     void initialiseDrawingModes();
 

@@ -62,12 +62,6 @@ class MainWindow: public Gtk::Window {
     Glib::RefPtr<Gdk::Pixbuf> imageBefore;
     Glib::RefPtr<Gdk::Pixbuf> imageAfter;
 
-    // Events
-    virtual bool on_button_press_event(GdkEventButton*);
-    virtual bool on_button_release_event(GdkEventButton*);
-    virtual bool on_motion_notify_event(GdkEventMotion*);
-    virtual bool on_scroll_event(GdkEventScroll*);
-
   private:
     void setProperties();
 

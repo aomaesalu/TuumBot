@@ -17,12 +17,12 @@
 #include <iostream>
 
 
-ImageBeforeDrawingArea::ImageBeforeDrawingArea():
+ImageBeforeDrawingArea::ImageBeforeDrawingArea(Gtk::Scale *brushScale):
   ImageDrawingArea()
 {
   initialiseProperties();
   initialiseImage();
-  initialiseBrush();
+  initialiseBrush(brushScale);
   initialiseMask();
   initialiseDrawingModes();
 }
@@ -101,15 +101,15 @@ bool ImageBeforeDrawingArea::on_motion_notify_event(GdkEventMotion *motionEvent)
 bool ImageBeforeDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
   // TODO: Fix
   if (scrollEvent->direction == GDK_SCROLL_UP) {
-    if (brushSize < 50) {
-      brushSize++;
+    if (brushSize->get_value() < 50) {
+      brushSize->set_value(brushSize->get_value() + 1);
     }
   } else if (scrollEvent->direction == GDK_SCROLL_DOWN) {
-    if (brushSize > 1) {
-      brushSize--;
+    if (brushSize->get_value() > 1) {
+      brushSize->set_value(brushSize->get_value() - 1);
     }
   }
-  std::cout << brushSize << std::endl;
+  std::cout << brushSize->get_value() << std::endl;
   return true;
 }
 
@@ -125,8 +125,8 @@ void ImageBeforeDrawingArea::initialiseImage() {
     set_size_request(image->get_width(), image->get_height());
 }
 
-void ImageBeforeDrawingArea::initialiseBrush() {
-  brushSize = 10;
+void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
+  brushSize = brushScale;
   // TODO: Different brush types, precalculate relative pixels
 }
 
@@ -159,9 +159,9 @@ bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int
   unsigned int stride = image->get_rowstride();
 
   // Color pixels
-  unsigned int radiusSquared = (brushSize / 2) * (brushSize / 2);
-  for (unsigned int i = 0; i < brushSize; ++i) {
-    for (unsigned int j = 0; j < brushSize; ++j) {
+  unsigned int radiusSquared = (brushSize->get_value() / 2) * (brushSize->get_value() / 2);
+  for (unsigned int i = 0; i < brushSize->get_value(); ++i) {
+    for (unsigned int j = 0; j < brushSize->get_value(); ++j) {
       unsigned int dx = i - x;
       unsigned int dy = j - y;
       unsigned int distanceSquared = dx * dx + dy * dy;
@@ -212,9 +212,9 @@ void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned
 }
 
 void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
-  unsigned int radiusSquared = (brushSize / 2) * (brushSize / 2);
-  for (unsigned int i = 0; i < brushSize; ++i) {
-    for (unsigned int j = 0; j < brushSize; ++j) {
+  unsigned int radiusSquared = (brushSize->get_value() / 2) * (brushSize->get_value() / 2);
+  for (unsigned int i = 0; i < brushSize->get_value(); ++i) {
+    for (unsigned int j = 0; j < brushSize->get_value(); ++j) {
       unsigned int dx = i - x;
       unsigned int dy = j - y;
       unsigned int distanceSquared = dx * dx + dy * dy;
