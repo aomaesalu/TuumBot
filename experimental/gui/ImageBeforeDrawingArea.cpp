@@ -99,17 +99,15 @@ bool ImageBeforeDrawingArea::on_motion_notify_event(GdkEventMotion *motionEvent)
 }
 
 bool ImageBeforeDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
-  // TODO: Fix
   if (scrollEvent->direction == GDK_SCROLL_UP) {
-    if (brushSize->get_value() < 50) {
-      brushSize->set_value(brushSize->get_value() + 1);
+    if (brushSize->get_value() < brushSize->get_adjustment()->property_upper()) {
+      brushSize->set_value(brushSize->get_value() + brushSize->get_adjustment()->get_step_increment());
     }
   } else if (scrollEvent->direction == GDK_SCROLL_DOWN) {
-    if (brushSize->get_value() > 1) {
-      brushSize->set_value(brushSize->get_value() - 1);
+    if (brushSize->get_value() > brushSize->get_adjustment()->property_lower()) {
+      brushSize->set_value(brushSize->get_value() - brushSize->get_adjustment()->get_step_increment());
     }
   }
-  std::cout << brushSize->get_value() << std::endl;
   return true;
 }
 
