@@ -58,9 +58,6 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
 
   cairo->paint();
 
-  // Redraw
-  //queue_draw();
-
   return true;
 }
 
@@ -78,6 +75,7 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
         eraseFromMask(buttonEvent->x, buttonEvent->y);
       }
     }
+    initialiseMaskBoundaries();
   }
   return true;
 }
@@ -145,6 +143,10 @@ void ImageBeforeDrawingArea::initialiseMask() {
     mask.push_back(row);
   }
   masking = false;
+  initialiseMaskBoundaries();
+}
+
+void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
   maskMinX = 640;
   maskMinY = 480;
   maskMaxX = 0;
@@ -158,9 +160,11 @@ void ImageBeforeDrawingArea::initialiseDrawingModes() {
 
 void ImageBeforeDrawingArea::setMasking(const bool &value) {
   if (value) {
-    setPlaying(false);
-    maskedImage = image->copy();
-    masking = true;
+    if (!masking) {
+      setPlaying(false);
+      maskedImage = image->copy();
+      masking = true;
+    }
   } else {
     //maskedImage = 0; TODO: NULL the pointer
     initialiseMask();
@@ -213,7 +217,7 @@ bool ImageBeforeDrawingArea::applyMask() {
   // Color pixels
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsigned int j = 0; j < mask[i].size(); ++j) {
-      if (mask[i][j]) {
+      if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && mask[i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
         pixel[0] *= 0.3;
         pixel[1] *= 0.3;
@@ -241,11 +245,10 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
     for (int j = -radius; j < radius; ++j) {
       unsigned int distanceSquared = i * i + j * j;
       if (distanceSquared <= radiusSquared) {
-        int currentX = x + i;
-        int currentY = y + j;
-        if (currentX >= 0 && currentX < 640 && currentY >= 0 && currentY < 480) {
+        unsigned int currentX = x + i;
+        unsigned int currentY = y + j;
+        if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
           mask[currentX][currentY] = value;
-          // TODO: Implement partial area masking buffer
           if (currentX < maskMinX) {
             maskMinX = currentX;
           }

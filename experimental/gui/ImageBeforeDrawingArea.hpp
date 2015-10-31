@@ -40,10 +40,10 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     Gtk::Scale *brushScale;
     std::vector<std::vector<bool>> mask;
 
-    int maskMinX;
-    int maskMinY;
-    int maskMaxX;
-    int maskMaxY;
+    unsigned int maskMinX;
+    unsigned int maskMinY;
+    unsigned int maskMaxX;
+    unsigned int maskMaxY;
 
     bool masking;
     bool addingMode;
@@ -53,6 +53,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseImage();
     void initialiseBrush(Gtk::Scale*);
     void initialiseMask();
+    void initialiseMaskBoundaries();
     void initialiseDrawingModes();
 
     void setMasking(const bool& = true);
