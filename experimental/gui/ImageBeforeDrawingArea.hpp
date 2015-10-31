@@ -36,6 +36,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
   private:
     Glib::RefPtr<Gdk::Pixbuf> image;
     Glib::RefPtr<Gdk::Pixbuf> maskedImage;
+    Glib::RefPtr<Gdk::Pixbuf> brushedImage;
 
     Gtk::Scale *brushScale;
     std::vector<std::vector<bool>> mask;
