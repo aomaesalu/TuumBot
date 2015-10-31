@@ -68,7 +68,7 @@ void MainWindow::constructGeneralButtonsBox() {
 }
 
 void MainWindow::constructImageBeforeFrame() {
-  imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::BUTTON_MOTION_MASK | Gdk::SCROLL_MASK);
+  imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
   imageBeforeFrame.add(imageBeforeArea);
   imageBeforeFrame.set_label("Before");
   imageBeforeFrame.set_size_request(640, 480);
