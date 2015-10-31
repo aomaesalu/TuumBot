@@ -67,7 +67,6 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
       }
     }
   }
-  std::cout << "Press" << std::endl;
   return true;
 }
 
@@ -83,7 +82,6 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
       }
     }
   }
-  std::cout << "Release" << std::endl;
   return true;
 }
 
@@ -200,12 +198,10 @@ bool ImageBeforeDrawingArea::applyMask() {
 }
 
 void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
-  std::cout << "Add to mask: " << x << " " << y << std::endl; // TODO: Remove
   changeValueInMask(x, y, true);
 }
 
 void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned int &y) {
-  std::cout << "Add to mask: " << x << " " << y << std::endl; // TODO: Remove
   changeValueInMask(x, y, false);
 }
 
