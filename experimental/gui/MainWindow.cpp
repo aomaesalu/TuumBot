@@ -117,7 +117,7 @@ void MainWindow::constructEntityChooseComboBox(Gtk::Container &parentContainer) 
 void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {
   brushSizeLabel.set_text("Brush size:");
   parentContainer.add(brushSizeLabel);
-  brushSizeScale.set_adjustment(Gtk::Adjustment::create(10, 1, 50, 1, 5));
+  brushSizeScale.set_adjustment(Gtk::Adjustment::create(30, 1, 75, 1, 5));
   brushSizeScale.set_digits(0);
   brushSizeScale.set_size_request(100);
   parentContainer.add(brushSizeScale);
