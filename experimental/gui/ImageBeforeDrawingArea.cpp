@@ -31,7 +31,7 @@ ImageBeforeDrawingArea::~ImageBeforeDrawingArea() {
   // Nothing to do here
 }
 
-bool ImageBeforeDrawingArea::maskEmpty() const {
+bool ImageBeforeDrawingArea::isMaskEmpty() const {
   for (std::vector<std::vector<bool>>::const_iterator i = mask.begin(); i != mask.end(); ++i) {
     for (std::vector<bool>::const_iterator j = (*i).begin(); j != (*i).end(); ++j) {
       if (*j) {
@@ -42,12 +42,21 @@ bool ImageBeforeDrawingArea::maskEmpty() const {
   return true;
 }
 
+void ImageBeforeDrawingArea::setPlaying(const bool &value) {
+  if (value) {
+    setMasking(false);
+  }
+  playing = value;
+}
+
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
+  if (masking && !applyMask())
+    return false;
+
   if (!drawImage(cairo))
     return false;
 
-  if (!applyMask())
-    return false;
+  cairo->paint();
 
   // Redraw
   //queue_draw();
@@ -57,7 +66,7 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
 
 bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) {
   if (buttonEvent->type == GDK_BUTTON_PRESS) {
-    setPlaying(false);
+    setMasking();
     if (buttonEvent->button == 1) { // Left mouse button
       if (!erasingMode) {
         addingMode = true;
@@ -138,16 +147,32 @@ void ImageBeforeDrawingArea::initialiseMask() {
 }
 
 void ImageBeforeDrawingArea::initialiseDrawingModes() {
+  masking = false;
   addingMode = false;
   erasingMode = false;
+}
+
+void ImageBeforeDrawingArea::setMasking(const bool &value) {
+  if (value) {
+    setPlaying(false);
+    maskedImage = image->copy();
+    masking = true;
+  } else {
+    //maskedImage = 0; TODO: NULL the pointer
+    initialiseDrawingModes();
+  }
+  masking = value;
 }
 
 bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
   if (!image)
     return false;
 
-  Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
-  cairo->paint();
+  if (masking) {
+    Gdk::Cairo::set_source_pixbuf(cairo, maskedImage, 0, 0);
+  } else {
+    Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
+  }
 
   return true;
 }
@@ -175,18 +200,19 @@ bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int
 }
 
 bool ImageBeforeDrawingArea::applyMask() {
-  guint8 *pixels = image->get_pixels();
-  unsigned int channels = image->get_n_channels();
-  unsigned int stride = image->get_rowstride();
+  maskedImage = image->copy();
+  guint8 *pixels = maskedImage->get_pixels();
+  unsigned int channels = maskedImage->get_n_channels();
+  unsigned int stride = maskedImage->get_rowstride();
 
   // Color pixels
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsigned int j = 0; j < mask[i].size(); ++j) {
       if (mask[i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
-        pixel[0] *= 0.5;
-        pixel[1] *= 0.5;
-        pixel[2] *= 0.5;
+        pixel[0] *= 0.3;
+        pixel[1] *= 0.3;
+        pixel[2] *= 0.3;
       }
     }
   }

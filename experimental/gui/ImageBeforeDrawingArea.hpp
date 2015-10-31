@@ -22,7 +22,9 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     ImageBeforeDrawingArea(Gtk::Scale*);
     virtual ~ImageBeforeDrawingArea();
 
-    bool maskEmpty() const;
+    bool isMaskEmpty() const;
+
+    void setPlaying(const bool& = true);
 
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
@@ -33,10 +35,12 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
   private:
     Glib::RefPtr<Gdk::Pixbuf> image;
+    Glib::RefPtr<Gdk::Pixbuf> maskedImage;
 
     Gtk::Scale *brushScale;
     std::vector<std::vector<bool>> mask;
 
+    bool masking;
     bool addingMode;
     bool erasingMode;
 
@@ -45,6 +49,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseBrush(Gtk::Scale*);
     void initialiseMask();
     void initialiseDrawingModes();
+
+    void setMasking(const bool& = true);
 
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
     bool drawBrush(const unsigned int&, const unsigned int&);
