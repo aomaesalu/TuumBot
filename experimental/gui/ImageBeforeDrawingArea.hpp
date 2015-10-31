@@ -63,8 +63,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void setMasking(const bool& = true);
 
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
-    bool locateBrush(const unsigned int&, const unsigned int&);
     bool applyMask();
+    bool locateBrush(const unsigned int&, const unsigned int&);
     bool applyBrush();
 
     void addToMask(const unsigned int&, const unsigned int&);

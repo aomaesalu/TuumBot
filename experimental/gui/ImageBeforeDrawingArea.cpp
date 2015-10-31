@@ -94,6 +94,7 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
         erasingMode = false;
       }
     }
+    initialiseMaskBoundaries();
   }
   return true;
 }
@@ -188,16 +189,6 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   return true;
 }
 
-bool ImageBeforeDrawingArea::locateBrush(const unsigned int &x, const unsigned int &y) {
-  brushX = x;
-  brushY = y;
-
-  // Redraw
-  queue_draw();
-
-  return true;
-}
-
 bool ImageBeforeDrawingArea::applyMask() {
   image->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
   guint8 *pixels = maskedImage->get_pixels();
@@ -215,6 +206,16 @@ bool ImageBeforeDrawingArea::applyMask() {
       }
     }
   }
+
+  return true;
+}
+
+bool ImageBeforeDrawingArea::locateBrush(const unsigned int &x, const unsigned int &y) {
+  brushX = x;
+  brushY = y;
+
+  // Redraw
+  queue_draw();
 
   return true;
 }
@@ -238,6 +239,7 @@ bool ImageBeforeDrawingArea::applyBrush() {
     brushMaxY = 479;
   }
 
+  // maskedImage->copy_area(brushMinX, brushMinY, brushMaxX - brushMinX + 1, brushMaxY - brushMinY + 1, brushedImage, brushMinX, brushMinY);
   brushedImage = maskedImage->copy(); // TODO: Optimised copying (only the necessary area! Maybe should save brush mask matrix, too.)
   guint8 *pixels = brushedImage->get_pixels();
   unsigned int channels = brushedImage->get_n_channels();
