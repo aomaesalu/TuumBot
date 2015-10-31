@@ -117,6 +117,7 @@ bool ImageBeforeDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
       brushScale->set_value(brushScale->get_value() - brushScale->get_adjustment()->get_step_increment());
     }
   }
+  drawBrush(scrollEvent->x, scrollEvent->y);
   return true;
 }
 
@@ -165,7 +166,6 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
   if (value) {
     if (!masking) {
       setPlaying(false);
-      //maskedImage = image->copy();
       masking = true;
     }
   } else {
