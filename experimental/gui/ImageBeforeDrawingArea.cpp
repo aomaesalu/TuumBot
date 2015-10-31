@@ -91,6 +91,7 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
         erasingMode = false;
       }
     }
+    initialiseMaskBoundaries();
   }
   return true;
 }
@@ -143,6 +144,8 @@ void ImageBeforeDrawingArea::initialiseMask() {
     mask.push_back(row);
   }
   masking = false;
+  maskedImage = image->copy();
+  brushedImage = maskedImage->copy();
   initialiseMaskBoundaries();
 }
 
@@ -162,11 +165,10 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
   if (value) {
     if (!masking) {
       setPlaying(false);
-      maskedImage = image->copy();
+      //maskedImage = image->copy();
       masking = true;
     }
   } else {
-    //maskedImage = 0; TODO: NULL the pointer
     initialiseMask();
     initialiseDrawingModes();
   }
@@ -177,33 +179,53 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   if (!image)
     return false;
 
-  if (masking) {
-    Gdk::Cairo::set_source_pixbuf(cairo, maskedImage, 0, 0);
-  } else {
-    Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
-  }
+  Gdk::Cairo::set_source_pixbuf(cairo, brushedImage, 0, 0);
 
   return true;
 }
 
 bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int &y) {
-  guint8 *pixels = image->get_pixels();
-  unsigned int channels = image->get_n_channels();
-  unsigned int stride = image->get_rowstride();
+  int radius = brushScale->get_value() / 2;
+  unsigned int brushMinX = x - radius;
+  if (brushMinX >= 640) {
+    brushMinX = 0;
+  }
+  unsigned int brushMinY = y - radius;
+  if (brushMinY >= 640) {
+    brushMinY = 0;
+  }
+  unsigned int brushMaxX = x + radius;
+  if (brushMaxX >= 640) {
+    brushMaxX = 639;
+  }
+  unsigned int brushMaxY = y + radius;
+  if (brushMaxY >= 480) {
+    brushMaxY = 479;
+  }
+
+  brushedImage = maskedImage->copy(); // TODO: Optimised copying (only the necessary area!)
+  guint8 *pixels = brushedImage->get_pixels();
+  unsigned int channels = brushedImage->get_n_channels();
+  unsigned int stride = brushedImage->get_rowstride();
 
   // Color pixels
-  unsigned int radiusSquared = (brushScale->get_value() / 2) * (brushScale->get_value() / 2);
-  for (unsigned int i = 0; i < brushScale->get_value(); ++i) {
-    for (unsigned int j = 0; j < brushScale->get_value(); ++j) {
-      unsigned int dx = i - x;
-      unsigned int dy = j - y;
-      unsigned int distanceSquared = dx * dx + dy * dy;
+  unsigned int radiusSquared = radius * radius;
+  for (int i = -radius; i < radius; ++i) {
+    for (int j = -radius; j < radius; ++j) {
+      unsigned int distanceSquared = i * i + j * j;
       if (distanceSquared <= radiusSquared) {
-        guint8 *pixel = pixels + i * channels + j * stride;
-        pixel[0] *= 2;
+        unsigned int currentX = x + i;
+        unsigned int currentY = y + j;
+        if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
+          guint8 *pixel = pixels + currentX * channels + currentY * stride;
+          pixel[1] *= 0.5;
+        }
       }
     }
   }
+
+  // Redraw
+  queue_draw();
 
   return true;
 }
