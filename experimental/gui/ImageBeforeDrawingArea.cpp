@@ -64,6 +64,7 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
 bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) {
   if (buttonEvent->type == GDK_BUTTON_PRESS) {
     setMasking();
+    initialiseMaskBoundaries();
     if (buttonEvent->button == 1) { // Left mouse button
       if (!erasingMode) {
         addingMode = true;
@@ -75,7 +76,6 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
         eraseFromMask(buttonEvent->x, buttonEvent->y);
       }
     }
-    initialiseMaskBoundaries();
   }
   return true;
 }
