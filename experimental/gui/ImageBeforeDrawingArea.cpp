@@ -49,6 +49,9 @@ bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo)
   if (!applyMask())
     return false;
 
+  // Redraw
+  //queue_draw();
+
   return true;
 }
 
@@ -162,14 +165,11 @@ bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int
       unsigned int dy = j - y;
       unsigned int distanceSquared = dx * dx + dy * dy;
       if (distanceSquared <= radiusSquared) {
-        guint8 *pixel = pixels + i * channels + j * stride;
+        guint8 *pixel = pixels + i * stride + j * channels;
         pixel[0] *= 2;
       }
     }
   }
-
-  // Redraw
-  queue_draw();
 
   return true;
 }
@@ -181,18 +181,15 @@ bool ImageBeforeDrawingArea::applyMask() {
 
   // Color pixels
   for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsigned int j = 0; j < mask.size(); ++j) {
+    for (unsigned int j = 0; j < mask[i].size(); ++j) {
       if (mask[i][j]) {
-        guint8 *pixel = pixels + i * channels + j * stride;
+        guint8 *pixel = pixels + i * stride + j * channels;
         pixel[0] *= 0.5;
         pixel[1] *= 0.5;
         pixel[2] *= 0.5;
       }
     }
   }
-
-  // Redraw
-  queue_draw();
 
   return true;
 }
@@ -206,15 +203,22 @@ void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned
 }
 
 void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
-  unsigned int radiusSquared = (brushScale->get_value() / 2) * (brushScale->get_value() / 2);
-  for (unsigned int i = 0; i < brushScale->get_value(); ++i) {
-    for (unsigned int j = 0; j < brushScale->get_value(); ++j) {
-      unsigned int dx = i - x;
-      unsigned int dy = j - y;
-      unsigned int distanceSquared = dx * dx + dy * dy;
+  unsigned int brushSize = brushScale->get_value();
+  int radius = brushSize / 2;
+  unsigned int radiusSquared = radius * radius;
+  for (int i = -radius; i < radius; ++i) {
+    for (int j = -radius; j < radius; ++j) {
+      unsigned int distanceSquared = i * i + j * j;
       if (distanceSquared <= radiusSquared) {
-        mask[i][j] = value;
+        int currentX = x + i;
+        int currentY = y + j;
+        if (currentX >= 0 && currentX < 640 && currentY >= 0 && currentY < 480) {
+          mask[currentY][currentX] = value;
+        }
       }
     }
   }
+
+  // Redraw
+  queue_draw();
 }
