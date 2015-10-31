@@ -131,8 +131,8 @@ void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
 
 void ImageBeforeDrawingArea::initialiseMask() {
   mask.clear();
-  std::vector<bool> row(image->get_width(), false);
-  for (int i = 0; i < image->get_height(); ++i) {
+  std::vector<bool> row(image->get_height(), false);
+  for (int i = 0; i < image->get_width(); ++i) {
     mask.push_back(row);
   }
 }
@@ -165,7 +165,7 @@ bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int
       unsigned int dy = j - y;
       unsigned int distanceSquared = dx * dx + dy * dy;
       if (distanceSquared <= radiusSquared) {
-        guint8 *pixel = pixels + i * stride + j * channels;
+        guint8 *pixel = pixels + i * channels + j * stride;
         pixel[0] *= 2;
       }
     }
@@ -183,7 +183,7 @@ bool ImageBeforeDrawingArea::applyMask() {
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsigned int j = 0; j < mask[i].size(); ++j) {
       if (mask[i][j]) {
-        guint8 *pixel = pixels + i * stride + j * channels;
+        guint8 *pixel = pixels + i * channels + j * stride;
         pixel[0] *= 0.5;
         pixel[1] *= 0.5;
         pixel[2] *= 0.5;
@@ -213,7 +213,7 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
         int currentX = x + i;
         int currentY = y + j;
         if (currentX >= 0 && currentX < 640 && currentY >= 0 && currentY < 480) {
-          mask[currentY][currentX] = value;
+          mask[currentX][currentY] = value;
         }
       }
     }
