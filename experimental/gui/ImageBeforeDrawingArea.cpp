@@ -144,10 +144,14 @@ void ImageBeforeDrawingArea::initialiseMask() {
   for (int i = 0; i < image->get_width(); ++i) {
     mask.push_back(row);
   }
+  masking = false;
+  maskMinX = 640;
+  maskMinY = 480;
+  maskMaxX = 0;
+  maskMaxY = 0;
 }
 
 void ImageBeforeDrawingArea::initialiseDrawingModes() {
-  masking = false;
   addingMode = false;
   erasingMode = false;
 }
@@ -159,6 +163,7 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
     masking = true;
   } else {
     //maskedImage = 0; TODO: NULL the pointer
+    initialiseMask();
     initialiseDrawingModes();
   }
   masking = value;
@@ -200,7 +205,7 @@ bool ImageBeforeDrawingArea::drawBrush(const unsigned int &x, const unsigned int
 }
 
 bool ImageBeforeDrawingArea::applyMask() {
-  maskedImage = image->copy();
+  image->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
   guint8 *pixels = maskedImage->get_pixels();
   unsigned int channels = maskedImage->get_n_channels();
   unsigned int stride = maskedImage->get_rowstride();
@@ -240,6 +245,19 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
         int currentY = y + j;
         if (currentX >= 0 && currentX < 640 && currentY >= 0 && currentY < 480) {
           mask[currentX][currentY] = value;
+          // TODO: Implement partial area masking buffer
+          if (currentX < maskMinX) {
+            maskMinX = currentX;
+          }
+          if (currentY < maskMinY) {
+            maskMinY = currentY;
+          }
+          if (currentX > maskMaxX) {
+            maskMaxX = currentX;
+          }
+          if (currentY > maskMaxY) {
+            maskMaxY = currentY;
+          }
         }
       }
     }
