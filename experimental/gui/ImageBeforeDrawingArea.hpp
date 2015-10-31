@@ -46,6 +46,9 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     unsigned int maskMaxX;
     unsigned int maskMaxY;
 
+    unsigned int brushX;
+    unsigned int brushY;
+
     bool masking;
     bool addingMode;
     bool erasingMode;
@@ -60,8 +63,9 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void setMasking(const bool& = true);
 
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
-    bool drawBrush(const unsigned int&, const unsigned int&);
+    bool locateBrush(const unsigned int&, const unsigned int&);
     bool applyMask();
+    bool applyBrush();
 
     void addToMask(const unsigned int&, const unsigned int&);
     void eraseFromMask(const unsigned int&, const unsigned int&);
