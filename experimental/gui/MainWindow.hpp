@@ -30,7 +30,6 @@ class MainWindow: public Gtk::Window {
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
 
-    void sendToFilter(const std::vector<std::vector<bool>>&, const std::vector<std::vector<bool>>&);
     void sendToFilter(const std::set<unsigned int>&, const std::set<unsigned int>&);
 
   protected:
