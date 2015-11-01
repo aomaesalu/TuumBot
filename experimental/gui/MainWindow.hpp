@@ -81,6 +81,7 @@ class MainWindow: public Gtk::Window {
     bool masking;
 
     std::vector<std::string> modes;
+    unsigned int mode;
 
     void setProperties();
     void initialiseModes();
@@ -108,6 +109,7 @@ class MainWindow: public Gtk::Window {
 
     void on_playButton_clicked();
     void on_stopButton_clicked();
+    void on_modeChooseComboBox_changed();
 
 };
 
