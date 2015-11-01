@@ -67,6 +67,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseMaskBoundaries();
     void initialiseDrawingModes();
 
+    bool isMaskEmpty(const std::vector<std::vector<bool>>&) const;
+
     bool applyMask();
     bool locateBrush(const unsigned int&, const unsigned int&);
     bool applyBrush();
