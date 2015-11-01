@@ -262,7 +262,7 @@ bool ImageBeforeDrawingArea::applyBrush() {
 }
 
 bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (!image)
+  if (!brushedImage)
     return false;
 
   Gdk::Cairo::set_source_pixbuf(cairo, brushedImage, 0, 0);
