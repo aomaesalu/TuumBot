@@ -9,15 +9,18 @@
 #ifndef GUI_IMAGE_AFTER_DRAWING_AREA_H
 #define GUI_IMAGE_AFTER_DRAWING_AREA_H
 
-#include "ImageDrawingArea.hpp"
+#include <map>
+
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
+
+#include "ImageDrawingArea.hpp"
 
 
 class ImageAfterDrawingArea: public ImageDrawingArea {
 
   public:
-    ImageAfterDrawingArea(Gtk::Scale*);
+    ImageAfterDrawingArea(bool&, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
   protected:
@@ -28,6 +31,8 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     Glib::RefPtr<Gdk::Pixbuf> image;
 
     Gtk::Scale *deltaScale;
+
+    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filter;
 
 };
 

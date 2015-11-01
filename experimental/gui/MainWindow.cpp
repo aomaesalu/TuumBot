@@ -12,8 +12,8 @@
 
 
 MainWindow::MainWindow():
-  imageBeforeArea(&brushSizeScale),
-  imageAfterArea(&deltaChooseScale)
+  imageBeforeArea(playing, &brushSizeScale),
+  imageAfterArea(playing, &deltaChooseScale)
 {
   setProperties();
   construct();
@@ -24,6 +24,16 @@ MainWindow::~MainWindow() {
   // Nothing to do here
 }
 
+bool MainWindow::isPlaying() const {
+  return playing;
+}
+
+void MainWindow::setPlaying(const bool &value) {
+  playing = value;
+  playButton.set_sensitive(!value);
+  stopButton.set_sensitive(value);
+}
+
 void MainWindow::setProperties() {
   // Set window properties
   set_title("Color calibration program");
@@ -31,6 +41,8 @@ void MainWindow::setProperties() {
   set_resizable(false);
   // Set window border width
   set_border_width(5);
+  // Set video playing
+  playing = true;
 }
 
 void MainWindow::construct() {
@@ -136,11 +148,14 @@ void MainWindow::constructDeltaChooseScale(Gtk::Container &parentContainer) {
 
 void MainWindow::constructPlayButton(Gtk::Container &parentContainer) {
   playButton.set_label("Play");
+  playButton.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_playButton_clicked));
+  playButton.set_sensitive(false);
   parentContainer.add(playButton);
 }
 
 void MainWindow::constructStopButton(Gtk::Container &parentContainer) {
   stopButton.set_label("Stop");
+  stopButton.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_stopButton_clicked));
   parentContainer.add(stopButton);
 }
 
@@ -160,4 +175,12 @@ void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
 void MainWindow::constructExitButton(Gtk::Container &parentContainer) {
   exitButton.set_label("Exit");
   parentContainer.add(exitButton);
+}
+
+void MainWindow::on_playButton_clicked() {
+  setPlaying();
+}
+
+void MainWindow::on_stopButton_clicked() {
+  setPlaying(false);
 }

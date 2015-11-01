@@ -15,8 +15,8 @@
 #include <glibmm/fileutils.h>
 
 
-ImageAfterDrawingArea::ImageAfterDrawingArea(Gtk::Scale *deltaScale):
-  ImageDrawingArea()
+ImageAfterDrawingArea::ImageAfterDrawingArea(bool &playing, Gtk::Scale *deltaScale):
+  ImageDrawingArea(playing)
 {
   image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
 

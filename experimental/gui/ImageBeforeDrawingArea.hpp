@@ -19,7 +19,7 @@
 class ImageBeforeDrawingArea: public ImageDrawingArea {
 
   public:
-    ImageBeforeDrawingArea(Gtk::Scale*);
+    ImageBeforeDrawingArea(bool&, Gtk::Scale*);
     virtual ~ImageBeforeDrawingArea();
 
     bool isMaskEmpty() const;

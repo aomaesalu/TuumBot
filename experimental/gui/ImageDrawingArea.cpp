@@ -11,8 +11,8 @@
 #include "ImageDrawingArea.hpp"
 
 
-ImageDrawingArea::ImageDrawingArea() {
-  setPlaying();
+ImageDrawingArea::ImageDrawingArea(bool &playing) {
+  this->playing = playing;
 }
 
 ImageDrawingArea::~ImageDrawingArea() {
