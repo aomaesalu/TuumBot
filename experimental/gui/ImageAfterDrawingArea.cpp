@@ -110,8 +110,8 @@ void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
   initialiseFilterMap(filterAdditionBuffer);
 }
 
-void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
-  initialiseFilterMap(filterAdditionBuffer);
+void ImageAfterDrawingArea::initialiseFilterRemovalBuffer() {
+  initialiseFilterMap(filterRemovalBuffer);
 }
 
 void ImageAfterDrawingArea::resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
