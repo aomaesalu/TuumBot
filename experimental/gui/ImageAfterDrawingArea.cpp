@@ -30,18 +30,14 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
   // Nothing to do here
 }
 
-void calculateFilterBuffer(const std::vector<std::vector<bool> &mask) {
-  resetFilterBuffer();
-  for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsgined int j = 0; j < mask[i].size(); ++j) {
-      // TODO
-    }
-  }
+void calculateFilterBuffer(const std::vector<std::vector<bool> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
+  calculateFilterAdditionBuffer(additionMask);
+  calculateFilterRemovalBuffer(removalMask);
 }
 
 void addBufferToFilter() {
-  // TODO
-  initialiseFilterBuffer();
+  addRemovalBufferToFilter();
+  addAdditionBufferToFilter();
 }
 
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
@@ -87,7 +83,8 @@ void ImageAfterDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
 
 void ImageAfterDrawingArea::initialiseFilters() {
   initialiseFilter();
-  initialiseFilterBuffer();
+  initialiseFilterAdditionBuffer();
+  initialiseFilterRemovalBuffer();
 }
 
 void ImageAfterDrawingArea::initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
@@ -109,8 +106,12 @@ void ImageAfterDrawingArea::initialiseFilter() {
   initialiseFilterMap(filter);
 }
 
-void ImageAfterDrawingArea::initialiseFilterBuffer() {
-  initialiseFilterMap(filterBuffer);
+void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
+  initialiseFilterMap(filterAdditionBuffer);
+}
+
+void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
+  initialiseFilterMap(filterAdditionBuffer);
 }
 
 void ImageAfterDrawingArea::resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
@@ -127,8 +128,12 @@ void ImageAfterDrawingArea::resetFilter() {
   resetFilterMap(filter);
 }
 
-void ImageAfterDrawingArea::resetFilterBuffer() {
-  resetFilterMap(filterBuffer);
+void ImageAfterDrawingArea::resetFilterAdditionBuffer() {
+  resetFilterMap(filterAdditionBuffer);
+}
+
+void ImageAfterDrawingArea::resetFilterRemovalBuffer() {
+  resetFilterMap(filterRemovalBuffer);
 }
 
 bool applyFilter() {
@@ -159,4 +164,32 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   Gdk::Cairo::set_source_pixbuf(cairo, filteredImage, 0, 0);
 
   return true;
+}
+
+void ImageBeforeDrawingArea::calculateFilterAdditionBuffer() {
+  resetFilterAdditionBuffer();
+  for (unsigned int i = 0; i < mask.size(); ++i) {
+    for (unsgined int j = 0; j < mask[i].size(); ++j) {
+      // TODO
+    }
+  }
+}
+
+void ImageBeforeDrawingArea::calculateFilterRemovalBuffer() {
+  resetFilterRemovalBuffer();
+  for (unsigned int i = 0; i < mask.size(); ++i) {
+    for (unsgined int j = 0; j < mask[i].size(); ++j) {
+      // TODO
+    }
+  }
+}
+
+void ImageBeforeDrawingArea::addAdditionBufferToFilter() {
+  // TODO
+  initialiseFilterAdditionBuffer();
+}
+
+void ImageBeforeDrawingArea::addRemovalBufferToFilter() {
+  // TODO
+  initialiseFilterRemovalBuffer();
 }
