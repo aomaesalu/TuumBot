@@ -167,6 +167,7 @@ void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
 
 void ImageBeforeDrawingArea::initialiseMasks() {
   initialiseMaskMaps();
+  initialiseMaskLists();
   mainWindow->setMasking(false);
   maskedImage = image->copy();
   brushedImage = maskedImage->copy();
@@ -181,6 +182,11 @@ void ImageBeforeDrawingArea::initialiseMaskMaps() {
     additionMask.push_back(row);
   }
   removalMask = additionMask;
+}
+
+void ImageBeforeDrawingArea::initialiseMaskLists() {
+  additionMaskList.clear();
+  removalMaskList.clear();
 }
 
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
