@@ -54,6 +54,27 @@ void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<
   queue_draw();
 }
 
+void ImageAfterDrawingArea::calculateFilterBuffer(const std::set<unsigned int> &additionMaskList, const std::set<unsigned int> &removalMaskList) {
+  resetFilterBuffers();
+
+  guint8 *pixels = image->get_pixels();
+  unsigned int channels = image->get_n_channels();
+  unsigned int stride = image->get_rowstride();
+
+  for (std::set<unsigned int>::iterator i = additionMaskList.begin(); i != additionMaskList.end(); ++i) {
+    guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
+    filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+  }
+
+  for (std::set<unsigned int>::iterator i = removalMaskList.begin(); i != removalMaskList.end(); ++i) {
+    guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
+    filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+  }
+
+  // Redraw
+  queue_draw();
+}
+
 void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe add buffer values to vectors?)
   for (unsigned int i = 0; i < filter.size(); ++i) {
     for (unsigned int j = 0; j < filter[i].size(); ++j) {
