@@ -166,38 +166,29 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   return true;
 }
 
-void ImageBeforeDrawingArea::calculateFilterAdditionBuffer(const std::vector<std::vector<bool>> &mask) {
-  resetFilterAdditionBuffer();
-
-  guint8 *pixels = filteredImage->get_pixels();
-  unsigned int channels = filteredImage->get_n_channels();
-  unsigned int stride = filteredImage->get_rowstride();
+void ImageBeforeDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &mask, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer) {
+  guint8 *pixels = image->get_pixels();
+  unsigned int channels = image->get_n_channels();
+  unsigned int stride = image->get_rowstride();
 
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsigned int j = 0; j < mask[i].size(); ++j) {
       if (mask[i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
-        filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+        buffer[pixel[0]][pixel[1]][pixel[2]] = true;
       }
     }
   }
 }
 
+void ImageBeforeDrawingArea::calculateFilterAdditionBuffer(const std::vector<std::vector<bool>> &mask) {
+  resetFilterAdditionBuffer();
+  calculateFilterBuffer(mask, filterAdditionBuffer);
+}
+
 void ImageBeforeDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterRemovalBuffer();
-
-  guint8 *pixels = filteredImage->get_pixels();
-  unsigned int channels = filteredImage->get_n_channels();
-  unsigned int stride = filteredImage->get_rowstride();
-
-  for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsgined int j = 0; j < mask[i].size(); ++j) {
-      if (mask[i][j]) {
-        guint8 *pixel = pixels + i * channels + j * stride;
-        filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
-      }
-    }
-  }
+  calculateFilterBuffer(mask, filterRemovalBuffer);
 }
 
 void ImageBeforeDrawingArea::addBufferToFilter(const std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
