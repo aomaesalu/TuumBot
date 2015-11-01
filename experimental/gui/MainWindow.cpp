@@ -48,10 +48,6 @@ void MainWindow::setMasking(const bool &value) {
   masking = value;
 }
 
-void MainWindow::sendToFilter(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
-  imageAfterArea.calculateFilterBuffer(additionMask, removalMask);
-}
-
 void MainWindow::sendToFilter(const std::set<unsigned int> &additionMaskList, const std::set<unsigned int> &removalMaskList) {
   imageAfterArea.calculateFilterBuffer(additionMaskList, removalMaskList);
 }
