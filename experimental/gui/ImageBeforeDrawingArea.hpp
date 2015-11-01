@@ -36,6 +36,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
 
+    void redraw();
+
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
     virtual bool on_button_press_event(GdkEventButton*);
@@ -71,8 +73,9 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseMasks();
     void initialiseMaskMatrices();
     void initialiseMaskLists();
-    void initialiseMaskBoundaries();
     void initialiseDrawingModes();
+    void initialiseMaskBoundaries();
+    void maximiseMaskBoundaries();
 
     bool isMaskEmpty(const std::vector<std::vector<bool>>&) const;
 

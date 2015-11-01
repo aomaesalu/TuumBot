@@ -91,6 +91,13 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
   mainWindow->setMasking(value);
 }
 
+void ImageBeforeDrawingArea::redraw() {
+  maximiseMaskBoundaries();
+  applyMask();
+  queue_draw();
+  initialiseMaskBoundaries();
+}
+
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
   if (isMasking() && !applyMask())
     return false;
@@ -213,6 +220,11 @@ void ImageBeforeDrawingArea::initialiseMaskLists() {
   }
 }
 
+void ImageBeforeDrawingArea::initialiseDrawingModes() {
+  addingMode = false;
+  removingMode = false;
+}
+
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
   maskMinX = 640;
   maskMinY = 480;
@@ -220,9 +232,11 @@ void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
   maskMaxY = 0;
 }
 
-void ImageBeforeDrawingArea::initialiseDrawingModes() {
-  addingMode = false;
-  removingMode = false;
+void ImageBeforeDrawingArea::maximiseMaskBoundaries() {
+  maskMinX = 0;
+  maskMinY = 0;
+  maskMaxX = 639;
+  maskMaxY = 479;
 }
 
 bool ImageBeforeDrawingArea::isMaskEmpty(const std::vector<std::vector<bool>> &mask) const {

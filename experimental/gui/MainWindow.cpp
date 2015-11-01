@@ -209,7 +209,8 @@ void MainWindow::on_stopButton_clicked() {
 
 void MainWindow::on_modeChooseComboBox_changed() {
   mode = modeChooseComboBox.get_active_row_number();
-  // TODO
+  imageBeforeArea.redraw();
+  imageAfterArea.queue_draw();
 }
 
 // TODO: Spacebar key event to play or stop video
