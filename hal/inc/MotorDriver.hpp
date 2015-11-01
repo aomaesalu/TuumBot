@@ -9,14 +9,26 @@
 #ifndef RTX_MOTOR_DRIVER_H
 #define RTX_MOTOR_DRIVER_H
 
+#include <string>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 namespace rtx {
 
   class MotorDriver {
     private:
-      int placeholder;
+      int motorid;
+      int port;
 
     public:
-      void init();
+      MotorDriver(int mtrid, int usedPort);
+      ~MotorDriver();
+
+      void sendcmd(std::string cmd);
+      void setSpeed(int newSpeed);
+      std::string readLine();
+      void stop();
 
   };
 
