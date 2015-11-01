@@ -180,20 +180,20 @@ void ImageBeforeDrawingArea::initialiseMasks() {
   initialiseMaskBoundaries();
 }
 
-void ImageBeforeDrawingArea::initialiseAdditionMask() { // TODO: Remove duplication
-  additionMask.clear();
+void ImageBeforeDrawingArea::initialiseMask(std::vector<std::vector<bool>> &mask) {
+  mask.clear();
   std::vector<bool> row(image->get_height(), false);
   for (int i = 0; i < image->get_width(); ++i) {
-    additionMask.push_back(row);
+    mask.push_back(row);
   }
 }
 
+void ImageBeforeDrawingArea::initialiseAdditionMask() {
+  initialiseMask(additionMask);
+}
+
 void ImageBeforeDrawingArea::initialiseRemovalMask() {
-  removalMask.clear();
-  std::vector<bool> row(image->get_height(), false);
-  for (int i = 0; i < image->get_width(); ++i) {
-    removalMask.push_back(row);
-  }
+  initialiseMask(removalMask);
 }
 
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
