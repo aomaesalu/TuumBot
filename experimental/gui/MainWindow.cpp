@@ -12,10 +12,10 @@
 
 
 MainWindow::MainWindow():
-  playing(true),
-  masking(false),
   imageBeforeArea(this, &brushSizeScale),
-  imageAfterArea(this, &deltaChooseScale)
+  imageAfterArea(this, &deltaChooseScale),
+  playing(true),
+  masking(false)
 {
   setProperties();
   construct();
