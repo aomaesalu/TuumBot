@@ -25,7 +25,7 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
-    void calculateFilterBuffer(const std::set<unsigned int>&, const std::set<unsigned int>&);
+    void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
     void addBufferToFilter();
 
   protected:
@@ -38,11 +38,11 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
 
     Gtk::Scale *deltaScale;
 
-    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filter;
-    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterAdditionBuffer;
-    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterRemovalBuffer;
-    std::set<unsigned int> filterAdditionBufferList;
-    std::set<unsigned int> filterRemovalBufferList;
+    std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>> filter;
+    std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>> filterAdditionBuffer;
+    std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>> filterRemovalBuffer;
+    std::vector<std::set<unsigned int>> filterAdditionBufferList;
+    std::vector<std::set<unsigned int>> filterRemovalBufferList;
 
     std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> resettedFilter;
 
@@ -51,14 +51,16 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void initialiseDeltaScale(Gtk::Scale*);
     void initialiseFilters();
 
-    void initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
+    void initialiseSingleFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
+    void initialiseFilterMap(std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>>&);
     void initialiseFilter();
     void initialiseFilterBuffers();
     void initialiseFilterAdditionBuffer();
     void initialiseFilterRemovalBuffer();
     void initialiseResettedFilter();
 
-    void resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
+    void resetSingleFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
+    void resetFilterMap(std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>>&);
     void resetFilter();
     void resetFilterBuffers();
     void resetFilterAdditionBuffer();

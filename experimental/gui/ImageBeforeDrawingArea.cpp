@@ -40,15 +40,36 @@ bool ImageBeforeDrawingArea::isMasking() const {
 }
 
 bool ImageBeforeDrawingArea::areMasksEmpty() const {
-  return isAdditionMaskEmpty() && isRemovalMaskEmpty();
+  for (unsigned int i = 0; i < mainWindow->getModes().size(); ++i) {
+    if (!isAdditionMaskEmpty(i) || !isRemovalMaskEmpty(i)) {
+      return false;
+    }
+  }
+  return true;
 }
 
-bool ImageBeforeDrawingArea::isAdditionMaskEmpty() const {
-  return isMaskEmpty(additionMask);
+bool ImageBeforeDrawingArea::areMasksEmpty(const unsigned int &mode) const {
+  return isAdditionMaskEmpty(mode) && isRemovalMaskEmpty(mode);
 }
 
-bool ImageBeforeDrawingArea::isRemovalMaskEmpty() const {
-  return isMaskEmpty(removalMask);
+bool ImageBeforeDrawingArea::areCurrentMasksEmpty() const {
+  return areMasksEmpty(mainWindow->getMode());
+}
+
+bool ImageBeforeDrawingArea::isAdditionMaskEmpty(const unsigned int &mode) const {
+  return isMaskEmpty(additionMask[mode]);
+}
+
+bool ImageBeforeDrawingArea::isCurrentAdditionMaskEmpty() const {
+  return isAdditionMaskEmpty(mainWindow->getMode());
+}
+
+bool ImageBeforeDrawingArea::isRemovalMaskEmpty(const unsigned int &mode) const {
+  return isMaskEmpty(removalMask[mode]);
+}
+
+bool ImageBeforeDrawingArea::isCurrentRemovalMaskEmpty() const {
+  return isRemovalMaskEmpty(mainWindow->getMode());
 }
 
 void ImageBeforeDrawingArea::setPlaying(const bool &value) {
@@ -166,7 +187,7 @@ void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
 }
 
 void ImageBeforeDrawingArea::initialiseMasks() {
-  initialiseMaskMaps();
+  initialiseMaskMatrices();
   initialiseMaskLists();
   mainWindow->setMasking(false);
   maskedImage = image->copy();
@@ -174,19 +195,22 @@ void ImageBeforeDrawingArea::initialiseMasks() {
   initialiseMaskBoundaries();
 }
 
-void ImageBeforeDrawingArea::initialiseMaskMaps() {
+void ImageBeforeDrawingArea::initialiseMaskMatrices() {
   additionMask.clear();
   removalMask.clear();
-  std::vector<bool> row(image->get_height(), false);
-  for (int i = 0; i < image->get_width(); ++i) {
-    additionMask.push_back(row);
-  }
+  std::vector<std::vector<std::vector<bool>>> emptyMasks(mainWindow->getModes().size(), std::vector<std::vector<bool>>(image->get_width(), std::vector<bool>(image->get_height(), false)));
+  additionMask = emptyMasks;
   removalMask = additionMask;
 }
 
 void ImageBeforeDrawingArea::initialiseMaskLists() {
   additionMaskList.clear();
   removalMaskList.clear();
+  std::set<unsigned int> emptySet;
+  for (unsigned int i = 0; i < mainWindow->getModes().size(); ++i) {
+    additionMaskList.push_back(emptySet);
+    removalMaskList.push_back(emptySet);
+  }
 }
 
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
@@ -215,14 +239,16 @@ bool ImageBeforeDrawingArea::isMaskEmpty(const std::vector<std::vector<bool>> &m
 bool ImageBeforeDrawingArea::applyMask() { // We only apply addition mask
   image->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
 
+  unsigned int mode = mainWindow->getMode();
+
   guint8 *pixels = maskedImage->get_pixels();
   unsigned int channels = maskedImage->get_n_channels();
   unsigned int stride = maskedImage->get_rowstride();
 
   // Color pixels
-  for (unsigned int i = 0; i < additionMask.size(); ++i) {
-    for (unsigned int j = 0; j < additionMask[i].size(); ++j) {
-      if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && additionMask[i][j]) {
+  for (unsigned int i = 0; i < additionMask[mode].size(); ++i) {
+    for (unsigned int j = 0; j < additionMask[mode][i].size(); ++j) {
+      if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && additionMask[mode][i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
         pixel[0] *= 0.3;
         pixel[1] *= 0.3;
@@ -306,9 +332,12 @@ void ImageBeforeDrawingArea::removeFromMask(const unsigned int &x, const unsigne
 
 // TODO: Smooth behaviour on fast movements - calculate positions inbetween based on movement history
 void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
+  unsigned int mode = mainWindow->getMode();
+
   unsigned int brushSize = brushScale->get_value();
   int radius = brushSize / 2;
   unsigned int radiusSquared = radius * radius;
+
   for (int i = -radius; i < radius; ++i) {
     for (int j = -radius; j < radius; ++j) {
       unsigned int distanceSquared = i * i + j * j;
@@ -316,15 +345,15 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
         unsigned int currentX = x + i;
         unsigned int currentY = y + j;
         if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
-          additionMask[currentX][currentY] = value;
-          removalMask[currentX][currentY] = !value;
+          additionMask[mode][currentX][currentY] = value;
+          removalMask[mode][currentX][currentY] = !value;
           unsigned int linearCoordinate = currentY * 640 + currentX;
           if (value) {
-            additionMaskList.insert(linearCoordinate);
-            removalMaskList.erase(linearCoordinate);
+            additionMaskList[mode].insert(linearCoordinate);
+            removalMaskList[mode].erase(linearCoordinate);
           } else {
-            removalMaskList.insert(linearCoordinate);
-            additionMaskList.erase(linearCoordinate);
+            removalMaskList[mode].insert(linearCoordinate);
+            additionMaskList[mode].erase(linearCoordinate);
           }
           if (currentX < maskMinX) {
             maskMinX = currentX;
@@ -348,8 +377,5 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
 }
 
 void ImageBeforeDrawingArea::sendMasksToFilter() {
-  //std::sort(additionMaskList.begin(), additionMaskList.end());
-  //std::sort(removalMaskList.begin(), removalMaskList.end());
-  //mainWindow->sendToFilter(additionMask, removalMask);
   mainWindow->sendToFilter(additionMaskList, removalMaskList);
 }

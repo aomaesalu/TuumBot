@@ -26,8 +26,12 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
     bool isMasking() const;
     bool areMasksEmpty() const;
-    bool isAdditionMaskEmpty() const;
-    bool isRemovalMaskEmpty() const;
+    bool areMasksEmpty(const unsigned int&) const;
+    bool areCurrentMasksEmpty() const;
+    bool isAdditionMaskEmpty(const unsigned int&) const;
+    bool isCurrentAdditionMaskEmpty() const;
+    bool isRemovalMaskEmpty(const unsigned int&) const;
+    bool isCurrentRemovalMaskEmpty() const;
 
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
@@ -45,10 +49,10 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     Glib::RefPtr<Gdk::Pixbuf> brushedImage;
 
     Gtk::Scale *brushScale;
-    std::vector<std::vector<bool>> additionMask;
-    std::vector<std::vector<bool>> removalMask;
-    std::set<unsigned int> additionMaskList;
-    std::set<unsigned int> removalMaskList;
+    std::vector<std::vector<std::vector<bool>>> additionMask;
+    std::vector<std::vector<std::vector<bool>>> removalMask;
+    std::vector<std::set<unsigned int>> additionMaskList;
+    std::vector<std::set<unsigned int>> removalMaskList;
 
     unsigned int maskMinX;
     unsigned int maskMinY;
@@ -65,7 +69,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseImage();
     void initialiseBrush(Gtk::Scale*);
     void initialiseMasks();
-    void initialiseMaskMaps();
+    void initialiseMaskMatrices();
     void initialiseMaskLists();
     void initialiseMaskBoundaries();
     void initialiseDrawingModes();
