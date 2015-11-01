@@ -109,7 +109,7 @@ void MainWindow::constructImageAfterFrame() {
 }
 
 void MainWindow::constructImageBeforeOptionsBox() {
-  displayMaskBeforeButton.set_label("Display mask on \"before\" image");
+  displayMaskBeforeButton.set_label("Display mask on \"before\" image"); // TODO: Add scale to change brightness instead
   displayMaskBeforeButton.set_active();
   displayMaskBeforeButton.set_can_focus(false);
   imageBeforeOptionsBox.add(displayMaskBeforeButton);
@@ -117,7 +117,7 @@ void MainWindow::constructImageBeforeOptionsBox() {
 }
 
 void MainWindow::constructImageAfterOptionsBox() {
-  displayMaskAfterButton.set_label("Display mask on \"after\" image");
+  displayMaskAfterButton.set_label("Display filter on \"after\" image"); // TODO: Add scale to change brightness instead
   displayMaskAfterButton.set_active();
   displayMaskAfterButton.set_can_focus(false);
   imageAfterOptionsBox.add(displayMaskAfterButton);
@@ -195,3 +195,5 @@ void MainWindow::on_playButton_clicked() {
 void MainWindow::on_stopButton_clicked() {
   setPlaying(false);
 }
+
+// TODO: Spacebar key event to play or stop video
