@@ -34,8 +34,8 @@ class MainWindow: public Gtk::Window {
     Gtk::Box imageAfterOptionsBox;
 
     // Drawing buttons and labels
-    Gtk::Label entityChooseLabel;
-    Gtk::ComboBoxText entityChooseComboBox;
+    Gtk::Label modeChooseLabel;
+    Gtk::ComboBoxText modeChooseComboBox;
     Gtk::Label brushSizeLabel;
     Gtk::Scale brushSizeScale;
     Gtk::Label deltaChooseLabel;
@@ -75,7 +75,7 @@ class MainWindow: public Gtk::Window {
     void constructImageBeforeOptionsBox();
     void constructImageAfterOptionsBox();
 
-    void constructEntityChooseComboBox(Gtk::Container&);
+    void constructModeChooseComboBox(Gtk::Container&);
     void constructBrushSizeScale(Gtk::Container&);
     void constructDeltaChooseScale(Gtk::Container&);
 

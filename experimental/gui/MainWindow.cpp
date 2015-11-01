@@ -50,7 +50,7 @@ void MainWindow::constructGrid() {
 }
 
 void MainWindow::constructDrawingButtonsBox() {
-  constructEntityChooseComboBox(drawingButtonsBox);
+  constructModeChooseComboBox(drawingButtonsBox);
   constructBrushSizeScale(drawingButtonsBox);
   constructDeltaChooseScale(drawingButtonsBox);
   constructPlayButton(drawingButtonsBox);
@@ -101,19 +101,19 @@ void MainWindow::constructImageAfterOptionsBox() {
   grid.attach(imageAfterOptionsBox, 1, 2, 1, 1);
 }
 
-void MainWindow::constructEntityChooseComboBox(Gtk::Container &parentContainer) {
-  entityChooseLabel.set_text("Entity:");
-  parentContainer.add(entityChooseLabel);
-  entityChooseComboBox.append("Ball");
-  entityChooseComboBox.append("Blue goal");
-  entityChooseComboBox.append("Yellow goal");
-  entityChooseComboBox.append("Field");
-  entityChooseComboBox.append("White line");
-  entityChooseComboBox.append("Black line");
-  entityChooseComboBox.append("Checkerboard white");
-  entityChooseComboBox.append("Checkerboard black");
-  entityChooseComboBox.set_active(0);
-  parentContainer.add(entityChooseComboBox);
+void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
+  modeChooseLabel.set_text("Mode:");
+  parentContainer.add(modeChooseLabel);
+  modeChooseComboBox.append("Ball");
+  modeChooseComboBox.append("Blue goal");
+  modeChooseComboBox.append("Yellow goal");
+  modeChooseComboBox.append("Field");
+  modeChooseComboBox.append("White line");
+  modeChooseComboBox.append("Black line");
+  modeChooseComboBox.append("Checkerboard white");
+  modeChooseComboBox.append("Checkerboard black");
+  modeChooseComboBox.set_active(0);
+  parentContainer.add(modeChooseComboBox);
 }
 
 void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {
