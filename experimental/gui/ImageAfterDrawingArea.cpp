@@ -72,6 +72,23 @@ void ImageAfterDrawingArea::addBufferToFilter() {
   queue_draw();
 }
 
+std::string ImageAfterDrawingArea::getOutput() const {
+  std::string output = "";
+  for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
+    char colorValue = 0;
+    for (unsigned int mode = 0; mode < 8; ++mode) { // We assume 0 < numberOfModes <= 8
+      bool modeValue = 0;
+      if (mode < mainWindow->getModes().size()) {
+        if (filter[mode].find(i) != filter[mode].end()) {
+          modeValue = 1;
+        }
+      }
+      colorValue = (colorValue << 1) + modeValue;
+    }
+  }
+  return output;
+}
+
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
   if (!applyFilter())
     return false;
