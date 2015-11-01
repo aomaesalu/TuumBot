@@ -27,6 +27,8 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
     void addBufferToFilter();
 
+    std::string getOutput() const;
+
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
     virtual bool on_scroll_event(GdkEventScroll*);

@@ -393,3 +393,5 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
 void ImageBeforeDrawingArea::sendMasksToFilter() {
   mainWindow->sendToFilter(additionMaskList, removalMaskList);
 }
+
+// TODO: Add operation history with undo and redo options
