@@ -52,7 +52,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     unsigned int brushY;
 
     bool addingMode;
-    bool erasingMode;
+    bool removingMode;
 
     void initialiseProperties();
     void initialiseImage();
@@ -67,7 +67,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
     void addToMask(const unsigned int&, const unsigned int&);
-    void eraseFromMask(const unsigned int&, const unsigned int&);
+    void removeFromMask(const unsigned int&, const unsigned int&);
     void changeValueInMask(const unsigned int&, const unsigned int&, const bool&);
 
 };
