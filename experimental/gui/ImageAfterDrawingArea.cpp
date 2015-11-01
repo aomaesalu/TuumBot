@@ -23,6 +23,7 @@ ImageAfterDrawingArea::ImageAfterDrawingArea(MainWindow *mainWindow, Gtk::Scale 
   initialiseProperties();
   initialiseImage();
   initialiseDeltaScale(deltaScale);
+  initialiseFilters();
 }
 
 ImageAfterDrawingArea::~ImageAfterDrawingArea() {
@@ -52,11 +53,11 @@ bool ImageAfterDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
   return true;
 }
 
-void ImageBeforeDrawingArea::initialiseProperties() {
+void ImageAfterDrawingArea::initialiseProperties() {
   set_size_request(640, 480);
 }
 
-void ImageBeforeDrawingArea::initialiseImage() {
+void ImageAfterDrawingArea::initialiseImage() {
   image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
 
   // Show the whole image
@@ -64,7 +65,42 @@ void ImageBeforeDrawingArea::initialiseImage() {
     set_size_request(image->get_width(), image->get_height());
 }
 
-void ImageBeforeDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
+void ImageAfterDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
   this->deltaScale = deltaScale;
   // TODO: Define exact usage
+}
+
+void ImageAfterDrawingArea::initialiseFilters() {
+  initialiseFilter();
+  initialiseFilterBuffer();
+}
+
+void ImageAfterDrawingArea::initialiseFilter() {
+  filter.clear();
+  std::map<unsigned int, bool> subSubFilter;
+  for (unsigned int i = 0; i < 256; ++i) {
+    subSubFilter[i] = false;
+  }
+  std::map<unsigned int, std::map<unsigned int, bool>> subFilter;
+  for (unsigned int i = 0; i < 256; ++i) {
+    subFilter[i] = subSubFilter;
+  }
+  for (unsigned int i = 0; i < 256; ++i) {
+    filter[i] = subFilter;
+  }
+}
+
+void ImageAfterDrawingArea::initialiseFilterBuffer() {
+  filterBuffer.clear();
+  std::map<unsigned int, bool> subSubFilterBuffer;
+  for (unsigned int i = 0; i < 256; ++i) {
+    subSubFilterBuffer[i] = false;
+  }
+  std::map<unsigned int, std::map<unsigned int, bool>> subFilterBuffer;
+  for (unsigned int i = 0; i < 256; ++i) {
+    subFilterBuffer[i] = subSubFilterBuffer;
+  }
+  for (unsigned int i = 0; i < 256; ++i) {
+    filterBuffer[i] = subFilterBuffer;
+  }
 }
