@@ -12,6 +12,8 @@
 
 
 MainWindow::MainWindow():
+  playing(true),
+  masking(false),
   imageBeforeArea(this, &brushSizeScale),
   imageAfterArea(this, &deltaChooseScale)
 {
@@ -28,11 +30,21 @@ bool MainWindow::isPlaying() const {
   return playing;
 }
 
+bool MainWindow::isMasking() const {
+  return masking;
+}
+
 void MainWindow::setPlaying(const bool &value) {
   playing = value;
+  if (value) {
+    imageBeforeArea.setMasking(false);
+  }
   playButton.set_sensitive(!value);
   stopButton.set_sensitive(value);
-  std::cout << isPlaying() << std::endl; // TODO: Remove
+}
+
+void MainWindow::setMasking(const bool &value) {
+  masking = value;
 }
 
 void MainWindow::setProperties() {
@@ -42,8 +54,6 @@ void MainWindow::setProperties() {
   set_resizable(false);
   // Set window border width
   set_border_width(5);
-  // Set video playing
-  playing = true;
 }
 
 void MainWindow::construct() {

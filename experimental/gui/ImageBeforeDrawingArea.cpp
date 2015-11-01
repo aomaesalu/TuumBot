@@ -20,7 +20,9 @@
 
 
 ImageBeforeDrawingArea::ImageBeforeDrawingArea(MainWindow *mainWindow, Gtk::Scale *brushScale):
-  ImageDrawingArea(mainWindow)
+  ImageDrawingArea(mainWindow),
+  addingMode(false),
+  erasingMode(false)
 {
   initialiseProperties();
   initialiseImage();
@@ -31,6 +33,10 @@ ImageBeforeDrawingArea::ImageBeforeDrawingArea(MainWindow *mainWindow, Gtk::Scal
 
 ImageBeforeDrawingArea::~ImageBeforeDrawingArea() {
   // Nothing to do here
+}
+
+bool ImageBeforeDrawingArea::isMasking() const {
+  return mainWindow->isMasking();
 }
 
 bool ImageBeforeDrawingArea::isMaskEmpty() const {
@@ -51,8 +57,20 @@ void ImageBeforeDrawingArea::setPlaying(const bool &value) {
   mainWindow->setPlaying(value);
 }
 
+void ImageBeforeDrawingArea::setMasking(const bool &value) {
+  if (value) {
+    if (!isMasking()) {
+      setPlaying(false);
+    }
+  } else {
+    initialiseMask(); // TODO: Fix lagging behaviour
+    initialiseDrawingModes();
+  }
+  mainWindow->setMasking(value);
+}
+
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (masking && !applyMask())
+  if (isMasking() && !applyMask())
     return false;
 
   if (!applyBrush())
@@ -151,7 +169,7 @@ void ImageBeforeDrawingArea::initialiseMask() {
   for (int i = 0; i < image->get_width(); ++i) {
     mask.push_back(row);
   }
-  masking = false;
+  mainWindow->setMasking(false);
   maskedImage = image->copy();
   brushedImage = maskedImage->copy();
   initialiseMaskBoundaries();
@@ -167,19 +185,6 @@ void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
 void ImageBeforeDrawingArea::initialiseDrawingModes() {
   addingMode = false;
   erasingMode = false;
-}
-
-void ImageBeforeDrawingArea::setMasking(const bool &value) {
-  if (value) {
-    if (!masking) {
-      setPlaying(false);
-      masking = true;
-    }
-  } else {
-    initialiseMask();
-    initialiseDrawingModes();
-  }
-  masking = value;
 }
 
 bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
@@ -273,6 +278,7 @@ void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned
   changeValueInMask(x, y, false);
 }
 
+// TODO: Smooth behaviour on fast movements - calculate positions inbetween based on movement history
 void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
   unsigned int brushSize = brushScale->get_value();
   int radius = brushSize / 2;

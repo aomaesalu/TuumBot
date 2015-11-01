@@ -23,8 +23,10 @@ class MainWindow: public Gtk::Window {
     virtual ~MainWindow();
 
     bool isPlaying() const;
+    bool isMasking() const;
 
     void setPlaying(const bool& = true);
+    void setMasking(const bool& = true);
 
   protected:
     Gtk::Grid grid;
@@ -68,6 +70,7 @@ class MainWindow: public Gtk::Window {
 
   private:
     bool playing;
+    bool masking;
 
     void setProperties();
 
