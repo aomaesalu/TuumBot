@@ -166,9 +166,9 @@ bool ImageAfterDrawingArea::applyFilter() {
       guint8 *pixel = pixels + i * channels + j * stride;
       unsigned int pixelCode = pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2];
       if (((filter[mode].find(pixelCode) != filter[mode].end()) && (filterRemovalBufferList[mode].find(pixelCode) == filterRemovalBufferList[mode].end())) || (filterAdditionBufferList[mode].find(pixelCode) != filterAdditionBufferList[mode].end())) {
-        pixel[0] *= 0.3;
-        pixel[1] *= 0.3;
-        pixel[2] *= 0.3;
+        pixel[0] *= 0.2;
+        pixel[1] *= 0.2;
+        pixel[2] *= 0.2;
       }
     }
   }
