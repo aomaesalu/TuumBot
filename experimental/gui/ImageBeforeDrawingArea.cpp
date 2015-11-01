@@ -8,6 +8,8 @@
 
 #include "ImageBeforeDrawingArea.hpp"
 
+#include "MainWindow.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>
@@ -17,8 +19,8 @@
 #include <iostream>
 
 
-ImageBeforeDrawingArea::ImageBeforeDrawingArea(bool &playing, Gtk::Scale *brushScale):
-  ImageDrawingArea(playing)
+ImageBeforeDrawingArea::ImageBeforeDrawingArea(MainWindow *mainWindow, Gtk::Scale *brushScale):
+  ImageDrawingArea(mainWindow)
 {
   initialiseProperties();
   initialiseImage();
@@ -46,7 +48,7 @@ void ImageBeforeDrawingArea::setPlaying(const bool &value) {
   if (value) {
     setMasking(false);
   }
-  playing = value;
+  mainWindow->setPlaying(value);
 }
 
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {

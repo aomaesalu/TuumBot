@@ -8,6 +8,8 @@
 
 #include "ImageAfterDrawingArea.hpp"
 
+#include "MainWindow.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>
@@ -15,8 +17,8 @@
 #include <glibmm/fileutils.h>
 
 
-ImageAfterDrawingArea::ImageAfterDrawingArea(bool &playing, Gtk::Scale *deltaScale):
-  ImageDrawingArea(playing)
+ImageAfterDrawingArea::ImageAfterDrawingArea(MainWindow *mainWindow, Gtk::Scale *deltaScale):
+  ImageDrawingArea(mainWindow)
 {
   image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
 

@@ -6,13 +6,17 @@
  * @version 0.1
  */
 
-#include <cairomm/context.h>
-
 #include "ImageDrawingArea.hpp"
 
+#include "MainWindow.hpp"
 
-ImageDrawingArea::ImageDrawingArea(bool &playing) {
-  this->playing = playing;
+#include <cairomm/context.h>
+
+
+ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
+  mainWindow(mainWindow)
+{
+  // Nothing to do here
 }
 
 ImageDrawingArea::~ImageDrawingArea() {
@@ -20,9 +24,9 @@ ImageDrawingArea::~ImageDrawingArea() {
 }
 
 bool ImageDrawingArea::isPlaying() const {
-  return playing;
+  return mainWindow->isPlaying();
 }
 
 void ImageDrawingArea::setPlaying(const bool &value) {
-  playing = value;
+  mainWindow->setPlaying(value);
 }
