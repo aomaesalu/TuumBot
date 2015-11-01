@@ -187,15 +187,6 @@ void ImageBeforeDrawingArea::initialiseDrawingModes() {
   erasingMode = false;
 }
 
-bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (!image)
-    return false;
-
-  Gdk::Cairo::set_source_pixbuf(cairo, brushedImage, 0, 0);
-
-  return true;
-}
-
 bool ImageBeforeDrawingArea::applyMask() {
   image->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
   guint8 *pixels = maskedImage->get_pixels();
@@ -267,6 +258,15 @@ bool ImageBeforeDrawingArea::applyBrush() {
       }
     }
   }
+  return true;
+}
+
+bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
+  if (!image)
+    return false;
+
+  Gdk::Cairo::set_source_pixbuf(cairo, brushedImage, 0, 0);
+
   return true;
 }
 
