@@ -27,7 +27,7 @@ ImageBeforeDrawingArea::ImageBeforeDrawingArea(MainWindow *mainWindow, Gtk::Scal
   initialiseProperties();
   initialiseImage();
   initialiseBrush(brushScale);
-  initialiseMask();
+  initialiseMasks();
   initialiseDrawingModes();
 }
 
@@ -39,7 +39,7 @@ bool ImageBeforeDrawingArea::isMasking() const {
   return mainWindow->isMasking();
 }
 
-bool ImageBeforeDrawingArea::isMaskEmpty() const {
+bool ImageBeforeDrawingArea::areMasksEmpty() const {
   for (std::vector<std::vector<bool>>::const_iterator i = mask.begin(); i != mask.end(); ++i) {
     for (std::vector<bool>::const_iterator j = (*i).begin(); j != (*i).end(); ++j) {
       if (*j) {
@@ -48,6 +48,14 @@ bool ImageBeforeDrawingArea::isMaskEmpty() const {
     }
   }
   return true;
+}
+
+bool ImageBeforeDrawingArea::isAdditionMaskEmpty() const {
+  // TODO
+}
+
+bool ImageBeforeDrawingArea::isRemovalMaskEmpty() const {
+  // TODO
 }
 
 void ImageBeforeDrawingArea::setPlaying(const bool &value) {
@@ -63,14 +71,14 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
       setPlaying(false);
     }
   } else {
-    initialiseMask(); // TODO: Fix lagging behaviour
+    initialiseMasks(); // TODO: Fix lagging behaviour
     initialiseDrawingModes();
   }
   mainWindow->setMasking(value);
 }
 
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (isMasking() && !applyMask())
+  if (isMasking() && !applyMasks())
     return false;
 
   if (!applyBrush())
@@ -163,16 +171,29 @@ void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
   // TODO: Different brush types, precalculate relative pixels
 }
 
-void ImageBeforeDrawingArea::initialiseMask() {
-  mask.clear();
-  std::vector<bool> row(image->get_height(), false);
-  for (int i = 0; i < image->get_width(); ++i) {
-    mask.push_back(row);
-  }
+void ImageBeforeDrawingArea::initialiseMasks() {
+  initialiseAdditionMask();
+  initialiseRemovalMask();
   mainWindow->setMasking(false);
   maskedImage = image->copy();
   brushedImage = maskedImage->copy();
   initialiseMaskBoundaries();
+}
+
+void ImageBeforeDrawingArea::initialiseAdditionMask() { // TODO: Remove duplication
+  additionMask.clear();
+  std::vector<bool> row(image->get_height(), false);
+  for (int i = 0; i < image->get_width(); ++i) {
+    additionMask.push_back(row);
+  }
+}
+
+void ImageBeforeDrawingArea::initialiseRemovalMask() {
+  removalMask.clear();
+  std::vector<bool> row(image->get_height(), false);
+  for (int i = 0; i < image->get_width(); ++i) {
+    removalMask.push_back(row);
+  }
 }
 
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
@@ -187,16 +208,17 @@ void ImageBeforeDrawingArea::initialiseDrawingModes() {
   removingMode = false;
 }
 
-bool ImageBeforeDrawingArea::applyMask() {
+bool ImageBeforeDrawingArea::applyMask() { // We only apply addition mask
   image->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
+
   guint8 *pixels = maskedImage->get_pixels();
   unsigned int channels = maskedImage->get_n_channels();
   unsigned int stride = maskedImage->get_rowstride();
 
   // Color pixels
-  for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsigned int j = 0; j < mask[i].size(); ++j) {
-      if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && mask[i][j]) {
+  for (unsigned int i = 0; i < additionMask.size(); ++i) {
+    for (unsigned int j = 0; j < additionMask[i].size(); ++j) {
+      if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && additionMask[i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
         pixel[0] *= 0.3;
         pixel[1] *= 0.3;
@@ -271,11 +293,11 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
 }
 
 void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(x, y, true);
+  changeValueInMask(x, y, true); // TODO: Separate addition and removal
 }
 
 void ImageBeforeDrawingArea::removeFromMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(x, y, false);
+  changeValueInMask(x, y, false); // TODO: Separate addition and removal
 }
 
 // TODO: Smooth behaviour on fast movements - calculate positions inbetween based on movement history
