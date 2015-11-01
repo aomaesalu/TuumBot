@@ -115,6 +115,7 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
         removingMode = false;
       }
     }
+    mainWindow->sendToFilter(additionMask, removalMask);
     initialiseMaskBoundaries();
   }
   return true;

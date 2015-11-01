@@ -28,6 +28,8 @@ class MainWindow: public Gtk::Window {
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
 
+    void sendToFilter(const std::vector<std::vector<bool>>&, const std::vector<std::vector<bool>>&);
+
   protected:
     Gtk::Grid grid;
 

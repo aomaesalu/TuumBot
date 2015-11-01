@@ -38,6 +38,7 @@ void MainWindow::setPlaying(const bool &value) {
   playing = value;
   if (value) {
     imageBeforeArea.setMasking(false);
+    imageAfterArea.addBufferToFilter();
   }
   playButton.set_sensitive(!value);
   stopButton.set_sensitive(value);
@@ -45,6 +46,10 @@ void MainWindow::setPlaying(const bool &value) {
 
 void MainWindow::setMasking(const bool &value) {
   masking = value;
+}
+
+void MainWindow::sendToFilter(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
+  imageAfterArea.calculateFilterBuffer(additionMask, removalMask);
 }
 
 void MainWindow::setProperties() {
