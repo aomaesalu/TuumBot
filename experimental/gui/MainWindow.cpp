@@ -8,6 +8,8 @@
 
 #include "MainWindow.hpp"
 
+#include <iostream>
+
 
 MainWindow::MainWindow():
   imageBeforeArea(this, &brushSizeScale),
@@ -142,6 +144,7 @@ void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
   for (std::vector<std::string>::iterator mode = modes.begin(); mode != modes.end(); ++mode) {
     modeChooseComboBox.append(*mode);
   }
+  modeChooseComboBox.signal_changed().connect(sigc::mem_fun(*this, &MainWindow::on_modeChooseComboBox_changed));
   modeChooseComboBox.set_active(0);
   parentContainer.add(modeChooseComboBox);
 }
@@ -201,6 +204,11 @@ void MainWindow::on_playButton_clicked() {
 
 void MainWindow::on_stopButton_clicked() {
   setPlaying(false);
+}
+
+void MainWindow::on_modeChooseComboBox_changed() {
+  mode = modeChooseComboBox.get_active_row_number();
+  // TODO
 }
 
 // TODO: Spacebar key event to play or stop video
