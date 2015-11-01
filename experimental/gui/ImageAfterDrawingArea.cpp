@@ -136,7 +136,7 @@ void ImageAfterDrawingArea::resetFilterRemovalBuffer() {
   resetFilterMap(filterRemovalBuffer);
 }
 
-bool applyFilter() {
+bool ImageAfterDrawingArea::applyFilter() {
   filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
   guint8 *pixels = filteredImage->get_pixels();
   unsigned int channels = filteredImage->get_n_channels();
