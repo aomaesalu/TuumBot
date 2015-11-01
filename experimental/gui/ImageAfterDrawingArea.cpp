@@ -130,3 +130,33 @@ void ImageAfterDrawingArea::resetFilter() {
 void ImageAfterDrawingArea::resetFilterBuffer() {
   resetFilterMap(filterBuffer);
 }
+
+bool applyFilter() {
+  filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
+  guint8 *pixels = filteredImage->get_pixels();
+  unsigned int channels = filteredImage->get_n_channels();
+  unsigned int stride = filteredImage->get_rowstride();
+
+  // Color pixels
+  for (unsigned int i = 0; i < 640; ++i) {
+    for (unsigned int j = 0; j < 480; ++j) {
+      guint8 *pixel = pixels + i * channels + j * stride;
+      if (filter[pixel[0]][pixel[1]][pixel[2]]) { // TODO: Add buffers
+        pixel[0] *= 0.3;
+        pixel[1] *= 0.3;
+        pixel[2] *= 0.3;
+      }
+    }
+  }
+
+  return true;
+}
+
+bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
+  if (!filteredImage)
+    return false;
+
+  Gdk::Cairo::set_source_pixbuf(cairo, filteredImage, 0, 0);
+
+  return true;
+}

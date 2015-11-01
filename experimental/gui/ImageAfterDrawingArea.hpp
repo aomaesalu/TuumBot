@@ -52,6 +52,9 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void resetFilter();
     void resetFilterBuffer();
 
+    bool applyFilter();
+    bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+
 };
 
 #endif // GUI_IMAGE_AFTER_DRAWING_AREA_H
