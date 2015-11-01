@@ -63,10 +63,6 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void calculateFilterAdditionBuffer(const std::vector<std::vector<bool>>&);
     void calculateFilterRemovalBuffer(const std::vector<std::vector<bool>>&);
 
-    void addBufferToFilter(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&, const bool&);
-    void addAdditionBufferToFilter();
-    void addRemovalBufferToFilter();
-
 };
 
 #endif // GUI_IMAGE_AFTER_DRAWING_AREA_H

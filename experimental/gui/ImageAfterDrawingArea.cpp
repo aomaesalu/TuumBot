@@ -35,9 +35,21 @@ void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<
   calculateFilterRemovalBuffer(removalMask);
 }
 
-void ImageAfterDrawingArea::addBufferToFilter() {
-  addRemovalBufferToFilter();
-  addAdditionBufferToFilter();
+void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe add buffer values to vectors?)
+  for (unsigned int i = 0; i < filter.size(); ++i) {
+    for (unsigned int j = 0; j < filter[i].size(); ++j) {
+      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
+        if (filterRemovalBuffer[i][j][k]) {
+          filter[i][j][k] = false;
+        }
+        if (filterAdditionBuffer[i][j][k]) {
+          filter[i][j][k] = true;
+        }
+      }
+    }
+  }
+  initialiseFilterRemovalBuffer();
+  initialiseFilterAdditionBuffer();
 }
 
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
@@ -189,26 +201,4 @@ void ImageAfterDrawingArea::calculateFilterAdditionBuffer(const std::vector<std:
 void ImageAfterDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterRemovalBuffer();
   calculateFilterBuffer(mask, filterRemovalBuffer);
-}
-
-void ImageAfterDrawingArea::addBufferToFilter(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
-  for (unsigned int i = 0; i < filter.size(); ++i) {
-    for (unsigned int j = 0; j < filter[i].size(); ++j) {
-      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
-        if (buffer[i][j][k]) {
-          filter[i][j][k] = value;
-        }
-      }
-    }
-  }
-}
-
-void ImageAfterDrawingArea::addAdditionBufferToFilter() {
-  addBufferToFilter(filterAdditionBuffer, true);
-  initialiseFilterAdditionBuffer();
-}
-
-void ImageAfterDrawingArea::addRemovalBufferToFilter() {
-  addBufferToFilter(filterRemovalBuffer, false);
-  initialiseFilterRemovalBuffer();
 }
