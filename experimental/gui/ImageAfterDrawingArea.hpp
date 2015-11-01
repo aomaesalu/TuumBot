@@ -9,8 +9,9 @@
 #ifndef GUI_IMAGE_AFTER_DRAWING_AREA_H
 #define GUI_IMAGE_AFTER_DRAWING_AREA_H
 
-#include <map>
 #include <vector>
+#include <set>
+#include <map>
 
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
@@ -25,6 +26,7 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     virtual ~ImageAfterDrawingArea();
 
     void calculateFilterBuffer(const std::vector<std::vector<bool>>&, const std::vector<std::vector<bool>>&);
+    void calculateFilterBuffer(const std::set<unsigned int>&, const std::set<unsigned int>&);
     void addBufferToFilter();
 
   protected:

@@ -52,6 +52,10 @@ void MainWindow::sendToFilter(const std::vector<std::vector<bool>> &additionMask
   imageAfterArea.calculateFilterBuffer(additionMask, removalMask);
 }
 
+void MainWindow::sendToFilter(const std::set<unsigned int> &additionMaskList, const std::set<unsigned int> &removalMaskList) {
+  imageAfterArea.calculateFilterBuffer(additionMaskList, removalMaskList);
+}
+
 void MainWindow::setProperties() {
   // Set window properties
   set_title("Color calibration program");

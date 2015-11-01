@@ -350,5 +350,6 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
 void ImageBeforeDrawingArea::sendMasksToFilter() {
   //std::sort(additionMaskList.begin(), additionMaskList.end());
   //std::sort(removalMaskList.begin(), removalMaskList.end());
-  mainWindow->sendToFilter(additionMask, removalMask);
+  //mainWindow->sendToFilter(additionMask, removalMask);
+  mainWindow->sendToFilter(additionMaskList, removalMaskList);
 }

@@ -9,6 +9,8 @@
 #ifndef GUI_MAIN_WINDOW_H
 #define GUI_MAIN_WINDOW_H
 
+#include <set>
+
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 
@@ -29,6 +31,7 @@ class MainWindow: public Gtk::Window {
     void setMasking(const bool& = true);
 
     void sendToFilter(const std::vector<std::vector<bool>>&, const std::vector<std::vector<bool>>&);
+    void sendToFilter(const std::set<unsigned int>&, const std::set<unsigned int>&);
 
   protected:
     Gtk::Grid grid;
