@@ -110,6 +110,8 @@ void MainWindow::constructEntityChooseComboBox(Gtk::Container &parentContainer) 
   entityChooseComboBox.append("Field");
   entityChooseComboBox.append("White line");
   entityChooseComboBox.append("Black line");
+  entityChooseComboBox.append("Checkerboard white");
+  entityChooseComboBox.append("Checkerboard black");
   entityChooseComboBox.set_active(0);
   parentContainer.add(entityChooseComboBox);
 }
