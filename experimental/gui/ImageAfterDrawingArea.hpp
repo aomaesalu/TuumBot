@@ -38,6 +38,9 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void initialiseProperties();
     void initialiseImage();
     void initialiseDeltaScale(Gtk::Scale*);
+    void initialiseFilters();
+    void initialiseFilter();
+    void initialiseFilterBuffer();
 
 };
 
