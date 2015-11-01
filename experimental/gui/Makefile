@@ -22,7 +22,7 @@ CXX = g++
 # Default compiler parameters
 # -Wall 		Shows all warnings when compiling, always use this!
 # -std=c++11 	Enables the C++11 standard mode
-CXXFLAGS = -Wall -std=c++11 `pkg-config gtkmm-3.0 --cflags`
+CXXFLAGS = -Wall -g -std=c++11 `pkg-config gtkmm-3.0 --cflags`
 
 # gtkmm library flags
 LDLIBS = `pkg-config gtkmm-3.0 --libs`
@@ -35,7 +35,7 @@ DEPEND = .depend
 .PHONY: clean
 
 $(PROGRAM): $(OBJS)
-	$(CXX) $^ -o $@ $(LDLIBS)
+	$(CXX) $^ -g -o $@ $(LDLIBS)
 
 # Object file rules:
 .cpp.o:

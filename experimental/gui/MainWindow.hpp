@@ -30,11 +30,12 @@ class MainWindow: public Gtk::Window {
     bool isMasking() const;
 
     std::vector<std::string> getModes() const;
+    unsigned int getMode() const;
 
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
 
-    void sendToFilter(const std::set<unsigned int>&, const std::set<unsigned int>&);
+    void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
 
   protected:
     Gtk::Grid grid;
@@ -80,11 +81,9 @@ class MainWindow: public Gtk::Window {
     bool playing;
     bool masking;
 
-    std::vector<std::string> modes;
     unsigned int mode;
 
     void setProperties();
-    void initialiseModes();
 
     void construct();
     void constructGrid();

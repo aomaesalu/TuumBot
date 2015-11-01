@@ -11,6 +11,8 @@
 #include <iostream>
 
 
+std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"};
+
 MainWindow::MainWindow():
   imageBeforeArea(this, &brushSizeScale),
   imageAfterArea(this, &deltaChooseScale),
@@ -18,7 +20,6 @@ MainWindow::MainWindow():
   masking(false)
 {
   setProperties();
-  initialiseModes();
   construct();
   show_all_children();
 }
@@ -39,6 +40,10 @@ std::vector<std::string> MainWindow::getModes() const {
   return modes;
 }
 
+unsigned int MainWindow::getMode() const {
+  return mode;
+}
+
 void MainWindow::setPlaying(const bool &value) {
   playing = value;
   if (value) {
@@ -53,7 +58,7 @@ void MainWindow::setMasking(const bool &value) {
   masking = value;
 }
 
-void MainWindow::sendToFilter(const std::set<unsigned int> &additionMaskList, const std::set<unsigned int> &removalMaskList) {
+void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
   imageAfterArea.calculateFilterBuffer(additionMaskList, removalMaskList);
 }
 
@@ -64,10 +69,6 @@ void MainWindow::setProperties() {
   set_resizable(false);
   // Set window border width
   set_border_width(5);
-}
-
-void MainWindow::initialiseModes() { // TODO: Move out of the class
-  modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"};
 }
 
 void MainWindow::construct() {
