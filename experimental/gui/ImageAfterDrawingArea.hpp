@@ -10,6 +10,7 @@
 #define GUI_IMAGE_AFTER_DRAWING_AREA_H
 
 #include <map>
+#include <vector>
 
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
@@ -23,12 +24,16 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
+    void calculateFilterBuffer(const std::vector<std::vector<bool>&);
+    void addBufferToFilter();
+
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
     virtual bool on_scroll_event(GdkEventScroll*);
 
   private:
     Glib::RefPtr<Gdk::Pixbuf> image;
+    Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
     Gtk::Scale *deltaScale;
 

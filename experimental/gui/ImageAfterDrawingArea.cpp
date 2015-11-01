@@ -30,11 +30,26 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
   // Nothing to do here
 }
 
+void calculateFilterBuffer(const std::vector<std::vector<bool> &mask) {
+  resetFilterBuffer();
+  for (unsigned int i = 0; i < mask.size(); ++i) {
+    for (unsgined int j = 0; j < mask[i].size(); ++j) {
+      // TODO
+    }
+  }
+}
+
+void addBufferToFilter() {
+  // TODO
+  initialiseFilterBuffer();
+}
+
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
   if (!image)
     return false;
 
   Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
+
   cairo->paint();
 
   return true;
@@ -102,5 +117,25 @@ void ImageAfterDrawingArea::initialiseFilterBuffer() {
   }
   for (unsigned int i = 0; i < 256; ++i) {
     filterBuffer[i] = subFilterBuffer;
+  }
+}
+
+void ImageAfterDrawingArea::resetFilter() {
+  for (unsigned int i = 0; i < filter.size(); ++i) {
+    for (unsigned int j = 0; j < filter[i].size(); ++j) {
+      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
+        filter[i][j][k] = false;
+      }
+    }
+  }
+}
+
+void ImageAfterDrawingArea::resetFilterBuffer() {
+  for (unsigned int i = 0; i < filterBuffer.size(); ++i) {
+    for (unsigned int j = 0; j < filterBuffer[i].size(); ++j) {
+      for (unsigned int k = 0; k < filterBuffer[i][j].size(); ++k) {
+        filterBuffer[i][j][k] = false;
+      }
+    }
   }
 }
