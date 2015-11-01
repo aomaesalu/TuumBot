@@ -293,15 +293,17 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
 }
 
 void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(x, y, true); // TODO: Separate addition and removal
+  changeValueInMask(additionMask, x, y, true);
+  changeValueInMask(removalMask, x, y, false);
 }
 
 void ImageBeforeDrawingArea::removeFromMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(x, y, false); // TODO: Separate addition and removal
+  changeValueInMask(additionMask, x, y, false);
+  changeValueInMask(removalMask, x, y, true);
 }
 
 // TODO: Smooth behaviour on fast movements - calculate positions inbetween based on movement history
-void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
+void ImageBeforeDrawingArea::changeValueInMask(std::vector<std::vector<bool>> &mask, const unsigned int &x, const unsigned int &y, const bool &value) {
   unsigned int brushSize = brushScale->get_value();
   int radius = brushSize / 2;
   unsigned int radiusSquared = radius * radius;
