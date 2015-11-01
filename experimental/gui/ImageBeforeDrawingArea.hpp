@@ -61,9 +61,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void initialiseImage();
     void initialiseBrush(Gtk::Scale*);
     void initialiseMasks();
-    void initialiseMask(std::vector<std::vector<bool>>&);
-    void initialiseAdditionMask();
-    void initialiseRemovalMask();
+    void initialiseMaskMaps();
     void initialiseMaskBoundaries();
     void initialiseDrawingModes();
 
