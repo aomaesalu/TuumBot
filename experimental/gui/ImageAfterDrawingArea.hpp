@@ -25,7 +25,6 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
-    void calculateFilterBuffer(const std::vector<std::vector<bool>>&, const std::vector<std::vector<bool>>&);
     void calculateFilterBuffer(const std::set<unsigned int>&, const std::set<unsigned int>&);
     void addBufferToFilter();
 

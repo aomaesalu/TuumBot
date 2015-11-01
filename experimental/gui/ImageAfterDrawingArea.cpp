@@ -30,30 +30,6 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
   // Nothing to do here
 }
 
-void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) { // TODO: Optimise speed
-  resetFilterBuffers();
-
-  guint8 *pixels = image->get_pixels();
-  unsigned int channels = image->get_n_channels();
-  unsigned int stride = image->get_rowstride();
-
-  for (unsigned int i = 0; i < additionMask.size(); ++i) { // We know that the addition mask and the removal mask are the same size
-    for (unsigned int j = 0; j < additionMask[i].size(); ++j) {
-      if (additionMask[i][j]) {
-        guint8 *pixel = pixels + i * channels + j * stride;
-        filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
-      }
-      if (removalMask[i][j]) {
-        guint8 *pixel = pixels + i * channels + j * stride;
-        filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
-      }
-    }
-  }
-
-  // Redraw
-  queue_draw();
-}
-
 void ImageAfterDrawingArea::calculateFilterBuffer(const std::set<unsigned int> &additionMaskList, const std::set<unsigned int> &removalMaskList) {
   resetFilterBuffers();
 
