@@ -31,8 +31,7 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
 }
 
 void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) { // TODO: Optimise speed
-  resetFilterAdditionBuffer();
-  resetFilterRemovalBuffer();
+  resetFilterBuffers();
 
   guint8 *pixels = image->get_pixels();
   unsigned int channels = image->get_n_channels();
@@ -65,8 +64,8 @@ void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe
       }
     }
   }
-  initialiseFilterRemovalBuffer();
-  initialiseFilterAdditionBuffer();
+
+  resetFilterBuffers();
 }
 
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
@@ -112,8 +111,7 @@ void ImageAfterDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
 
 void ImageAfterDrawingArea::initialiseFilters() {
   initialiseFilter();
-  initialiseFilterAdditionBuffer();
-  initialiseFilterRemovalBuffer();
+  initialiseFilterBuffers();
 }
 
 void ImageAfterDrawingArea::initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
@@ -133,6 +131,11 @@ void ImageAfterDrawingArea::initialiseFilterMap(std::map<unsigned int, std::map<
 
 void ImageAfterDrawingArea::initialiseFilter() {
   initialiseFilterMap(filter);
+}
+
+void ImageAfterDrawingArea::initialiseFilterBuffers() {
+  initialiseFilterAdditionBuffer();
+  filterRemovalBuffer = filterAdditionBuffer;
 }
 
 void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
@@ -155,6 +158,17 @@ void ImageAfterDrawingArea::resetFilterMap(std::map<unsigned int, std::map<unsig
 
 void ImageAfterDrawingArea::resetFilter() {
   resetFilterMap(filter);
+}
+
+void ImageAfterDrawingArea::resetFilterBuffers() {
+  for (unsigned int i = 0; i < filterAdditionBuffer.size(); ++i) { // We know that the filter addition buffer and the filter removal buffer are the same size
+    for (unsigned int j = 0; j < filterAdditionBuffer[i].size(); ++j) {
+      for (unsigned int k = 0; k < filterAdditionBuffer[i][j].size(); ++k) {
+        filterAdditionBuffer[i][j][k] = false;
+        filterRemovalBuffer[i][j][k] = false;
+      }
+    }
+  }
 }
 
 void ImageAfterDrawingArea::resetFilterAdditionBuffer() {

@@ -48,11 +48,13 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
 
     void initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
     void initialiseFilter();
+    void initialiseFilterBuffers();
     void initialiseFilterAdditionBuffer();
     void initialiseFilterRemovalBuffer();
 
     void resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
     void resetFilter();
+    void resetFilterBuffers();
     void resetFilterAdditionBuffer();
     void resetFilterRemovalBuffer();
 
