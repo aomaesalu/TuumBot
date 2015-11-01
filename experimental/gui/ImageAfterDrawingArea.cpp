@@ -49,6 +49,9 @@ void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<
       }
     }
   }
+
+  // Redraw
+  queue_draw();
 }
 
 void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe add buffer values to vectors?)
@@ -66,13 +69,17 @@ void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe
   }
 
   resetFilterBuffers();
+
+  // Redraw
+  queue_draw();
 }
 
 bool ImageAfterDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (!image)
+  if (!applyFilter())
     return false;
 
-  Gdk::Cairo::set_source_pixbuf(cairo, image, 0, 0);
+  if (!drawImage(cairo))
+    return false;
 
   cairo->paint();
 
