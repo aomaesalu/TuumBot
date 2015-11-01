@@ -90,8 +90,8 @@ void ImageAfterDrawingArea::initialiseFilters() {
   initialiseFilterBuffer();
 }
 
-void ImageAfterDrawingArea::initialiseFilter() {
-  filter.clear();
+void ImageAfterDrawingArea::initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
+  filterMap.clear();
   std::map<unsigned int, bool> subSubFilter;
   for (unsigned int i = 0; i < 256; ++i) {
     subSubFilter[i] = false;
@@ -101,41 +101,32 @@ void ImageAfterDrawingArea::initialiseFilter() {
     subFilter[i] = subSubFilter;
   }
   for (unsigned int i = 0; i < 256; ++i) {
-    filter[i] = subFilter;
+    filterMap[i] = subFilter;
   }
 }
 
+void ImageAfterDrawingArea::initialiseFilter() {
+  initialiseFilterMap(filter);
+}
+
 void ImageAfterDrawingArea::initialiseFilterBuffer() {
-  filterBuffer.clear();
-  std::map<unsigned int, bool> subSubFilterBuffer;
-  for (unsigned int i = 0; i < 256; ++i) {
-    subSubFilterBuffer[i] = false;
-  }
-  std::map<unsigned int, std::map<unsigned int, bool>> subFilterBuffer;
-  for (unsigned int i = 0; i < 256; ++i) {
-    subFilterBuffer[i] = subSubFilterBuffer;
-  }
-  for (unsigned int i = 0; i < 256; ++i) {
-    filterBuffer[i] = subFilterBuffer;
+  initialiseFilterMap(filterBuffer);
+}
+
+void ImageAfterDrawingArea::resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
+  for (unsigned int i = 0; i < filterMap.size(); ++i) {
+    for (unsigned int j = 0; j < filterMap[i].size(); ++j) {
+      for (unsigned int k = 0; k < filterMap[i][j].size(); ++k) {
+        filterMap[i][j][k] = false;
+      }
+    }
   }
 }
 
 void ImageAfterDrawingArea::resetFilter() {
-  for (unsigned int i = 0; i < filter.size(); ++i) {
-    for (unsigned int j = 0; j < filter[i].size(); ++j) {
-      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
-        filter[i][j][k] = false;
-      }
-    }
-  }
+  resetFilterMap(filter);
 }
 
 void ImageAfterDrawingArea::resetFilterBuffer() {
-  for (unsigned int i = 0; i < filterBuffer.size(); ++i) {
-    for (unsigned int j = 0; j < filterBuffer[i].size(); ++j) {
-      for (unsigned int k = 0; k < filterBuffer[i][j].size(); ++k) {
-        filterBuffer[i][j][k] = false;
-      }
-    }
-  }
+  resetFilterMap(filterBuffer);
 }
