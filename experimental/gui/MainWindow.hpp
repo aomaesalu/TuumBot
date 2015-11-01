@@ -9,7 +9,9 @@
 #ifndef GUI_MAIN_WINDOW_H
 #define GUI_MAIN_WINDOW_H
 
+#include <vector>
 #include <set>
+#include <string>
 
 #include <gtkmm.h>
 #include <gtkmm/window.h>
@@ -26,6 +28,8 @@ class MainWindow: public Gtk::Window {
 
     bool isPlaying() const;
     bool isMasking() const;
+
+    std::vector<std::string> getModes() const;
 
     void setPlaying(const bool& = true);
     void setMasking(const bool& = true);
@@ -76,7 +80,10 @@ class MainWindow: public Gtk::Window {
     bool playing;
     bool masking;
 
+    std::vector<std::string> modes;
+
     void setProperties();
+    void initialiseModes();
 
     void construct();
     void constructGrid();
