@@ -79,7 +79,7 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
 
     void addToMask(const unsigned int&, const unsigned int&);
     void removeFromMask(const unsigned int&, const unsigned int&);
-    void changeValueInMask(std::vector<std::vector<bool>>&, const unsigned int&, const unsigned int&, const bool&);
+    void changeValueInMask(const unsigned int&, const unsigned int&, const bool&);
 
     void sendMasksToFilter();
 
