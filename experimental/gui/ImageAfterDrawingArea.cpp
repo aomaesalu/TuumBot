@@ -146,7 +146,7 @@ bool applyFilter() {
   for (unsigned int i = 0; i < 640; ++i) {
     for (unsigned int j = 0; j < 480; ++j) {
       guint8 *pixel = pixels + i * channels + j * stride;
-      if (filter[pixel[0]][pixel[1]][pixel[2]]) { // TODO: Add buffers
+      if (filter[pixel[0]][pixel[1]][pixel[2]] && !filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] || filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]]) {
         pixel[0] *= 0.3;
         pixel[1] *= 0.3;
         pixel[2] *= 0.3;
