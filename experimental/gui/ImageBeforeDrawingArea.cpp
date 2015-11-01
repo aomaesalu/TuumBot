@@ -17,8 +17,8 @@
 #include <iostream>
 
 
-ImageBeforeDrawingArea::ImageBeforeDrawingArea(Gtk::Scale *brushScale):
-  ImageDrawingArea()
+ImageBeforeDrawingArea::ImageBeforeDrawingArea(bool &playing, Gtk::Scale *brushScale):
+  ImageDrawingArea(playing)
 {
   initialiseProperties();
   initialiseImage();

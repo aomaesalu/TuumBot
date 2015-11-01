@@ -15,7 +15,7 @@
 class ImageDrawingArea: public Gtk::DrawingArea {
 
   public:
-    ImageDrawingArea();
+    ImageDrawingArea(bool&);
     virtual ~ImageDrawingArea();
 
     bool isPlaying() const;

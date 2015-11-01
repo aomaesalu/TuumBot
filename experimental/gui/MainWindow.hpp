@@ -22,6 +22,10 @@ class MainWindow: public Gtk::Window {
     MainWindow();
     virtual ~MainWindow();
 
+    bool isPlaying() const;
+
+    void setPlaying(const bool& = true);
+
   protected:
     Gtk::Grid grid;
 
@@ -63,6 +67,8 @@ class MainWindow: public Gtk::Window {
     Glib::RefPtr<Gdk::Pixbuf> imageAfter;
 
   private:
+    bool playing;
+
     void setProperties();
 
     void construct();
@@ -85,6 +91,9 @@ class MainWindow: public Gtk::Window {
     void constructFileChooseComboBox(Gtk::Container&);
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
+
+    void on_playButton_clicked();
+    void on_stopButton_clicked();
 
 };
 
