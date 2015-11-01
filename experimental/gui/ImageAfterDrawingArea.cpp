@@ -43,13 +43,11 @@ void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::set<uns
 
   for (std::set<unsigned int>::iterator i = additionMaskList[mode].begin(); i != additionMaskList[mode].end(); ++i) {
     guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
-    //filterAdditionBuffer[mode][pixel[0]][pixel[1]][pixel[2]] = true;
     filterAdditionBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
   }
 
   for (std::set<unsigned int>::iterator i = removalMaskList[mode].begin(); i != removalMaskList[mode].end(); ++i) {
     guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
-    //filterRemovalBuffer[mode][pixel[0]][pixel[1]][pixel[2]] = true;
     filterRemovalBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
   }
 
@@ -62,12 +60,10 @@ void ImageAfterDrawingArea::addBufferToFilter() {
 
   for (std::set<unsigned int>::iterator i = filterRemovalBufferList[mode].begin(); i != filterRemovalBufferList[mode].end(); ++i) {
     filter[mode].erase(*i);
-    //filter[mode][(*i) / 256 / 256][(*i) / 256 % 256][(*i) % 256] = false;
   }
 
   for (std::set<unsigned int>::iterator i = filterAdditionBufferList[mode].begin(); i != filterAdditionBufferList[mode].end(); ++i) {
     filter[mode].insert(*i);
-    //filter[mode][(*i) / 256 / 256][(*i) / 256 % 256][(*i) % 256] = true;
   }
 
   resetFilterBuffers();
@@ -119,8 +115,6 @@ void ImageAfterDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
 }
 
 void ImageAfterDrawingArea::initialiseFilters() {
-  //initialiseFilter();
-  //initialiseFilterBuffers();
   std::set<unsigned int> emptySet;
   for (unsigned int i = 0; i < mainWindow->getModes().size(); ++i) {
     filter.push_back(emptySet);
@@ -129,87 +123,16 @@ void ImageAfterDrawingArea::initialiseFilters() {
   }
 }
 
-/*void ImageAfterDrawingArea::initialiseSingleFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
-  filterMap.clear();
-  std::map<unsigned int, bool> subSubFilter;
-  for (unsigned int i = 0; i < 256; ++i) {
-    subSubFilter[i] = false;
-  }
-  std::map<unsigned int, std::map<unsigned int, bool>> subFilter;
-  for (unsigned int i = 0; i < 256; ++i) {
-    subFilter[i] = subSubFilter;
-  }
-  for (unsigned int i = 0; i < 256; ++i) {
-    filterMap[i] = subFilter;
-  }
-}*/
-
-/*void ImageAfterDrawingArea::initialiseFilterMap(std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>> &filterMap) {
-  std::cout << "C1" << std::endl;
-  std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> singleFilterMap;
-  std::cout << "C2" << std::endl;
-  initialiseSingleFilterMap(singleFilterMap);
-  std::cout << "C3" << std::endl;
-  for (unsigned int i = 0; i < mainWindow->getModes().size(); ++i) {
-    std::cout << "C4" << std::endl;
-    filterMap.push_back(singleFilterMap);
-    std::cout << "C5" << std::endl;
-  }
-  std::cout << "C6" << std::endl;
-}
-
-void ImageAfterDrawingArea::initialiseFilter() {
-  initialiseFilterMap(filter);
-}*/
-
-/*void ImageAfterDrawingArea::initialiseFilterBuffers() {
-  initialiseFilterAdditionBuffer();
-  filterRemovalBuffer = filterAdditionBuffer;
-}
-
-void ImageAfterDrawingArea::initialiseFilterAdditionBuffer() {
-  initialiseFilterMap(filterAdditionBuffer);
-}
-
-void ImageAfterDrawingArea::initialiseFilterRemovalBuffer() {
-  initialiseFilterMap(filterRemovalBuffer);
-}*/
-
-/*void ImageAfterDrawingArea::initialiseResettedFilter() {
-  initialiseSingleFilterMap(resettedFilter);
-}*/
-
-/*void ImageAfterDrawingArea::resetSingleFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
-  filterMap = resettedFilter;
-}
-
-void ImageAfterDrawingArea::resetFilterMap(std::vector<std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>> &filterMap) {
-  for (unsigned int i = 0; i < filterMap.size(); ++i) {
-    resetSingleFilterMap(filterMap[i]);
-  }
-}*/
-
 void ImageAfterDrawingArea::resetFilter() {
-  //resetFilterMap(filter);
   unsigned int mode = mainWindow->getMode();
   filter[mode].clear();
 }
 
 void ImageAfterDrawingArea::resetFilterBuffers() {
   unsigned int mode = mainWindow->getMode();
-  //filterAdditionBuffer[mode] = resettedFilter;
-  //filterRemovalBuffer[mode] = resettedFilter;
   filterAdditionBufferList[mode].clear();
   filterRemovalBufferList[mode].clear();
 }
-
-/*void ImageAfterDrawingArea::resetFilterAdditionBuffer() {
-  resetFilterMap(filterAdditionBuffer);
-}*/
-
-/*void ImageAfterDrawingArea::resetFilterRemovalBuffer() {
-  resetFilterMap(filterRemovalBuffer);
-}*/
 
 bool ImageAfterDrawingArea::applyFilter() {
   filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
@@ -224,7 +147,6 @@ bool ImageAfterDrawingArea::applyFilter() {
   for (unsigned int i = 0; i < 640; ++i) {
     for (unsigned int j = 0; j < 480; ++j) {
       guint8 *pixel = pixels + i * channels + j * stride;
-      //if ((filter[mode][pixel[0]][pixel[1]][pixel[2]] && !filterRemovalBuffer[mode][pixel[0]][pixel[1]][pixel[2]]) || filterAdditionBuffer[mode][pixel[0]][pixel[1]][pixel[2]]) {
       unsigned int pixelCode = pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2];
       if (((filter[mode].find(pixelCode) != filter[mode].end()) && (filterRemovalBufferList[mode].find(pixelCode) == filterRemovalBufferList[mode].end())) || (filterAdditionBufferList[mode].find(pixelCode) != filterAdditionBufferList[mode].end())) {
         pixel[0] *= 0.3;
