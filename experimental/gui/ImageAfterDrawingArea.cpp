@@ -20,13 +20,9 @@
 ImageAfterDrawingArea::ImageAfterDrawingArea(MainWindow *mainWindow, Gtk::Scale *deltaScale):
   ImageDrawingArea(mainWindow)
 {
-  image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
-
-  // Show the whole image
-  if (image)
-    set_size_request(image->get_width(), image->get_height());
-
-  this->deltaScale = deltaScale;
+  initialiseProperties();
+  initialiseImage();
+  initialiseDeltaScale(deltaScale);
 }
 
 ImageAfterDrawingArea::~ImageAfterDrawingArea() {
@@ -54,4 +50,21 @@ bool ImageAfterDrawingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
     }
   }
   return true;
+}
+
+void ImageBeforeDrawingArea::initialiseProperties() {
+  set_size_request(640, 480);
+}
+
+void ImageBeforeDrawingArea::initialiseImage() {
+  image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
+
+  // Show the whole image
+  if (image)
+    set_size_request(image->get_width(), image->get_height());
+}
+
+void ImageBeforeDrawingArea::initialiseDeltaScale(Gtk::Scale *deltaScale) {
+  this->deltaScale = deltaScale;
+  // TODO: Define exact usage
 }

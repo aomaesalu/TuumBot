@@ -33,6 +33,11 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     Gtk::Scale *deltaScale;
 
     std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filter;
+    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterBuffer;
+
+    void initialiseProperties();
+    void initialiseImage();
+    void initialiseDeltaScale(Gtk::Scale*);
 
 };
 
