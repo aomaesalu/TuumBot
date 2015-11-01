@@ -40,7 +40,11 @@ bool ImageBeforeDrawingArea::isMasking() const {
 }
 
 bool ImageBeforeDrawingArea::areMasksEmpty() const {
-  for (std::vector<std::vector<bool>>::const_iterator i = mask.begin(); i != mask.end(); ++i) {
+  return isAdditionMaskEmpty() && isRemovalMaskEmpty();
+}
+
+bool ImageBeforeDrawingArea::isAdditionMaskEmpty() const {
+  for (std::vector<std::vector<bool>>::const_iterator i = additionMask.begin(); i != additionMask.end(); ++i) {
     for (std::vector<bool>::const_iterator j = (*i).begin(); j != (*i).end(); ++j) {
       if (*j) {
         return false;
@@ -50,12 +54,15 @@ bool ImageBeforeDrawingArea::areMasksEmpty() const {
   return true;
 }
 
-bool ImageBeforeDrawingArea::isAdditionMaskEmpty() const {
-  // TODO
-}
-
 bool ImageBeforeDrawingArea::isRemovalMaskEmpty() const {
-  // TODO
+  for (std::vector<std::vector<bool>>::const_iterator i = removalMask.begin(); i != removalMask.end(); ++i) {
+    for (std::vector<bool>::const_iterator j = (*i).begin(); j != (*i).end(); ++j) {
+      if (*j) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 void ImageBeforeDrawingArea::setPlaying(const bool &value) {
