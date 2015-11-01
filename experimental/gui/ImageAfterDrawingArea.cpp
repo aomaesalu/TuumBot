@@ -185,11 +185,27 @@ void ImageBeforeDrawingArea::calculateFilterRemovalBuffer(const std::vector<std:
 }
 
 void ImageBeforeDrawingArea::addAdditionBufferToFilter() {
-  // TODO
+  for (unsigned int i = 0; i < filter.size(); ++i) {
+    for (unsigned int j = 0; j < filter[i].size(); ++j) {
+      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
+        if (filterAdditionBuffer[i][j][k]) {
+          filter[i][j][k] = true;
+        }
+      }
+    }
+  }
   initialiseFilterAdditionBuffer();
 }
 
 void ImageBeforeDrawingArea::addRemovalBufferToFilter() {
-  // TODO
+  for (unsigned int i = 0; i < filter.size(); ++i) {
+    for (unsigned int j = 0; j < filter[i].size(); ++j) {
+      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
+        if (filterRemovalBuffer[i][j][k]) {
+          filter[i][j][k] = false;
+        }
+      }
+    }
+  }
   initialiseFilterRemovalBuffer();
 }
