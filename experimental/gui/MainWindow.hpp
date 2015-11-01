@@ -106,9 +106,13 @@ class MainWindow: public Gtk::Window {
     void constructSaveButton(Gtk::Container&);
     void constructExitButton(Gtk::Container&);
 
+    void saveFilterToFile(const std::string&);
+    void readFilterFromFile(const std::string&);
+
     void on_playButton_clicked();
     void on_stopButton_clicked();
     void on_modeChooseComboBox_changed();
+    void on_saveButton_clicked();
 
 };
 
