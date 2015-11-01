@@ -10,6 +10,8 @@
 #define GUI_IMAGE_BEFORE_DRAWING_AREA_H
 
 #include <vector>
+#include <set>
+
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
 
@@ -45,8 +47,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     Gtk::Scale *brushScale;
     std::vector<std::vector<bool>> additionMask;
     std::vector<std::vector<bool>> removalMask;
-    std::vector<unsigned int> additionMaskList;
-    std::vector<unsigned int> removalMaskList;
+    std::set<unsigned int> additionMaskList;
+    std::set<unsigned int> removalMaskList;
 
     unsigned int maskMinX;
     unsigned int maskMinY;
@@ -78,6 +80,8 @@ class ImageBeforeDrawingArea: public ImageDrawingArea {
     void addToMask(const unsigned int&, const unsigned int&);
     void removeFromMask(const unsigned int&, const unsigned int&);
     void changeValueInMask(std::vector<std::vector<bool>>&, const unsigned int&, const unsigned int&, const bool&);
+
+    void sendMasksToFilter();
 
 };
 
