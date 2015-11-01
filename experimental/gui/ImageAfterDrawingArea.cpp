@@ -40,29 +40,26 @@ void ImageAfterDrawingArea::calculateFilterBuffer(const std::set<unsigned int> &
   for (std::set<unsigned int>::iterator i = additionMaskList.begin(); i != additionMaskList.end(); ++i) {
     guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
     filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+    filterAdditionBufferList.insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
   }
 
   for (std::set<unsigned int>::iterator i = removalMaskList.begin(); i != removalMaskList.end(); ++i) {
     guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
     filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+    filterRemovalBufferList.insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
   }
 
   // Redraw
   queue_draw();
 }
 
-void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe add buffer values to vectors?)
-  for (unsigned int i = 0; i < filter.size(); ++i) {
-    for (unsigned int j = 0; j < filter[i].size(); ++j) {
-      for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
-        if (filterRemovalBuffer[i][j][k]) {
-          filter[i][j][k] = false;
-        }
-        if (filterAdditionBuffer[i][j][k]) {
-          filter[i][j][k] = true;
-        }
-      }
-    }
+void ImageAfterDrawingArea::addBufferToFilter() {
+  for (std::set<unsigned int>::iterator i = filterRemovalBufferList.begin(); i != filterRemovalBufferList.end(); ++i) {
+    filter[(*i) / 256 / 256][(*i) / 256 % 256][(*i) % 256] = false;
+  }
+
+  for (std::set<unsigned int>::iterator i = filterAdditionBufferList.begin(); i != filterAdditionBufferList.end(); ++i) {
+    filter[(*i) / 256 / 256][(*i) / 256 % 256][(*i) % 256] = true;
   }
 
   resetFilterBuffers();
@@ -165,6 +162,8 @@ void ImageAfterDrawingArea::resetFilter() {
 void ImageAfterDrawingArea::resetFilterBuffers() {
   filterAdditionBuffer = resettedFilter;
   filterRemovalBuffer = resettedFilter;
+  filterAdditionBufferList.clear();
+  filterRemovalBufferList.clear();
 }
 
 void ImageAfterDrawingArea::resetFilterAdditionBuffer() {
