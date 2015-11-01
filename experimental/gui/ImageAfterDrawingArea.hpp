@@ -58,6 +58,9 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     bool applyFilter();
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
+    void calculateFilterAdditionBuffer(const std::vector<std::vector<bool>>&);
+    void calculateFilterRemovalBuffer(const std::vector<std::vector<bool>>&);
+
     void addAdditionBufferToFilter();
     void addRemovalBufferToFilter();
 
