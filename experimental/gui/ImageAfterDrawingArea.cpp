@@ -191,7 +191,7 @@ void ImageAfterDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::
   calculateFilterBuffer(mask, filterRemovalBuffer);
 }
 
-void ImageAfterDrawingArea::addBufferToFilter(const std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
+void ImageAfterDrawingArea::addBufferToFilter(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
   for (unsigned int i = 0; i < filter.size(); ++i) {
     for (unsigned int j = 0; j < filter[i].size(); ++j) {
       for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
