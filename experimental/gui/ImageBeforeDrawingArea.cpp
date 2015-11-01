@@ -166,28 +166,21 @@ void ImageBeforeDrawingArea::initialiseBrush(Gtk::Scale *brushScale) {
 }
 
 void ImageBeforeDrawingArea::initialiseMasks() {
-  initialiseAdditionMask();
-  initialiseRemovalMask();
+  initialiseMaskMaps();
   mainWindow->setMasking(false);
   maskedImage = image->copy();
   brushedImage = maskedImage->copy();
   initialiseMaskBoundaries();
 }
 
-void ImageBeforeDrawingArea::initialiseMask(std::vector<std::vector<bool>> &mask) {
-  mask.clear();
+void ImageBeforeDrawingArea::initialiseMaskMaps() {
+  additionMask.clear();
+  removalMask.clear();
   std::vector<bool> row(image->get_height(), false);
   for (int i = 0; i < image->get_width(); ++i) {
-    mask.push_back(row);
+    additionMask.push_back(row);
   }
-}
-
-void ImageBeforeDrawingArea::initialiseAdditionMask() {
-  initialiseMask(additionMask);
-}
-
-void ImageBeforeDrawingArea::initialiseRemovalMask() {
-  initialiseMask(removalMask);
+  removalMask = additionMask;
 }
 
 void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
