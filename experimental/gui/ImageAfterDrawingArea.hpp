@@ -42,6 +42,8 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterAdditionBuffer;
     std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterRemovalBuffer;
 
+    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> resettedFilter;
+
     void initialiseProperties();
     void initialiseImage();
     void initialiseDeltaScale(Gtk::Scale*);
@@ -52,6 +54,7 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void initialiseFilterBuffers();
     void initialiseFilterAdditionBuffer();
     void initialiseFilterRemovalBuffer();
+    void initialiseResettedFilter();
 
     void resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
     void resetFilter();

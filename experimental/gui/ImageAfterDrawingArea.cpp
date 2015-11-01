@@ -150,14 +150,19 @@ void ImageAfterDrawingArea::initialiseFilterRemovalBuffer() {
   initialiseFilterMap(filterRemovalBuffer);
 }
 
+void ImageAfterDrawingArea::initialiseResettedFilter() {
+  initialiseFilterMap(resettedFilter);
+}
+
 void ImageAfterDrawingArea::resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &filterMap) {
-  for (unsigned int i = 0; i < filterMap.size(); ++i) {
+  /*for (unsigned int i = 0; i < filterMap.size(); ++i) {
     for (unsigned int j = 0; j < filterMap[i].size(); ++j) {
       for (unsigned int k = 0; k < filterMap[i][j].size(); ++k) {
         filterMap[i][j][k] = false;
       }
     }
-  }
+  }*/
+  filterMap = resettedFilter;
 }
 
 void ImageAfterDrawingArea::resetFilter() {
@@ -165,14 +170,16 @@ void ImageAfterDrawingArea::resetFilter() {
 }
 
 void ImageAfterDrawingArea::resetFilterBuffers() {
-  for (unsigned int i = 0; i < filterAdditionBuffer.size(); ++i) { // We know that the filter addition buffer and the filter removal buffer are the same size
+  /*for (unsigned int i = 0; i < filterAdditionBuffer.size(); ++i) { // We know that the filter addition buffer and the filter removal buffer are the same size
     for (unsigned int j = 0; j < filterAdditionBuffer[i].size(); ++j) {
       for (unsigned int k = 0; k < filterAdditionBuffer[i][j].size(); ++k) {
         filterAdditionBuffer[i][j][k] = false;
         filterRemovalBuffer[i][j][k] = false;
       }
     }
-  }
+  }*/
+  filterAdditionBuffer = resettedFilter;
+  filterRemovalBuffer = resettedFilter;
 }
 
 void ImageAfterDrawingArea::resetFilterAdditionBuffer() {
