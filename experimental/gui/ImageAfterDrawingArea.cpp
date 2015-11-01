@@ -30,7 +30,7 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
   // Nothing to do here
 }
 
-void calculateFilterBuffer(const std::vector<std::vector<bool> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
+void calculateFilterBuffer(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
   calculateFilterAdditionBuffer(additionMask);
   calculateFilterRemovalBuffer(removalMask);
 }
@@ -166,7 +166,7 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   return true;
 }
 
-void ImageBeforeDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &mask, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer) {
+void ImageBeforeDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &mask, std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer) {
   guint8 *pixels = image->get_pixels();
   unsigned int channels = image->get_n_channels();
   unsigned int stride = image->get_rowstride();
@@ -191,7 +191,7 @@ void ImageBeforeDrawingArea::calculateFilterRemovalBuffer(const std::vector<std:
   calculateFilterBuffer(mask, filterRemovalBuffer);
 }
 
-void ImageBeforeDrawingArea::addBufferToFilter(const std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
+void ImageBeforeDrawingArea::addBufferToFilter(const std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer, const bool &value) {
   for (unsigned int i = 0; i < filter.size(); ++i) {
     for (unsigned int j = 0; j < filter[i].size(); ++j) {
       for (unsigned int k = 0; k < filter[i][j].size(); ++k) {
