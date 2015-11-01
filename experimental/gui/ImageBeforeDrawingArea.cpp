@@ -297,17 +297,15 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
 }
 
 void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(additionMask, x, y, true);
-  changeValueInMask(removalMask, x, y, false);
+  changeValueInMask(x, y, true);
 }
 
 void ImageBeforeDrawingArea::removeFromMask(const unsigned int &x, const unsigned int &y) {
-  changeValueInMask(additionMask, x, y, false);
-  changeValueInMask(removalMask, x, y, true);
+  changeValueInMask(x, y, false);
 }
 
 // TODO: Smooth behaviour on fast movements - calculate positions inbetween based on movement history
-void ImageBeforeDrawingArea::changeValueInMask(std::vector<std::vector<bool>> &mask, const unsigned int &x, const unsigned int &y, const bool &value) {
+void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsigned int &y, const bool &value) {
   unsigned int brushSize = brushScale->get_value();
   int radius = brushSize / 2;
   unsigned int radiusSquared = radius * radius;
@@ -318,7 +316,8 @@ void ImageBeforeDrawingArea::changeValueInMask(std::vector<std::vector<bool>> &m
         unsigned int currentX = x + i;
         unsigned int currentY = y + j;
         if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
-          mask[currentX][currentY] = value;
+          additionMask[currentX][currentY] = value;
+          removalMask[currentX][currentY] = !value;
           if (currentX < maskMinX) {
             maskMinX = currentX;
           }
