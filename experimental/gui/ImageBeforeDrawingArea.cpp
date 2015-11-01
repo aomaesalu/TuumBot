@@ -264,9 +264,9 @@ bool ImageBeforeDrawingArea::applyMask() { // We only apply addition mask
     for (unsigned int j = 0; j < additionMask[mode][i].size(); ++j) {
       if (i >= maskMinX && i <= maskMaxX && j >= maskMinY && j <= maskMaxY && additionMask[mode][i][j]) {
         guint8 *pixel = pixels + i * channels + j * stride;
-        pixel[0] *= 0.3;
-        pixel[1] *= 0.3;
-        pixel[2] *= 0.3;
+        for (unsigned int k = 0; k < 3; ++k) {
+          pixel[k] = 255 - pixel[k];
+        }
       }
     }
   }
