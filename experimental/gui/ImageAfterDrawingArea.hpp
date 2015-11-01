@@ -24,7 +24,7 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
-    void calculateFilterBuffer(const std::vector<std::vector<bool>&);
+    void calculateFilterBuffer(const std::vector<std::vector<bool>&, const std::vector<std::vector<bool>>&);
     void addBufferToFilter();
 
   protected:
@@ -38,7 +38,8 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     Gtk::Scale *deltaScale;
 
     std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filter;
-    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterBuffer;
+    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterAdditionBuffer;
+    std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> filterRemovalBuffer;
 
     void initialiseProperties();
     void initialiseImage();
@@ -46,14 +47,19 @@ class ImageAfterDrawingArea: public ImageDrawingArea {
     void initialiseFilters();
     void initialiseFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
     void initialiseFilter();
-    void initialiseFilterBuffer();
+    void initialiseFilterAdditionBuffer();
+    void initialiseFilterRemovalBuffer();
 
     void resetFilterMap(std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>>&);
     void resetFilter();
-    void resetFilterBuffer();
+    void resetFilterAdditionBuffer();
+    void resetFilterRemovalBuffer();
 
     bool applyFilter();
     bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+
+    void addAdditionBufferToFilter();
+    void addRemovalBufferToFilter();
 
 };
 
