@@ -30,9 +30,26 @@ ImageAfterDrawingArea::~ImageAfterDrawingArea() {
   // Nothing to do here
 }
 
-void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) {
-  calculateFilterAdditionBuffer(additionMask);
-  calculateFilterRemovalBuffer(removalMask);
+void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &additionMask, const std::vector<std::vector<bool>> &removalMask) { // TODO: Optimise speed
+  resetFilterAdditionBuffer();
+  resetFilterRemovalBuffer();
+
+  guint8 *pixels = image->get_pixels();
+  unsigned int channels = image->get_n_channels();
+  unsigned int stride = image->get_rowstride();
+
+  for (unsigned int i = 0; i < additionMask.size(); ++i) { // We know that the addition mask and the removal mask are the same size
+    for (unsigned int j = 0; j < additionMask[i].size(); ++j) {
+      if (additionMask[i][j]) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+      }
+      if (removalMask[i][j]) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+      }
+    }
+  }
 }
 
 void ImageAfterDrawingArea::addBufferToFilter() { // TODO: Optimise speed (maybe add buffer values to vectors?)
@@ -176,29 +193,4 @@ bool ImageAfterDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo
   Gdk::Cairo::set_source_pixbuf(cairo, filteredImage, 0, 0);
 
   return true;
-}
-
-void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::vector<bool>> &mask, std::map<unsigned int, std::map<unsigned int, std::map<unsigned int, bool>>> &buffer) {
-  guint8 *pixels = image->get_pixels();
-  unsigned int channels = image->get_n_channels();
-  unsigned int stride = image->get_rowstride();
-
-  for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsigned int j = 0; j < mask[i].size(); ++j) {
-      if (mask[i][j]) {
-        guint8 *pixel = pixels + i * channels + j * stride;
-        buffer[pixel[0]][pixel[1]][pixel[2]] = true;
-      }
-    }
-  }
-}
-
-void ImageAfterDrawingArea::calculateFilterAdditionBuffer(const std::vector<std::vector<bool>> &mask) {
-  resetFilterAdditionBuffer();
-  calculateFilterBuffer(mask, filterAdditionBuffer);
-}
-
-void ImageAfterDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::vector<bool>> &mask) {
-  resetFilterRemovalBuffer();
-  calculateFilterBuffer(mask, filterRemovalBuffer);
 }
