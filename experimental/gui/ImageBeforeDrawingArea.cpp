@@ -115,7 +115,7 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
         removingMode = false;
       }
     }
-    mainWindow->sendToFilter(additionMask, removalMask);
+    sendMasksToFilter();
     initialiseMaskBoundaries();
   }
   return true;
@@ -318,6 +318,14 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
         if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
           additionMask[currentX][currentY] = value;
           removalMask[currentX][currentY] = !value;
+          unsigned int linearCoordinate = currentY * 640 + currentX;
+          if (value) {
+            additionMaskList.insert(linearCoordinate);
+            removalMaskList.erase(linearCoordinate);
+          } else {
+            removalMaskList.insert(linearCoordinate);
+            additionMaskList.erase(linearCoordinate);
+          }
           if (currentX < maskMinX) {
             maskMinX = currentX;
           }
@@ -337,4 +345,10 @@ void ImageBeforeDrawingArea::changeValueInMask(const unsigned int &x, const unsi
 
   // Redraw
   queue_draw();
+}
+
+void ImageBeforeDrawingArea::sendMasksToFilter() {
+  //std::sort(additionMaskList.begin(), additionMaskList.end());
+  //std::sort(removalMaskList.begin(), removalMaskList.end());
+  mainWindow->sendToFilter(additionMask, removalMask);
 }
