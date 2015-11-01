@@ -22,7 +22,7 @@
 ImageBeforeDrawingArea::ImageBeforeDrawingArea(MainWindow *mainWindow, Gtk::Scale *brushScale):
   ImageDrawingArea(mainWindow),
   addingMode(false),
-  erasingMode(false)
+  removingMode(false)
 {
   initialiseProperties();
   initialiseImage();
@@ -89,14 +89,14 @@ bool ImageBeforeDrawingArea::on_button_press_event(GdkEventButton *buttonEvent) 
     setMasking();
     initialiseMaskBoundaries();
     if (buttonEvent->button == 1) { // Left mouse button
-      if (!erasingMode) {
+      if (!removingMode) {
         addingMode = true;
         addToMask(buttonEvent->x, buttonEvent->y);
       }
     } else if (buttonEvent->button == 3) { // Right mouse button
       if (!addingMode) {
-        erasingMode = true;
-        eraseFromMask(buttonEvent->x, buttonEvent->y);
+        removingMode = true;
+        removeFromMask(buttonEvent->x, buttonEvent->y);
       }
     }
   }
@@ -110,8 +110,8 @@ bool ImageBeforeDrawingArea::on_button_release_event(GdkEventButton *buttonEvent
         addingMode = false;
       }
     } else if (buttonEvent->button == 3) { // Right mouse button
-      if (erasingMode) {
-        erasingMode = false;
+      if (removingMode) {
+        removingMode = false;
       }
     }
     initialiseMaskBoundaries();
@@ -124,8 +124,8 @@ bool ImageBeforeDrawingArea::on_motion_notify_event(GdkEventMotion *motionEvent)
     return false;
   if (addingMode) {
     addToMask(motionEvent->x, motionEvent->y);
-  } else if (erasingMode) {
-    eraseFromMask(motionEvent->x, motionEvent->y);
+  } else if (removingMode) {
+    removeFromMask(motionEvent->x, motionEvent->y);
   }
   return true;
 }
@@ -184,7 +184,7 @@ void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
 
 void ImageBeforeDrawingArea::initialiseDrawingModes() {
   addingMode = false;
-  erasingMode = false;
+  removingMode = false;
 }
 
 bool ImageBeforeDrawingArea::applyMask() {
@@ -274,7 +274,7 @@ void ImageBeforeDrawingArea::addToMask(const unsigned int &x, const unsigned int
   changeValueInMask(x, y, true);
 }
 
-void ImageBeforeDrawingArea::eraseFromMask(const unsigned int &x, const unsigned int &y) {
+void ImageBeforeDrawingArea::removeFromMask(const unsigned int &x, const unsigned int &y) {
   changeValueInMask(x, y, false);
 }
 
