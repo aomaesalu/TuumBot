@@ -168,18 +168,34 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
 
 void ImageBeforeDrawingArea::calculateFilterAdditionBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterAdditionBuffer();
+
+  guint8 *pixels = filteredImage->get_pixels();
+  unsigned int channels = filteredImage->get_n_channels();
+  unsigned int stride = filteredImage->get_rowstride();
+
   for (unsigned int i = 0; i < mask.size(); ++i) {
-    for (unsgined int j = 0; j < mask[i].size(); ++j) {
-      // TODO
+    for (unsigned int j = 0; j < mask[i].size(); ++j) {
+      if (mask[i][j]) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        filterAdditionBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+      }
     }
   }
 }
 
 void ImageBeforeDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterRemovalBuffer();
+
+  guint8 *pixels = filteredImage->get_pixels();
+  unsigned int channels = filteredImage->get_n_channels();
+  unsigned int stride = filteredImage->get_rowstride();
+
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsgined int j = 0; j < mask[i].size(); ++j) {
-      // TODO
+      if (mask[i][j]) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        filterRemovalBuffer[pixel[0]][pixel[1]][pixel[2]] = true;
+      }
     }
   }
 }
