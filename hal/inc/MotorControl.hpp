@@ -9,18 +9,31 @@
 #ifndef RTX_MOTOR_CONTROL_H
 #define RTX_MOTOR_CONTROL_H
 
+#include <termios.h>
+#include <string>
 #include "MotorDriver.hpp"
+//#include <boost/thread/thread.hpp>
+//#include <boost/date_time/posix_time/posix_time.hpp>
+#include <math.h>
+#include <unistd.h>
 
+#define n_motors 4
+#define wheel_d 79
 
 namespace rtx {
 
-  class MotorDriver {
+  class MotorControl {
     private:
-      MotorDriver* motors;
-      uint8_t n_motors;
+      int serialPort;
+      MotorDriver* motors[n_motors];
 
     public:
-      void init();
+      MotorControl();
+      MotorControl(const char *device, int baudrate);
+      ~MotorControl();
+      void forward(int newSpeed);
+      void turn(int degrees);
+
 
   };
 
