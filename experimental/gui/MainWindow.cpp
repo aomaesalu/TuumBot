@@ -8,8 +8,6 @@
 
 #include "MainWindow.hpp"
 
-#include <iostream>
-
 
 MainWindow::MainWindow():
   imageBeforeArea(this, &brushSizeScale),
@@ -18,6 +16,7 @@ MainWindow::MainWindow():
   masking(false)
 {
   setProperties();
+  initialiseModes();
   construct();
   show_all_children();
 }
@@ -32,6 +31,10 @@ bool MainWindow::isPlaying() const {
 
 bool MainWindow::isMasking() const {
   return masking;
+}
+
+std::vector<std::string> MainWindow::getModes() const {
+  return modes;
 }
 
 void MainWindow::setPlaying(const bool &value) {
@@ -59,6 +62,10 @@ void MainWindow::setProperties() {
   set_resizable(false);
   // Set window border width
   set_border_width(5);
+}
+
+void MainWindow::initialiseModes() { // TODO: Move out of the class
+  modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"};
 }
 
 void MainWindow::construct() {
@@ -132,14 +139,9 @@ void MainWindow::constructImageAfterOptionsBox() {
 void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
   modeChooseLabel.set_text("Mode:");
   parentContainer.add(modeChooseLabel);
-  modeChooseComboBox.append("Ball");
-  modeChooseComboBox.append("Blue goal");
-  modeChooseComboBox.append("Yellow goal");
-  modeChooseComboBox.append("Field");
-  modeChooseComboBox.append("White line");
-  modeChooseComboBox.append("Black line");
-  modeChooseComboBox.append("Checkerboard white");
-  modeChooseComboBox.append("Checkerboard black");
+  for (std::vector<std::string>::iterator mode = modes.begin(); mode != modes.end(); ++mode) {
+    modeChooseComboBox.append(*mode);
+  }
   modeChooseComboBox.set_active(0);
   parentContainer.add(modeChooseComboBox);
 }
