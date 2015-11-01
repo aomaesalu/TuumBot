@@ -78,7 +78,7 @@ void ImageBeforeDrawingArea::setMasking(const bool &value) {
 }
 
 bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-  if (isMasking() && !applyMasks())
+  if (isMasking() && !applyMask())
     return false;
 
   if (!applyBrush())
