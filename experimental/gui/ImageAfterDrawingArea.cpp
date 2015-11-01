@@ -166,7 +166,7 @@ bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cair
   return true;
 }
 
-void ImageBeforeDrawingArea::calculateFilterAdditionBuffer() {
+void ImageBeforeDrawingArea::calculateFilterAdditionBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterAdditionBuffer();
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsgined int j = 0; j < mask[i].size(); ++j) {
@@ -175,7 +175,7 @@ void ImageBeforeDrawingArea::calculateFilterAdditionBuffer() {
   }
 }
 
-void ImageBeforeDrawingArea::calculateFilterRemovalBuffer() {
+void ImageBeforeDrawingArea::calculateFilterRemovalBuffer(const std::vector<std::vector<bool>> &mask) {
   resetFilterRemovalBuffer();
   for (unsigned int i = 0; i < mask.size(); ++i) {
     for (unsgined int j = 0; j < mask[i].size(); ++j) {
