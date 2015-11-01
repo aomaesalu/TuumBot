@@ -20,7 +20,7 @@
 class ImageAfterDrawingArea: public ImageDrawingArea {
 
   public:
-    ImageAfterDrawingArea(bool&, Gtk::Scale*);
+    ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
     virtual ~ImageAfterDrawingArea();
 
   protected:

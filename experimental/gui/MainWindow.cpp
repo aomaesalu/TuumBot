@@ -12,8 +12,8 @@
 
 
 MainWindow::MainWindow():
-  imageBeforeArea(playing, &brushSizeScale),
-  imageAfterArea(playing, &deltaChooseScale)
+  imageBeforeArea(this, &brushSizeScale),
+  imageAfterArea(this, &deltaChooseScale)
 {
   setProperties();
   construct();
@@ -32,6 +32,7 @@ void MainWindow::setPlaying(const bool &value) {
   playing = value;
   playButton.set_sensitive(!value);
   stopButton.set_sensitive(value);
+  std::cout << isPlaying() << std::endl; // TODO: Remove
 }
 
 void MainWindow::setProperties() {

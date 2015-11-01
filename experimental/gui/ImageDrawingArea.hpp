@@ -11,11 +11,13 @@
 
 #include <gtkmm/drawingarea.h>
 
+class MainWindow;
+
 
 class ImageDrawingArea: public Gtk::DrawingArea {
 
   public:
-    ImageDrawingArea(bool&);
+    ImageDrawingArea(MainWindow*);
     virtual ~ImageDrawingArea();
 
     bool isPlaying() const;
@@ -25,7 +27,7 @@ class ImageDrawingArea: public Gtk::DrawingArea {
   protected:
     virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) = 0;
 
-    bool playing;
+    MainWindow *mainWindow;
 
 };
 
