@@ -85,6 +85,7 @@ std::string ImageAfterDrawingArea::getOutput() const {
       }
       colorValue = (colorValue << 1) + modeValue;
     }
+    output += colorValue;
   }
   return output;
 }

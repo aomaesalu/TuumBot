@@ -9,6 +9,7 @@
 #include "MainWindow.hpp"
 
 #include <iostream>
+#include <fstream>
 
 
 std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"};
@@ -191,12 +192,23 @@ void MainWindow::constructFileChooseComboBox(Gtk::Container &parentContainer) {
 
 void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
   saveButton.set_label("Save");
+  saveButton.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_saveButton_clicked) );
   parentContainer.add(saveButton);
 }
 
 void MainWindow::constructExitButton(Gtk::Container &parentContainer) {
   exitButton.set_label("Exit");
   parentContainer.add(exitButton);
+}
+
+void MainWindow::saveFilterToFile(const std::string &fileName) {
+  std::ofstream outputFile(fileName);
+  outputFile << imageAfterArea.getOutput();
+  outputFile.close();
+}
+
+void MainWindow::readFilterFromFile(const std::string &filename) {
+  // TODO
 }
 
 void MainWindow::on_playButton_clicked() {
@@ -211,6 +223,26 @@ void MainWindow::on_modeChooseComboBox_changed() {
   mode = modeChooseComboBox.get_active_row_number();
   imageBeforeArea.redraw();
   imageAfterArea.queue_draw();
+}
+
+void MainWindow::on_saveButton_clicked() {
+  Gtk::FileChooserDialog dialog("Please choose where to save the calibrated color file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+  dialog.set_transient_for(*this);
+  // Add buttons
+  dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+  dialog.add_button("_Save", Gtk::RESPONSE_OK);
+  // TODO
+  // Show dialog and wait for response
+  int result = dialog.run();
+  // Handle response
+  if (result == Gtk::RESPONSE_OK) {
+    std::cout << "Save clicked" << std::endl;
+    saveFilterToFile(dialog.get_filename());
+  } else if (result == Gtk::RESPONSE_CANCEL) {
+    std::cout << "Cancel clicked" << std::endl;
+  } else {
+    std::cout << "Unexpected button clicked." << std::endl;
+  }
 }
 
 // TODO: Spacebar key event to play or stop video
