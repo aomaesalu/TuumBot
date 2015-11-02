@@ -45,6 +45,7 @@ INCLUDE_DIRS += $(MODULE_PATH)/libraries
 #FIXME:
 INCLUDE_DIRS += $(MODULE_PATH)/libraries/system
 CPPSRC += $(MODULE_PATH)/libraries/system/tuum_visioning.cpp
+CPPSRC += $(MODULE_PATH)/libraries/system/tuum_localization.cpp
 
 CPPFLAGS += -std=gnu++11
 
