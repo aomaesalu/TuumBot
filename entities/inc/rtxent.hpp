@@ -9,6 +9,8 @@
 #ifndef RTXENTITIES_H_
 #define RTXENTITIES_H_
 
+#include "Ball.hpp"
+#include "Goal.hpp"
 #include "Robot.hpp"
 #include "Field.hpp"
 
