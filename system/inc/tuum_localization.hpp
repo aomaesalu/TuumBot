@@ -17,6 +17,8 @@ namespace rtx { namespace Localization {
 
   void testSequence();
 
+  Vec2i getPosition();
+
 }}
 
 #endif // RTX_SYS_LOC_H
