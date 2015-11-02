@@ -6,4 +6,4 @@
  * @version 0.1
  */
 
-#include "OCVCamera.hpp"
+#include "VirtualCamera.hpp"
