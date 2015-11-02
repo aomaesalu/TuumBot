@@ -19,6 +19,7 @@
 
 #define n_motors 4
 #define wheel_d 79
+#define baudrate 19200
 
 namespace rtx {
 
@@ -29,10 +30,12 @@ namespace rtx {
 
     public:
       MotorControl();
-      MotorControl(const char *device, int baudrate);
       ~MotorControl();
+      void init();
       void forward(int newSpeed);
       void turn(int degrees);
+      void turnsimple(int speed);
+      void OmniDrive(float speed, float angle, float rot);
 
 
   };

@@ -9,12 +9,13 @@
 #define HAL_HARDWARE_H
 
 #include "CameraDevice.hpp"
+#include "MotorControl.hpp"
 
 namespace rtx { namespace hal {
 
   class Hardware {
     private:
-      int m_motorControl;
+      MotorControl m_motorControl;
 
       CameraDevice* m_frontCamera;
       CameraDevice* m_backCamera;
