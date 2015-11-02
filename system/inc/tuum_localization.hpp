@@ -15,6 +15,8 @@ namespace rtx { namespace Localization {
   void setup();
   void process();
 
+  void testSequence();
+
 }}
 
 #endif // RTX_SYS_LOC_H

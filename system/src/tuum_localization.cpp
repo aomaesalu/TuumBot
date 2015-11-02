@@ -17,8 +17,6 @@ namespace rtx { namespace Localization {
   SystemState state_estimate;
   ParticleFilter particleFilter;
 
-  LandmarkSet demoLandmarks;
-
   void demo_measurements(LandmarkSet& landmarks, int x, int y) {
     double d;
     for(auto & lm : landmarks) {
@@ -34,6 +32,19 @@ namespace rtx { namespace Localization {
     srand(static_cast<unsigned>(time(0)));
 
     particleFilter.init(1000, 0, 100, 0, 100);
+  }
+
+  void process() {
+    // Localize through goals and features from 'Visioning' system
+    /*particleFilter.update(MotionVec mvec);
+    particleFilter.sense(Visioning::features);
+    particleFilter.sense(Visioning::goals);
+    particleFilter.filter();
+    state_estimate = particleFilter.evaluate();*/
+  }
+
+  void testSequence() {
+    LandmarkSet demoLandmarks;
 
     demoLandmarks.push_back(Landmark(20, 20));
     demoLandmarks.push_back(Landmark(80, 80));
@@ -91,15 +102,6 @@ namespace rtx { namespace Localization {
       printf("\033[1;31mMean error: %g\033[0m\n\n", particleFilter.calcError(sim));
     }
     //particleFilter.printParticleInfo();
-  }
-
-  void process() {
-    // Localize through goals and features from 'Visioning' system
-    /*particleFilter.update(MotionVec mvec);
-    particleFilter.sense(Visioning::features);
-    particleFilter.sense(Visioning::goals);
-    particleFilter.filter();
-    state_estimate = particleFilter.evaluate();*/
   }
 
 };};
