@@ -7,7 +7,14 @@ MotorControl::MotorControl(){
 
 }
 
-MotorControl::MotorControl(const char *device, int baudrate){
+MotorControl::~MotorControl(){
+
+  close(serialPort);
+}
+
+void MotorControl::init(){
+  int motorids[4] = {5,6,7,8};
+  const char* device = "/dev/ttyUSB0";
   serialPort=open(device, O_RDWR | O_NOCTTY | O_NDELAY); //open port
 
   struct termios portcfg; // struct for settings
@@ -42,13 +49,8 @@ MotorControl::MotorControl(const char *device, int baudrate){
   tcflush(serialPort, TCIOFLUSH);
 
   for(int i=1; i < (n_motors+1); i++) {
-    motors[i] = new MotorDriver((i+4), serialPort);
+    motors[i] = new MotorDriver(motorids[i-1], serialPort);
   }
-}
-
-MotorControl::~MotorControl(){
-
-  close(serialPort);
 }
 
 void MotorControl::forward(int newSpeed){
@@ -81,4 +83,15 @@ void MotorControl::turn(int degrees){
     motors[i]->stop();
   }
   std::cout << "Stopped" << std::endl;
+}
+
+void MotorControl::turnsimple(int speed) {
+  for (int i=1; i < (n_motors+1); i++){
+    motors[i]->setSpeed(speed);
+    usleep(100);
+  }
+}
+
+void MotorControl::OmniDrive(float speed, float angle, float rot){
+  
 }

@@ -18,6 +18,10 @@ namespace rtx { namespace hal {
 
   void Hardware::init() {
     printf("[Hardware::init]Loading hardware...\n");
+    m_motorControl.init();
+    m_motorControl.forward(10);
+    usleep(2000000);
+    m_motorControl.OmniDrive(10, 0, 0);
   }
 
   CameraDevice* Hardware::getFrontCamera() {
