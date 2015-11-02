@@ -4,4 +4,6 @@
 
 #include "loc_core.hpp"
 
+#include "particlef.hpp"
+
 #endif
