@@ -1,10 +1,10 @@
 
 #include <random>
 
+#include "rtxc.h"
+
 #ifndef RTX_FUTURE_H
 #define RTX_FUTURE_H
-
-#define PI 3.14159265
 
 // TODO: these belong in loc module? or create dedicated system module?
 namespace rtx {
@@ -53,6 +53,19 @@ namespace rtx {
 
   typedef Vec2D<double> Vec2f;
   typedef Vec3D<double> Vec3f;
+};
+
+namespace vis {
+
+  class Feature {
+    private:
+      int m_placeholder;
+    public:
+      Feature() {
+
+      }
+  };
+
 };
 
 #endif // RTX_FUTURE_H

@@ -1,23 +1,5 @@
-/**
- * Tuum
- * Robotex 2015
- * University of Tartu
- * Team:
- *   Kristjan Kanarbik
- *   Meelik Kiik
- *   Ants-Oskar Mäesalu
- *   Mart Müllerbeck
- *   Kaur Viiklaid
- *   Indrek Virro
- *   Mihkel Väljaots
-
- * Mathematical constants header
- * Contributors:
- *   Ants-Oskar Mäesalu
- */
-
-#ifndef PHYSICAL_CONSTANTS_H
-#define PHYSICAL_CONSTANTS_H
+#ifndef RTX_CONSTANTS_H
+#define RTX_CONSTANTS_H
 
 // Physical constants in millimeters
 #define FIELD_WIDTH 3100                // Football field width
@@ -39,18 +21,13 @@
 #define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width         // Unused
 #define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
 
+
 // Implementation-specific physical constants in millimeters
 #define ROBOT_RADIUS 350                // Our robot's radius
 #define ROBOT_INITIAL_POSITION_X -1     // Our robot's initial position x-coordinate
 #define ROBOT_INITIAL_POSITION_Y -1     // Out robot's initial position y-coordinate
 
-#endif // PHYSICAL_CONSTANTS_H
-
-//FIXME:
-
-#ifndef MATHEMATICAL_CONSTANTS_H
-#define MATHEMATICAL_CONSTANTS_H
 
 #define PI 3.1415926536
 
-#endif // MATHEMATICAL_CONSTANTS_H
+#endif // RTX_CONSTANTS_H
