@@ -21,6 +21,7 @@ int main() {
   // Initialize system modules
   Visioning::setup();
   Localization::setup();
+  Motion::setup();
 
   bool running = true;
   while(running) {
@@ -28,6 +29,7 @@ int main() {
 
     Visioning::process();
     Localization::process();
+    Motion::process();
   }
 
   return 0;

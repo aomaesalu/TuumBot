@@ -15,4 +15,4 @@
 #include "tuum_localization.hpp"
 #include "tuum_motion.hpp"
 
-#endif /* APPLICATION_H */
+#endif // APPLICATION_H
