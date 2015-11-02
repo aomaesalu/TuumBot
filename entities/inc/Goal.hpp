@@ -9,7 +9,7 @@
 #ifndef GOAL_H
 #define GOAL_H
 
-#include "constants.h"
+#include "rtxc.h"
 
 #include "Rectangle.hpp"
 #include "Point2D.hpp"

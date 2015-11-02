@@ -4,8 +4,7 @@ SYSTEM_MODULE_PATH=.
 BUILD_PATH_EXT = $(BUILD_TARGET_PLATFORM)
 
 
-DEPENDENCIES = loc
-LIB_DEPS += $(LOC_LIB_DEP)
+DEPENDENCIES = loc hal entities geometry rtxmath
 TARGET_TYPE = a
 
 

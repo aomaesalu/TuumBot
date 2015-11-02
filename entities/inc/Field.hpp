@@ -9,7 +9,8 @@
 #ifndef FIELD_H_
 #define FIELD_H_
 
-#include "constants.h"
+#include "rtxc.h"
+
 #include "Rectangle.hpp"
 
 #include "Goal.hpp"

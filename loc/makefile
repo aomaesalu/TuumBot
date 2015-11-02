@@ -1,11 +1,10 @@
 
 MODULE=loc
-LZN_MODULE_PATH=.
-
-# Target this makefile is building.
-TARGET_TYPE = a
+LOC_MODULE_PATH=.
 BUILD_PATH_EXT = $(BUILD_TARGET_PLATFORM)
 
-DEPENDENCIES =
+DEPENDENCIES = rtxmath
+TARGET_TYPE = a
+
 
 include ../build/tlm.mk
