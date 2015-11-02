@@ -8,7 +8,7 @@
 #include "rtxhal.hpp"
 #include "tuum_visioning.hpp"
 
-using namespace hal;
+using namespace rtx::hal;
 
 namespace rtx { namespace Visioning {
 
