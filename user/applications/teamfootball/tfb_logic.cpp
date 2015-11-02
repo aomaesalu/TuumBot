@@ -27,7 +27,6 @@ namespace rtx { namespace Logic {
         // Motion::isTargetAchieved()
         logicState = LS_PASSIVE;
         break;
-
       case LS_PASSIVE:
         break;
       case LS_BALL_LOCATE:
