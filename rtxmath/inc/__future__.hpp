@@ -19,16 +19,21 @@ namespace rtx {
 
 
   struct Timer {
-    uint32_t start;
+    uint32_t start_at;
     uint32_t period;
-    uint32_t _end;
+    uint32_t _end_at;
 
-    void set() {
-      _end = start + period;
+    void start() {
+      start_at = 0; // Replace with current time
+      _end_at = start_at + period;
+    }
+
+    void setPeriod(uint32_t p) {
+      period = p;
     }
 
     bool isTime() {
-      return _end > 0; // Replace '0' with some 'getTime' function
+      return 0 > _end_at; // Replace with current time
     }
 
   };
@@ -41,11 +46,29 @@ namespace rtx {
   template<typename T>
   struct Vec2D {
     T x; T y;
+
+    double distanceTo(Vec2D<T> t) {
+      return distanceTo(t.x, t.y);
+    }
+
+    double distanceTo(T _x, T _y) {
+      return sqrt(pow(x - _x, 2) + pow(y - _y, 2));
+    }
   };
 
   template<typename T>
   struct Vec3D {
     T x; T y; T z;
+  };
+
+  template<typename A, typename B, typename C>
+  struct Vec3 {
+    A x; B y; C z;
+  };
+
+  template<typename A, typename B, typename C>
+  struct Vec4 {
+    A x; B y; C z; C a;
   };
 
   typedef Vec2D<int> Vec2i;
