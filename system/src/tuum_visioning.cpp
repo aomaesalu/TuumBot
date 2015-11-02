@@ -54,3 +54,5 @@ namespace rtx { namespace Visioning {
   }
 
 }}
+
+#endif // RTX_SYS_VIS_H

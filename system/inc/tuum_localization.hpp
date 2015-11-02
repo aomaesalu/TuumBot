@@ -18,7 +18,6 @@ namespace rtx { namespace Localization {
   void testSequence();
 
   Transform getTransform();
-
 }}
 
 #endif // RTX_SYS_LOC_H
