@@ -35,8 +35,11 @@ namespace rtx {
       void forward(int newSpeed);
       void turn(int degrees);
       void turnsimple(int speed);
-      void OmniDrive(float speed, float angle, float rot);
+      void OmniDrive(double speed, double angle, double rot);
 
+      void Move(double, double, double);
+
+      void testSequence();
 
   };
 

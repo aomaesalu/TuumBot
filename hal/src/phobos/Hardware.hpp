@@ -29,7 +29,7 @@ namespace rtx { namespace hal {
 
       CameraDevice* getFrontCamera();
       CameraDevice* getBackCamera();
-      int* getMotorControl();
+      MotorControl* getMotorControl();
 
       bool isBallInDribbler();
 

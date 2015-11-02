@@ -1,5 +1,6 @@
 #include "MotorControl.hpp"
 #include <iostream>
+#include <cmath>
 
 using namespace rtx;
 
@@ -61,16 +62,17 @@ void MotorControl::forward(int newSpeed){
     else {
       motors[i]->setSpeed(newSpeed);
     }
+    usleep(1000);
   }
 }
 
 void MotorControl::turn(int degrees){
-  float wheel_perim = M_PI * wheel_d;
+  double wheel_perim = M_PI * wheel_d;
   int speed = 15;
-  float cyc = (62.5 / (18.75 * 64)) * 15;
-  float wheelspeed = wheel_perim * cyc; //mm/s
-  float time_full_ms = (254 / wheelspeed) * 1000;
-  float time_deg = time_full_ms / 360;
+  double cyc = (62.5 / (18.75 * 64)) * 15;
+  double wheelspeed = wheel_perim * cyc; //mm/s
+  double time_full_ms = (254 / wheelspeed) * 1000;
+  double time_deg = time_full_ms / 360;
   int turntime = time_deg * degrees;
 
   for(int i=1; i < (n_motors+1); i++) {
@@ -92,6 +94,64 @@ void MotorControl::turnsimple(int speed) {
   }
 }
 
-void MotorControl::OmniDrive(float speed, float angle, float rot){
+void MotorControl::OmniDrive(double speed, double angle, double rot){
+  int spd1 = speed * sin(angle - M_PI / 4.0) + rot;
+  int spd2 = speed * -sin(angle + M_PI / 4.0) + rot;
+  int spd3 = speed * -sin(angle - M_PI / 4.0) + rot;
+  int spd4 = speed * sin(angle + M_PI / 4.0) + rot;
   
+  int speeds[4] = {spd1, spd2, spd3, spd4};
+  for (int i=1; i < (n_motors+1); i++){
+    motors[i]->setSpeed(speeds[i-1]);
+    usleep(1000);
+  }
+}
+
+void MotorControl::Move(double x, double y, double db) {
+  double spd, a;
+  if(x != 0 || y != 0) {
+    spd = sqrt(pow(x, 2) + pow(y, 2));
+    a = atan(y / x);
+  } else {
+    spd = 0.0;
+    a = 0.0;
+  }
+
+
+  double v_rot;
+  if(db == 0) v_rot = 0;
+  else v_rot = M_PI * spd / (2*db);
+
+  if(x < 0 || y < 0) spd = spd * -1;
+  printf("%g, %g, %g => ", x, y, db);
+  printf("%g, %g, %g\n", spd, a, v_rot);
+
+  OmniDrive(spd, a, v_rot);
+}
+
+void MotorControl::testSequence() {
+  double x, y, db, S = 20;
+
+  x = 0.0; y = 0.0; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+
+  x = 1.0; y = 0.0; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+  x = 0.5; y = 0.5; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+  x = -1.0; y = 0.0; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+  x = -0.5; y = -0.5; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+
+  x = 0.0; y = 0.0; db = 0.0;
+  Move(x*S, y*S, db);
+  usleep(1000 * 1000);
+
+
 }
