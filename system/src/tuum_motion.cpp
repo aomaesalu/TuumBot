@@ -1,4 +1,10 @@
-
+/** @file tuum_motion.cpp
+ *  Motion system implementation.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 1. November 2015
+ */
 #include "rtxhal.hpp"
 #include "MotorControl.hpp"
 

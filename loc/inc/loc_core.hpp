@@ -1,3 +1,10 @@
+/** @file loc_core.hpp
+ *  Core localization functions.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 24. October 2015
+ */
 
 #include <cstdlib>
 #include <vector>

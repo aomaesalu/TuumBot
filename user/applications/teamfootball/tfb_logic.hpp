@@ -1,4 +1,10 @@
-
+/** @file tfb_logic.hpp
+ *  Team football logic module.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 2. November 2015
+ */
 
 #ifndef RTX_TFB_LOGIC_H
 #define RTX_TFB_LOGIC_H

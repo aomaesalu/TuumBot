@@ -1,3 +1,10 @@
+/** @file particlef.hpp
+ *  Particle filter functions implementation.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 24. October 2015
+ */
 
 #include <iostream>
 

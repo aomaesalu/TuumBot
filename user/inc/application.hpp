@@ -1,3 +1,11 @@
+/** @file application.hpp
+ *  Consolidated application systems header.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 2. November 2015
+ */
+
 #ifndef APPLICATION_H
 #define APPLICATION_H
 

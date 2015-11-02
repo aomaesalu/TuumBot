@@ -1,3 +1,10 @@
+/** @file loc_core.cpp
+ *  Localization core functions implementation.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 24. October 2015
+ */
 
 #include "loc_core.hpp"
 

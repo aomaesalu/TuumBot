@@ -1,3 +1,10 @@
+/** @file particlef.hpp
+ *  Particle filter declaration.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 24. October 2015
+ */
 
 #ifndef RTX_LOC_PARTICLE_FILTER_H
 #define RTX_LOC_PARTICLE_FILTER_H

@@ -1,3 +1,10 @@
+/** @file tfb_logic.cpp
+ *  Team football logic module implementation.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 2. November 2015
+ */
 
 #include "tfb_logic.hpp"
 

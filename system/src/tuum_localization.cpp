@@ -1,8 +1,9 @@
 /** @file tuum_localization.cpp
- *  Localization system module implementation.
+ *  Localization system implementation.
  *
  *  @authors Meelik Kiik
  *  @version 0.1
+ *  @date 1. November 2015
  */
 
 #include <cstdlib>

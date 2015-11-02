@@ -1,3 +1,11 @@
+/** @file application.cpp
+ *  Team football application entry module.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 02. November 2015
+ */
+
 #include <iostream>
 
 #include "application.hpp"

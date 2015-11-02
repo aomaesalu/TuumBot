@@ -1,8 +1,9 @@
 /** @file tuum_vision.cpp
- *  Visioning interface implementation.
+ *  Vision system implementation.
  *
  *  @authors Meelik Kiik
  *  @version 0.1
+ *  @date 1. November 2015
  */
 
 #include "rtxhal.hpp"
