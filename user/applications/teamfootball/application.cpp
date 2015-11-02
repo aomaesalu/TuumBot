@@ -15,6 +15,7 @@ int main() {
   // Initialize system modules
   Visioning::setup();
   Localization::setup();
+  Motion::setup();
 
   Logic::setup();
 
@@ -24,6 +25,7 @@ int main() {
 
     Visioning::process();
     Localization::process();
+    Motion::process();
 
     Logic::process();
   }
