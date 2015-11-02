@@ -12,10 +12,10 @@ using namespace rtx::hal;
 
 namespace rtx { namespace Visioning {
 
-  extern FeatureSet features;
-  extern BallSet balls;
-  extern RobotSet robots;
-  extern GoalSet goals;
+  FeatureSet features;
+  BallSet balls;
+  RobotSet robots;
+  GoalSet goals;
 
   void setup() {
     CameraDevice* cam = hal::hw.getFrontCamera();
