@@ -32,6 +32,10 @@ namespace rtx { namespace Localization {
     srand(static_cast<unsigned>(time(0)));
 
     particleFilter.init(1000, 0, 100, 0, 100);
+
+    printf("\033[1;32m");
+    printf("[Localization::setup()]Ready.");
+    printf("\033[0m\n");
   }
 
   void process() {

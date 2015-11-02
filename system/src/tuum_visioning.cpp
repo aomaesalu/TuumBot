@@ -19,6 +19,10 @@ namespace rtx { namespace Visioning {
 
   void setup() {
     CameraDevice* cam = hal::hw.getFrontCamera();
+
+    printf("\033[1;32m");
+    printf("[Visioning::setup()]Ready.");
+    printf("\033[0m\n");
   }
 
   void process() {
