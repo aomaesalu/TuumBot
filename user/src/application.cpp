@@ -13,7 +13,7 @@ using namespace std;
 using namespace rtx;
 
 int main() {
-  printf("main(): Default user application.\n");
+  printf("main(): Default tuum system application.\n");
 
   // Initialize hardware
   rtx::hal::setup();

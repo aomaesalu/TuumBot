@@ -1,3 +1,11 @@
+/** @file __future__.hpp
+ *  Contains funcionalities that are yet to be
+ *  properly implemented in a module but are required.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 24. October 2015
+ */
 
 #include <random>
 
