@@ -16,7 +16,7 @@
 #include <glibmm/refptr.h>
 #include <glibmm/fileutils.h>
 
-#include <iostream> # TODO: Remove
+#include <iostream> // TODO: Remove
 
 
 namespace rtx {
