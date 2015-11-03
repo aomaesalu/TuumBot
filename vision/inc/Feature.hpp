@@ -10,6 +10,7 @@
 #define RTX_VISION_FEATURE_H
 
 #include "Point2D.hpp"
+
 #include <utility>
 
 

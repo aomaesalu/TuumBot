@@ -84,4 +84,4 @@ namespace rtx {
     return type == BALL || type == ROBOT;
   }
 
-}
+};
