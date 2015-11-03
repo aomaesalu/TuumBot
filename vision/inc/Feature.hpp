@@ -20,7 +20,7 @@ namespace rtx {
     GOAL,
     BALL,
     ROBOT
-  }
+  };
 
   class Feature {
 
@@ -52,8 +52,8 @@ namespace rtx {
       double angle;
       FeatureType type;
 
-  }
+  };
 
-}
+};
 
 #endif // RTX_VISION_FEATURE_H
