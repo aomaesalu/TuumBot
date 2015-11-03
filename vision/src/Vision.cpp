@@ -7,9 +7,6 @@
  */
 
 #include "Vision.hpp"
-//#include "Feature.hpp"
-
-#include <vector>
 
 
 namespace rtx {
@@ -92,19 +89,19 @@ namespace rtx {
     // TODO
   }
 
-  void updateStaticFeatures() {
+  void Vision::updateStaticFeatures() {
     emptyVector(staticFeatures);
     staticFeatures.insert(features.end(), corners.begin(), corners.end());
     staticFeatures.insert(features.end, goals.begin(), goals.end());
   }
 
-  void updateMovableFeatures() {
+  void Vision::updateMovableFeatures() {
     emptyVector(movableFeatures);
     staticFeatures.insert(features.end(), balls.begin(), balls.end());
     staticFeatures.insert(features.end, robots.begin(), robots.end());
   }
 
-  void updateAllFeatures() {
+  void Vision::updateAllFeatures() {
     emptyVector(allFeatures);
     staticFeatures.insert(features.end(), staticFeatures.begin(),
                           staticFeatures.end());
@@ -112,7 +109,7 @@ namespace rtx {
                           movableFeatures.end());
   }
 
-  void updateFeatures() {
+  void Vision::updateFeatures() {
     updateStaticFeatures();
     updateMovableFeatures();
     updateAllFeatures();
