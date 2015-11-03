@@ -15,7 +15,7 @@ CPPSRC += $(call target_files,src/,*.cpp)
 # ASM source files included in this build.
 ASRC +=
 
-CPPFLAGS += -std=gnu++14
+CPPFLAGS += -std=gnu++11
 
 BUILTINS_EXCLUDE =
 CFLAGS += $(addprefix -fno-builtin-,$(BUILTINS_EXCLUDE))
