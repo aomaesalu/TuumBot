@@ -52,7 +52,7 @@ namespace rtx {
     this->distance = distance;
   }
 
-  void Feature::setAngle(const unsigned int &angle) {
+  void Feature::setAngle(const double &angle) {
     this->angle = angle;
   }
 
