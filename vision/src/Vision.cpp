@@ -91,21 +91,21 @@ namespace rtx {
 
   void Vision::updateStaticFeatures() {
     emptyVector(staticFeatures);
-    staticFeatures.insert(features.end(), corners.begin(), corners.end());
-    staticFeatures.insert(features.end, goals.begin(), goals.end());
+    staticFeatures.insert(staticFeatures.end(), corners.begin(), corners.end());
+    staticFeatures.insert(staticFeatures.end(), goals.begin(), goals.end());
   }
 
   void Vision::updateMovableFeatures() {
     emptyVector(movableFeatures);
-    staticFeatures.insert(features.end(), balls.begin(), balls.end());
-    staticFeatures.insert(features.end, robots.begin(), robots.end());
+    movableFeatures.insert(movableFeatures.end(), balls.begin(), balls.end());
+    movableFeatures.insert(movableFeatures.end(), robots.begin(), robots.end());
   }
 
   void Vision::updateAllFeatures() {
     emptyVector(allFeatures);
-    staticFeatures.insert(features.end(), staticFeatures.begin(),
+    allFeatures.insert(allFeatures.end(), staticFeatures.begin(),
                           staticFeatures.end());
-    staticFeatures.insert(features.end, movableFeatures.begin(),
+    allFeatures.insert(allFeatures.end(), movableFeatures.begin(),
                           movableFeatures.end());
   }
 
