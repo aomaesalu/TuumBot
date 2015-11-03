@@ -33,7 +33,7 @@ namespace rtx {
   }
 
   std::pair<unsigned int, double> Feature::getDeltaVector() const {
-    return std::make_pair<unsigned int, double>(distance, angle);
+    return std::pair<unsigned int, double>(distance, angle);
   }
 
   unsigned int Feature::getDistance() const {
