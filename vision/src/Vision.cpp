@@ -6,7 +6,7 @@
  * @version 0.1
  */
 
-#include "vision.hpp"
+#include "Vision.hpp"
 
 
 void emptyVector(std::vector<Feature*> &vector) {
