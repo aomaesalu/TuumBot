@@ -8,13 +8,13 @@
 
 #include "MainWindow.hpp"
 
-#include <iostream> # TODO: Remove
+#include <iostream> // TODO: Remove
 #include <fstream>
 
 
 namespace rtx {
 
-  std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; # TODO: Read from file
+  std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
 
   MainWindow::MainWindow():
     imageBeforeArea(this, &brushSizeScale),
