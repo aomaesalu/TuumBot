@@ -27,11 +27,12 @@ namespace rtx { namespace Motion {
   int setTarget(Vec3i target);
   void setSpeed(int v);
 
-  void setType(MotionType mt);
+  void setBehaviour(MotionType mt);
 
   double targetDistance();
   double targetAngle();
-  bool targetAchieved();
+
+  bool isTargetAchieved();
   bool orientationAchieved();
 
 }}

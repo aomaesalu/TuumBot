@@ -15,8 +15,56 @@
 namespace rtx { namespace Motion {
 
   MotionType motionType;
+
   Vec3i motionGoal;
-  Vec3<int, double, double> velocityData; // (v, direction, rotSpeed)
+  bool motionInProgress;
+  bool targetAchieved;
+
+  struct MotionData {
+    int baseVelocity;
+    double vx; double vy;
+    double angleDelta; // angleDelta = M_PI*db; 0 < db < 2;
+
+    double getHeading() {
+      if( vx == 0 && vy != 0) return M_PI / 2 * (vy / abs(vy));
+      else if( vy == 0 && vx != 0) return M_PI * (vx / abs(vx));
+      else if( vy == 0 && vx == 0) return 0.0;
+      return atan(vy / vx);
+    }
+
+    int getVelocity() {
+      return (int)(baseVelocity * getVelocityFactor());
+    }
+
+    int getRotationSpeed() {
+      if(angleDelta == 0) return 0;
+      double v = (pow(M_PI, 2) * baseVelocity / (4 * angleDelta));
+      return (int)v;
+    }
+
+    double getVelocityFactor() {
+      if(vx == 0.0 && vy == 0.0) return 0.0;
+      double s = vx + vy;
+      if( s > 1) return 1;
+      else if( s < -1 ) return 1;
+      return s;
+    }
+
+    void setDirectionVector(double x, double y) {
+      vx = x; vy = y;
+      normalizeTo(1.0);
+    }
+
+    void normalizeTo(double factor) {
+      double s = (vx + vy) / factor;
+      if(s == 0.0) {
+        vx = 0.0; vy = 0.0;
+      } else {
+        vx /= s; vy /= s;
+      }
+    }
+
+  } motionData;
 
   double targetDistanceCondition = 10;
   double targetOrientationCondition = 0.1;
@@ -25,7 +73,10 @@ namespace rtx { namespace Motion {
 
   void setup() {
     motionType = MOT_NAIVE;
-    velocityData = {0, 0.0, 0.0};
+    motionInProgress = false;
+    targetAchieved = false;
+
+    motionData = {0, 0.0, 0.0, 0.0};
 
     motorCmdTimer.setPeriod(1000);
     motorCmdTimer.start();
@@ -37,41 +88,51 @@ namespace rtx { namespace Motion {
 
   void process() {
     MotorControl* mco = hal::hw.getMotorControl();
-    // mco->setMovement(speed, dir_vec, rotSpeed)
 
     bool dirty = false;
-
-    // Updates velocity data
     switch(motionType) {
       case MOT_SCAN:
-        velocityData.x = 0;
-        velocityData.y = 0.0;
+        if(!motionInProgress) {
+          printf("MOT_SCAN: init\n");
+          motionData.baseVelocity = 15;
+          motionData.setDirectionVector(0.0, 0.0);
+          motionData.angleDelta = 0.25;
+
+          motionInProgress = true;
+          targetAchieved = false;
+          dirty = true;
+        }
         break;
       case MOT_NAIVE:
-        // Correct orientation => velocityData
-        // or
-        // Forward motion => velocityData
+
+        // Correct orientation => motionData
+        // then
+        // Forward motion => motionData
         break;
       case MOT_CURVED:
-        // Curved motion => velocityData
+        // Curved motion => motionData
         break;
       case MOT_STATIC:
-        // Rotational motion => velocityData
+        // Rotational motion => motionData
         break;
       case MOT_COMPLEX_CURVED:
-        // Complex rotational motion => velocityData
+        // Complex rotational motion => motionData
         break;
       default:
-        velocityData = {0, 0.0, 0.0};
+        motionData = {0, 0.0, 0.0};
+        motionInProgress = false;
         dirty = true;
         break;
     }
 
-    if(!targetAchieved() & (motorCmdTimer.isTime() || dirty)) {
-      // mco->setMovement(velocityData.x, velocityData.y, velocityData.z)
-      printf("[rtx::Motion]mco->setMovement(?)\n");
-      motorCmdTimer.start();
+    if(motionInProgress || dirty) {
+      if((!isTargetAchieved() && motorCmdTimer.isTime()) || dirty) {
+        //mco->setMovement(motionData.x, motionData.y, motionData.z, motionData.a);
+        printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getVelocity(), motionData.getHeading(), motionData.getRotationSpeed());
+        motorCmdTimer.start();
+      }
     }
+
   }
 
   int setTarget(Vec3i target) {
@@ -79,11 +140,13 @@ namespace rtx { namespace Motion {
   }
 
   void setSpeed(int v) {
-    velocityData.x = v;
+    motionData.baseVelocity = v;
+    // Recalculate velocity parameters?
   }
 
-  void setType(MotionType mt) {
+  void setBehaviour(MotionType mt) {
     motionType = mt;
+    motionInProgress = false;
   }
 
   double targetDistance() {
@@ -94,8 +157,8 @@ namespace rtx { namespace Motion {
     return 0.0; // TODO: dot(Localization::getOrientation(), motionGoal);
   }
 
-  bool targetAchieved() {
-    return targetDistance() < targetDistanceCondition;
+  bool isTargetAchieved() {
+    return targetAchieved;
   }
 
   bool orientationAchieved() {
