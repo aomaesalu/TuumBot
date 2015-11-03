@@ -11,23 +11,27 @@
 
 #include <gtkmm/drawingarea.h>
 
-class MainWindow;
 
+namespace rtx {
 
-class ImageDrawingArea: public Gtk::DrawingArea {
+  class MainWindow;
 
-  public:
-    ImageDrawingArea(MainWindow*);
-    virtual ~ImageDrawingArea();
+  class ImageDrawingArea: public Gtk::DrawingArea {
 
-    bool isPlaying() const;
+    public:
+      ImageDrawingArea(MainWindow*);
+      virtual ~ImageDrawingArea();
 
-    void setPlaying(const bool& = true);
+      bool isPlaying() const;
 
-  protected:
-    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) = 0;
+      void setPlaying(const bool& = true);
 
-    MainWindow *mainWindow;
+    protected:
+      virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) = 0;
+
+      MainWindow *mainWindow;
+
+  };
 
 };
 

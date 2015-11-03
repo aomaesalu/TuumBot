@@ -13,20 +13,24 @@
 #include <cairomm/context.h>
 
 
-ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
-  mainWindow(mainWindow)
-{
-  // Nothing to do here
-}
+namespace rtx {
 
-ImageDrawingArea::~ImageDrawingArea() {
-  // Nothing to do here
-}
+  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
+    mainWindow(mainWindow)
+  {
+    // Nothing to do here
+  }
 
-bool ImageDrawingArea::isPlaying() const {
-  return mainWindow->isPlaying();
-}
+  ImageDrawingArea::~ImageDrawingArea() {
+    // Nothing to do here
+  }
 
-void ImageDrawingArea::setPlaying(const bool &value) {
-  mainWindow->setPlaying(value);
-}
+  bool ImageDrawingArea::isPlaying() const {
+    return mainWindow->isPlaying();
+  }
+
+  void ImageDrawingArea::setPlaying(const bool &value) {
+    mainWindow->setPlaying(value);
+  }
+
+};

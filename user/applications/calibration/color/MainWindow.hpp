@@ -20,99 +20,103 @@
 #include "ImageAfterDrawingArea.hpp"
 
 
-class MainWindow: public Gtk::Window {
+namespace rtx {
 
-  public:
-    MainWindow();
-    virtual ~MainWindow();
+  class MainWindow: public Gtk::Window {
 
-    bool isPlaying() const;
-    bool isMasking() const;
+    public:
+      MainWindow();
+      virtual ~MainWindow();
 
-    std::vector<std::string> getModes() const;
-    unsigned int getMode() const;
+      bool isPlaying() const;
+      bool isMasking() const;
 
-    void setPlaying(const bool& = true);
-    void setMasking(const bool& = true);
+      std::vector<std::string> getModes() const;
+      unsigned int getMode() const;
 
-    void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
+      void setPlaying(const bool& = true);
+      void setMasking(const bool& = true);
 
-  protected:
-    Gtk::Grid grid;
+      void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
 
-    // Frames and boxes for the layout
-    Gtk::Box drawingButtonsBox;
-    Gtk::Box generalButtonsBox;
-    Gtk::Frame imageBeforeFrame;
-    Gtk::Frame imageAfterFrame;
-    Gtk::Box imageBeforeOptionsBox;
-    Gtk::Box imageAfterOptionsBox;
+    protected:
+      Gtk::Grid grid;
 
-    // Drawing buttons and labels
-    Gtk::Label modeChooseLabel;
-    Gtk::ComboBoxText modeChooseComboBox;
-    Gtk::Label brushSizeLabel;
-    Gtk::Scale brushSizeScale;
-    Gtk::Label deltaChooseLabel;
-    Gtk::Scale deltaChooseScale;
+      // Frames and boxes for the layout
+      Gtk::Box drawingButtonsBox;
+      Gtk::Box generalButtonsBox;
+      Gtk::Frame imageBeforeFrame;
+      Gtk::Frame imageAfterFrame;
+      Gtk::Box imageBeforeOptionsBox;
+      Gtk::Box imageAfterOptionsBox;
 
-    // Video control buttons
-    Gtk::Button playButton;
-    Gtk::Button stopButton;
+      // Drawing buttons and labels
+      Gtk::Label modeChooseLabel;
+      Gtk::ComboBoxText modeChooseComboBox;
+      Gtk::Label brushSizeLabel;
+      Gtk::Scale brushSizeScale;
+      Gtk::Label deltaChooseLabel;
+      Gtk::Scale deltaChooseScale;
 
-    // General buttons
-    Gtk::ComboBoxText fileChooseComboBox;
-    Gtk::Button saveButton;
-    Gtk::Button exitButton;
+      // Video control buttons
+      Gtk::Button playButton;
+      Gtk::Button stopButton;
 
-    // Options buttons
-    Gtk::CheckButton displayMaskBeforeButton;
-    Gtk::CheckButton displayMaskAfterButton;
+      // General buttons
+      Gtk::ComboBoxText fileChooseComboBox;
+      Gtk::Button saveButton;
+      Gtk::Button exitButton;
 
-    // Image drawing areas and contexts
-    ImageBeforeDrawingArea imageBeforeArea;
-    ImageAfterDrawingArea imageAfterArea;
+      // Options buttons
+      Gtk::CheckButton displayMaskBeforeButton;
+      Gtk::CheckButton displayMaskAfterButton;
 
-    // Images
-    Glib::RefPtr<Gdk::Pixbuf> imageBefore;
-    Glib::RefPtr<Gdk::Pixbuf> imageAfter;
+      // Image drawing areas and contexts
+      ImageBeforeDrawingArea imageBeforeArea;
+      ImageAfterDrawingArea imageAfterArea;
 
-  private:
-    bool playing;
-    bool masking;
+      // Images
+      Glib::RefPtr<Gdk::Pixbuf> imageBefore;
+      Glib::RefPtr<Gdk::Pixbuf> imageAfter;
 
-    unsigned int mode;
+    private:
+      bool playing;
+      bool masking;
 
-    void setProperties();
+      unsigned int mode;
 
-    void construct();
-    void constructGrid();
+      void setProperties();
 
-    void constructDrawingButtonsBox();
-    void constructGeneralButtonsBox();
-    void constructImageBeforeFrame();
-    void constructImageAfterFrame();
-    void constructImageBeforeOptionsBox();
-    void constructImageAfterOptionsBox();
+      void construct();
+      void constructGrid();
 
-    void constructModeChooseComboBox(Gtk::Container&);
-    void constructBrushSizeScale(Gtk::Container&);
-    void constructDeltaChooseScale(Gtk::Container&);
+      void constructDrawingButtonsBox();
+      void constructGeneralButtonsBox();
+      void constructImageBeforeFrame();
+      void constructImageAfterFrame();
+      void constructImageBeforeOptionsBox();
+      void constructImageAfterOptionsBox();
 
-    void constructPlayButton(Gtk::Container&);
-    void constructStopButton(Gtk::Container&);
+      void constructModeChooseComboBox(Gtk::Container&);
+      void constructBrushSizeScale(Gtk::Container&);
+      void constructDeltaChooseScale(Gtk::Container&);
 
-    void constructFileChooseComboBox(Gtk::Container&);
-    void constructSaveButton(Gtk::Container&);
-    void constructExitButton(Gtk::Container&);
+      void constructPlayButton(Gtk::Container&);
+      void constructStopButton(Gtk::Container&);
 
-    void saveFilterToFile(const std::string&);
-    void readFilterFromFile(const std::string&);
+      void constructFileChooseComboBox(Gtk::Container&);
+      void constructSaveButton(Gtk::Container&);
+      void constructExitButton(Gtk::Container&);
 
-    void on_playButton_clicked();
-    void on_stopButton_clicked();
-    void on_modeChooseComboBox_changed();
-    void on_saveButton_clicked();
+      void saveFilterToFile(const std::string&);
+      void readFilterFromFile(const std::string&);
+
+      void on_playButton_clicked();
+      void on_stopButton_clicked();
+      void on_modeChooseComboBox_changed();
+      void on_saveButton_clicked();
+
+  };
 
 };
 
