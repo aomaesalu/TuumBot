@@ -18,41 +18,45 @@
 #include "ImageDrawingArea.hpp"
 
 
-class ImageAfterDrawingArea: public ImageDrawingArea {
+namespace rtx {
 
-  public:
-    ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
-    virtual ~ImageAfterDrawingArea();
+  class ImageAfterDrawingArea: public ImageDrawingArea {
 
-    void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
-    void addBufferToFilter();
+    public:
+      ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
+      virtual ~ImageAfterDrawingArea();
 
-    std::string getOutput() const;
+      void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
+      void addBufferToFilter();
 
-  protected:
-    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
-    virtual bool on_scroll_event(GdkEventScroll*);
+      std::string getOutput() const;
 
-  private:
-    Glib::RefPtr<Gdk::Pixbuf> image;
-    Glib::RefPtr<Gdk::Pixbuf> filteredImage;
+    protected:
+      virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
+      virtual bool on_scroll_event(GdkEventScroll*);
 
-    Gtk::Scale *deltaScale;
+    private:
+      Glib::RefPtr<Gdk::Pixbuf> image;
+      Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
-    std::vector<std::set<unsigned int>> filter;
-    std::vector<std::set<unsigned int>> filterAdditionBufferList;
-    std::vector<std::set<unsigned int>> filterRemovalBufferList;
+      Gtk::Scale *deltaScale;
 
-    void initialiseProperties();
-    void initialiseImage();
-    void initialiseDeltaScale(Gtk::Scale*);
-    void initialiseFilters();
+      std::vector<std::set<unsigned int>> filter;
+      std::vector<std::set<unsigned int>> filterAdditionBufferList;
+      std::vector<std::set<unsigned int>> filterRemovalBufferList;
 
-    void resetFilter();
-    void resetFilterBuffers();
+      void initialiseProperties();
+      void initialiseImage();
+      void initialiseDeltaScale(Gtk::Scale*);
+      void initialiseFilters();
 
-    bool applyFilter();
-    bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+      void resetFilter();
+      void resetFilterBuffers();
+
+      bool applyFilter();
+      bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+
+  };
 
 };
 

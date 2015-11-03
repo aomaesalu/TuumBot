@@ -18,77 +18,81 @@
 #include "ImageDrawingArea.hpp"
 
 
-class ImageBeforeDrawingArea: public ImageDrawingArea {
+namespace rtx {
 
-  public:
-    ImageBeforeDrawingArea(MainWindow*, Gtk::Scale*);
-    virtual ~ImageBeforeDrawingArea();
+  class ImageBeforeDrawingArea: public ImageDrawingArea {
 
-    bool isMasking() const;
-    bool areMasksEmpty() const;
-    bool areMasksEmpty(const unsigned int&) const;
-    bool areCurrentMasksEmpty() const;
-    bool isAdditionMaskEmpty(const unsigned int&) const;
-    bool isCurrentAdditionMaskEmpty() const;
-    bool isRemovalMaskEmpty(const unsigned int&) const;
-    bool isCurrentRemovalMaskEmpty() const;
+    public:
+      ImageBeforeDrawingArea(MainWindow*, Gtk::Scale*);
+      virtual ~ImageBeforeDrawingArea();
 
-    void setPlaying(const bool& = true);
-    void setMasking(const bool& = true);
+      bool isMasking() const;
+      bool areMasksEmpty() const;
+      bool areMasksEmpty(const unsigned int&) const;
+      bool areCurrentMasksEmpty() const;
+      bool isAdditionMaskEmpty(const unsigned int&) const;
+      bool isCurrentAdditionMaskEmpty() const;
+      bool isRemovalMaskEmpty(const unsigned int&) const;
+      bool isCurrentRemovalMaskEmpty() const;
 
-    void redraw();
+      void setPlaying(const bool& = true);
+      void setMasking(const bool& = true);
 
-  protected:
-    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
-    virtual bool on_button_press_event(GdkEventButton*);
-    virtual bool on_button_release_event(GdkEventButton*);
-    virtual bool on_motion_notify_event(GdkEventMotion*);
-    virtual bool on_scroll_event(GdkEventScroll*);
+      void redraw();
 
-  private:
-    Glib::RefPtr<Gdk::Pixbuf> image;
-    Glib::RefPtr<Gdk::Pixbuf> maskedImage;
-    Glib::RefPtr<Gdk::Pixbuf> brushedImage;
+    protected:
+      virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
+      virtual bool on_button_press_event(GdkEventButton*);
+      virtual bool on_button_release_event(GdkEventButton*);
+      virtual bool on_motion_notify_event(GdkEventMotion*);
+      virtual bool on_scroll_event(GdkEventScroll*);
 
-    Gtk::Scale *brushScale;
-    std::vector<std::vector<std::vector<bool>>> additionMask;
-    std::vector<std::vector<std::vector<bool>>> removalMask;
-    std::vector<std::set<unsigned int>> additionMaskList;
-    std::vector<std::set<unsigned int>> removalMaskList;
+    private:
+      Glib::RefPtr<Gdk::Pixbuf> image;
+      Glib::RefPtr<Gdk::Pixbuf> maskedImage;
+      Glib::RefPtr<Gdk::Pixbuf> brushedImage;
 
-    unsigned int maskMinX;
-    unsigned int maskMinY;
-    unsigned int maskMaxX;
-    unsigned int maskMaxY;
+      Gtk::Scale *brushScale;
+      std::vector<std::vector<std::vector<bool>>> additionMask;
+      std::vector<std::vector<std::vector<bool>>> removalMask;
+      std::vector<std::set<unsigned int>> additionMaskList;
+      std::vector<std::set<unsigned int>> removalMaskList;
 
-    unsigned int brushX;
-    unsigned int brushY;
+      unsigned int maskMinX;
+      unsigned int maskMinY;
+      unsigned int maskMaxX;
+      unsigned int maskMaxY;
 
-    bool addingMode;
-    bool removingMode;
+      unsigned int brushX;
+      unsigned int brushY;
 
-    void initialiseProperties();
-    void initialiseImage();
-    void initialiseBrush(Gtk::Scale*);
-    void initialiseMasks();
-    void initialiseMaskMatrices();
-    void initialiseMaskLists();
-    void initialiseDrawingModes();
-    void initialiseMaskBoundaries();
-    void maximiseMaskBoundaries();
+      bool addingMode;
+      bool removingMode;
 
-    bool isMaskEmpty(const std::vector<std::vector<bool>>&) const;
+      void initialiseProperties();
+      void initialiseImage();
+      void initialiseBrush(Gtk::Scale*);
+      void initialiseMasks();
+      void initialiseMaskMatrices();
+      void initialiseMaskLists();
+      void initialiseDrawingModes();
+      void initialiseMaskBoundaries();
+      void maximiseMaskBoundaries();
 
-    bool applyMask();
-    bool locateBrush(const unsigned int&, const unsigned int&);
-    bool applyBrush();
-    bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
+      bool isMaskEmpty(const std::vector<std::vector<bool>>&) const;
 
-    void addToMask(const unsigned int&, const unsigned int&);
-    void removeFromMask(const unsigned int&, const unsigned int&);
-    void changeValueInMask(const unsigned int&, const unsigned int&, const bool&);
+      bool applyMask();
+      bool locateBrush(const unsigned int&, const unsigned int&);
+      bool applyBrush();
+      bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
-    void sendMasksToFilter();
+      void addToMask(const unsigned int&, const unsigned int&);
+      void removeFromMask(const unsigned int&, const unsigned int&);
+      void changeValueInMask(const unsigned int&, const unsigned int&, const bool&);
+
+      void sendMasksToFilter();
+
+  };
 
 };
 
