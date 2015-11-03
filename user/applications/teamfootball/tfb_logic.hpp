@@ -19,6 +19,7 @@ namespace rtx { namespace Logic {
   };
 
   enum LogicState {
+    LS_INIT,
     LS_PASSIVE,
     LS_BALL_LOCATE,
     LS_BALL_RETRIEVE,

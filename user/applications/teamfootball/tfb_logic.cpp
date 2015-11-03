@@ -13,11 +13,16 @@ namespace rtx { namespace Logic {
   LogicState logicState;
 
   void setup() {
-    logicState = LS_PASSIVE;
+    logicState = LS_INIT;
   }
 
   void process() {
     switch(logicState) {
+      case LS_INIT:
+        printf("Logic initial state...\n");
+        Motion::setBehaviour(Motion::MOT_SCAN);
+        logicState = LS_PASSIVE;
+        break;
       case LS_PASSIVE:
         break;
       case LS_BALL_LOCATE:
