@@ -1,6 +1,6 @@
 /**
  * @file ImageDrawingArea.cpp
- * Experimental GUI color calibration application "after" image drawing area.
+ * Color calibration application "after" image drawing area.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

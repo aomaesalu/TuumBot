@@ -28,6 +28,9 @@
 *.app
 *.elf
 
+# Dependencies
+.depend
+
 # Certain directories
 bin/*
 obj/*

@@ -1,6 +1,6 @@
 /**
  * @file MainWindow.cpp
- * Experimental GUI application main window.
+ * Color calibration application main window.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1

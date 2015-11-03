@@ -6,14 +6,18 @@
  * @version 0.1
  */
 
-#include <cstdlib>
+#include <gtkmm/application.h>
 
-//using namespace rtx;
+#include "MainWindow.hpp"
+
+using namespace rtx;
 
 
-int main() {
+int main(int argc, char *argv[]) {
+  Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-	// TODO
+  MainWindow window;
 
-	return EXIT_SUCCESS;
+  // Show windows and return when closed
+  return app->run(window);
 }

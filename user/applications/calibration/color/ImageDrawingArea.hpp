@@ -1,6 +1,6 @@
 /**
  * @file ImageDrawingArea.hpp
- * Experimental GUI color calibration application image drawing area.
+ * Color calibration application image drawing area.
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
