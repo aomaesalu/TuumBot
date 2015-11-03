@@ -10,6 +10,7 @@
 #define RTX_VISION_FEATURE_H
 
 #include "Point2D.hpp"
+
 #include <utility>
 
 
@@ -20,7 +21,7 @@ namespace rtx {
     GOAL,
     BALL,
     ROBOT
-  }
+  };
 
   class Feature {
 
@@ -52,8 +53,8 @@ namespace rtx {
       double angle;
       FeatureType type;
 
-  }
+  };
 
-}
+};
 
 #endif // RTX_VISION_FEATURE_H

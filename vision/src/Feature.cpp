@@ -28,60 +28,60 @@ namespace rtx {
     // Nothing to do here
   }
 
-  Feature::~Feature {
+  Feature::~Feature() {
     // Nothing to do here
   }
 
-  std::pair<unsigned int, double> getDeltaVector() const {
-    return std::make_pair<unsigned int, double>(distance, angle);
+  std::pair<unsigned int, double> Feature::getDeltaVector() const {
+    return std::pair<unsigned int, double>(distance, angle);
   }
 
-  unsigned int getDistance() const {
+  unsigned int Feature::getDistance() const {
     return distance;
   }
 
-  double getAngle() const {
+  double Feature::getAngle() const {
     return angle;
   }
 
-  FeatureType getType() const {
+  FeatureType Feature::getType() const {
     return type;
   }
 
-  void setDistance(const unsigned int &distance) {
+  void Feature::setDistance(const unsigned int &distance) {
     this->distance = distance;
   }
 
-  void setAngle(const unsigned int &angle) {
+  void Feature::setAngle(const double &angle) {
     this->angle = angle;
   }
 
-  void setType(const FeatureType &type) {
+  void Feature::setType(const FeatureType &type) {
     this->type = type;
   }
 
-  bool isCorner() const {
+  bool Feature::isCorner() const {
     return type == CORNER;
   }
 
-  bool isGoal() const {
+  bool Feature::isGoal() const {
     return type == GOAL;
   }
 
-  bool isBall() const {
+  bool Feature::isBall() const {
     return type == BALL;
   }
 
-  bool isRobot() const {
+  bool Feature::isRobot() const {
     return type == ROBOT;
   }
 
-  bool isStatic() const {
+  bool Feature::isStatic() const {
     return type == CORNER || type == GOAL;
   }
 
-  bool isMovable() const {
+  bool Feature::isMovable() const {
     return type == BALL || type == ROBOT;
   }
 
-}
+};
