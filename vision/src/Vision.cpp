@@ -7,17 +7,20 @@
  */
 
 #include "Vision.hpp"
+//#include "Feature.hpp"
 
+#include <vector>
 
-void emptyVector(std::vector<Feature*> &vector) {
-  for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
-       ++i) {
-    delete *i;
-  }
-  vector.clear();
-}
 
 namespace rtx {
+
+  void emptyVector(std::vector<Feature*> &vector) {
+    for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
+         ++i) {
+      delete *i;
+    }
+    vector.clear();
+  }
 
   Vision::Vision() {
     // TODO
