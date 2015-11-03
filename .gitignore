@@ -34,3 +34,7 @@ obj/*
 lib/*
 data/*
 build/target/*
+
+# Image files
+*.ppm
+*.png
