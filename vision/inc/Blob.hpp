@@ -20,8 +20,8 @@ namespace rtx {
 
     public:
       Blob(const Blob&);
-      Blob(const std::vector<Point2D*>&);
-      Blob(const std::vector<std::pair<unsigned int, unsigned int>>&);
+      Blob(const std::vector<Point2D*>&, const Color&);
+      Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&);
       ~Blob();
 
       Point2D* getPosition() const;
@@ -32,8 +32,9 @@ namespace rtx {
       unsigned int getBoxArea() const;
       double getDensity() const;
 
-
     private:
+      // TODO: Save a list of points, too, for further analysis?
+      // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
       Point2D *position;
       unsigned int width;
       unsigned int height;
