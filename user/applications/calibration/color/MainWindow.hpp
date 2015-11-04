@@ -6,8 +6,8 @@
  * @version 0.1
  */
 
-#ifndef GUI_MAIN_WINDOW_H
-#define GUI_MAIN_WINDOW_H
+#ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_MAIN_WINDOW_H
+#define RTX_APPLICATIONS_CALIBRATION_COLOR_MAIN_WINDOW_H
 
 #include <vector>
 #include <set>
@@ -79,10 +79,6 @@ namespace rtx {
       ImageBeforeDrawingArea imageBeforeArea;
       ImageAfterDrawingArea imageAfterArea;
 
-      // Images
-      Glib::RefPtr<Gdk::Pixbuf> imageBefore;
-      Glib::RefPtr<Gdk::Pixbuf> imageAfter;
-
     private:
       Camera *camera;
       Frame frame;
@@ -128,4 +124,4 @@ namespace rtx {
 
 };
 
-#endif // GUI_MAIN_WINDOW_H
+#endif // RTX_APPLICATIONS_CALIBRATION_COLOR_MAIN_WINDOW_H
