@@ -34,6 +34,8 @@ namespace rtx {
     size_t          size;     // width * height * 3
   };
 
+  Frame toRGB(const Frame&);
+
   class Camera {
 
   public:

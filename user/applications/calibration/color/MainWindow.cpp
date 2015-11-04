@@ -18,7 +18,7 @@ namespace rtx {
 
   std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
 
-  MainWindow::MainWindow(Camera*):
+  MainWindow::MainWindow(Camera *camera):
     camera(camera),
     imageBeforeArea(this, &brushSizeScale),
     imageAfterArea(this, &deltaChooseScale),
@@ -28,6 +28,7 @@ namespace rtx {
     setProperties();
     construct();
     show_all_children();
+    updateFrame();
   }
 
   MainWindow::~MainWindow() {
@@ -66,6 +67,8 @@ namespace rtx {
 
   void MainWindow::updateFrame() {
     frame = camera->getFrame();
+    imageBeforeArea.updateFrame(&frame);
+    imageAfterArea.updateFrame(&frame);
   }
 
   void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
