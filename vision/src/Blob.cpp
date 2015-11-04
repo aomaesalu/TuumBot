@@ -28,19 +28,19 @@ namespace rtx {
     unsigned int xSum = 0, ySum = 0;
     for (std::vector<Point2D*>::const_iterator i = points.begin(); i != points.end(); ++i) {
       numberOfPoints++;
-      xSum += i->getX();
-      ySum += i->getY();
-      if (i->geX() < minX) {
-        min>X = i->getX();
+      xSum += (*i)->getX();
+      ySum += (*i)->getY();
+      if ((*i)->geX() < minX) {
+        minX = (*i)->getX();
       }
-      if (i->getX() > maxX) {
-        maxX = i->getX();
+      if ((*i)->getX() > maxX) {
+        maxX = (*i)->getX();
       }
-      if (i->getY() < minY) {
-        minY = i->getY();
+      if ((*i)->getY() < minY) {
+        minY = (*i)->getY();
       }
-      if (i->getY() > maxY) {
-        maxY = i->getY();
+      if ((*i)->getY() > maxY) {
+        maxY = (*i)->getY();
       }
     }
     width = maxX - minX + 1;
@@ -58,7 +58,7 @@ namespace rtx {
       xSum += i->first;
       ySum += i->second;
       if (i-first < minX) {
-        min>X = i->first;
+        miX = i->first;
       }
       if (i->first > maxX) {
         maxX = i->first;
