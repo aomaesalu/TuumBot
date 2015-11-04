@@ -39,7 +39,7 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
-      void updateFrame();
+      bool updateFrame();
 
       void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
 
