@@ -16,6 +16,8 @@ LIBS += $(MAKE_DEPENDENCIES)
 
 LIBS += gtkmm-3.0 atkmm-1.6 gdkmm-3.0 giomm-2.4 pangomm-1.4 glibmm-2.4 gtk-3 gdk-3 pangocairo-1.0 pango-1.0 atk-1.0 cairo-gobject gio-2.0 cairomm-1.0 cairo sigc-2.0 gdk_pixbuf-2.0 gobject-2.0 glib-2.0 # FIXME: Libraries added due to gtkmm usage; should be LDLIBS += `pkg-config gtkmm-3.0 --libs`
 
+LIBS += pthread # FIXME: Threading
+
 LIB_DEPS += $(USER_LIB_DEP)  $(VISION_LIB_DEP) $(GEOMETRY_LIB_DEP) $(ENTITIES_LIB_DEP) $(HAL_LIB_DEP)
 
 LIB_DIRS += $(dir $(LIB_DEPS))

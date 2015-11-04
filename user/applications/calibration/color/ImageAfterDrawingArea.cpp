@@ -9,6 +9,7 @@
 #include "ImageAfterDrawingArea.hpp"
 
 #include "MainWindow.hpp"
+#include "cameraConstants.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -39,17 +40,17 @@ namespace rtx {
 
     unsigned int mode = mainWindow->getMode();
 
-    guint8 *pixels = image->get_pixels();
-    unsigned int channels = image->get_n_channels();
-    unsigned int stride = image->get_rowstride();
+    guint8 *pixels = frame->data;
+    unsigned int channels = 3;
+    unsigned int stride = frame->width * channels;
 
     for (std::set<unsigned int>::iterator i = additionMaskList[mode].begin(); i != additionMaskList[mode].end(); ++i) {
-      guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
+      guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
       filterAdditionBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
     }
 
     for (std::set<unsigned int>::iterator i = removalMaskList[mode].begin(); i != removalMaskList[mode].end(); ++i) {
-      guint8 *pixel = pixels + ((*i) % 640) * channels + ((*i) / 640) * stride;
+      guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
       filterRemovalBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
     }
 
@@ -71,6 +72,13 @@ namespace rtx {
     resetFilterBuffers();
 
     // Redraw
+    queue_draw();
+  }
+
+  void ImageAfterDrawingArea::updateFrame(Frame *frame, Frame *rgbFrame) {
+    this->frame = frame;
+    this->rgbFrame = rgbFrame;
+    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame->data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame->width, (int) rgbFrame->height, (int) rgbFrame->width * 3);
     queue_draw();
   }
 
@@ -118,7 +126,7 @@ namespace rtx {
   }
 
   void ImageAfterDrawingArea::initialiseProperties() {
-    set_size_request(640, 480);
+    set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
   }
 
   void ImageAfterDrawingArea::initialiseImage() {
@@ -163,11 +171,16 @@ namespace rtx {
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
+    guint8 *actualPixels = frame->data;
+    unsigned int actualChannels = 3;
+    unsigned int actualStride = frame->width * actualChannels;
+
     // Color pixels
-    for (unsigned int i = 0; i < 640; ++i) {
-      for (unsigned int j = 0; j < 480; ++j) {
+    for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
+      for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
         guint8 *pixel = pixels + i * channels + j * stride;
-        unsigned int pixelCode = pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2];
+        guint8 *actualPixel = actualPixels + i * actualChannels + j * actualStride;
+        unsigned int pixelCode = actualPixel[0] * 256 * 256 + actualPixel[1] * 256 + actualPixel[2];
         if (((filter[mode].find(pixelCode) != filter[mode].end()) && (filterRemovalBufferList[mode].find(pixelCode) == filterRemovalBufferList[mode].end())) || (filterAdditionBufferList[mode].find(pixelCode) != filterAdditionBufferList[mode].end())) {
           pixel[0] *= 0.2;
           pixel[1] *= 0.2;

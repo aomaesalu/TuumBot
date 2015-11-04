@@ -28,6 +28,9 @@
 *.app
 *.elf
 
+# Debug files
+core
+
 # Dependencies
 .depend
 
