@@ -66,7 +66,7 @@ namespace rtx {
     queue_draw();
   }
 
-  bool ImageBeforeDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
+  bool ImageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
     if (isCalculating() && !applyCalculations())
       return false;
 
@@ -78,11 +78,11 @@ namespace rtx {
     return true;
   }
 
-  void ImageBeforeDrawingArea::initialiseProperties() {
+  void ImageDrawingArea::initialiseProperties() {
     set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
   }
 
-  void ImageBeforeDrawingArea::initialiseImage() {
+  void ImageDrawingArea::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
 
     // Show the whole image
@@ -90,7 +90,7 @@ namespace rtx {
       set_size_request(image->get_width(), image->get_height());
   }
 
-  void ImageBeforeDrawingArea::initialiseConstants() {
+  void ImageDrawingArea::initialiseConstants() {
     // TODO
   }
 
@@ -98,12 +98,12 @@ namespace rtx {
     // TODO
   }
 
-  bool ImageBeforeDrawingArea::applyCalculations() {
+  bool ImageDrawingArea::applyCalculations() {
     // TODO
     return true;
   }
 
-  bool ImageBeforeDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
+  bool ImageDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
     if (!filteredImage)
       return false;
 
