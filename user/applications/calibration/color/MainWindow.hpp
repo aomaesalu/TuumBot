@@ -79,10 +79,6 @@ namespace rtx {
       ImageBeforeDrawingArea imageBeforeArea;
       ImageAfterDrawingArea imageAfterArea;
 
-      // Images
-      Glib::RefPtr<Gdk::Pixbuf> imageBefore;
-      Glib::RefPtr<Gdk::Pixbuf> imageAfter;
-
     private:
       Camera *camera;
       Frame frame;
