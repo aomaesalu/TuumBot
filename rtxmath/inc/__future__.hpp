@@ -62,6 +62,22 @@ namespace rtx {
     double distanceTo(T _x, T _y) {
       return sqrt(pow(x - _x, 2) + pow(y - _y, 2));
     }
+
+    double getMagnitude() {
+      return sqrt(pow(x, 2) + pow(y, 2));
+    }
+
+    void rotate(double alpha) {
+      T X = x * cos(alpha) + y * -sin(alpha);
+      T Y = x * sin(alpha) + y * cos(alpha);
+      x = X; y = Y;
+    }
+
+    void normalizeTo(double factor) {
+      if(x == 0.0 && y == 0.0) return;
+      double s = sqrt(pow(x, 2) + pow(y, 2)) / factor;
+      x /= s; y /= s;
+    }
   };
 
   template<typename T>
@@ -84,6 +100,18 @@ namespace rtx {
 
   typedef Vec2D<double> Vec2f;
   typedef Vec3D<double> Vec3f;
+
+  struct Transform {
+    Vec2i p;
+    double o;
+
+    Vec2i getPosition() {
+      return p;
+    }
+
+    int getX() { return p.x; }
+    int getY() { return p.y; }
+  };
 };
 
 namespace vis {
