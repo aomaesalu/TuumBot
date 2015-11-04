@@ -1,5 +1,10 @@
 # TuumBot
 
+## Dependencies
+
+sudo apt-get install libgtkmm-3.0-dev
+
+
 ## Directory guide
 
 #### Low level modules
