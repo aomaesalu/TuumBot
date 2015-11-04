@@ -66,9 +66,11 @@ namespace rtx {
   }
 
   void MainWindow::updateFrame() {
-    frame = camera->getFrame();
-    imageBeforeArea.updateFrame(&frame);
-    imageAfterArea.updateFrame(&frame);
+    if (playing) {
+      frame = camera->getFrame();
+      imageBeforeArea.updateFrame(&frame);
+      imageAfterArea.updateFrame(&frame);
+    }
   }
 
   void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
