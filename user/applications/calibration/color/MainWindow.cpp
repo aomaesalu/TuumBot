@@ -65,14 +65,15 @@ namespace rtx {
     masking = value;
   }
 
-  void MainWindow::updateFrame() {
-    if (playing) {
-      frame = camera->getFrame();
-      rgbFrame = toRGB(frame);
-
-      imageBeforeArea.updateFrame(&frame, &rgbFrame);
-      imageAfterArea.updateFrame(&frame, &rgbFrame);
+  bool MainWindow::updateFrame() {
+    if (!playing) {
+      return false;
     }
+    frame = camera->getFrame();
+    rgbFrame = toRGB(frame);
+    imageBeforeArea.updateFrame(&frame, &rgbFrame);
+    imageAfterArea.updateFrame(&frame, &rgbFrame);
+    return true;
   }
 
   void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
