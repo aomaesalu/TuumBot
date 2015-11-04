@@ -13,8 +13,8 @@
 
 namespace rtx {
 
-  Blob::Blob(const Blob &other)
-    position{new Point2D(other.getPosition())},
+  Blob::Blob(const Blob &other):
+    position{new Point2D(*(other.getPosition()))},
     width{other.getWidth()},
     height{other.getHeight()},
     numberOfPoints{other.getNumberOfPoints()},
@@ -32,7 +32,7 @@ namespace rtx {
       numberOfPoints++;
       xSum += (*i)->getX();
       ySum += (*i)->getY();
-      if ((*i)->geX() < minX) {
+      if ((*i)->getX() < minX) {
         minX = (*i)->getX();
       }
       if ((*i)->getX() > maxX) {
