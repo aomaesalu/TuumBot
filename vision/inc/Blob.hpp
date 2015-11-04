@@ -20,6 +20,7 @@ namespace rtx {
 
     public:
       Blob(const Blob&);
+      Blob(const std::vector<Point2D*>&);
       Blob(const std::vector<std::pair<unsigned int, unsigned int>>&);
       ~Blob();
 
@@ -27,8 +28,9 @@ namespace rtx {
       unsigned int getWidth() const;
       unsigned int getHeight() const;
       unsigned int getNumberOfPoints() const;
-      double getDensity() const;
       Color getColor() const;
+      unsigned int getBoxArea() const;
+      double getDensity() const;
 
 
     private:
