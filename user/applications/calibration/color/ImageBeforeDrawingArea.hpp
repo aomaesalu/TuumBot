@@ -40,7 +40,7 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
-      void updateFrame(Frame*);
+      void updateFrame(Frame*, Frame*);
 
       void redraw();
 
@@ -57,6 +57,7 @@ namespace rtx {
       Glib::RefPtr<Gdk::Pixbuf> brushedImage;
 
       Frame *frame;
+      Frame *rgbFrame;
 
       Gtk::Scale *brushScale;
       std::vector<std::vector<std::vector<bool>>> additionMask;

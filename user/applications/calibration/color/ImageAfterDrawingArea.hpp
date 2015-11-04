@@ -31,7 +31,7 @@ namespace rtx {
       void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
       void addBufferToFilter();
 
-      void updateFrame(Frame*);
+      void updateFrame(Frame*, Frame*);
 
       std::string getOutput() const;
 
@@ -44,6 +44,7 @@ namespace rtx {
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
       Frame *frame;
+      Frame *rgbFrame;
 
       Gtk::Scale *deltaScale;
 

@@ -28,6 +28,8 @@ namespace rtx {
   // Macro to set the memory of a variable to zero
   #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
+  #define CLIP(color) (unsigned char)(((color) > 0xFF) ? 0xff : (((color) < 0) ? 0 : (color)))
+
   static void convertYCbCrtoRGB(const unsigned char *src, unsigned char *dest,
                                  int width, int height)
   {
@@ -36,12 +38,13 @@ namespace rtx {
       for (j = 0; j < width; ++j) {
 
 
-        *dest++ = 1.164 * (src[0] - 16) + 2.018 * (src[1] - 128);
+
+        *dest++ = CLIP(1.164 * (src[0] - 16) + 1.596 * (src[2] - 128));
 
 
-        *dest++ = 1.164 * (src[0] - 16) - 0.813 * (src[2] - 128) - 0.391 * (src[1] - 128);
-
-        *dest++ = 1.164 * (src[0] - 16) + 1.596 * (src[2] - 128);
+        *dest++ = CLIP(1.164 * (src[0] - 16) - 0.813 * (src[2] - 128) - 0.391 * (src[1] - 128));
+        
+        *dest++ = CLIP(1.164 * (src[0] - 16) + 2.018 * (src[1] - 128));
 
 
         src += 3;
@@ -51,7 +54,8 @@ namespace rtx {
 
   Frame toRGB(const Frame &frame) {
     Frame rgbFrame;
-    rgbFrame.data = frame.data;
+    rgbFrame.data = (unsigned char *) malloc(frame.size * sizeof(char));
+    std::copy(frame.data, frame.data + frame.size, rgbFrame.data);
     rgbFrame.width = frame.width;
     rgbFrame.height = frame.height;
     rgbFrame.size = frame.size;

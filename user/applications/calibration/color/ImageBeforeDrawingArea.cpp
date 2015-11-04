@@ -94,9 +94,10 @@ namespace rtx {
     mainWindow->setMasking(value);
   }
 
-  void ImageBeforeDrawingArea::updateFrame(Frame *frame) {
+  void ImageBeforeDrawingArea::updateFrame(Frame *frame, Frame *rgbFrame) {
     this->frame = frame;
-    image = Gdk::Pixbuf::create_from_data((const guint8*) frame->data, Gdk::COLORSPACE_RGB, false, 8, (int) frame->width, (int) frame->height, (int) frame->width * 3);
+    this->rgbFrame = rgbFrame;
+    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame->data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame->width, (int) rgbFrame->height, (int) rgbFrame->width * 3);
     redraw();
   }
 
