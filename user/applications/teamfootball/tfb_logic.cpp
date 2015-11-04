@@ -20,7 +20,8 @@ namespace rtx { namespace Logic {
     switch(logicState) {
       case LS_INIT:
         printf("Logic initial state...\n");
-        Motion::setBehaviour(Motion::MOT_SCAN);
+        Motion::setBehaviour(Motion::MOT_CURVED);
+	Motion::setTarget(Transform({{0, 15}, M_PI/4}));
         logicState = LS_PASSIVE;
         break;
       case LS_PASSIVE:
