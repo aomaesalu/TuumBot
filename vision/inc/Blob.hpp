@@ -11,14 +11,16 @@
 
 #include "Point2D.hpp"
 
+#include <vector>
+
 
 namespace rtx {
 
   class Blob {
 
     public:
-      Blob(); // TODO: Form actual necessary constructor
       Blob(const Blob&);
+      Blob(const std::vector<std::pair<unsigned int, unsigned int>>&);
       ~Blob();
 
       Point2D* getPosition() const;
@@ -26,22 +28,15 @@ namespace rtx {
       unsigned int getHeight() const;
       unsigned int getNumberOfPoints() const;
       double getDensity() const;
-      // TODO: Add getter for color
+      Color getColor() const;
 
-      // TODO: Do we need separate setters if we have the necessary constructor?
-      void setPosition(const Point2D*);
-      void setPosition(const unsigned int&, const unsigned int&);
-      void setWidth(const unsigned int&);
-      void setHeight(const unsigned int&);
-      void setNumberOfPoints(const unsigned int&);
-      // TODO: Add setter for color
 
     private:
       Point2D *position;
       unsigned int width;
       unsigned int height;
       unsigned int numberOfPoints;
-      // TODO: Add Color
+      Color color;
 
   };
 
