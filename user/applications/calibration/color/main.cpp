@@ -6,14 +6,35 @@
  * @version 0.1
  */
 
-#include <cstdlib>
+#include <gtkmm/application.h>
+#include <thread>
 
-//using namespace rtx;
+#include <iostream> // TODO: Remove
+
+#include "cameraConstants.hpp"
+#include "Camera.hpp"
+
+#include "MainWindow.hpp"
+
+using namespace rtx;
 
 
-int main() {
+static void process(MainWindow *window) {
+  while (true) {
+    window->updateFrame();
+  }
+}
 
-	// TODO
+int main(int argc, char *argv[]) {
+  Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-	return EXIT_SUCCESS;
+  Camera camera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT);
+
+  MainWindow window(&camera);
+
+  std::thread frameThread(process, &window);
+  frameThread.detach();
+
+  // Show windows and return when closed
+  return app->run(window);
 }

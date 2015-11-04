@@ -28,9 +28,19 @@
 *.app
 *.elf
 
+# Debug files
+core
+
+# Dependencies
+.depend
+
 # Certain directories
 bin/*
 obj/*
 lib/*
 data/*
 build/target/*
+
+# Image files
+*.ppm
+*.png
