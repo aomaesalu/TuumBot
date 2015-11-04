@@ -52,13 +52,13 @@ namespace rtx {
   }
 
   void MainWindow::setPlaying(const bool &value) {
-    playing = value;
     if (value) {
       imageBeforeArea.setMasking(false);
       imageAfterArea.addBufferToFilter();
     }
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
+    playing = value; // We have to do this at the end of this method because of lock-free threading
   }
 
   void MainWindow::setMasking(const bool &value) {

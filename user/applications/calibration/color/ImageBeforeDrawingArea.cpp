@@ -88,7 +88,7 @@ namespace rtx {
         setPlaying(false);
       }
     } else {
-      initialiseMasks(); // TODO: Fix lagging behaviour
+      initialiseMasks();
       initialiseDrawingModes();
     }
     mainWindow->setMasking(value);
@@ -204,12 +204,19 @@ namespace rtx {
   }
 
   void ImageBeforeDrawingArea::initialiseMasks() {
+    std::cout << "E1" << std::cout;
     initialiseMaskMatrices();
+    std::cout << "E2" << std::cout;
     initialiseMaskLists();
+    std::cout << "E3" << std::cout;
     mainWindow->setMasking(false);
+    std::cout << "E4" << std::cout;
     maskedImage = image->copy();
+    std::cout << "E5" << std::cout;
     brushedImage = maskedImage->copy();
+    std::cout << "E6" << std::cout;
     initialiseMaskBoundaries();
+    std::cout << "E7" << std::cout;
   }
 
   void ImageBeforeDrawingArea::initialiseMaskMatrices() {
