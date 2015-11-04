@@ -8,6 +8,8 @@
 
 #include "MainWindow.hpp"
 
+#include "cameraConstants.hpp"
+
 #include <iostream> // TODO: Remove
 #include <fstream>
 
@@ -16,7 +18,8 @@ namespace rtx {
 
   std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
 
-  MainWindow::MainWindow():
+  MainWindow::MainWindow(Camera *camera):
+    camera(camera),
     imageBeforeArea(this, &brushSizeScale),
     imageAfterArea(this, &deltaChooseScale),
     playing(true),
@@ -25,6 +28,7 @@ namespace rtx {
     setProperties();
     construct();
     show_all_children();
+    updateFrame();
   }
 
   MainWindow::~MainWindow() {
@@ -48,17 +52,27 @@ namespace rtx {
   }
 
   void MainWindow::setPlaying(const bool &value) {
-    playing = value;
     if (value) {
       imageBeforeArea.setMasking(false);
       imageAfterArea.addBufferToFilter();
     }
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
+    playing = value; // We have to do this at the end of this method because of lock-free threading
   }
 
   void MainWindow::setMasking(const bool &value) {
     masking = value;
+  }
+
+  void MainWindow::updateFrame() {
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
+
+      imageBeforeArea.updateFrame(&frame, &rgbFrame);
+      imageAfterArea.updateFrame(&frame, &rgbFrame);
+    }
   }
 
   void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
@@ -112,7 +126,7 @@ namespace rtx {
     imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
     imageBeforeFrame.add(imageBeforeArea);
     imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(640, 480);
+    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     imageBeforeFrame.set_border_width(0);
     grid.attach(imageBeforeFrame, 0, 1, 1, 1);
   }
@@ -121,7 +135,7 @@ namespace rtx {
     imageAfterArea.add_events(Gdk::SCROLL_MASK);
     imageAfterFrame.add(imageAfterArea);
     imageAfterFrame.set_label("After");
-    imageAfterFrame.set_size_request(640, 480);
+    imageAfterFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     imageAfterFrame.set_border_width(0);
     grid.attach(imageAfterFrame, 1, 1, 1, 1);
   }

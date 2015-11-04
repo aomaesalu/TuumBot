@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include "cameraConstants.h"    // Camera constants
+#include "cameraConstants.hpp"    // Camera constants
 
 
 namespace rtx {
@@ -33,6 +33,8 @@ namespace rtx {
     size_t          height;
     size_t          size;     // width * height * 3
   };
+
+  Frame toRGB(const Frame&);
 
   class Camera {
 

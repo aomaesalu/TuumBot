@@ -9,6 +9,7 @@
 #include "ImageBeforeDrawingArea.hpp"
 
 #include "MainWindow.hpp"
+#include "cameraConstants.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -87,10 +88,17 @@ namespace rtx {
         setPlaying(false);
       }
     } else {
-      initialiseMasks(); // TODO: Fix lagging behaviour
+      initialiseMasks();
       initialiseDrawingModes();
     }
     mainWindow->setMasking(value);
+  }
+
+  void ImageBeforeDrawingArea::updateFrame(Frame *frame, Frame *rgbFrame) {
+    this->frame = frame;
+    this->rgbFrame = rgbFrame;
+    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame->data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame->width, (int) rgbFrame->height, (int) rgbFrame->width * 3);
+    redraw();
   }
 
   void ImageBeforeDrawingArea::redraw() {
@@ -177,7 +185,7 @@ namespace rtx {
   }
 
   void ImageBeforeDrawingArea::initialiseProperties() {
-    set_size_request(640, 480);
+    set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
   }
 
   void ImageBeforeDrawingArea::initialiseImage() {
@@ -196,12 +204,19 @@ namespace rtx {
   }
 
   void ImageBeforeDrawingArea::initialiseMasks() {
+    std::cout << "E1" << std::cout;
     initialiseMaskMatrices();
+    std::cout << "E2" << std::cout;
     initialiseMaskLists();
+    std::cout << "E3" << std::cout;
     mainWindow->setMasking(false);
+    std::cout << "E4" << std::cout;
     maskedImage = image->copy();
+    std::cout << "E5" << std::cout;
     brushedImage = maskedImage->copy();
+    std::cout << "E6" << std::cout;
     initialiseMaskBoundaries();
+    std::cout << "E7" << std::cout;
   }
 
   void ImageBeforeDrawingArea::initialiseMaskMatrices() {
@@ -228,8 +243,8 @@ namespace rtx {
   }
 
   void ImageBeforeDrawingArea::initialiseMaskBoundaries() {
-    maskMinX = 640;
-    maskMinY = 480;
+    maskMinX = CAMERA_WIDTH;
+    maskMinY = CAMERA_HEIGHT;
     maskMaxX = 0;
     maskMaxY = 0;
   }
@@ -237,8 +252,8 @@ namespace rtx {
   void ImageBeforeDrawingArea::maximiseMaskBoundaries() {
     maskMinX = 0;
     maskMinY = 0;
-    maskMaxX = 639;
-    maskMaxY = 479;
+    maskMaxX = CAMERA_WIDTH - 1;
+    maskMaxY = CAMERA_HEIGHT - 1;
   }
 
   bool ImageBeforeDrawingArea::isMaskEmpty(const std::vector<std::vector<bool>> &mask) const {
@@ -289,20 +304,20 @@ namespace rtx {
   bool ImageBeforeDrawingArea::applyBrush() {
     int radius = brushScale->get_value() / 2;
     unsigned int brushMinX = brushX - radius;
-    if (brushMinX >= 640) {
+    if (brushMinX >= CAMERA_WIDTH) {
       brushMinX = 0;
     }
     unsigned int brushMinY = brushY - radius;
-    if (brushMinY >= 640) {
+    if (brushMinY >= CAMERA_WIDTH) {
       brushMinY = 0;
     }
     unsigned int brushMaxX = brushX + radius;
-    if (brushMaxX >= 640) {
-      brushMaxX = 639;
+    if (brushMaxX >= CAMERA_WIDTH) {
+      brushMaxX = CAMERA_WIDTH - 1;
     }
     unsigned int brushMaxY = brushY + radius;
-    if (brushMaxY >= 480) {
-      brushMaxY = 479;
+    if (brushMaxY >= CAMERA_HEIGHT) {
+      brushMaxY = CAMERA_HEIGHT - 1;
     }
 
     // maskedImage->copy_area(brushMinX, brushMinY, brushMaxX - brushMinX + 1, brushMaxY - brushMinY + 1, brushedImage, brushMinX, brushMinY);
@@ -319,7 +334,7 @@ namespace rtx {
         if (distanceSquared <= radiusSquared) {
           unsigned int currentX = brushX + i;
           unsigned int currentY = brushY + j;
-          if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
+          if (currentX < CAMERA_WIDTH && currentY < CAMERA_HEIGHT) { // If the value overflows, it's already smaller than the maximum value
             guint8 *pixel = pixels + currentX * channels + currentY * stride;
             pixel[1] *= 0.5;
           }
@@ -360,10 +375,10 @@ namespace rtx {
         if (distanceSquared <= radiusSquared) {
           unsigned int currentX = x + i;
           unsigned int currentY = y + j;
-          if (currentX < 640 && currentY < 480) { // If the value overflows, it's already smaller than the maximum value
+          if (currentX < CAMERA_WIDTH && currentY < CAMERA_HEIGHT) { // If the value overflows, it's already smaller than the maximum value
             additionMask[mode][currentX][currentY] = value;
             removalMask[mode][currentX][currentY] = !value;
-            unsigned int linearCoordinate = currentY * 640 + currentX;
+            unsigned int linearCoordinate = currentY * CAMERA_WIDTH + currentX;
             if (value) {
               additionMaskList[mode].insert(linearCoordinate);
               removalMaskList[mode].erase(linearCoordinate);
