@@ -27,16 +27,21 @@ namespace rtx {
 
 
   struct Timer {
-    uint32_t start;
+    uint32_t _start;
     uint32_t period;
     uint32_t _end;
 
-    void set() {
-      _end = start + period;
+    void start() {
+      // _start = ?
+      _end = _start + period;
     }
 
     bool isTime() {
       return _end > 0; // Replace '0' with some 'getTime' function
+    }
+
+    void setPeriod(uint32_t T) {
+      period = T;
     }
 
   };
@@ -49,6 +54,30 @@ namespace rtx {
   template<typename T>
   struct Vec2D {
     T x; T y;
+
+    void rotate(double alpha) {
+      Vec2D v;
+      v.x = x * cos(alpha) + y * -sin(alpha);
+      v.y = x * sin(alpha) + y * cos(alpha);
+      x = v.x; y = v.y;
+    }
+
+    void normalizeTo(double value) {
+      double s = abs(x) + abs(y);
+      if(s == 0) return;
+      x /= s;
+      y /= s;
+    }
+
+    double getMagnitude() {
+      if(x == 0.0 && y == 0.0) return 0.0;
+      return sqrt(pow(x, 2) + pow(y, 2));
+    }
+
+    double distanceTo(Vec2D<T> t) {
+      Vec2D<T> vec = {t.x - x, t.y - y};
+      return vec.getMagnitude();
+    }
   };
 
   template<typename T>
@@ -61,6 +90,18 @@ namespace rtx {
 
   typedef Vec2D<double> Vec2f;
   typedef Vec3D<double> Vec3f;
+
+  struct Transform {
+    Vec2i pos;
+    double o;
+
+    Vec2i getPosition() {
+      return pos;
+    }
+
+    int getX() { return pos.x; }
+    int getY() { return pos.y; }
+  };
 };
 
 namespace vis {

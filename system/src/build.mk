@@ -15,8 +15,4 @@ CPPSRC += $(call target_files,src/,*.cpp)
 # ASM source files included in this build.
 ASRC +=
 
-<<<<<<< fd7077e5b6495469d2d04fab5397af789a109ce1
 CPPFLAGS += -std=gnu++11
-=======
-CPPFLAGS += -std=gnu++14
->>>>>>> Create build module for system modules.
