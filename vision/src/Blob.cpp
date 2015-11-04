@@ -6,6 +6,8 @@
  * @version 0.1
  */
 
+#include "cameraConstants.hpp"
+
 #include "Blob.hpp"
 
 
@@ -19,12 +21,58 @@ namespace rtx {
     color{other.getColor()}
   }
 
-  Blob::Blob(const std::vector<Point2D*> &points) {
-    // TODO
+  Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
+    this->color = color;
+    unsigned int minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    unsigned int maxX = 0, maxY = 0;
+    unsigned int xSum = 0, ySum = 0;
+    for (std::vector<Point2D*>::const_iterator i = points.begin(); i != points.end(); ++i) {
+      numberOfPoints++;
+      xSum += i->getX();
+      ySum += i->getY();
+      if (i->geX() < minX) {
+        min>X = i->getX();
+      }
+      if (i->getX() > maxX) {
+        maxX = i->getX();
+      }
+      if (i->getY() < minY) {
+        minY = i->getY();
+      }
+      if (i->getY() > maxY) {
+        maxY = i->getY();
+      }
+    }
+    width = maxX - minX + 1;
+    height = maxY - minY + 1;
+    position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
-  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points) {
-    // TODO
+  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
+    this->color = color;
+    unsigned int minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    unsigned int maxX = 0, maxY = 0;
+    unsigned int xSum = 0, ySum = 0;
+    for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator i = points.begin(); i != points.end(); ++i) {
+      numberOfPoints++;
+      xSum += i->first;
+      ySum += i->second;
+      if (i-first < minX) {
+        min>X = i->first;
+      }
+      if (i->first > maxX) {
+        maxX = i->first;
+      }
+      if (i->second < minY) {
+        minY = i->second;
+      }
+      if (i->second > maxY) {
+        maxY = i->second;
+      }
+    }
+    width = maxX - minX + 1;
+    height = maxY - minY + 1;
+    position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
   Blob::~Blob() {
