@@ -13,12 +13,14 @@
 
 namespace rtx {
 
-  Blob::Blob(const Blob &other) {
+  Blob::Blob(const Blob &other)
     position{new Point2D(other.getPosition())},
     width{other.getWidth()},
     height{other.getHeight()},
     numberOfPoints{other.getNumberOfPoints()},
     color{other.getColor()}
+  {
+    // Nothing to do here
   }
 
   Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
@@ -57,8 +59,8 @@ namespace rtx {
       numberOfPoints++;
       xSum += i->first;
       ySum += i->second;
-      if (i-first < minX) {
-        miX = i->first;
+      if (i->first < minX) {
+        minX = i->first;
       }
       if (i->first > maxX) {
         maxX = i->first;
