@@ -43,7 +43,10 @@ endif
 INCLUDE_DIRS += $(MODULE_PATH)/libraries
 
 CPPFLAGS += -std=gnu++11
+
 CPPFLAGS += `pkg-config gtkmm-3.0 --cflags` # FIXME: Command added due to gtkmm usage
+
+CPPFLAGS += -L /lib64 # FIXME: Threading
 
 BUILTINS_EXCLUDE =
 CFLAGS += $(addprefix -fno-builtin-,$(BUILTINS_EXCLUDE))
