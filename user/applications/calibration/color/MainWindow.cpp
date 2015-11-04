@@ -16,7 +16,8 @@ namespace rtx {
 
   std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
 
-  MainWindow::MainWindow():
+  MainWindow::MainWindow(Camera*):
+    camera(camera),
     imageBeforeArea(this, &brushSizeScale),
     imageAfterArea(this, &deltaChooseScale),
     playing(true),
