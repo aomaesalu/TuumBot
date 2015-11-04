@@ -10,6 +10,7 @@
 #define RTX_VISION_BLOB_H
 
 #include "Point2D.hpp"
+#include "Color.hpp"
 
 #include <vector>
 
