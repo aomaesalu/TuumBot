@@ -27,4 +27,4 @@ namespace rtx {
 
 };
 
-#endif RTX_VISION_COLOR_H
+#endif // RTX_VISION_COLOR_H
