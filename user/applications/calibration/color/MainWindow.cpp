@@ -8,6 +8,8 @@
 
 #include "MainWindow.hpp"
 
+#include "cameraConstants.hpp"
+
 #include <iostream> // TODO: Remove
 #include <fstream>
 
@@ -113,7 +115,7 @@ namespace rtx {
     imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
     imageBeforeFrame.add(imageBeforeArea);
     imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(640, 480);
+    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     imageBeforeFrame.set_border_width(0);
     grid.attach(imageBeforeFrame, 0, 1, 1, 1);
   }
@@ -122,7 +124,7 @@ namespace rtx {
     imageAfterArea.add_events(Gdk::SCROLL_MASK);
     imageAfterFrame.add(imageAfterArea);
     imageAfterFrame.set_label("After");
-    imageAfterFrame.set_size_request(640, 480);
+    imageAfterFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     imageAfterFrame.set_border_width(0);
     grid.attach(imageAfterFrame, 1, 1, 1, 1);
   }
