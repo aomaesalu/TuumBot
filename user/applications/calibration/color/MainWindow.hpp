@@ -39,6 +39,8 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
+      void updateFrame();
+
       void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
 
     protected:
@@ -83,6 +85,7 @@ namespace rtx {
 
     private:
       Camera *camera;
+      Frame frame;
 
       bool playing;
       bool masking;

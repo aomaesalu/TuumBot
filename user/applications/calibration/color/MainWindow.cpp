@@ -64,6 +64,10 @@ namespace rtx {
     masking = value;
   }
 
+  void MainWindow::updateFrame() {
+    frame = camera->getFrame();
+  }
+
   void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
     imageAfterArea.calculateFilterBuffer(additionMaskList, removalMaskList);
   }
