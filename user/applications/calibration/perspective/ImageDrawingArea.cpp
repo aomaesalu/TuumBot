@@ -22,8 +22,7 @@
 
 namespace rtx {
 
-  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
-  {
+  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow) {
     initialiseProperties();
     initialiseImage();
     intialiseConstants();
