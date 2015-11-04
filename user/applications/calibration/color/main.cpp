@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
   Camera camera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT);
 
-  MainWindow window;
+  MainWindow window(&camera);
 
   // Show windows and return when closed
   return app->run(window);

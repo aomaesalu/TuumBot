@@ -16,6 +16,8 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 
+#include "Camera.hpp"
+
 #include "ImageBeforeDrawingArea.hpp"
 #include "ImageAfterDrawingArea.hpp"
 
@@ -25,7 +27,7 @@ namespace rtx {
   class MainWindow: public Gtk::Window {
 
     public:
-      MainWindow();
+      MainWindow(Camera*);
       virtual ~MainWindow();
 
       bool isPlaying() const;
@@ -80,6 +82,8 @@ namespace rtx {
       Glib::RefPtr<Gdk::Pixbuf> imageAfter;
 
     private:
+      Camera *camera;
+
       bool playing;
       bool masking;
 
