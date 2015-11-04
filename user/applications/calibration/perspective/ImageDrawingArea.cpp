@@ -38,7 +38,7 @@ namespace rtx {
   }
 
   bool ImageDrawingArea::isCalculating() const {
-    return mainWindow->isMasking();
+    return mainWindow->isCalculating();
   }
 
   void ImageDrawingArea::setPlaying(const bool &value) {
