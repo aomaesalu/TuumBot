@@ -40,9 +40,9 @@ namespace rtx {
 
     unsigned int mode = mainWindow->getMode();
 
-    guint8 *pixels = image->get_pixels();
-    unsigned int channels = image->get_n_channels();
-    unsigned int stride = image->get_rowstride();
+    guint8 *pixels = frame->data;
+    unsigned int channels = 3;
+    unsigned int stride = frame->width * channels;
 
     for (std::set<unsigned int>::iterator i = additionMaskList[mode].begin(); i != additionMaskList[mode].end(); ++i) {
       guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
@@ -171,11 +171,16 @@ namespace rtx {
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
+    guint8 *actualPixels = frame->data;
+    unsigned int actualChannels = 3;
+    unsigned int actualStride = frame->width * actualChannels;
+
     // Color pixels
     for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
       for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
         guint8 *pixel = pixels + i * channels + j * stride;
-        unsigned int pixelCode = pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2];
+        guint8 *actualPixel = actualPixels + i * actualChannels + j * actualStride;
+        unsigned int pixelCode = actualPixel[0] * 256 * 256 + actualPixel[1] * 256 + actualPixel[2];
         if (((filter[mode].find(pixelCode) != filter[mode].end()) && (filterRemovalBufferList[mode].find(pixelCode) == filterRemovalBufferList[mode].end())) || (filterAdditionBufferList[mode].find(pixelCode) != filterAdditionBufferList[mode].end())) {
           pixel[0] *= 0.2;
           pixel[1] *= 0.2;
