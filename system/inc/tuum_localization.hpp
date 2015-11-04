@@ -17,7 +17,7 @@ namespace rtx { namespace Localization {
 
   void testSequence();
 
-  Vec2i getPosition();
+  Transform getTransform();
 
 }}
 

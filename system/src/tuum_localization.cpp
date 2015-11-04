@@ -109,8 +109,8 @@ namespace rtx { namespace Localization {
     //particleFilter.printParticleInfo();
   }
 
-  Vec2i getPosition() {
-    return Vec2i({0, 0});
+  Transform getTransform() {
+    return Transform({0, 0, 0.0});
   }
 
 };};
