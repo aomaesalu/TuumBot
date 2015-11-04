@@ -8,6 +8,7 @@
 
 #include <gtkmm/application.h>
 #include <thread>
+#include <ctime> // For calculating FPS
 
 #include <iostream> // TODO: Remove
 
@@ -20,8 +21,19 @@ using namespace rtx;
 
 
 static void process(MainWindow *window) {
+  unsigned int frameCounter = 0;
+  clock_t startTime = clock();
+  clock_t lastTime = startTime;
   while (true) {
-    window->updateFrame();
+    clock_t currentTime = clock();
+    if (float(currentTime - lastTime) / CLOCKS_PER_SEC > 1) {
+      //std::cout << "FPS: " << frameCounter << std::endl;
+      frameCounter = 0;
+      lastTime = currentTime;
+    }
+    if (window->updateFrame()) {
+      frameCounter++;
+    }
   }
 }
 
