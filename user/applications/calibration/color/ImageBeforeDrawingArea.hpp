@@ -15,6 +15,8 @@
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
 
+#include "Camera.hpp"
+
 #include "ImageDrawingArea.hpp"
 
 
@@ -38,6 +40,8 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
+      void updateFrame(Frame*);
+
       void redraw();
 
     protected:
@@ -51,6 +55,8 @@ namespace rtx {
       Glib::RefPtr<Gdk::Pixbuf> image;
       Glib::RefPtr<Gdk::Pixbuf> maskedImage;
       Glib::RefPtr<Gdk::Pixbuf> brushedImage;
+
+      Frame *frame;
 
       Gtk::Scale *brushScale;
       std::vector<std::vector<std::vector<bool>>> additionMask;

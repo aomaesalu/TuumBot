@@ -18,13 +18,49 @@
 #include <stdexcept>            // Exception header (runtime_error)
 #include <linux/videodev2.h>    // V4L2 header
 
-#include "V4L2Camera.hpp"             // The class header
+#include <iostream> // TODO: Remove
+
+#include "V4L2Camera.hpp"       // The class header
 
 
 namespace rtx {
 
   // Macro to set the memory of a variable to zero
   #define CLEAR(x) memset(&(x), 0, sizeof(x))
+
+  static void convertYCbCrtoRGB(const unsigned char *src, unsigned char *dest,
+                                 int width, int height)
+  {
+    int j;
+    while (--height >= 0) {
+      for (j = 0; j < width; ++j) {
+
+
+        *dest++ = 1.164 * (src[0] - 16) + 2.018 * (src[1] - 128);
+
+
+        *dest++ = 1.164 * (src[0] - 16) - 0.813 * (src[2] - 128) - 0.391 * (src[1] - 128);
+
+        *dest++ = 1.164 * (src[0] - 16) + 1.596 * (src[2] - 128);
+
+
+        src += 3;
+      }
+    }
+  }
+
+  Frame toRGB(const Frame &frame) {
+    Frame rgbFrame;
+    rgbFrame.data = frame.data;
+    rgbFrame.width = frame.width;
+    rgbFrame.height = frame.height;
+    rgbFrame.size = frame.size;
+    convertYCbCrtoRGB((unsigned char *) frame.data,
+                             rgbFrame.data,
+                             rgbFrame.width,
+                             rgbFrame.height);
+    return rgbFrame;
+  }
 
   /**
     Handles ioctl function calls. Calls the ioctl multiple times until the ioctl
@@ -69,9 +105,9 @@ namespace rtx {
   }
 
   Camera::Camera(const std::string &device, const int &width, const int &height):
-  device(device),
-  width(width),
-  height(height)
+    device(device),
+    width(width),
+    height(height)
   {
     fileDescriptor = -1;
     openDevice();
@@ -410,7 +446,7 @@ namespace rtx {
       FD_SET(fileDescriptor, &fileDescriptors);
 
       /* Timeout. */
-      timeValue.tv_sec = 2;
+      timeValue.tv_sec = timeout;
       timeValue.tv_usec = 0;
 
       int returnValue = select(fileDescriptor + 1, &fileDescriptors, NULL, NULL,
@@ -429,7 +465,7 @@ namespace rtx {
       int index = readFrame();
       if (index != -1)
         formatFrame((unsigned char *) buffers[index].data, frame.data, width,
-                    height, stride);
+                    height, stride); // TODO: Fix YCbCr conversion!
         return frame;
       /* EAGAIN - continue select loop. */
     }

@@ -75,6 +75,12 @@ namespace rtx {
     queue_draw();
   }
 
+  void ImageAfterDrawingArea::updateFrame(Frame *frame) {
+    this->frame = frame;
+    image = Gdk::Pixbuf::create_from_data((const guint8*) frame->data, Gdk::COLORSPACE_RGB, false, 8, (int) frame->width, (int) frame->height, (int) frame->width * 3);
+    queue_draw();
+  }
+
   std::string ImageAfterDrawingArea::getOutput() const {
     std::string output = "";
     for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {

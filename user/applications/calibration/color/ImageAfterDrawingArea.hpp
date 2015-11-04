@@ -15,6 +15,8 @@
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
 
+#include "Camera.hpp"
+
 #include "ImageDrawingArea.hpp"
 
 
@@ -29,6 +31,8 @@ namespace rtx {
       void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
       void addBufferToFilter();
 
+      void updateFrame(Frame*);
+
       std::string getOutput() const;
 
     protected:
@@ -38,6 +42,8 @@ namespace rtx {
     private:
       Glib::RefPtr<Gdk::Pixbuf> image;
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
+
+      Frame *frame;
 
       Gtk::Scale *deltaScale;
 
