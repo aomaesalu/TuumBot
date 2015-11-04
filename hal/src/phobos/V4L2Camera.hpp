@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include "cameraConstants.h"    // Camera constants
+#include "cameraConstants.hpp"    // Camera constants
 
 
 namespace rtx {
