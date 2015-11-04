@@ -68,8 +68,10 @@ namespace rtx {
   void MainWindow::updateFrame() {
     if (playing) {
       frame = camera->getFrame();
-      imageBeforeArea.updateFrame(&frame);
-      imageAfterArea.updateFrame(&frame);
+      rgbFrame = toRGB(frame);
+
+      imageBeforeArea.updateFrame(&frame, &rgbFrame);
+      imageAfterArea.updateFrame(&frame, &rgbFrame);
     }
   }
 
