@@ -96,7 +96,7 @@ namespace rtx { namespace Motion {
         if(!motionInProgress) {
           printf("MOT_SCAN: init\n");
           motionData.baseVelocity = 15;
-          motionData.setDirectionVector(1.0, 0.0);
+          motionData.setDirectionVector(0.0, 0.0);
           motionData.orientDelta = M_PI;
 
           motionInProgress = true;
@@ -110,23 +110,23 @@ namespace rtx { namespace Motion {
         // Forward motion => motionData
         break;
       case MOT_CURVED:
-	if(!motionInProgress) {
-	  Transform t = Localization::getTransform();
+        if(!motionInProgress) {
+          Transform t = Localization::getTransform();
 
-	  motionData.baseVelocity = 15;
-	  motionData.orientDelta = motionGoal.o - t.o;
+          motionData.baseVelocity = 15;
+          motionData.orientDelta = motionGoal.o - t.o;
           motionData.setDirectionVector(motionGoal.getX() - t.getX(), motionGoal.getY() - t.getY());
-	  printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
+          printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
 
-	  //printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
+          //printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
 
-	  printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
-	  printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
+          printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
+          printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
 
-	  targetAchieved = false;
-	  motionInProgress = true;
-	  dirty = true;
-	}
+          targetAchieved = false;
+          motionInProgress = true;
+          dirty = true;
+        }
         break;
       case MOT_STATIC:
         // Rotational motion => motionData
