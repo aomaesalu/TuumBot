@@ -42,11 +42,6 @@ endif
 
 INCLUDE_DIRS += $(MODULE_PATH)/libraries
 
-#FIXME:
-INCLUDE_DIRS += $(MODULE_PATH)/libraries/system
-#CPPSRC += $(MODULE_PATH)/libraries/system/tuum_vision.cpp
-
-
 CPPFLAGS += -std=gnu++11
 
 CPPFLAGS += `pkg-config gtkmm-3.0 --cflags` # FIXME: Command added due to gtkmm usage
