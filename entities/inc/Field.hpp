@@ -9,6 +9,9 @@
 #ifndef RTX_ENTITIES_FIELD_H_
 #define RTX_ENTITIES_FIELD_H_
 
+//#include "rtxc.h"
+#include "entityConstants.hpp"
+
 #include "Rectangle.hpp"
 
 #include "entityConstants.hpp"
