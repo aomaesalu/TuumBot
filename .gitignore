@@ -39,8 +39,12 @@ bin/*
 obj/*
 lib/*
 data/*
-build/target/*
 
 # Image files
 *.ppm
+=======
+build/*
+=======
+build/target/*
+=======
 *.png
