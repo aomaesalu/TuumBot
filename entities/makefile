@@ -6,6 +6,6 @@ ENTITIES_MODULE_PATH=.
 TARGET_TYPE = a
 BUILD_PATH_EXT = $(BUILD_TARGET_PLATFORM)
 
-DEPENDENCIES = geometry
+DEPENDENCIES = geometry rtxmath
 
 include ../build/tlm.mk

@@ -9,6 +9,9 @@
 #ifndef RTX_ENTITIES_GOAL_H
 #define RTX_ENTITIES_GOAL_H
 
+//#include "rtxc.h"
+#include "entityConstants.hpp"
+
 #include "Rectangle.hpp"
 #include "Point2D.hpp"
 
