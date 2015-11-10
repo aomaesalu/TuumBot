@@ -96,12 +96,12 @@ namespace rtx {
   }
 
   void MainWindow::constructImageFrame() {
-    /*imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
-    imageBeforeFrame.add(imageBeforeArea);
-    imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-    imageBeforeFrame.set_border_width(0);
-    grid.attach(imageBeforeFrame, 0, 1, 1, 1);*/ // TODO
+    imageArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
+    imageFrame.add(imageArea);
+    imageFrame.set_label("Image");
+    imageFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    imageFrame.set_border_width(0);
+    grid.attach(imageFrame, 0, 1, 1, 1);
   }
 
   void MainWindow::constructImageOptionsBox() {
