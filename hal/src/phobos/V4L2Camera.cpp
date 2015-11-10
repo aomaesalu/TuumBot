@@ -36,17 +36,15 @@ namespace rtx {
     int j;
     while (--height >= 0) {
       for (j = 0; j < width; ++j) {
-
-
-
+        // Y:  src[0]
+        // Cb: src[1]
+        // Cr: src[2]
+        // Red
         *dest++ = CLIP(1.164 * (src[0] - 16) + 1.596 * (src[2] - 128));
-
-
+        // Green
         *dest++ = CLIP(1.164 * (src[0] - 16) - 0.813 * (src[2] - 128) - 0.391 * (src[1] - 128));
-        
+        // Blue
         *dest++ = CLIP(1.164 * (src[0] - 16) + 2.018 * (src[1] - 128));
-
-
         src += 3;
       }
     }
