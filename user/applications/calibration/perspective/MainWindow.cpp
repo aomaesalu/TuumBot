@@ -76,7 +76,6 @@ namespace rtx {
     constructGrid();
     constructGeneralButtonsBox();
     constructImageFrame();
-    constructImageOptionsBox();
   }
 
   void MainWindow::constructGrid() {
@@ -102,14 +101,6 @@ namespace rtx {
     imageFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     imageFrame.set_border_width(0);
     grid.attach(imageFrame, 0, 1, 1, 1);
-  }
-
-  void MainWindow::constructImageOptionsBox() {
-    /*displayMaskBeforeButton.set_label("Display mask on \"before\" image"); // TODO: Add scale to change brightness instead
-    displayMaskBeforeButton.set_active();
-    displayMaskBeforeButton.set_can_focus(false);
-    imageBeforeOptionsBox.add(displayMaskBeforeButton);
-    grid.attach(imageBeforeOptionsBox, 0, 2, 1, 1);*/ // TODO
   }
 
   void MainWindow::constructPlayButton(Gtk::Container &parentContainer) {

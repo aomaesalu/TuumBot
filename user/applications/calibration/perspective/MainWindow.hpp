@@ -43,7 +43,6 @@ namespace rtx {
       // Frames and boxes for the layout
       Gtk::Box generalButtonsBox;
       Gtk::Frame imageFrame;
-      Gtk::Box imageOptionsBox;
 
       // Video control buttons
       Gtk::Button playButton;
@@ -77,7 +76,6 @@ namespace rtx {
 
       void constructGeneralButtonsBox();
       void constructImageFrame();
-      void constructImageOptionsBox();
 
       void constructPlayButton(Gtk::Container&);
       void constructStopButton(Gtk::Container&);
