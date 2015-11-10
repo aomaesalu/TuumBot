@@ -86,11 +86,13 @@ namespace rtx {
   }
 
   void MainWindow::constructGeneralButtonsBox() {
-    /*constructFileChooseComboBox(generalButtonsBox);
+    constructPlayButton(generalButtonsBox);
+    constructStopButton(generalButtonsBox);
+    constructFileChooseComboBox(generalButtonsBox);
     constructSaveButton(generalButtonsBox);
     constructExitButton(generalButtonsBox);
     generalButtonsBox.set_spacing(10);
-    grid.attach(generalButtonsBox, 1, 0, 1, 1);*/ // TODO
+    grid.attach(generalButtonsBox, 0, 0, 1, 1);
   }
 
   void MainWindow::constructImageFrame() {
