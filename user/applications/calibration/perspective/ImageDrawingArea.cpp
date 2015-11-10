@@ -66,7 +66,7 @@ namespace rtx {
   }
 
   bool ImageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-    if (isCalculating() && !applyCalculations())
+    if (!applyCalculations())
       return false;
 
     if (!drawImage(cairo))
@@ -98,6 +98,7 @@ namespace rtx {
   }
 
   bool ImageDrawingArea::applyCalculations() {
+    filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
     // TODO
     return true;
   }
