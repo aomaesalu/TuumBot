@@ -65,9 +65,10 @@ namespace rtx {
 
               std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
               std::vector<std::pair<unsigned int, unsigned int>> stack;
-              stack.push_back(std::make_pair<unsigned int, unsigned int>(i, j));
+              stack.push_back(std::pair<unsigned int, unsigned int>(i, j));
               while (!stack.empty()) {
-                std::pair<unsigned int, unsigned int> point = stack.pop_back();
+                std::pair<unsigned int, unsigned int> point = stack.back();
+                stack.pop_back();
                 if (!visited[mode][point.first][point.second]) { //  Do we need to check it here? We check it again later...
                   visited[mode][point.first][point.second] = true;
                   blobPoints.push_back(point);
