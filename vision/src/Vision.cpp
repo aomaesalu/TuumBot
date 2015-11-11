@@ -53,9 +53,9 @@ namespace rtx {
     void blobDetection(const Frame &frame, const std::string &filter) {
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false)));
 
-      guint8 *pixels = frame->data;
+      unsigned char *pixels = frame.data;
       unsigned int channels = 3;
-      unsigned int stride = frame->width * channels;
+      unsigned int stride = frame.width * channels;
 
       for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
         for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
@@ -72,7 +72,7 @@ namespace rtx {
                   visited[mode][point.first][point.second] = true;
                   blobPoints.push_back(point);
 
-                  guint8 *pixel = pixels + point.first * channels + point.second * stride;
+                  unsigned char *pixel = pixels + point.first * channels + point.second * stride;
                   if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], mode)) {
                     if (point.first > 0) {
                       std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
