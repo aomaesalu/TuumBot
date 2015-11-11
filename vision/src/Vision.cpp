@@ -51,6 +51,8 @@ namespace rtx {
     }
 
     void blobDetection(const Frame &frame, const std::string &filter) {
+      blobs.clear();
+
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false)));
 
       unsigned char *pixels = frame.data;
@@ -103,6 +105,8 @@ namespace rtx {
 
                 }
               }
+
+              blobs.push_back(new Blob(blobPoints, intToColor(mode)));
 
             }
           }

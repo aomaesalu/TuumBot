@@ -21,7 +21,7 @@ namespace rtx {
 
   namespace Vision {
 
-    typedef std::vector<Blob> BlobSet;
+    typedef std::vector<Blob*> BlobSet;
     typedef std::vector<Feature> LineSet;
     typedef std::vector<Feature> CornerSet;
 
