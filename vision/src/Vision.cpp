@@ -32,21 +32,101 @@ namespace rtx {
       printf("\033[0m\n");
     }
 
-    void process(const Frame &frame) {
-      blobDetection(frame);
-      lineDetection(frame);
-      cornerDetection(frame);
+    void process(const Frame &frame, const std::string &filter) {
+      blobDetection(frame, filter);
+      lineDetection(frame, filter);
+      cornerDetection(frame, filter);
     }
 
-    void lineDetection(const Frame &frame) {
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) const {
+      if (filter.size() > pixel) {
+        return (filter[pixel] >> (7 - mode)) & 0x1;
+      } else {
+        return false;
+      }
+    }
+
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
+      return isColored(x * 256 * 256 + y * 256 + z, mode);
+    }
+
+    void blobDetection(const Frame &frame, const std::string &filter) {
+      std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false)));
+
+      guint8 *pixels = frame->data;
+      unsigned int channels = 3;
+      unsigned int stride = frame->width * channels;
+
+      for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
+        for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
+
+          for (unsigned int mode = 0; mode < 8; ++mode) {
+            if (!visited[mode][i][j]) {
+
+              std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
+              std::vector<std::pair<unsigned int, unsigned int>> stack;
+              stack.push_back(std::make_pair<unsigned int, unsigned int>(i, j));
+              while (!stack.empty()) {
+                std::pair<unsigned int, unsigned int> point = stack.pop_back();
+                if (!visited[mode][point->first][point->second]) { //  Do we need to check it here? We check it again later...
+                  visited[mode][point->first][point->second] = true;
+                  blobPoints.push_back(point);
+
+                  guint8 *pixel = pixels + point->first * channels + point->second * stride;
+                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], mode)) {
+                    if (point->first > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point->first - 1, point->second);
+                      if (!visited[mode][point->first][point->second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point->first < CAMERA_WIDTH - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point->first + 1, point->second);
+                      if (!visited[mode][point->first][point->second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point->second > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point->first, point->second - 1);
+                      if (!visited[mode][point->first][point->second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point->second < CAMERA_HEIGHT - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point->first, point->second + 1);
+                      if (!visited[mode][point->first][point->second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                  }
+
+                }
+              }
+
+            }
+          }
+
+        }
+      }
+    }
+
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
     }
 
-    void cornerDetection(const Frame &frame) {
+    void lineDetection(const Frame &frame, const std::string &filter) {
       // TODO
     }
 
-    void blobDetection(const Frame &frame) {
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+      // TODO
+    }
+
+    void cornerDetection(const Frame &frame, const std::string &filter) {
+      // TODO
+    }
+
+    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
     }
 
