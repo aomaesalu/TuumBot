@@ -134,7 +134,7 @@ namespace rtx {
 
     /**
       Initialises the camera device.
-      Checks the camera device's V4L2 capabilites, cropping capabilities, [...] TODO
+      Checks the camera device's V4L2 capabilites, [...] TODO
     */
     void initialiseDevice();
 
@@ -167,11 +167,6 @@ namespace rtx {
       apparent in the device, the method throws a runtime error.
     */
     void checkV4L2Capabilities();
-
-    /**
-      Checks if the camera has cropping capabilites.
-    */
-    void checkCroppingCapabilites();
 
     /**
       Initialises the camera device video format.
