@@ -6,26 +6,26 @@
  * @version 0.1
  */
 
-#include "Line.hpp"
+#include "Line2D.hpp"
 
 
 namespace rtx {
 
-  Line::Line(const Line &other):
+  Line2D::Line2D(const Line2D &other):
     pointA{new Point2D(other.getPointA()->getX(), other.getPointB()->getY())},
     pointB{new Point2D(other.getPointB()->getX(), other.getPointB()->getY())}
   {
 
   }
 
-  Line::Line(const Point2D *pointA, const Point2D *pointB):
+  Line2D::Line2D(const Point2D *pointA, const Point2D *pointB):
     pointA{new Point2D(pointA->getX(), pointA->getY())},
     pointB{new Point2D(pointB->getX(), pointB->getY())}
   {
 
   }
 
-  Line::Line(const double &pointAx, const double &pointAy,
+  Line2D::Line2D(const double &pointAx, const double &pointAy,
              const double &pointBx, const double &pointBy):
     pointA{new Point2D(pointAx, pointAy)},
     pointB{new Point2D(pointBx, pointBy)}
@@ -33,31 +33,31 @@ namespace rtx {
 
   }
 
-  void Line::setPointA(const Point2D *pointA) {
+  void Line2D::setPointA(const Point2D *pointA) {
     this->pointA = new Point2D(pointA->getX(), pointA->getY());
   }
 
-  void Line::setPointA(const double &x, const double &y) {
+  void Line2D::setPointA(const double &x, const double &y) {
     pointA = new Point2D(x, y);
   }
 
-  void Line::setPointB(const Point2D *pointB) {
+  void Line2D::setPointB(const Point2D *pointB) {
     this->pointB = new Point2D(pointB->getX(), pointB->getY());
   }
 
-  void Line::setPointB(const double &x, const double &y) {
+  void Line2D::setPointB(const double &x, const double &y) {
     pointB = new Point2D(x, y);
   }
 
-  double Line::getLength() const {
+  double Line2D::getLength() const {
     return pointA->distanceFrom(pointB);
   }
 
-  Point2D* Line::getPointA() const {
+  Point2D* Line2D::getPointA() const {
     return pointA;
   }
 
-  Point2D* Line::getPointB() const {
+  Point2D* Line2D::getPointB() const {
     return pointB;
   }
 
