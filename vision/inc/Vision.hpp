@@ -11,7 +11,9 @@
 
 #include <vector>
 
+#include "rtxhal.hpp"
 #include "Feature.hpp"
+#include "Blob.hpp"
 
 
 namespace rtx {

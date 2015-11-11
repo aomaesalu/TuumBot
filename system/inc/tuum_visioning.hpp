@@ -14,6 +14,7 @@
 
 #include "rtxhal.hpp"
 #include "rtxent.hpp"
+#include "rtxvision.h"
 
 using namespace vis;
 

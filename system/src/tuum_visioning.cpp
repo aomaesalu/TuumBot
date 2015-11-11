@@ -10,13 +10,12 @@
 #include "rtxhal.hpp"
 #include "tuum_visioning.hpp"
 
-using namespace rtx::hal;
+using namespace rtx;
 
 namespace rtx { namespace Visioning {
 
   FeatureSet features;
   BallSet balls;
-  RobotSet robots;
   GoalSet goals;
   RobotSet robots;
 
@@ -41,8 +40,8 @@ namespace rtx { namespace Visioning {
     if (frontCamera) {
       featureDetection(frontCamera);
       ballDetection(frontCamera);
-      robotsDetection(frontCamera);
       goalDetection(frontCamera);
+      robotDetection(frontCamera);
     }
   }
 

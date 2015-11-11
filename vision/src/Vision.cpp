@@ -32,9 +32,9 @@ namespace rtx {
     }
 
     void process(CameraDevice *camera) {
-      blobDetection();
-      lineDetection();
-      cornerDetection();
+      blobDetection(camera);
+      lineDetection(camera);
+      cornerDetection(camera);
     }
 
     void lineDetection(CameraDevice *camera) {
