@@ -16,27 +16,23 @@
 
 namespace rtx {
 
-  class Vision {
+  namespace Vision {
 
-    public:
-      Vision();
-      ~Vision();
+    typedef std::vector<Blob> BlobSet;
+    typedef std::vector<Feature> LineSet;
+    typedef std::vector<Feature> CornerSet;
 
-      std::vector<Blob*> getBlobs() const;
-      std::vector<Feature*> getLines() const;
-      std::vector<Feature*> getCorners() const;
+    extern BlobSet blobs;
+    extern LineSet lines;
+    extern CornerSet corners;
 
-      void process();
+    void setup();
+    void process();
 
-    private:
-      std::vector<Blob*> blobs;
-      std::vector<Feature*> lines;
-      std::vector<Feature*> corners;
-
-      void lineDetection();
-      void blobDetection();
-      void cornerDetection();
-
+    void lineDetection();
+    void blobDetection();
+    void cornerDetection();
+    
   };
 
 };

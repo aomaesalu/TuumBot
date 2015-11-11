@@ -11,49 +11,42 @@
 
 namespace rtx {
 
-  void emptyVector(std::vector<Feature*> &vector) {
-    for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
-         ++i) {
-      delete *i;
+  namespace Vision {
+
+    BlobSet blobs;
+    LineSet lines;
+    CornerSet corners;
+
+    /*void emptyVector(std::vector<Feature*> &vector) {
+      for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
+           ++i) {
+        delete *i;
+      }
+      vector.clear();
+    }*/
+
+    void setup() {
+      // TODO
     }
-    vector.clear();
-  }
 
-  Vision::Vision() {
-    // TODO
-  }
+    void process() {
+      blobDetection();
+      lineDetection();
+      cornerDetection();
+    }
 
-  Vision::~Vision() {
-    // TODO
-  }
+    void lineDetection() {
+      // TODO
+    }
 
-  std::vector<Blob*> Vision::getBlobs() const {
-    return blobs;
-  }
+    void cornerDetection() {
+      // TODO
+    }
 
-  std::vector<Feature*> Vision::getLines() const {
-    return lines;
-  }
+    void blobDetection() {
+      // TODO
+    }
 
-  std::vector<Feature*> Vision::getCorners() const {
-    return corners;
-  }
+  };
 
-  void Vision::process() {
-    blobDetection();
-    lineDetection();
-    cornerDetection();
-  }
-
-  void Vision::lineDetection() {
-    // TODO
-  }
-
-  void Vision::cornerDetection() {
-    // TODO
-  }
-
-  void Vision::blobDetection() {
-    // TODO
-  }
 };
