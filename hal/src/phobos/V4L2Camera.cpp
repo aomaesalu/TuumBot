@@ -36,17 +36,15 @@ namespace rtx {
     int j;
     while (--height >= 0) {
       for (j = 0; j < width; ++j) {
-
-
-
+        // Y:  src[0]
+        // Cb: src[1]
+        // Cr: src[2]
+        // Red
         *dest++ = CLIP(1.164 * (src[0] - 16) + 1.596 * (src[2] - 128));
-
-
+        // Green
         *dest++ = CLIP(1.164 * (src[0] - 16) - 0.813 * (src[2] - 128) - 0.391 * (src[1] - 128));
-        
+        // Blue
         *dest++ = CLIP(1.164 * (src[0] - 16) + 2.018 * (src[1] - 128));
-
-
         src += 3;
       }
     }
@@ -188,10 +186,7 @@ namespace rtx {
 
     // TODO: Select video input, video standard and tune here.
 
-    // Check the cropping capabilities of the video device. Currently does not
-    // throw any kind of exceptions.
-    // TODO: Decide on what to do with this functionality.
-    checkCroppingCapabilites();
+    // TODO: Crop here (if necessary)
 
     // Initialise the appropriate video format for the camera device.
     initialiseFormat();
@@ -271,47 +266,6 @@ namespace rtx {
     // between application and driver, the data itself is not copied.
     if (!(capabilities.capabilities & V4L2_CAP_STREAMING))
       throw std::runtime_error(device + " does not support streaming I/O");
-  }
-
-  /**
-    TODO: This method isn't necessarily needed upon camera device initialisation.
-    Decide on what to do with it, or whether to improve it.
-  */
-  void Camera::checkCroppingCapabilites() {
-    // V4L2 cropping capability structure
-    struct v4l2_cropcap croppingCapabilities;
-
-    // V4L2 cropping rectangle structure
-    struct v4l2_crop croppingRectangle;
-
-    CLEAR(croppingCapabilities);
-
-    // Specify the cropping capability type to be specific for video captures.
-    // Other types possible include video outputs, overlays, and custom types.
-    croppingCapabilities.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-
-    // Query device cropping capabilities. On success, 0 is returned; on error -1
-    // is returned and the errno variable is set appropriately to EINVAL.
-    if (xioctl(fileDescriptor, VIDIOC_CROPCAP, &croppingCapabilities) == 0) {
-      // Specify the cropping type to be specific for video captures. Other types
-      // possible include video outputs, overlays, and custom types.
-      croppingRectangle.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-
-      // Reset the cropping rectangle to default
-      croppingRectangle.c = croppingCapabilities.defrect;
-
-      // Try to crop the video capture. On success, 0 is returned; on error, -1
-      // is returned and the errno variable is set appropriately to EINVAL.
-      if (xioctl(fileDescriptor, VIDIOC_S_CROP, &croppingRectangle) == -1) {
-        if (errno == EINVAL) {
-          // Cropping is not supported. Ignore error (for now?).
-        } else {
-          // Errors ignored.
-        }
-      }
-    } else {
-      // Errors ignored.
-    }
   }
 
   void Camera::initialiseFormat() {
@@ -467,10 +421,11 @@ namespace rtx {
       }
 
       int index = readFrame();
-      if (index != -1)
+      if (index != -1) {
         formatFrame((unsigned char *) buffers[index].data, frame.data, width,
-                    height, stride); // TODO: Fix YCbCr conversion!
+                    height, stride);
         return frame;
+      }
       /* EAGAIN - continue select loop. */
     }
   }

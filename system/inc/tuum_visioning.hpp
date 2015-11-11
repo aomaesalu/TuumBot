@@ -1,8 +1,10 @@
-/** @file tuum_vision.hpp
+/** @file tuum_visioning.hpp
  *  Visioning interface declaration.
  *
+ *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
+ *  @date 11. November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -13,6 +15,7 @@
 
 #include "rtxhal.hpp"
 #include "rtxent.hpp"
+#include "rtxvision.h"
 
 using namespace vis;
 
@@ -22,19 +25,21 @@ namespace rtx { namespace Visioning {
   typedef std::vector<Ball> BallSet;
   typedef std::vector<Robot> RobotSet;
   typedef std::vector<Goal> GoalSet;
+  typedef std::vector<Robot> RobotSet;
 
   extern FeatureSet features;
   extern BallSet balls;
   extern RobotSet robots;
   extern GoalSet goals;
+  extern RobotSet robots;
 
   void setup();
   void process();
 
-  void featureDetection(CameraDevice*);
-  void ballsDetection(CameraDevice*);
-  void robotsDetection(CameraDevice*);
-  void goalDetection(CameraDevice*);
+  void featureDetection(const Frame&);
+  void ballDetection(const Frame&);
+  void goalDetection(const Frame&);
+  void robotDetection(const Frame&);
 
 }}
 
