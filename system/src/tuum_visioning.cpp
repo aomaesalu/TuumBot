@@ -4,10 +4,9 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 1. November 2015
+ *  @date 11. November 2015
  */
 
-#include "rtxhal.hpp"
 #include "tuum_visioning.hpp"
 
 using namespace rtx;
@@ -20,8 +19,8 @@ namespace rtx { namespace Visioning {
   RobotSet robots;
 
   void setup() {
-    CameraDevice *frontCamera = hal::hw.getFrontCamera();
-    CameraDevice *backCamera = hal::hw.getBackCamera();
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera();
 
     Vision::setup();
 
@@ -31,8 +30,14 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
-    CameraDevice *frontCamera = hal::hw.getFrontCamera();
-    CameraDevice *backCamera = hal::hw.getBackCamera(); // TODO: Use
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
+
+    Frame frontFrame, backFrame;
+    if (frontCamera)
+      frontFrame = frontCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
 
     Vision::process(frontCamera);
     Vision::process(backCamera);
@@ -45,19 +50,19 @@ namespace rtx { namespace Visioning {
     }
   }
 
-  void featureDetection(CameraDevice *camera) {
+  void featureDetection(Camera *camera) {
     // TODO
   }
 
-  void ballDetection(CameraDevice *camera) {
+  void ballDetection(Camera *camera) {
     // TODO
   }
 
-  void goalDetection(CameraDevice *camera) {
+  void goalDetection(Camera *camera) {
     // TODO
   }
 
-  void robotDetection(CameraDevice *camera) {
+  void robotDetection(Camera *camera) {
     // TODO
   }
 

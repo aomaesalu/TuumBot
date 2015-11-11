@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -29,11 +30,11 @@ namespace rtx {
     extern CornerSet corners;
 
     void setup();
-    void process(CameraDevice*);
+    void process(Camera*);
 
-    void lineDetection(CameraDevice*);
-    void blobDetection(CameraDevice*);
-    void cornerDetection(CameraDevice*);
+    void lineDetection(Camera*);
+    void blobDetection(Camera*);
+    void cornerDetection(Camera*);
 
   };
 

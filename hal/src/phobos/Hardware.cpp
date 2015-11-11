@@ -2,7 +2,9 @@
  *  Platform Hardware class implementation.
  *
  *  @authors Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
+ *  @date 11. November 2015
  */
 
 #include <iostream>
@@ -21,12 +23,12 @@ namespace rtx { namespace hal {
     m_motorControl.init();
   }
 
-  CameraDevice* Hardware::getFrontCamera() {
-    return nullptr;
+  Camera* Hardware::getFrontCamera() {
+    return m_frontCamera;
   }
 
-  CameraDevice* Hardware::getBackCamera() {
-    return nullptr;
+  Camera* Hardware::getBackCamera() {
+    return m_backCamera;
   }
 
   MotorControl* Hardware::getMotorControl() {

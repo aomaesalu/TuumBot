@@ -4,6 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
+ *  @date 11. November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -35,10 +36,10 @@ namespace rtx { namespace Visioning {
   void setup();
   void process();
 
-  void featureDetection(CameraDevice*);
-  void ballDetection(CameraDevice*);
-  void goalDetection(CameraDevice*);
-  void robotDetection(CameraDevice*);
+  void featureDetection(Camera*);
+  void ballDetection(Camera*);
+  void goalDetection(Camera*);
+  void robotDetection(Camera*);
 
 }}
 

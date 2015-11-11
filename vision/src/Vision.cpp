@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ *  @date 11. November 2015
  */
 
 #include "Vision.hpp"
@@ -31,21 +32,21 @@ namespace rtx {
       printf("\033[0m\n");
     }
 
-    void process(CameraDevice *camera) {
+    void process(Camera *camera) {
       blobDetection(camera);
       lineDetection(camera);
       cornerDetection(camera);
     }
 
-    void lineDetection(CameraDevice *camera) {
+    void lineDetection(Camera *camera) {
       // TODO
     }
 
-    void cornerDetection(CameraDevice *camera) {
+    void cornerDetection(Camera *camera) {
       // TODO
     }
 
-    void blobDetection(CameraDevice *camera) {
+    void blobDetection(Camera *camera) {
       // TODO
     }
 
