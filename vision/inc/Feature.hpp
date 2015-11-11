@@ -21,7 +21,7 @@ namespace rtx {
     LINE,
     CORNER
   };
-
+  
   class Feature {
 
     public:

@@ -64,7 +64,7 @@ namespace rtx {
     return type == BLOB;
   }
 
-  bool Feature::isCorner() const {
+  bool Feature::isLine() const {
     return type == LINE;
   }
 
