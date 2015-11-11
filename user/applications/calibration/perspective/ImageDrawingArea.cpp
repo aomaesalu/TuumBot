@@ -115,10 +115,20 @@ namespace rtx {
       for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
         guint8 *pixel = pixels + i * channels + j * stride;
         guint8 *actualPixel = actualPixels + i * actualChannels + j * actualStride;
-        if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
-          pixel[0] *= 0.2;
-          pixel[1] *= 0.2;
-          pixel[2] *= 0.2;
+        if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 6)) {
+          if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
+            pixel[0] = 127;
+            pixel[1] = 127;
+            pixel[2] = 127;
+          } else {
+            pixel[0] = 235;
+            pixel[1] = 235;
+            pixel[2] = 235;
+          }
+        } else if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
+          pixel[0] = 0;
+          pixel[1] = 0;
+          pixel[2] = 0;
         }
       }
     }
