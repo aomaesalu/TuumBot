@@ -27,6 +27,8 @@ namespace rtx { namespace Visioning {
   typedef std::vector<Goal> GoalSet;
   typedef std::vector<Robot> RobotSet;
 
+  extern std::string filter;
+
   extern FeatureSet features;
   extern BallSet balls;
   extern RobotSet robots;
@@ -35,6 +37,8 @@ namespace rtx { namespace Visioning {
 
   void setup();
   void process();
+
+  void readFilterFromFile(const std::string&);
 
   void featureDetection(const Frame&);
   void ballDetection(const Frame&);

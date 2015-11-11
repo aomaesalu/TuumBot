@@ -9,9 +9,13 @@
 
 #include "tuum_visioning.hpp"
 
+#include <fstream>
+
 using namespace rtx;
 
 namespace rtx { namespace Visioning {
+
+  std::string filter;
 
   FeatureSet features;
   BallSet balls;
@@ -21,6 +25,8 @@ namespace rtx { namespace Visioning {
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera();
+
+    readFilterFromFile("../data/colors/1.txt");
 
     Vision::setup();
 
@@ -39,8 +45,8 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process(frontFrame);
-    Vision::process(backFrame);
+    Vision::process(frontFrame, filter);
+    Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -50,6 +56,12 @@ namespace rtx { namespace Visioning {
     }
 
     // TODO: Add back camera frame processing
+  }
+
+  void readFilterFromFile(const std::string &fileName) {
+    std::ifstream inputFile(fileName);
+    inputFile >> filter;
+    inputFile.close();
   }
 
   void featureDetection(const Frame &frame) {
