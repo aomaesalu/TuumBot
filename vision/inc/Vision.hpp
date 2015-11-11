@@ -21,7 +21,7 @@ namespace rtx {
 
   namespace Vision {
 
-    typedef std::vector<Blob> BlobSet;
+    typedef std::vector<Blob*> BlobSet;
     typedef std::vector<Feature> LineSet;
     typedef std::vector<Feature> CornerSet;
 
@@ -30,11 +30,19 @@ namespace rtx {
     extern CornerSet corners;
 
     void setup();
-    void process(const Frame&);
+    void process(const Frame&, const std::string&);
 
-    void lineDetection(const Frame&);
-    void blobDetection(const Frame&);
-    void cornerDetection(const Frame&);
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
+
+    void blobDetection(const Frame&, const std::string&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
+
+    void lineDetection(const Frame&, const std::string&);
+    void lineDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
+
+    void cornerDetection(const Frame&, const std::string&);
+    void cornerDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
 
   };
 
