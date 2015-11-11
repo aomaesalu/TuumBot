@@ -31,6 +31,8 @@ namespace rtx {
 
       bool isPlaying() const;
       bool isCalculating() const;
+      bool isColored(const unsigned int&, const unsigned int&) const;
+      bool isColored(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
 
       void setPlaying(const bool& = true);
       void setCalculating(const bool& = true);
@@ -43,7 +45,6 @@ namespace rtx {
       // Frames and boxes for the layout
       Gtk::Box generalButtonsBox;
       Gtk::Frame imageFrame;
-      Gtk::Box imageOptionsBox;
 
       // Video control buttons
       Gtk::Button playButton;
@@ -67,6 +68,8 @@ namespace rtx {
       Frame frame;
       Frame rgbFrame;
 
+      std::string filter;
+
       bool playing;
       bool calculating;
 
@@ -77,7 +80,6 @@ namespace rtx {
 
       void constructGeneralButtonsBox();
       void constructImageFrame();
-      void constructImageOptionsBox();
 
       void constructPlayButton(Gtk::Container&);
       void constructStopButton(Gtk::Container&);

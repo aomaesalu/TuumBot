@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #include "ImageDrawingArea.hpp"
@@ -22,7 +23,9 @@
 
 namespace rtx {
 
-  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow) {
+  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
+    mainWindow(mainWindow)
+  {
     initialiseProperties();
     initialiseImage();
     initialiseConstants();
@@ -66,7 +69,7 @@ namespace rtx {
   }
 
   bool ImageDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-    if (isCalculating() && !applyCalculations())
+    if (!applyCalculations())
       return false;
 
     if (!drawImage(cairo))
@@ -83,6 +86,7 @@ namespace rtx {
 
   void ImageDrawingArea::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
+    //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
 
     // Show the whole image
     if (image)
@@ -98,7 +102,38 @@ namespace rtx {
   }
 
   bool ImageDrawingArea::applyCalculations() {
-    // TODO
+    filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
+
+    guint8 *pixels = filteredImage->get_pixels();
+    unsigned int channels = filteredImage->get_n_channels();
+    unsigned int stride = filteredImage->get_rowstride();
+
+    guint8 *actualPixels = frame->data;
+    unsigned int actualChannels = 3;
+    unsigned int actualStride = frame->width * actualChannels;
+
+    // Color pixels
+    for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
+      for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        guint8 *actualPixel = actualPixels + i * actualChannels + j * actualStride;
+        if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 6)) {
+          if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
+            pixel[0] = 127;
+            pixel[1] = 127;
+            pixel[2] = 127;
+          } else {
+            pixel[0] = 235;
+            pixel[1] = 235;
+            pixel[2] = 235;
+          }
+        } else if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
+          pixel[0] = 0;
+          pixel[1] = 0;
+          pixel[2] = 0;
+        }
+      }
+    }
     return true;
   }
 

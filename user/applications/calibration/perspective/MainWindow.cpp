@@ -20,9 +20,11 @@ namespace rtx {
     camera(camera),
     imageArea(this),
     playing(true),
-    calculating(false)
+    calculating(false),
+    filter("")
   {
     setProperties();
+    readFilterFromFile("../data/colors/1.txt");
     construct();
     show_all_children();
     updateFrame();
@@ -38,6 +40,18 @@ namespace rtx {
 
   bool MainWindow::isCalculating() const {
     return calculating;
+  }
+
+  bool MainWindow::isColored(const unsigned int &pixel, const unsigned int &mode) const {
+    if (filter.size() > pixel) {
+      return (filter[pixel] >> (7 - mode)) & 0x1;
+    } else {
+      return false;
+    }
+  }
+
+  bool MainWindow::isColored(const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
+    return isColored(x * 256 * 256 + y * 256 + z, mode);
   }
 
   void MainWindow::setPlaying(const bool &value) {
@@ -76,7 +90,6 @@ namespace rtx {
     constructGrid();
     constructGeneralButtonsBox();
     constructImageFrame();
-    constructImageOptionsBox();
   }
 
   void MainWindow::constructGrid() {
@@ -86,28 +99,22 @@ namespace rtx {
   }
 
   void MainWindow::constructGeneralButtonsBox() {
-    /*constructFileChooseComboBox(generalButtonsBox);
+    constructPlayButton(generalButtonsBox);
+    constructStopButton(generalButtonsBox);
+    constructFileChooseComboBox(generalButtonsBox);
     constructSaveButton(generalButtonsBox);
     constructExitButton(generalButtonsBox);
     generalButtonsBox.set_spacing(10);
-    grid.attach(generalButtonsBox, 1, 0, 1, 1);*/ // TODO
+    grid.attach(generalButtonsBox, 0, 0, 1, 1);
   }
 
   void MainWindow::constructImageFrame() {
-    /*imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
-    imageBeforeFrame.add(imageBeforeArea);
-    imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-    imageBeforeFrame.set_border_width(0);
-    grid.attach(imageBeforeFrame, 0, 1, 1, 1);*/ // TODO
-  }
-
-  void MainWindow::constructImageOptionsBox() {
-    /*displayMaskBeforeButton.set_label("Display mask on \"before\" image"); // TODO: Add scale to change brightness instead
-    displayMaskBeforeButton.set_active();
-    displayMaskBeforeButton.set_can_focus(false);
-    imageBeforeOptionsBox.add(displayMaskBeforeButton);
-    grid.attach(imageBeforeOptionsBox, 0, 2, 1, 1);*/ // TODO
+    imageArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
+    imageFrame.add(imageArea);
+    imageFrame.set_label("Image");
+    imageFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    imageFrame.set_border_width(0);
+    grid.attach(imageFrame, 0, 1, 1, 1);
   }
 
   void MainWindow::constructPlayButton(Gtk::Container &parentContainer) {
@@ -151,7 +158,9 @@ namespace rtx {
   }
 
   void MainWindow::readFilterFromFile(const std::string &fileName) {
-    // TODO
+    std::ifstream inputFile(fileName);
+    inputFile >> filter;
+    inputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {

@@ -6,19 +6,19 @@
  * @version 0.1
  */
 
-#ifndef RTX_GEOMETRY_LINE_H
-#define RTX_GEOMETRY_LINE_H
+#ifndef RTX_GEOMETRY_LINE2D_H
+#define RTX_GEOMETRY_LINE2D_H
 
 #include "Point2D.hpp"
 
 
 namespace rtx {
 
-  class Line {
+  class Line2D {
     public:
-      Line(const Line&);
-      Line(const Point2D*, const Point2D*);
-      Line(const double&, const double&, const double&, const double&);
+      Line2D(const Line2D&);
+      Line2D(const Point2D*, const Point2D*);
+      Line2D(const double&, const double&, const double&, const double&);
 
       void setPointA(const Point2D*);
       void setPointA(const double&, const double&);
@@ -36,4 +36,4 @@ namespace rtx {
 
 };
 
-#endif // RTX_GEOMETRY_LINE_H
+#endif // RTX_GEOMETRY_LINE2D_H

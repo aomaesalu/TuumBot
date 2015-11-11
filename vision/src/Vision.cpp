@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ *  @date 11. November 2015
  */
 
 #include "Vision.hpp"
@@ -11,108 +12,129 @@
 
 namespace rtx {
 
-  void emptyVector(std::vector<Feature*> &vector) {
-    for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
-         ++i) {
-      delete *i;
+  namespace Vision {
+
+    BlobSet blobs;
+    LineSet lines;
+    CornerSet corners;
+
+    /*void emptyVector(std::vector<Feature*> &vector) {
+      for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
+           ++i) {
+        delete *i;
+      }
+      vector.clear();
+    }*/
+
+    void setup() {
+      printf("\033[1;32m");
+      printf("[Vision::setup()]Ready.");
+      printf("\033[0m\n");
     }
-    vector.clear();
-  }
 
-  Vision::Vision() {
-    // TODO
-  }
+    void process(const Frame &frame, const std::string &filter) {
+      blobDetection(frame, filter);
+      lineDetection(frame, filter);
+      cornerDetection(frame, filter);
+    }
 
-  Vision::~Vision() {
-    // TODO
-  }
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
+      if (filter.size() > pixel) {
+        return (filter[pixel] >> (7 - mode)) & 0x1;
+      } else {
+        return false;
+      }
+    }
 
-  std::vector<Feature*> Vision::getBalls() const {
-    return balls;
-  }
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
+      return isColored(frame, filter, x * 256 * 256 + y * 256 + z, mode);
+    }
 
-  std::vector<Feature*> Vision::getGoals() const {
-    return goals;
-  }
+    void blobDetection(const Frame &frame, const std::string &filter) {
+      blobs.clear();
 
-  std::vector<Feature*> Vision::getCorners() const {
-    return corners;
-  }
+      std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false)));
 
-  std::vector<Feature*> Vision::getRobots() const {
-    return robots;
-  }
+      unsigned char *pixels = frame.data;
+      unsigned int channels = 3;
+      unsigned int stride = frame.width * channels;
 
-  std::vector<Feature*> Vision::getStaticFeatures() const {
-    return staticFeatures;
-  }
+      for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
+        for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
 
-  std::vector<Feature*> Vision::getMovableFeatures() const {
-    return movableFeatures;
-  }
+          for (unsigned int mode = 0; mode < 8; ++mode) {
+            if (!visited[mode][i][j]) {
 
-  std::vector<Feature*> Vision::getAllFeatures() const {
-    return allFeatures;
-  }
+              std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
+              std::vector<std::pair<unsigned int, unsigned int>> stack;
+              stack.push_back(std::pair<unsigned int, unsigned int>(i, j));
+              while (!stack.empty()) {
+                std::pair<unsigned int, unsigned int> point = stack.back();
+                stack.pop_back();
+                if (!visited[mode][point.first][point.second]) { //  Do we need to check it here? We check it again later...
+                  visited[mode][point.first][point.second] = true;
+                  blobPoints.push_back(point);
 
-  void Vision::process() {
-    lineDetection();
-    cornerDetection();
-    blobDetection();
-    ballDetection();
-    goalDetection();
-    robotDetection();
-    updateFeatures();
-  }
+                  unsigned char *pixel = pixels + point.first * channels + point.second * stride;
+                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], mode)) {
+                    if (point.first > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
+                      if (!visited[mode][point.first][point.second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point.first < CAMERA_WIDTH - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
+                      if (!visited[mode][point.first][point.second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point.second > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
+                      if (!visited[mode][point.first][point.second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                    if (point.second < CAMERA_HEIGHT - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
+                      if (!visited[mode][point.first][point.second]) {
+                        stack.push_back(newPoint);
+                      }
+                    }
+                  }
 
-  void Vision::lineDetection() {
-    // TODO
-  }
+                }
+              }
 
-  void Vision::blobDetection() {
-    // TODO
-  }
+              blobs.push_back(new Blob(blobPoints, intToColor(mode)));
 
-  void Vision::ballDetection() {
-    // TODO
-  }
+            }
+          }
 
-  void Vision::goalDetection() {
-    // TODO
-  }
+        }
+      }
+    }
 
-  void Vision::cornerDetection() {
-    // TODO
-  }
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+      // TODO
+    }
 
-  void Vision::robotDetection() {
-    // TODO
-  }
+    void lineDetection(const Frame &frame, const std::string &filter) {
+      // TODO
+    }
 
-  void Vision::updateStaticFeatures() {
-    emptyVector(staticFeatures);
-    staticFeatures.insert(staticFeatures.end(), corners.begin(), corners.end());
-    staticFeatures.insert(staticFeatures.end(), goals.begin(), goals.end());
-  }
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+      // TODO
+    }
 
-  void Vision::updateMovableFeatures() {
-    emptyVector(movableFeatures);
-    movableFeatures.insert(movableFeatures.end(), balls.begin(), balls.end());
-    movableFeatures.insert(movableFeatures.end(), robots.begin(), robots.end());
-  }
+    void cornerDetection(const Frame &frame, const std::string &filter) {
+      // TODO
+    }
 
-  void Vision::updateAllFeatures() {
-    emptyVector(allFeatures);
-    allFeatures.insert(allFeatures.end(), staticFeatures.begin(),
-                          staticFeatures.end());
-    allFeatures.insert(allFeatures.end(), movableFeatures.begin(),
-                          movableFeatures.end());
-  }
+    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+      // TODO
+    }
 
-  void Vision::updateFeatures() {
-    updateStaticFeatures();
-    updateMovableFeatures();
-    updateAllFeatures();
-  }
+  };
 
 };

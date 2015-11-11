@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -11,52 +12,40 @@
 
 #include <vector>
 
+#include "rtxhal.hpp"
 #include "Feature.hpp"
+#include "Blob.hpp"
 
 
 namespace rtx {
 
-  class Vision {
+  namespace Vision {
 
-    public:
-      Vision();
-      ~Vision();
+    typedef std::vector<Blob*> BlobSet;
+    typedef std::vector<Feature> LineSet;
+    typedef std::vector<Feature> CornerSet;
 
-      std::vector<Feature*> getBalls() const;
-      std::vector<Feature*> getGoals() const;
-      std::vector<Feature*> getCorners() const;
-      std::vector<Feature*> getRobots() const;
+    extern BlobSet blobs;
+    extern LineSet lines;
+    extern CornerSet corners;
 
-      std::vector<Feature*> getStaticFeatures() const;
-      std::vector<Feature*> getMovableFeatures() const;
-      std::vector<Feature*> getAllFeatures() const;
+    void setup();
+    void process(const Frame&, const std::string&);
 
-      void process();
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
 
-    private:
-      std::vector<Feature*> balls;
-      std::vector<Feature*> goals;
-      std::vector<Feature*> corners;
-      std::vector<Feature*> robots;
+    void blobDetection(const Frame&, const std::string&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
 
-      std::vector<Feature*> staticFeatures;
-      std::vector<Feature*> movableFeatures;
-      std::vector<Feature*> allFeatures;
+    void lineDetection(const Frame&, const std::string&);
+    void lineDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
 
-      void lineDetection();
-      void blobDetection();
-      void ballDetection();
-      void goalDetection();
-      void cornerDetection();
-      void robotDetection();
-
-      void updateStaticFeatures();
-      void updateMovableFeatures();
-      void updateAllFeatures();
-      void updateFeatures();
+    void cornerDetection(const Frame&, const std::string&);
+    void cornerDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
 
   };
 
 };
 
-#endif // RTX_VISION_BALL_DETECTION_H
+#endif // RTX_VISION_VISION_H
