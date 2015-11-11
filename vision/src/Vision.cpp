@@ -38,7 +38,7 @@ namespace rtx {
       cornerDetection(frame, filter);
     }
 
-    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) const {
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
       if (filter.size() > pixel) {
         return (filter[pixel] >> (7 - mode)) & 0x1;
       } else {
@@ -46,7 +46,7 @@ namespace rtx {
       }
     }
 
-    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
+    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
       return isColored(frame, filter, x * 256 * 256 + y * 256 + z, mode);
     }
 
