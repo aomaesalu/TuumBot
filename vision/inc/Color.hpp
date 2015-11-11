@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #ifndef RTX_VISION_COLOR_H
@@ -23,7 +24,7 @@ namespace rtx {
     CHECKERBOARD_BLACK
   };
 
-  // TODO: Add conversion methods
+  Color intToColor(const unsigned int&);
 
 };
 
