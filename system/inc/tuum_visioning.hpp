@@ -36,10 +36,10 @@ namespace rtx { namespace Visioning {
   void setup();
   void process();
 
-  void featureDetection(Camera*);
-  void ballDetection(Camera*);
-  void goalDetection(Camera*);
-  void robotDetection(Camera*);
+  void featureDetection(const Frame&);
+  void ballDetection(const Frame&);
+  void goalDetection(const Frame&);
+  void robotDetection(const Frame&);
 
 }}
 

@@ -32,21 +32,21 @@ namespace rtx {
       printf("\033[0m\n");
     }
 
-    void process(Camera *camera) {
-      blobDetection(camera);
-      lineDetection(camera);
-      cornerDetection(camera);
+    void process(const Frame &frame) {
+      blobDetection(frame);
+      lineDetection(frame);
+      cornerDetection(frame);
     }
 
-    void lineDetection(Camera *camera) {
+    void lineDetection(const Frame &frame) {
       // TODO
     }
 
-    void cornerDetection(Camera *camera) {
+    void cornerDetection(const Frame &frame) {
       // TODO
     }
 
-    void blobDetection(Camera *camera) {
+    void blobDetection(const Frame &frame) {
       // TODO
     }
 

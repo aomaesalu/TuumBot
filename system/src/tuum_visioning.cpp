@@ -39,30 +39,32 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process(frontCamera);
-    Vision::process(backCamera);
+    Vision::process(frontFrame);
+    Vision::process(backFrame);
 
     if (frontCamera) {
-      featureDetection(frontCamera);
-      ballDetection(frontCamera);
-      goalDetection(frontCamera);
-      robotDetection(frontCamera);
+      featureDetection(frontFrame);
+      ballDetection(frontFrame);
+      goalDetection(frontFrame);
+      robotDetection(frontFrame);
     }
+
+    // TODO: Add back camera frame processing
   }
 
-  void featureDetection(Camera *camera) {
+  void featureDetection(const Frame &frame) {
     // TODO
   }
 
-  void ballDetection(Camera *camera) {
+  void ballDetection(const Frame &frame) {
     // TODO
   }
 
-  void goalDetection(Camera *camera) {
+  void goalDetection(const Frame &frame) {
     // TODO
   }
 
-  void robotDetection(Camera *camera) {
+  void robotDetection(const Frame &frame) {
     // TODO
   }
 
