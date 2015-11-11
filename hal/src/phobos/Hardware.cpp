@@ -14,7 +14,10 @@
 
 namespace rtx { namespace hal {
 
-  Hardware::Hardware() {
+  Hardware::Hardware():
+    m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT),
+    m_backCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT) // TODO: Detect correct camera device for back camera; currently the cameras are the same.
+  {
 
   }
 
@@ -24,11 +27,11 @@ namespace rtx { namespace hal {
   }
 
   Camera* Hardware::getFrontCamera() {
-    return m_frontCamera;
+    return &m_frontCamera;
   }
 
   Camera* Hardware::getBackCamera() {
-    return m_backCamera;
+    return &m_backCamera;
   }
 
   MotorControl* Hardware::getMotorControl() {
