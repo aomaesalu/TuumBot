@@ -38,38 +38,40 @@ namespace rtx {
   void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
     resetFilterBuffers();
 
-    unsigned int mode = mainWindow->getMode();
+    //unsigned int mode = mainWindow->getMode();
 
     guint8 *pixels = frame->data;
     unsigned int channels = 3;
     unsigned int stride = frame->width * channels;
 
-    for (std::set<unsigned int>::iterator i = additionMaskList[mode].begin(); i != additionMaskList[mode].end(); ++i) {
-      guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
-      for (int j = -3; j <= 3; ++j) {
-        for (int k = -3; k <= 3; ++k) {
-          for (int m = -3; m <= 3; ++m) {
-            if (pixel[0] + j >= 0 && pixel[0] + j < 256 && pixel[1] + k >= 0 && pixel[1] + k < 256 && pixel[2] + m >= 0 && pixel[2] < 256) {
-              filterAdditionBufferList[mode].insert((pixel[0] + j) * 256 * 256 + (pixel[1] + k) * 256 + pixel[2] + m);
+    for (unsigned int mode = 0; mode < 8; ++mode) {
+      for (std::set<unsigned int>::iterator i = additionMaskList[mode].begin(); i != additionMaskList[mode].end(); ++i) {
+        guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
+        for (int j = -3; j <= 3; ++j) {
+          for (int k = -3; k <= 3; ++k) {
+            for (int m = -3; m <= 3; ++m) {
+              if (pixel[0] + j >= 0 && pixel[0] + j < 256 && pixel[1] + k >= 0 && pixel[1] + k < 256 && pixel[2] + m >= 0 && pixel[2] < 256) {
+                filterAdditionBufferList[mode].insert((pixel[0] + j) * 256 * 256 + (pixel[1] + k) * 256 + pixel[2] + m);
+              }
             }
           }
         }
+        //filterAdditionBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
       }
-      //filterAdditionBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
-    }
 
-    for (std::set<unsigned int>::iterator i = removalMaskList[mode].begin(); i != removalMaskList[mode].end(); ++i) {
-      guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
-      for (int j = -3; j <= 3; ++j) {
-        for (int k = -3; k <= 3; ++k) {
-          for (int m = -3; m <= 3; ++m) {
-            if (pixel[0] + j >= 0 && pixel[0] + j < 256 && pixel[1] + k >= 0 && pixel[1] + k < 256 && pixel[2] + m >= 0 && pixel[2] < 256) {
-              filterRemovalBufferList[mode].insert((pixel[0] + j) * 256 * 256 + (pixel[1] + k) * 256 + pixel[2] + m);
+      for (std::set<unsigned int>::iterator i = removalMaskList[mode].begin(); i != removalMaskList[mode].end(); ++i) {
+        guint8 *pixel = pixels + ((*i) % CAMERA_WIDTH) * channels + ((*i) / CAMERA_WIDTH) * stride;
+        for (int j = -3; j <= 3; ++j) {
+          for (int k = -3; k <= 3; ++k) {
+            for (int m = -3; m <= 3; ++m) {
+              if (pixel[0] + j >= 0 && pixel[0] + j < 256 && pixel[1] + k >= 0 && pixel[1] + k < 256 && pixel[2] + m >= 0 && pixel[2] < 256) {
+                filterRemovalBufferList[mode].insert((pixel[0] + j) * 256 * 256 + (pixel[1] + k) * 256 + pixel[2] + m);
+              }
             }
           }
         }
+        //filterRemovalBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
       }
-      //filterRemovalBufferList[mode].insert(pixel[0] * 256 * 256 + pixel[1] * 256 + pixel[2]);
     }
 
     // Redraw
