@@ -26,24 +26,26 @@ namespace rtx {
     }*/
 
     void setup() {
-      // TODO
+      printf("\033[1;32m");
+      printf("[Vision::setup()]Ready.");
+      printf("\033[0m\n");
     }
 
-    void process() {
+    void process(CameraDevice *camera) {
       blobDetection();
       lineDetection();
       cornerDetection();
     }
 
-    void lineDetection() {
+    void lineDetection(CameraDevice *camera) {
       // TODO
     }
 
-    void cornerDetection() {
+    void cornerDetection(CameraDevice *camera) {
       // TODO
     }
 
-    void blobDetection() {
+    void blobDetection(CameraDevice *camera) {
       // TODO
     }
 

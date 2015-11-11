@@ -24,6 +24,8 @@ namespace rtx { namespace Visioning {
     CameraDevice *frontCamera = hal::hw.getFrontCamera();
     CameraDevice *backCamera = hal::hw.getBackCamera();
 
+    Vision::setup();
+
     printf("\033[1;32m");
     printf("[Visioning::setup()]Ready.");
     printf("\033[0m\n");
@@ -32,6 +34,9 @@ namespace rtx { namespace Visioning {
   void process() {
     CameraDevice *frontCamera = hal::hw.getFrontCamera();
     CameraDevice *backCamera = hal::hw.getBackCamera(); // TODO: Use
+
+    Vision::process(frontCamera);
+    Vision::process(backCamera);
 
     if (frontCamera) {
       featureDetection(frontCamera);

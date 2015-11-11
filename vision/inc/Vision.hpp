@@ -27,12 +27,12 @@ namespace rtx {
     extern CornerSet corners;
 
     void setup();
-    void process();
+    void process(CameraDevice*);
 
-    void lineDetection();
-    void blobDetection();
-    void cornerDetection();
-    
+    void lineDetection(CameraDevice*);
+    void blobDetection(CameraDevice*);
+    void cornerDetection(CameraDevice*);
+
   };
 
 };
