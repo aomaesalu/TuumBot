@@ -9,7 +9,7 @@
 #include <gtkmm/application.h>
 #include <thread>
 
-#include <iostream> // TODO
+#include <iostream> // TODO: Remove
 
 #include "cameraConstants.hpp"
 #include "Camera.hpp"

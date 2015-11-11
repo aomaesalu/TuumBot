@@ -465,10 +465,11 @@ namespace rtx {
       }
 
       int index = readFrame();
-      if (index != -1)
+      if (index != -1) {
         formatFrame((unsigned char *) buffers[index].data, frame.data, width,
-                    height, stride); // TODO: Fix YCbCr conversion!
+                    height, stride);
         return frame;
+      }
       /* EAGAIN - continue select loop. */
     }
   }
