@@ -12,8 +12,7 @@
 
 #include <iostream> // TODO: Remove
 
-#include "cameraConstants.hpp"
-#include "Camera.hpp"
+#include "rtxhal.hpp"
 
 #include "MainWindow.hpp"
 
@@ -40,9 +39,10 @@ static void process(MainWindow *window) {
 int main(int argc, char *argv[]) {
   Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-  Camera camera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT);
+  // Initialise hardware
+  rtx::hal::setup();
 
-  MainWindow window(&camera);
+  MainWindow window(hal::hw.getFrontCamera()); // TODO: Add back camera, too
 
   std::thread frameThread(process, &window);
   frameThread.detach();

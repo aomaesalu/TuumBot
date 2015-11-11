@@ -20,7 +20,7 @@ namespace rtx { namespace hal {
       MotorControl m_motorControl;
 
       Camera m_frontCamera;
-      Camera m_backCamera;
+      //Camera m_backCamera;
 
       int m_dribbler;
       int m_coilGun;
