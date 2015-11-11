@@ -9,6 +9,8 @@
 #include <gtkmm/application.h>
 #include <thread>
 
+#include <iostream> // TODO: Remove
+
 #include "cameraConstants.hpp"
 #include "Camera.hpp"
 
@@ -41,8 +43,8 @@ int main(int argc, char *argv[]) {
 
   MainWindow window(&camera);
 
-  //std::thread frameThread(process, &window);
-  //frameThread.detach();
+  std::thread frameThread(process, &window);
+  frameThread.detach();
 
   // Show windows and return when closed
   return app->run(window);
