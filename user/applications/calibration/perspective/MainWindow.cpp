@@ -20,9 +20,11 @@ namespace rtx {
     camera(camera),
     imageArea(this),
     playing(true),
-    calculating(false)
+    calculating(false),
+    filter("")
   {
     setProperties();
+    readFilterFromFile("../data/colors/1.txt");
     construct();
     show_all_children();
     updateFrame();
@@ -38,6 +40,18 @@ namespace rtx {
 
   bool MainWindow::isCalculating() const {
     return calculating;
+  }
+
+  bool MainWindow::isColored(const unsigned int &pixel, const unsigned int &mode) const {
+    if (filter.size() > pixel) {
+      return (filter[pixel] >> (7 - mode)) & 0x1;
+    } else {
+      return false;
+    }
+  }
+
+  bool MainWindow::isColored(const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
+    return isColored(x * 256 * 256 + y * 256 + z, mode);
   }
 
   void MainWindow::setPlaying(const bool &value) {
@@ -144,7 +158,9 @@ namespace rtx {
   }
 
   void MainWindow::readFilterFromFile(const std::string &fileName) {
-    // TODO
+    std::ifstream inputFile(fileName);
+    inputFile >> filter;
+    inputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {

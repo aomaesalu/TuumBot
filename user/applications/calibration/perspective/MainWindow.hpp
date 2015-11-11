@@ -31,6 +31,8 @@ namespace rtx {
 
       bool isPlaying() const;
       bool isCalculating() const;
+      bool isColored(const unsigned int&, const unsigned int&) const;
+      bool isColored(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
 
       void setPlaying(const bool& = true);
       void setCalculating(const bool& = true);
@@ -65,6 +67,8 @@ namespace rtx {
       Camera *camera;
       Frame frame;
       Frame rgbFrame;
+
+      std::string filter;
 
       bool playing;
       bool calculating;

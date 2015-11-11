@@ -22,7 +22,9 @@
 
 namespace rtx {
 
-  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow) {
+  ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
+    mainWindow(mainWindow)
+  {
     initialiseProperties();
     initialiseImage();
     initialiseConstants();
@@ -99,7 +101,27 @@ namespace rtx {
 
   bool ImageDrawingArea::applyCalculations() {
     filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
-    // TODO
+
+    guint8 *pixels = filteredImage->get_pixels();
+    unsigned int channels = filteredImage->get_n_channels();
+    unsigned int stride = filteredImage->get_rowstride();
+
+    guint8 *actualPixels = frame->data;
+    unsigned int actualChannels = 3;
+    unsigned int actualStride = frame->width * actualChannels;
+
+    // Color pixels
+    for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
+      for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
+        guint8 *pixel = pixels + i * channels + j * stride;
+        guint8 *actualPixel = actualPixels + i * actualChannels + j * actualStride;
+        if (mainWindow->isColored(actualPixel[0], actualPixel[1], actualPixel[2], 7)) {
+          pixel[0] *= 0.2;
+          pixel[1] *= 0.2;
+          pixel[2] *= 0.2;
+        }
+      }
+    }
     return true;
   }
 
