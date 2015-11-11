@@ -60,28 +60,16 @@ namespace rtx {
     this->type = type;
   }
 
+  bool Feature::isBlob() const {
+    return type == BLOB;
+  }
+
+  bool Feature::isCorner() const {
+    return type == LINE;
+  }
+
   bool Feature::isCorner() const {
     return type == CORNER;
-  }
-
-  bool Feature::isGoal() const {
-    return type == GOAL;
-  }
-
-  bool Feature::isBall() const {
-    return type == BALL;
-  }
-
-  bool Feature::isRobot() const {
-    return type == ROBOT;
-  }
-
-  bool Feature::isStatic() const {
-    return type == CORNER || type == GOAL;
-  }
-
-  bool Feature::isMovable() const {
-    return type == BALL || type == ROBOT;
   }
 
 };

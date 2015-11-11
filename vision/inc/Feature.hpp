@@ -17,10 +17,9 @@
 namespace rtx {
 
   enum FeatureType {
-    CORNER,
-    GOAL,
-    BALL,
-    ROBOT
+    BLOB,
+    LINE,
+    CORNER
   };
 
   class Feature {
@@ -40,13 +39,9 @@ namespace rtx {
       void setAngle(const double&);
       void setType(const FeatureType&);
 
+      bool isBlob() const;
+      bool isLine() const;
       bool isCorner() const;
-      bool isGoal() const;
-      bool isBall() const;
-      bool isRobot() const;
-
-      bool isStatic() const;
-      bool isMovable() const;
 
     private:
       unsigned int distance;
