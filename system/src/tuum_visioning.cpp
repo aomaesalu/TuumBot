@@ -1,6 +1,7 @@
 /** @file tuum_vision.cpp
  *  Vision system implementation.
  *
+ *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
  *  @date 1. November 2015
@@ -17,9 +18,11 @@ namespace rtx { namespace Visioning {
   BallSet balls;
   RobotSet robots;
   GoalSet goals;
+  RobotSet robots;
 
   void setup() {
-    CameraDevice* cam = hal::hw.getFrontCamera();
+    CameraDevice *frontCamera = hal::hw.getFrontCamera();
+    CameraDevice *backCamera = hal::hw.getBackCamera();
 
     printf("\033[1;32m");
     printf("[Visioning::setup()]Ready.");
@@ -27,30 +30,31 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
-    CameraDevice* cam = hal::hw.getFrontCamera();
+    CameraDevice *frontCamera = hal::hw.getFrontCamera();
+    CameraDevice *backCamera = hal::hw.getBackCamera(); // TODO: Use
 
-    if(cam != nullptr) {
-      featureDetection(cam);
-      ballsDetection(cam);
-      robotsDetection(cam);
-      goalDetection(cam);
+    if (frontCamera) {
+      featureDetection(frontCamera);
+      ballDetection(frontCamera);
+      robotsDetection(frontCamera);
+      goalDetection(frontCamera);
     }
   }
 
-  void featureDetection(CameraDevice* cam) {
-
+  void featureDetection(CameraDevice *camera) {
+    // TODO
   }
 
-  void ballsDetection(CameraDevice* cam) {
-
+  void ballDetection(CameraDevice *camera) {
+    // TODO
   }
 
-  void robotsDetection(CameraDevice* cam) {
-
+  void goalDetection(CameraDevice *camera) {
+    // TODO
   }
 
-  void goalDetection(CameraDevice* cam) {
-
+  void robotDetection(CameraDevice *camera) {
+    // TODO
   }
 
 }}
