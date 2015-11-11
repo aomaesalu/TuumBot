@@ -65,18 +65,32 @@ namespace rtx { namespace Visioning {
   }
 
   void featureDetection(const Frame &frame) {
+    features.clear();
     // TODO
   }
 
   void ballDetection(const Frame &frame) {
-    // TODO
+    balls.clear();
+    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
+      if (Vision::blobs[i]->getColor() == BALL) {
+        // TODO
+      }
+    }
   }
 
   void goalDetection(const Frame &frame) {
-    // TODO
+    goals.clear();
+    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
+      if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
+        // TODO
+      } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
+        // TODO
+      }
+    }
   }
 
   void robotDetection(const Frame &frame) {
+    robots.clear();
     // TODO
   }
 
