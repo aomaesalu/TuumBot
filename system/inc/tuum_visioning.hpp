@@ -21,11 +21,11 @@ using namespace vis;
 
 namespace rtx { namespace Visioning {
 
-  typedef std::vector<Feature> FeatureSet;
-  typedef std::vector<Ball> BallSet;
-  typedef std::vector<Robot> RobotSet;
-  typedef std::vector<Goal> GoalSet;
-  typedef std::vector<Robot> RobotSet;
+  typedef std::vector<Feature*> FeatureSet;
+  typedef std::vector<Ball*> BallSet;
+  typedef std::vector<Robot*> RobotSet;
+  typedef std::vector<Goal*> GoalSet;
+  typedef std::vector<Robot*> RobotSet;
 
   extern std::string filter;
 
