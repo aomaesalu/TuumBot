@@ -77,14 +77,15 @@ namespace rtx {
   }
 
   void ImageAfterDrawingArea::addBufferToFilter() {
-    unsigned int mode = mainWindow->getMode();
+    //unsigned int mode = mainWindow->getMode();
+    for (unsigned int mode = 0; mode < 8; ++mode) {
+      for (std::set<unsigned int>::iterator i = filterRemovalBufferList[mode].begin(); i != filterRemovalBufferList[mode].end(); ++i) {
+        filter[mode].erase(*i);
+      }
 
-    for (std::set<unsigned int>::iterator i = filterRemovalBufferList[mode].begin(); i != filterRemovalBufferList[mode].end(); ++i) {
-      filter[mode].erase(*i);
-    }
-
-    for (std::set<unsigned int>::iterator i = filterAdditionBufferList[mode].begin(); i != filterAdditionBufferList[mode].end(); ++i) {
-      filter[mode].insert(*i);
+      for (std::set<unsigned int>::iterator i = filterAdditionBufferList[mode].begin(); i != filterAdditionBufferList[mode].end(); ++i) {
+        filter[mode].insert(*i);
+      }
     }
 
     resetFilterBuffers();
@@ -175,9 +176,11 @@ namespace rtx {
   }
 
   void ImageAfterDrawingArea::resetFilterBuffers() {
-    unsigned int mode = mainWindow->getMode();
-    filterAdditionBufferList[mode].clear();
-    filterRemovalBufferList[mode].clear();
+    //unsigned int mode = mainWindow->getMode();
+    for (unsigned int mode = 0; mode < 8; ++mode) {
+      filterAdditionBufferList[mode].clear();
+      filterRemovalBufferList[mode].clear();
+    }
   }
 
   bool ImageAfterDrawingArea::applyFilter() {
