@@ -68,33 +68,33 @@ namespace rtx {
               stack.push_back(std::make_pair<unsigned int, unsigned int>(i, j));
               while (!stack.empty()) {
                 std::pair<unsigned int, unsigned int> point = stack.pop_back();
-                if (!visited[mode][point->first][point->second]) { //  Do we need to check it here? We check it again later...
-                  visited[mode][point->first][point->second] = true;
+                if (!visited[mode][point.first][point.second]) { //  Do we need to check it here? We check it again later...
+                  visited[mode][point.first][point.second] = true;
                   blobPoints.push_back(point);
 
-                  guint8 *pixel = pixels + point->first * channels + point->second * stride;
+                  guint8 *pixel = pixels + point.first * channels + point.second * stride;
                   if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], mode)) {
-                    if (point->first > 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point->first - 1, point->second);
-                      if (!visited[mode][point->first][point->second]) {
+                    if (point.first > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
+                      if (!visited[mode][point.first][point.second]) {
                         stack.push_back(newPoint);
                       }
                     }
-                    if (point->first < CAMERA_WIDTH - 1) {
-                      std::pair<unsigned int, unsigned int> newPoint(point->first + 1, point->second);
-                      if (!visited[mode][point->first][point->second]) {
+                    if (point.first < CAMERA_WIDTH - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
+                      if (!visited[mode][point.first][point.second]) {
                         stack.push_back(newPoint);
                       }
                     }
-                    if (point->second > 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point->first, point->second - 1);
-                      if (!visited[mode][point->first][point->second]) {
+                    if (point.second > 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
+                      if (!visited[mode][point.first][point.second]) {
                         stack.push_back(newPoint);
                       }
                     }
-                    if (point->second < CAMERA_HEIGHT - 1) {
-                      std::pair<unsigned int, unsigned int> newPoint(point->first, point->second + 1);
-                      if (!visited[mode][point->first][point->second]) {
+                    if (point.second < CAMERA_HEIGHT - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
+                      if (!visited[mode][point.first][point.second]) {
                         stack.push_back(newPoint);
                       }
                     }
