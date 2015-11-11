@@ -1,25 +1,28 @@
 /** @file tuum_vision.cpp
  *  Vision system implementation.
  *
+ *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 1. November 2015
+ *  @date 11. November 2015
  */
 
-#include "rtxhal.hpp"
 #include "tuum_visioning.hpp"
 
-using namespace rtx::hal;
+using namespace rtx;
 
 namespace rtx { namespace Visioning {
 
   FeatureSet features;
   BallSet balls;
-  RobotSet robots;
   GoalSet goals;
+  RobotSet robots;
 
   void setup() {
-    CameraDevice* cam = hal::hw.getFrontCamera();
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera();
+
+    Vision::setup();
 
     printf("\033[1;32m");
     printf("[Visioning::setup()]Ready.");
@@ -27,30 +30,42 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
-    CameraDevice* cam = hal::hw.getFrontCamera();
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
 
-    if(cam != nullptr) {
-      featureDetection(cam);
-      ballsDetection(cam);
-      robotsDetection(cam);
-      goalDetection(cam);
+    Frame frontFrame, backFrame;
+    if (frontCamera)
+      frontFrame = frontCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
+
+    Vision::process(frontFrame);
+    Vision::process(backFrame);
+
+    if (frontCamera) {
+      featureDetection(frontFrame);
+      ballDetection(frontFrame);
+      goalDetection(frontFrame);
+      robotDetection(frontFrame);
     }
+
+    // TODO: Add back camera frame processing
   }
 
-  void featureDetection(CameraDevice* cam) {
-
+  void featureDetection(const Frame &frame) {
+    // TODO
   }
 
-  void ballsDetection(CameraDevice* cam) {
-
+  void ballDetection(const Frame &frame) {
+    // TODO
   }
 
-  void robotsDetection(CameraDevice* cam) {
-
+  void goalDetection(const Frame &frame) {
+    // TODO
   }
 
-  void goalDetection(CameraDevice* cam) {
-
+  void robotDetection(const Frame &frame) {
+    // TODO
   }
 
 }}

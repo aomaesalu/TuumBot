@@ -219,6 +219,8 @@ namespace rtx {
   }
 
   void MainWindow::saveFilterToFile(const std::string &fileName) {
+    setPlaying(true);
+    setPlaying(false);
     std::ofstream outputFile(fileName);
     outputFile << imageAfterArea.getOutput();
     outputFile.close();

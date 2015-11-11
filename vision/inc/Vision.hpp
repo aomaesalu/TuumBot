@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -11,52 +12,32 @@
 
 #include <vector>
 
+#include "rtxhal.hpp"
 #include "Feature.hpp"
+#include "Blob.hpp"
 
 
 namespace rtx {
 
-  class Vision {
+  namespace Vision {
 
-    public:
-      Vision();
-      ~Vision();
+    typedef std::vector<Blob> BlobSet;
+    typedef std::vector<Feature> LineSet;
+    typedef std::vector<Feature> CornerSet;
 
-      std::vector<Feature*> getBalls() const;
-      std::vector<Feature*> getGoals() const;
-      std::vector<Feature*> getCorners() const;
-      std::vector<Feature*> getRobots() const;
+    extern BlobSet blobs;
+    extern LineSet lines;
+    extern CornerSet corners;
 
-      std::vector<Feature*> getStaticFeatures() const;
-      std::vector<Feature*> getMovableFeatures() const;
-      std::vector<Feature*> getAllFeatures() const;
+    void setup();
+    void process(const Frame&);
 
-      void process();
-
-    private:
-      std::vector<Feature*> balls;
-      std::vector<Feature*> goals;
-      std::vector<Feature*> corners;
-      std::vector<Feature*> robots;
-
-      std::vector<Feature*> staticFeatures;
-      std::vector<Feature*> movableFeatures;
-      std::vector<Feature*> allFeatures;
-
-      void lineDetection();
-      void blobDetection();
-      void ballDetection();
-      void goalDetection();
-      void cornerDetection();
-      void robotDetection();
-
-      void updateStaticFeatures();
-      void updateMovableFeatures();
-      void updateAllFeatures();
-      void updateFeatures();
+    void lineDetection(const Frame&);
+    void blobDetection(const Frame&);
+    void cornerDetection(const Frame&);
 
   };
 
 };
 
-#endif // RTX_VISION_BALL_DETECTION_H
+#endif // RTX_VISION_VISION_H
