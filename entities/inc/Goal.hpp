@@ -17,17 +17,19 @@
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
+#include "RelativePosition.hpp"
 
 
 namespace rtx {
 
-  class Goal: public Entity, public Rectangle {
+  class Goal: public RelativePosition, public Rectangle {//public Entity, public Rectangle, public RelativePosition {
     public:
       Goal(const Goal&);
-      Goal(const Point2D*, const double& = GOAL_WIDTH,
+      /*Goal(const Point2D*, const double& = GOAL_WIDTH,
            const double& = GOAL_LENGTH);
       Goal(const double&, const double&, const double& = GOAL_WIDTH,
-           const double& = GOAL_LENGTH);
+           const double& = GOAL_LENGTH);*/
+      Goal(const unsigned int&, const double&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
     private:
       // TODO: Add color
