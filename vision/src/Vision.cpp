@@ -47,7 +47,7 @@ namespace rtx {
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
-      return isColored(x * 256 * 256 + y * 256 + z, mode);
+      return isColored(frame, filter, x * 256 * 256 + y * 256 + z, mode);
     }
 
     void blobDetection(const Frame &frame, const std::string &filter) {

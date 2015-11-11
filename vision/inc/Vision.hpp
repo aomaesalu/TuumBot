@@ -32,8 +32,8 @@ namespace rtx {
     void setup();
     void process(const Frame&, const std::string&);
 
-    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
-    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
+    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&) const;
 
     void blobDetection(const Frame&, const std::string&);
     void blobDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
