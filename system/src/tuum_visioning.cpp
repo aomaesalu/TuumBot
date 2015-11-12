@@ -46,7 +46,7 @@ namespace rtx { namespace Visioning {
       backFrame = backCamera->getFrame();
 
     Vision::process(frontFrame, filter);
-    Vision::process(backFrame, filter);
+    //Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
