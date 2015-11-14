@@ -8,10 +8,15 @@
  */
 
 #include "tuum_visioning.hpp"
+#include "mathematicalConstants.hpp"
+
+#include <fstream>
 
 using namespace rtx;
 
 namespace rtx { namespace Visioning {
+
+  std::string filter;
 
   FeatureSet features;
   BallSet balls;
@@ -21,6 +26,8 @@ namespace rtx { namespace Visioning {
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera();
+
+    readFilterFromFile("../data/colors/1.txt");
 
     Vision::setup();
 
@@ -39,8 +46,8 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process(frontFrame);
-    Vision::process(backFrame);
+    Vision::process(frontFrame, filter);
+    //Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -52,19 +59,51 @@ namespace rtx { namespace Visioning {
     // TODO: Add back camera frame processing
   }
 
+  void readFilterFromFile(const std::string &fileName) {
+    std::ifstream inputFile(fileName);
+    inputFile >> filter;
+    inputFile.close();
+  }
+
   void featureDetection(const Frame &frame) {
+    features.clear();
     // TODO
   }
 
   void ballDetection(const Frame &frame) {
-    // TODO
+    balls.clear();
+    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
+      if (Vision::blobs[i]->getColor() == BALL) {
+        // TODO: Refactor
+        Point2D* point = Vision::blobs[i]->getPosition();
+        unsigned int distance = 1; // TODO: Calculate based on perspective
+        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+        balls.push_back(new Ball(distance, angle));
+      }
+    }
   }
 
   void goalDetection(const Frame &frame) {
-    // TODO
+    goals.clear();
+    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
+      if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
+        // TODO: Refactor
+        Point2D* point = Vision::blobs[i]->getPosition();
+        unsigned int distance = 1; // TODO: Calculate based on perspective
+        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+        goals.push_back(new Goal(distance, angle));
+      } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
+        // TODO: Refactor
+        Point2D* point = Vision::blobs[i]->getPosition();
+        unsigned int distance = 1; // TODO: Calculate based on perspective
+        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+        goals.push_back(new Goal(distance, angle));
+      }
+    }
   }
 
   void robotDetection(const Frame &frame) {
+    robots.clear();
     // TODO
   }
 

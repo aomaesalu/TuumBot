@@ -11,6 +11,7 @@
 #define RTXENTITIES_H_
 
 #include "Entity.hpp"
+#include "RelativePosition.hpp"
 
 #include "Field.hpp"
 #include "Field1vs1.hpp"

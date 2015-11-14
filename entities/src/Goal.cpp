@@ -12,13 +12,14 @@
 namespace rtx {
 
   Goal::Goal(const Goal &other):
-    Entity(other.getPosition()),
+    //Entity(other.getPosition()),
+    RelativePosition(other.getDistance(), other.getAngle()),
     Rectangle(other.getWidth(), other.getLength())
   {
 
   }
 
-  Goal::Goal(const Point2D *position, const double &width,
+  /*Goal::Goal(const Point2D *position, const double &width,
              const double &length):
     Entity(position),
     Rectangle(width, length)
@@ -29,6 +30,13 @@ namespace rtx {
   Goal::Goal(const double &x, const double &y, const double &width,
              const double &length):
     Entity(new Point2D(x, y)),
+    Rectangle(width, length)
+  {
+
+  }*/
+
+  Goal::Goal(const unsigned int &distance, const double &angle, const double &width, const double &length):
+    RelativePosition(distance, angle),
     Rectangle(width, length)
   {
 
