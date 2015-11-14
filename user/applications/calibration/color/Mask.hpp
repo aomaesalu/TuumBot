@@ -29,6 +29,8 @@ namespace rtx {
 
       void reset();
 
+      // TODO: Add boundaries maximisation and recalculation if necessary
+
       MaskList getAdditionValues() const;
       MaskValueSet getAdditionValues(const unsigned int&) const;
 
@@ -40,6 +42,11 @@ namespace rtx {
 
       MaskMapList getRemovalMaps() const;
       MaskValueMap getRemovalMap(const unsigned int&) const;
+
+      unsigned int getMinX() const;
+      unsigned int getMinY() const;
+      unsigned int getMaxX() const;
+      unsigned int getMaxY() const;
 
       bool isEmpty() const;
       bool isEmpty(const unsigned int&) const;
@@ -59,8 +66,15 @@ namespace rtx {
       MaskMapList additionMaps;
       MaskMapList removalMaps;
 
+      // TODO: Create boundaries construct, extend Boundable
+      unsigned int minX;
+      unsigned int minY;
+      unsigned int maxX;
+      unsigned int maxY;
+
       void initialiseLists(const unsigned int&);
       void initialiseMaps(const unsigned int&, const unsigned int&, const unsigned int&);
+      void initialiseBoundaries();
 
       void resetLists();
       void resetMaps();

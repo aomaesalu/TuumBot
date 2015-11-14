@@ -19,6 +19,7 @@ namespace rtx {
     // Initialise data
     initialiseLists();
     initialiseMaps();
+    initialiseBoundaries();
   }
 
   Mask::~Mask() {
@@ -40,9 +41,17 @@ namespace rtx {
     removalMaps = additionMaps;
   }
 
+  void Mask::initialiseBoundaries() {
+    minX = frameWidth;
+    minY = frameHeight;
+    maxX = 0;
+    maxY = 0;
+  }
+
   void Mask::reset() {
     resetLists();
     resetMaps();
+    initialiseBoundaries();
   }
 
   void Mask::resetLists() {
@@ -95,6 +104,22 @@ namespace rtx {
     return removalMaps[mode];
   }
 
+  unsigned int Mask::getMinX() const {
+    return minX;
+  }
+
+  unsigned int Mask::getMinY() const {
+    return minY;
+  }
+
+  unsigned int Mask::getMaxX() const {
+    return maxX;
+  }
+
+  unsigned int Mask::getMaxY() const {
+    return maxY;
+  }
+
   bool Mask::isEmpty() const {
     for (unsigned int mode = 0; mode < additionValues.size(); ++mode) {
       if (!isAdditionEmpty(mode) || !isRemovalEmpty(mode)) {
@@ -137,11 +162,12 @@ namespace rtx {
 
           if (currentX < frameWidth && currentY < frameHeight) { // If the value overflows, it's already smaller than the maximal value because of usage of unsigned integers, therefore, other checks are not necessary
 
+            // Add values to maps
             additionMaps[mode][currentX][currentY] = value;
             removalMaps[mode][currentX][currentY] = !value;
 
+            // Add values to lists
             unsigned int linearCoordinate = currentY * frameWidth + currentX;
-
             if (value) {
               additionValues[mode].insert(linearCoordinate);
               removalValues[mode].erase(linearCoordinate);
@@ -150,7 +176,19 @@ namespace rtx {
               additionValues[mode].erase(linearCoordinate);
             }
 
-            // TODO: Add mask boundaries
+            // Calculate new boundaries
+            if (currentX < minX) {
+              minX = currentX;
+            }
+            if (currentY < minY) {
+              minY = currentY;
+            }
+            if (currentX > maxX) {
+              maxX = currentX;
+            }
+            if (currentY > maxY) {
+              maxY = currentY;
+            }
 
           }
 
