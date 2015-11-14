@@ -60,7 +60,7 @@ namespace rtx {
     return camera;
   }
 
-  Frame* Application::getFrame() const {
+  Frame* Application::getFrame() {
     return &frame;
   }
 
@@ -84,11 +84,11 @@ namespace rtx {
     return mode;
   }
 
-  Mask* Application::getMask() const {
+  Mask* Application::getMask() {
     return &mask;
   }
 
-  Filter* Application::getFilter() const {
+  Filter* Application::getFilter() {
     return &filter;
   }
 

@@ -30,7 +30,7 @@ namespace rtx {
       MainWindow* getWindow() const;
 
       Camera* getCamera() const;
-      Frame* getFrame() const;
+      Frame* getFrame();
 
       Glib::RefPtr<Gdk::Pixbuf> getImage() const;
 
@@ -40,8 +40,8 @@ namespace rtx {
       std::vector<std::string> getModes() const;
       unsigned int getMode() const;
 
-      Mask* getMask() const;
-      Filter* getFilter() const;
+      Mask* getMask();
+      Filter* getFilter();
 
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
