@@ -11,6 +11,7 @@
 #include <ctime> // For calculating FPS
 
 #include <iostream> // TODO: Remove
+#include <fstream>
 
 #include "rtxhal.hpp"
 
