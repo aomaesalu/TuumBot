@@ -13,10 +13,12 @@
 #include <vector>
 #include <set>
 
+#include "Mask.hpp"
+
 
 namespace rtx {
 
-  typedef std::set<unsigned int> ModeFilter;
+  typedef std::set<unsigned int> FilterValueSet;
   typedef std::vector<ModeFilter> FilterList;
 
   class Filter {
@@ -26,13 +28,13 @@ namespace rtx {
       virtual ~Filter();
 
       FilterList getValues() const;
-      ModeFilter getValues(const unsigned int&) const;
+      FilterValueSet getValues(const unsigned int&) const;
 
       FilterList getAdditionBuffers() const;
-      ModeFilter getAdditionBuffer(const unsigned int&) const;
+      FilterValueSet getAdditionBuffer(const unsigned int&) const;
 
       FilterList getRemovalBuffers() const;
-      ModeFilter getRemovalBuffer(const unsigned int&) const;
+      FilterValueSet getRemovalBuffer(const unsigned int&) const;
 
       void addMasksToBuffers(const MaskList&, const MaskList&);
       void addBuffersToFilter();
