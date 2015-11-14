@@ -27,6 +27,9 @@ namespace rtx {
       Filter();
       virtual ~Filter();
 
+      void reset();
+      void reset(const unsigned int&);
+
       FilterList getValues() const;
       FilterValueSet getValues(const unsigned int&) const;
 
@@ -42,9 +45,16 @@ namespace rtx {
       std::string getString() const;
 
     private:
+      unsigned int numberOfModes;
+
       FilterList values;
       FilterList additionBuffers;
       FilterList removalBuffers;
+
+      void initialise();
+
+      void resetValues(const unsigned int&);
+      void resetBuffers(const unsigned int&);
 
   };
 
