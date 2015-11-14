@@ -31,6 +31,8 @@ namespace rtx {
 
       // TODO: Add boundaries maximisation and recalculation if necessary
 
+      bool getValue(const unsigned int&, const unsigned int&, const unsigned int&) const;
+
       MaskList getAdditionValues() const;
       MaskValueSet getAdditionValues(const unsigned int&) const;
 

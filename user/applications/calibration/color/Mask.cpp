@@ -75,6 +75,10 @@ namespace rtx {
     }
   }
 
+  bool Mask::getValue(const unsigned int& mode, const unsigned int &x, const unsigned int &y) const {
+    return additionMaps[mode][x][y];
+  }
+
   MaskList Mask::getAdditionValues() const {
     return additionValues;
   }
