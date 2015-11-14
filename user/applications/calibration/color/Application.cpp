@@ -140,7 +140,7 @@ namespace rtx {
 
   int Application::run() {
     // Show windows and return when closed
-    return gtkApplication->run(window);
+    return gtkApplication->run(*window);
   }
 
   bool Application::updateFrame() {
