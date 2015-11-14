@@ -46,8 +46,8 @@ namespace rtx {
       bool isAdditionEmpty(const unsigned int&) const;
       bool isRemovalEmpty(const unsigned int&) const;
 
-      void add(const unsigned int&, const unsigned int&);
-      void remove(const unsigned int&, const unsigned int&);
+      void add(const unsigned int&, const unsigned int&, const unsigned int&, const int&);
+      void remove(const unsigned int&, const unsigned int&, const unsigned int&, const int&);
 
     private:
       unsigned int numberOfModes;
@@ -65,7 +65,7 @@ namespace rtx {
       void resetLists();
       void resetMaps();
 
-      void change(const unsigned int&, const unsigned int&, const bool&);
+      void change(const unsigned int&, const unsigned int&, const unsigned int&, const int&, const bool&);
 
   };
 

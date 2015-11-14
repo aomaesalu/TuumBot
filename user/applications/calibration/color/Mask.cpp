@@ -15,6 +15,7 @@ namespace rtx {
     numberOfModes = numberOfModes;
     frameWidth = frameWidth;
     frameHeight = frameHeight;
+
     // Initialise data
     initialiseLists();
     initialiseMaps();
@@ -115,16 +116,49 @@ namespace rtx {
     return removalValues[mode].empty();
   }
 
-  void Mask::add(const unsigned int &x, const unsigned int &y) {
-    change(x, y, true);
+  void Mask::add(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius) {
+    change(x, y, mode, radius, true);
   }
 
-  void Mask::remove(const unsigned int &x, const unsigned int &y) {
-    change(x, y, false);
+  void Mask::remove(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius) {
+    change(x, y, mode, radius, false);
   }
 
-  void Mask::change(const unsigned int &x, const unsigned int &y, const bool &value) {
-    // TODO
+  void Mask::change(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius, const bool &value) {
+    unsigned int radiusSquared = radius * radius;
+
+    for (int i = -radius; i < radius; ++i) {
+      for (int j = -radius; j < radius; ++j) {
+
+        if (i * i + j * j <= radiusSquared) {
+
+          unsigned int currentX = x + i;
+          unsigned int currentY = y + j;
+
+          if (currentX < frameWidth && currentY < frameHeight) { // If the value overflows, it's already smaller than the maximal value because of usage of unsigned integers, therefore, other checks are not necessary
+
+            additionMaps[mode][currentX][currentY] = value;
+            removalMaps[mode][currentX][currentY] = !value;
+
+            unsigned int linearCoordinate = currentY * frameWidth + currentX;
+
+            if (value) {
+              additionValues[mode].insert(linearCoordinate);
+              removalValues[mode].erase(linearCoordinate);
+            } else {
+              removalValues[mode]insert(linearCoordinate);
+              additionValues[mode].erase(linearCoordinate);
+            }
+
+            // TODO: Add mask boundaries
+
+          }
+
+        }
+
+      }
+    }
+
   }
 
 }
