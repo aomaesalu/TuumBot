@@ -86,8 +86,22 @@ namespace rtx {
     // TODO
   }
 
+  // TODO: Refactor for faster output
   std::string Filter::getString() const {
-    // TODO
+    std::string output = "";
+    for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
+      char colorValue = 0;
+      // We currently assume 0 < numberOfModes <= 8
+      for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+        bool modeValue = 0;
+        if (values[mode].find(i) != values[mode].end()) {
+          modeValue = 1;
+        }
+        colorValue = (colorValue << 1) + modeValue;
+      }
+      output += colorValue;
+    }
+    return output;
   }
 
 }
