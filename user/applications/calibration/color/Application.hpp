@@ -19,10 +19,11 @@ namespace rtx {
   class Application {
 
     public:
-      Application(Camera*, Camera*);
+      Application(int, char*, Camera*, Camera*);
       virtual ~Application();
 
-      MainWindow* getMainWindow() const;
+      Glib::RefPtr<Gtk::Application> getGtkApplication() const;
+      MainWindow* getWindow() const;
 
       Camera* getFrontCamera() const;
       Camera* getBackCamera() const;
@@ -36,10 +37,11 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
-      void run();
+      int run();
 
     private:
-      MainWindow *mainWindow;
+      Glib::RefPtr<Gtk::Application> gtkApplication;
+      MainWindow *window;
 
       Camera *frontCamera;
       Camera *backCamera;
