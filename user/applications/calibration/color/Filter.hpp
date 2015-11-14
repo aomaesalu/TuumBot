@@ -39,7 +39,7 @@ namespace rtx {
       FilterList getRemovalBuffers() const;
       FilterValueSet getRemovalBuffer(const unsigned int&) const;
 
-      void addMasksToBuffers(const MaskList&, const MaskList&);
+      void addMasksToBuffers(const Frame&, const MaskList&, const MaskList&);
       void addBuffersToFilter();
 
       std::string getString() const;
