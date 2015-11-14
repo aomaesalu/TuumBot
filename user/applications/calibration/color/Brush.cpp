@@ -27,7 +27,11 @@ namespace rtx {
   }
 
   unsigned int Brush::getSize() const {
-    // TODO
+    return scale->get_value();
+  }
+
+  unsigned int Brush::getRadius() const {
+    return getSize() / 2;
   }
 
   unsigned int Brush::getX() const {
@@ -36,6 +40,37 @@ namespace rtx {
 
   unsigned int Brush::getY() const {
     return y;
+  }
+
+  unsigned int Brush::getMinX() const {
+    unsigned int value = x - getRadius();
+    if (value >= CAMERA_WIDTH) {
+      value = 0;
+    }
+    return value;
+  }
+
+  unsigned int Brush::getMinY() const {
+    unsigned int value = y - radius;
+    if (value >= CAMERA_HEIGHT) {
+      value = 0;
+    }
+    return value;
+  }
+
+  unsigned int Brush::getMaxX() const {
+    unsigned int value = x + radius;
+    if (value >= CAMERA_WIDTH) {
+      value = CAMERA_WIDTH - 1;
+    }
+    return value;
+  }
+
+  unsigned int Brush::getMaxY() const {
+    unsigned int value = y + radius;
+    if (value >= CAMERA_HEIGHT) {
+      value = CAMERA_HEIGHT - 1;
+    }
   }
 
   void Brush::setX(const unsigned int &value) {

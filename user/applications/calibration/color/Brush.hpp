@@ -20,9 +20,17 @@ namespace rtx {
       virtual ~Brush();
 
       Gtk::Scale* getScale() const;
+
       unsigned int getSize() const;
+      unsigned int getRadius() const;
+      
       unsigned int getX() const;
       unsigned int getY() const;
+
+      unsigned int getMinX() const;
+      unsigned int getMinY() const;
+      unsigned int getMaxX() const;
+      unsigned int getMaxY() const;
 
       void setX(const unsigned int&);
       void setY(const unsigned int&);
