@@ -53,6 +53,8 @@ namespace rtx {
       Frame frame;
       Frame rgbFrame;
 
+      Glib::RefPtr<Gdk::Pixbuf> image;
+
       bool playing;
       bool masking;
 
@@ -61,6 +63,8 @@ namespace rtx {
 
       Mask mask;
       Filter filter;
+
+      void initialiseImage();
 
   };
 

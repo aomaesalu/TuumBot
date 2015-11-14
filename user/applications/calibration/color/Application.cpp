@@ -38,6 +38,15 @@ namespace rtx {
     delete window;
   }
 
+  void Application::initialiseImage() {
+    image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
+    //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
+
+    // Show the whole image
+    if (image)
+      set_size_request(image->get_width(), image->get_height());
+  }
+
   Glib::RefPtr<Gtk::Application> Application::getGtkApplication() const {
     return gtkApplication;
   }
