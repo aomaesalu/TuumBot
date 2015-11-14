@@ -16,15 +16,15 @@ namespace rtx {
     frameWidth = frameWidth;
     frameHeight = frameHeight;
     // Initialise data
-    initialiseLists(numberOfModes);
-    initialiseMaps(numberOfModes, frameWidth, frameHeight);
+    initialiseLists();
+    initialiseMaps();
   }
 
   Mask::~Mask() {
     // Nothing to do here
   }
 
-  void Mask::initialiseLists(const unsigned int &numberOfModes) {
+  void Mask::initialiseLists() {
     MaskValueSet emptySet;
     // TODO: Use set/vector initialisation constructors if possible
     for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
@@ -33,7 +33,7 @@ namespace rtx {
     }
   }
 
-  void Mask::initialiseMaps(const unsigned int &numberOfModes, const unsigned int &frameWidth, const unsigned int &frameHeight) {
+  void Mask::initialiseMaps() {
     MaskMapList emptyMaps(numberOfModes, MaskValueMap(frameWidth, std::vector<bool>(frameHeight, false)));
     additionMaps = emptyMaps;
     removalMaps = additionMaps;
@@ -45,16 +45,16 @@ namespace rtx {
   }
 
   void Mask::resetLists() {
-    for (unsigned int mode = 0; mode < additionValues.size(); ++mode) {
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
       additionValues[mode].clear();
       removalValues[mode].clear();
     }
   }
 
   void Mask::resetMaps() {
-    for (unsigned int mode = 0; mode < additionMaps.size(); ++mode) {
-      for (unsigned int x = 0; x < additionMaps[mode].size(); ++x) {
-        for (unsigned int y = 0; y < additionMaps[mode][x].size(); ++y) {
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+      for (unsigned int x = 0; x < frameWidth; ++x) {
+        for (unsigned int y = 0; y < frameHeight; ++y) {
           additionMaps[mode][x][y] = false;
           removalMaps[mode][x][y] = false;
         }

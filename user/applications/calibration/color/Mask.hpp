@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November, 2015
+ *  @date 14 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_MASK_H
@@ -50,6 +50,10 @@ namespace rtx {
       void remove(const unsigned int&, const unsigned int&);
 
     private:
+      unsigned int numberOfModes;
+      unsigned int frameWidth;
+      unsigned int frameHeight;
+
       MaskList additionValues;
       MaskList removalValues;
       MaskMapList additionMaps;
