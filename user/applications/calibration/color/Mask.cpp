@@ -51,19 +51,24 @@ namespace rtx {
   }
 
   bool Mask::isEmpty() const {
-    // TODO
+    for (unsigned int mode = 0; mode < additionValues.size(); ++mode) {
+      if (!isAdditionEmpty(mode) || !isRemovalEmpty(mode)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   bool Mask::isEmpty(const unsigned int &mode) const {
-    // TODO
+    return isAdditionEmpty(mode) && isRemovalEmpty(mode);
   }
 
   bool Mask::isAdditionEmpty(const unsigned int &mode) const {
-    // TODO
+    return additionValues[mode].empty();
   }
 
   bool Mask::isRemovalEmpty(const unsigned int &mode) const {
-    // TODO
+    return removalValues[mode].empty();
   }
 
   void add(const unsigned int &x, const unsigned int &y) {
