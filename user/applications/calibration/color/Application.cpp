@@ -118,7 +118,7 @@ namespace rtx {
   }
 
   void Application::sendMasksToFilter() {
-    filter.addMasksToBuffers(mask.getAdditionValues(), mask.getRemovalValues());
+    filter.addMasksToBuffers(frame, mask.getAdditionValues(), mask.getRemovalValues());
   }
 
   void Application::readFilterFromFile(const std::string &fileName) {
