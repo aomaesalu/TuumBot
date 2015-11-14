@@ -63,6 +63,14 @@ namespace rtx {
     return image;
   }
 
+  bool Application::isPlaying() const {
+    return playing;
+  }
+
+  bool Application::isMasking() const {
+    return masking;
+  }
+
   std::vector<std::string> Application::getModes() const {
     return modes;
   }
