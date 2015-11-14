@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.cpp
- * Color calibration application main window.
+ *  @file MainWindow.cpp
+ *  Color calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 14 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -16,74 +17,38 @@
 
 namespace rtx {
 
-  std::vector<std::string> modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
-
-  MainWindow::MainWindow(Camera *camera):
-    camera(camera),
-    imageBeforeArea(this, &brushSizeScale),
-    imageAfterArea(this, &deltaChooseScale),
-    playing(true),
-    masking(false)
+  MainWindow::MainWindow(Application *application):
+    maskingArea(application),
+    previewArea(application)
   {
+    // Attach application information
+    application = application;
+
+    // Set GUI main properties
     setProperties();
+
+    // Construct the GUI
     construct();
+
+    // Initialise video areas
+    maskingArea->initialise();
+    previewArea->initialise();
+
+    // Update video frame
+    // TODO: updateFrame();
+
+    // Show GUI contents
     show_all_children();
-    updateFrame();
   }
 
   MainWindow::~MainWindow() {
     // Nothing to do here
   }
 
-  bool MainWindow::isPlaying() const {
-    return playing;
-  }
-
-  bool MainWindow::isMasking() const {
-    return masking;
-  }
-
-  std::vector<std::string> MainWindow::getModes() const {
-    return modes;
-  }
-
-  unsigned int MainWindow::getMode() const {
-    return mode;
-  }
-
-  void MainWindow::setPlaying(const bool &value) {
-    if (value) {
-      imageBeforeArea.setMasking(false);
-      imageAfterArea.addBufferToFilter();
-    }
-    playButton.set_sensitive(!value);
-    stopButton.set_sensitive(value);
-    playing = value; // We have to do this at the end of this method because of lock-free threading
-  }
-
-  void MainWindow::setMasking(const bool &value) {
-    masking = value;
-  }
-
-  bool MainWindow::updateFrame() {
-    if (!playing) {
-      return false;
-    }
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
-    imageBeforeArea.updateFrame(&frame, &rgbFrame);
-    imageAfterArea.updateFrame(&frame, &rgbFrame);
-    return true;
-  }
-
-  void MainWindow::sendToFilter(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
-    imageAfterArea.calculateFilterBuffer(additionMaskList, removalMaskList);
-  }
-
   void MainWindow::setProperties() {
     // Set window properties
     set_title("Color calibration program");
-    //set_size_request(300, 300);
+    // Set the window to be of static size
     set_resizable(false);
     // Set window border width
     set_border_width(5);
@@ -93,10 +58,10 @@ namespace rtx {
     constructGrid();
     constructDrawingButtonsBox();
     constructGeneralButtonsBox();
-    constructImageBeforeFrame();
-    constructImageAfterFrame();
-    constructImageBeforeOptionsBox();
-    constructImageAfterOptionsBox();
+    constructMaskingAreaFrame();
+    constructPreviewAreaFrame();
+    constructMaskingAreaOptionsBox();
+    constructPreviewAreaOptionsBox();
   }
 
   void MainWindow::constructGrid() {
@@ -123,38 +88,38 @@ namespace rtx {
     grid.attach(generalButtonsBox, 1, 0, 1, 1);
   }
 
-  void MainWindow::constructImageBeforeFrame() {
-    imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
-    imageBeforeFrame.add(imageBeforeArea);
-    imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-    imageBeforeFrame.set_border_width(0);
-    grid.attach(imageBeforeFrame, 0, 1, 1, 1);
+  void MainWindow::constructMaskingAreaFrame() {
+    maskingArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
+    maskingAreaFrame.add(maskingArea);
+    maskingAreaFrame.set_label("Masking");
+    maskingAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    maskingAreaFrame.set_border_width(0);
+    grid.attach(maskingAreaFrame, 0, 1, 1, 1);
   }
 
-  void MainWindow::constructImageAfterFrame() {
-    imageAfterArea.add_events(Gdk::SCROLL_MASK);
-    imageAfterFrame.add(imageAfterArea);
-    imageAfterFrame.set_label("After");
-    imageAfterFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-    imageAfterFrame.set_border_width(0);
-    grid.attach(imageAfterFrame, 1, 1, 1, 1);
+  void MainWindow::constructPreviewAreaFrame() {
+    previewArea.add_events(Gdk::SCROLL_MASK);
+    previewAreaFrame.add(previewArea);
+    previewAreaFrame.set_label("Preview");
+    previewAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    previewAreaFrame.set_border_width(0);
+    grid.attach(previewAreaFrame, 1, 1, 1, 1);
   }
 
-  void MainWindow::constructImageBeforeOptionsBox() {
-    displayMaskBeforeButton.set_label("Display mask on \"before\" image"); // TODO: Add scale to change brightness instead
+  void MainWindow::constructMaskingAreaOptionsBox() {
+    displayMaskBeforeButton.set_label("Display mask on \"masking\" image"); // TODO: Add scale to change brightness instead
     displayMaskBeforeButton.set_active();
     displayMaskBeforeButton.set_can_focus(false);
-    imageBeforeOptionsBox.add(displayMaskBeforeButton);
-    grid.attach(imageBeforeOptionsBox, 0, 2, 1, 1);
+    maskingAreaOptionsBox.add(displayMaskBeforeButton);
+    grid.attach(maskingAreaOptionsBox, 0, 2, 1, 1);
   }
 
-  void MainWindow::constructImageAfterOptionsBox() {
-    displayMaskAfterButton.set_label("Display filter on \"after\" image"); // TODO: Add scale to change brightness instead
+  void MainWindow::constructPreviewAreaOptionsBox() {
+    displayMaskAfterButton.set_label("Display filter on \"preview\" image"); // TODO: Add scale to change brightness instead
     displayMaskAfterButton.set_active();
     displayMaskAfterButton.set_can_focus(false);
-    imageAfterOptionsBox.add(displayMaskAfterButton);
-    grid.attach(imageAfterOptionsBox, 1, 2, 1, 1);
+    previewAreaOptionsBox.add(displayMaskAfterButton);
+    grid.attach(previewAreaOptionsBox, 1, 2, 1, 1);
   }
 
   void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
@@ -218,30 +183,31 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
-  void MainWindow::saveFilterToFile(const std::string &fileName) {
-    setPlaying(true);
-    setPlaying(false);
-    std::ofstream outputFile(fileName);
-    outputFile << imageAfterArea.getOutput();
-    outputFile.close();
+  Gtk::Scale* MainWindow::getBrushScale() const {
+    return brushScale;
   }
 
-  void MainWindow::readFilterFromFile(const std::string &filename) {
-    // TODO
+  Gtk::Scale* MainWindow::getDeltaScale() const {
+    return deltaScale;
+  }
+
+  void MainWindow::setPlaying(const bool &value) {
+    playButton.set_sensitive(!value);
+    stopButton.set_sensitive(value);
   }
 
   void MainWindow::on_playButton_clicked() {
-    setPlaying();
+    application->setPlaying();
   }
 
   void MainWindow::on_stopButton_clicked() {
-    setPlaying(false);
+    application->setPlaying(false);
   }
 
   void MainWindow::on_modeChooseComboBox_changed() {
     mode = modeChooseComboBox.get_active_row_number();
-    imageBeforeArea.redraw();
-    imageAfterArea.queue_draw();
+    maskingArea.redraw();
+    previewArea.queue_draw();
   }
 
   void MainWindow::on_saveButton_clicked() {
@@ -256,7 +222,7 @@ namespace rtx {
     // Handle response
     if (result == Gtk::RESPONSE_OK) {
       std::cout << "Save clicked" << std::endl;
-      saveFilterToFile(dialog.get_filename());
+      application->saveFilterToFile(dialog.get_filename());
     } else if (result == Gtk::RESPONSE_CANCEL) {
       std::cout << "Cancel clicked" << std::endl;
     } else {

@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.hpp
- * Color calibration application main window.
+ *  @file MainWindow.hpp
+ *  Color calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 14 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_MAIN_WINDOW_H
@@ -16,10 +17,8 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 
-#include "Camera.hpp"
-
-#include "ImageBeforeDrawingArea.hpp"
-#include "ImageAfterDrawingArea.hpp"
+#include "MaskingArea.hpp"
+#include "PreviewArea.hpp"
 
 
 namespace rtx {
@@ -30,18 +29,10 @@ namespace rtx {
       MainWindow(Camera*);
       virtual ~MainWindow();
 
-      bool isPlaying() const;
-      bool isMasking() const;
-
-      std::vector<std::string> getModes() const;
-      unsigned int getMode() const;
+      Gtk::Scale* getBrushScale() const;
+      Gtk::Scale* getDeltaScale() const;
 
       void setPlaying(const bool& = true);
-      void setMasking(const bool& = true);
-
-      bool updateFrame();
-
-      void sendToFilter(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
 
     protected:
       Gtk::Grid grid;
@@ -49,10 +40,10 @@ namespace rtx {
       // Frames and boxes for the layout
       Gtk::Box drawingButtonsBox;
       Gtk::Box generalButtonsBox;
-      Gtk::Frame imageBeforeFrame;
-      Gtk::Frame imageAfterFrame;
-      Gtk::Box imageBeforeOptionsBox;
-      Gtk::Box imageAfterOptionsBox;
+      Gtk::Frame maskingAreaFrame;
+      Gtk::Frame previewAreaFrame;
+      Gtk::Box maskingAreaOptionsBox;
+      Gtk::Box previewAreaOptionsBox;
 
       // Drawing buttons and labels
       Gtk::Label modeChooseLabel;
@@ -76,18 +67,11 @@ namespace rtx {
       Gtk::CheckButton displayMaskAfterButton;
 
       // Image drawing areas and contexts
-      ImageBeforeDrawingArea imageBeforeArea;
-      ImageAfterDrawingArea imageAfterArea;
+      MaskingArea maskingArea;
+      PreviewArea previewArea;
 
     private:
-      Camera *camera;
-      Frame frame;
-      Frame rgbFrame;
-
-      bool playing;
-      bool masking;
-
-      unsigned int mode;
+      Application *application;
 
       void setProperties();
 
@@ -96,10 +80,10 @@ namespace rtx {
 
       void constructDrawingButtonsBox();
       void constructGeneralButtonsBox();
-      void constructImageBeforeFrame();
-      void constructImageAfterFrame();
-      void constructImageBeforeOptionsBox();
-      void constructImageAfterOptionsBox();
+      void constructMaskingAreaFrame();
+      void constructMaskingAreaFrame();
+      void constructPreviewAreaOptionsBox();
+      void constructPreviewAreaOptionsBox();
 
       void constructModeChooseComboBox(Gtk::Container&);
       void constructBrushSizeScale(Gtk::Container&);
@@ -111,9 +95,6 @@ namespace rtx {
       void constructFileChooseComboBox(Gtk::Container&);
       void constructSaveButton(Gtk::Container&);
       void constructExitButton(Gtk::Container&);
-
-      void saveFilterToFile(const std::string&);
-      void readFilterFromFile(const std::string&);
 
       void on_playButton_clicked();
       void on_stopButton_clicked();
