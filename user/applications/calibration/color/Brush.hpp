@@ -23,7 +23,10 @@ namespace rtx {
 
       unsigned int getSize() const;
       unsigned int getRadius() const;
-      
+
+      unsigned int getUpperLimit() const;
+      unsigned int getLowerLimit() const;
+
       unsigned int getX() const;
       unsigned int getY() const;
 

@@ -34,6 +34,14 @@ namespace rtx {
     return getSize() / 2;
   }
 
+  unsigned int Brush::getUpperLimit() const {
+    return scale->get_adjustment()->property_upper();
+  }
+
+  unsigned int Brush::getLowerLimit() const {
+    return scale->get_adjustment()->property_lower()
+  }
+
   unsigned int Brush::getX() const {
     return x;
   }
