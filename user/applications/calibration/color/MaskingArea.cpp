@@ -110,7 +110,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &context) {
+  bool MaskingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
     if (!brushedImage)
       return false;
 
@@ -119,7 +119,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::on_draw(const Cairo::RefPtr<Cairo::Context>&) {
+  bool MaskingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
     if (application->isMasking() && !applyMask())
       return false;
 
@@ -134,7 +134,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::on_button_press_event(GdkEventButton*) {
+  bool MaskingArea::on_button_press_event(GdkEventButton *buttonEvent) {
     if (buttonEvent->type == GDK_BUTTON_PRESS) {
       application->setMasking();
       // TODO: initialiseMaskBoundaries();
@@ -155,7 +155,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::on_button_release_event(GdkEventButton*) {
+  bool MaskingArea::on_button_release_event(GdkEventButton *buttonEvent) {
     if (buttonEvent->type == GDK_BUTTON_RELEASE) {
       if (buttonEvent->button == 1) { // Left mouse button
         if (addingMode) {
@@ -172,7 +172,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::on_motion_notify_event(GdkEventMotion*) {
+  bool MaskingArea::on_motion_notify_event(GdkEventMotion *motionEvent) {
     if (!locateBrush(motionEvent->x, motionEvent->y))
       return false;
     if (addingMode) {
@@ -183,7 +183,7 @@ namespace rtx {
     return true;
   }
 
-  bool MaskingArea::on_scroll_event(GdkEventScroll*) {
+  bool MaskingArea::on_scroll_event(GdkEventScroll *scrollEvent) {
     if (scrollEvent->direction == GDK_SCROLL_UP) {
       if (brush->getSize() < brush->getUpperLimit()) {
         brush->incrementSize();
