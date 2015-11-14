@@ -7,6 +7,8 @@
  *  @date 14 November 2015
  */
 
+ #include "Mask.hpp"
+
 
 namespace rtx {
 
