@@ -39,7 +39,11 @@ namespace rtx {
   }
 
   unsigned int Brush::getLowerLimit() const {
-    return scale->get_adjustment()->property_lower()
+    return scale->get_adjustment()->property_lower();
+  }
+
+  unsigned int Brush::getStepSize() const {
+    return scale->get_adjustment()->get_step_increment();
   }
 
   unsigned int Brush::getX() const {
@@ -79,6 +83,18 @@ namespace rtx {
     if (value >= CAMERA_HEIGHT) {
       value = CAMERA_HEIGHT - 1;
     }
+  }
+
+  void Brush::setSize(const unsigned int &value) {
+    scale->set_value(value);
+  }
+
+  void Brush::incrementSize() {
+    setSize(getSize() + getStepSize());
+  }
+
+  void Brush::decrementSize() {
+    setSize(getSize() - getStepSize());
   }
 
   void Brush::setX(const unsigned int &value) {

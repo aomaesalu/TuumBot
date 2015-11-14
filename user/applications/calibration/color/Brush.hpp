@@ -26,6 +26,7 @@ namespace rtx {
 
       unsigned int getUpperLimit() const;
       unsigned int getLowerLimit() const;
+      unsigned int getStepSize() const;
 
       unsigned int getX() const;
       unsigned int getY() const;
@@ -34,6 +35,10 @@ namespace rtx {
       unsigned int getMinY() const;
       unsigned int getMaxX() const;
       unsigned int getMaxY() const;
+
+      void setSize(const unsigned int&);
+      void incrementSize();
+      void decrementSize();
 
       void setX(const unsigned int&);
       void setY(const unsigned int&);
