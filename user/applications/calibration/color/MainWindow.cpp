@@ -24,18 +24,26 @@ namespace rtx {
   {
     // Attach application information
     this->application = application;
+    std::cout << "A1" << std::endl;
 
     // Set GUI main properties
     setProperties();
+    std::cout << "A2" << std::endl;
 
     // Construct the GUI
     construct();
+    std::cout << "A3" << std::endl;
 
     // Update video frame
     // TODO: updateFrame();
+    maskingArea.redraw();
+    std::cout << "A4" << std::endl;
+    previewArea.queue_draw();
+    std::cout << "A5" << std::endl;
 
     // Show GUI contents
     show_all_children();
+    std::cout << "A6" << std::endl;
   }
 
   MainWindow::~MainWindow() {
@@ -52,13 +60,21 @@ namespace rtx {
   }
 
   void MainWindow::construct() {
+    std::cout << "B1" << std::endl;
     constructGrid();
+    std::cout << "B2" << std::endl;
     constructDrawingButtonsBox();
+    std::cout << "B3" << std::endl;
     constructGeneralButtonsBox();
+    std::cout << "B4" << std::endl;
     constructMaskingAreaFrame();
+    std::cout << "B5" << std::endl;
     constructPreviewAreaFrame();
+    std::cout << "B6" << std::endl;
     constructMaskingAreaOptionsBox();
+    std::cout << "B7" << std::endl;
     constructPreviewAreaOptionsBox();
+    std::cout << "B8" << std::endl;
   }
 
   void MainWindow::constructGrid() {
@@ -68,13 +84,21 @@ namespace rtx {
   }
 
   void MainWindow::constructDrawingButtonsBox() {
+    std::cout << "C1" << std::endl;
     constructModeChooseComboBox(drawingButtonsBox);
+    std::cout << "C2" << std::endl;
     constructBrushSizeScale(drawingButtonsBox);
+    std::cout << "C3" << std::endl;
     constructDeltaChooseScale(drawingButtonsBox);
+    std::cout << "C4" << std::endl;
     constructPlayButton(drawingButtonsBox);
+    std::cout << "C5" << std::endl;
     constructStopButton(drawingButtonsBox);
+    std::cout << "C6" << std::endl;
     drawingButtonsBox.set_spacing(10);
+    std::cout << "C7" << std::endl;
     grid.attach(drawingButtonsBox, 0, 0, 1, 1);
+    std::cout << "C8" << std::endl;
   }
 
   void MainWindow::constructGeneralButtonsBox() {
@@ -122,12 +146,16 @@ namespace rtx {
   void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
     modeChooseLabel.set_text("Mode:");
     parentContainer.add(modeChooseLabel);
-    for (std::vector<std::string>::iterator mode = application->getModes().begin(); mode != application->getModes().end(); ++mode) {
+    for (std::vector<std::string>::const_iterator mode = application->getModes().begin(); mode != application->getModes().end(); ++mode) {
       modeChooseComboBox.append(*mode);
     }
+    std::cout << "D6" << std::endl;
     modeChooseComboBox.signal_changed().connect(sigc::mem_fun(*this, &MainWindow::on_modeChooseComboBox_changed));
+    std::cout << "D7" << std::endl;
     modeChooseComboBox.set_active(0);
+    std::cout << "D8" << std::endl;
     parentContainer.add(modeChooseComboBox);
+    std::cout << "D9" << std::endl;
   }
 
   void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {

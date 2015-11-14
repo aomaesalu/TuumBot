@@ -12,14 +12,20 @@
 #include "cameraConstants.hpp"
 
 #include <fstream>
+#include <iostream> // TODO: Remove
 
 
 namespace rtx {
 
   Application::Application(int &argc, char *argv[], Camera *camera):
     mask(8, CAMERA_WIDTH, CAMERA_HEIGHT),
-    filter(8)
+    filter(8),
+    modes(std::vector<std::string>(8, ""))
   {
+    // Attach command line parameters
+    this->argc = argc;
+    this->argv = argv;
+
     // Attach camera information
     this->camera = camera;
 
@@ -35,10 +41,12 @@ namespace rtx {
     initialiseImage();
 
     // Create gtkmm application
-    gtkApplication = Gtk::Application::create(argc, argv, "Robotex Tuum Color Calibration Application");
-
+    gtkApplication = Gtk::Application::create(argc, argv);
+    std::cout << "1" << std::endl;
+    
     // Create window
     window = new MainWindow(this);
+    std::cout << "2" << std::endl;
   }
 
   Application::~Application() {
@@ -78,7 +86,7 @@ namespace rtx {
     return masking;
   }
 
-  std::vector<std::string> Application::getModes() const {
+  const std::vector<std::string>& Application::getModes() {
     return modes;
   }
 
@@ -149,7 +157,9 @@ namespace rtx {
     }
     frame = camera->getFrame();
     rgbFrame = toRGB(frame);
-    window->updateFrame(&frame, &rgbFrame);
+    // TODO: window->updateFrame(&frame, &rgbFrame);
+    window->getMaskingArea()->redraw();
+    window->getPreviewArea()->queue_draw();
     return true;
   }
 

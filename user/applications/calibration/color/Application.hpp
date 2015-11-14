@@ -37,7 +37,7 @@ namespace rtx {
       bool isPlaying() const;
       bool isMasking() const;
 
-      std::vector<std::string> getModes() const;
+      const std::vector<std::string>& getModes();
       unsigned int getMode() const;
 
       Mask* getMask();
@@ -57,6 +57,9 @@ namespace rtx {
       bool updateFrame();
 
     private:
+      int argc;
+      char **argv;
+
       Glib::RefPtr<Gtk::Application> gtkApplication;
       MainWindow *window;
 
