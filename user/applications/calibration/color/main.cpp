@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   rtx::hal::setup();
 
   // Create application
-  Application application(argc, argv, hal::hw.getFrontCamera(), hal::hw.getBackCamera());
+  Application application(argc, argv, hal::hw.getFrontCamera());
 
   // Run camera frame thread // TODO: Move to application class
   std::thread frameThread(process, application);

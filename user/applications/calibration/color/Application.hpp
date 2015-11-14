@@ -22,14 +22,13 @@ namespace rtx {
   class Application {
 
     public:
-      Application(int, char*, Camera*, Camera*);
+      Application(int, char*, Camera*);
       virtual ~Application();
 
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;
       MainWindow* getWindow() const;
 
-      Camera* getFrontCamera() const;
-      Camera* getBackCamera() const;
+      Camera* getCamera() const;
 
       std::vector<std::string> getModes() const;
       unsigned int getMode() const;
@@ -44,13 +43,13 @@ namespace rtx {
       void saveFilterToFile(const std::string&);
 
       int run();
+      bool updateFrame();
 
     private:
       Glib::RefPtr<Gtk::Application> gtkApplication;
       MainWindow *window;
 
-      Camera *frontCamera;
-      Camera *backCamera;
+      Camera *camera;
 
       bool playing;
       bool masking;

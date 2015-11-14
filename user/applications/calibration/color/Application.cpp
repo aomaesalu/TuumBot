@@ -12,13 +12,12 @@
 
 namespace rtx {
 
-  Application::Application(int argc, char *argv[], Camera *frontCamera, Camera *backCamera):
+  Application::Application(int argc, char *argv[], Camera *camera):
     mask(8, CAMERA_WIDTH, CAMERA_HEIGHT),
     filter(8)
   {
     // Attach camera information
-    frontCamera = frontCamera;
-    backCamera = backCamera;
+    camera = camera;
 
     // Initialise modes
     modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
@@ -47,12 +46,8 @@ namespace rtx {
     return mainWindow;
   }
 
-  Camera* Application::getFrontCamera() const {
-    return frontCamera;
-  }
-
-  Camera* Application::getBackCamera() const {
-    return backCamera;
+  Camera* Application::getCamera() const {
+    return camera;
   }
 
   std::vector<std::string> Application::getModes() const {
@@ -69,7 +64,6 @@ namespace rtx {
   }
 
   void Application::setMasking(const bool &value) {
-    window->setMasking(value);
     masking = value;
   }
 
@@ -91,6 +85,16 @@ namespace rtx {
   int Application::run() {
     // Show windows and return when closed
     return gtkApplication->run(window);
+  }
+
+  bool Application::updateFrame() {
+    if (!playing) {
+      return false;
+    }
+    frame = camera->getFrame();
+    rgbFrame = toRGB(frame);
+    window->updateFrame(&frame, &rgbFrame);
+    return true;
   }
 
 }
