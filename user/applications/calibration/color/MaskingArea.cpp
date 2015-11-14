@@ -67,7 +67,7 @@ namespace rtx {
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         if (x >= mask->getMinX() && x <= mask->getMaxX() && y >= mask->getMinY() && y <= mask->getMaxY() && mask->has(mode, x, y)) {
-          guint8 *pixel = pixels + i * channels + j * stride;
+          guint8 *pixel = pixels + x * channels + y * stride;
           for (unsigned int k = 0; k < channels; ++k) {
             pixel[k] = 255 - pixel[k];
           }
@@ -149,13 +149,13 @@ namespace rtx {
       if (buttonEvent->button == 1) {
         if (!removalMode) {
           addingMode = true;
-          mask->add(buttonEvent->x, buttonEvent->y);
+          application->getMask()->add(buttonEvent->x, buttonEvent->y, application->getMode(), brush->getRadius());
         }
       // Right mouse button
       } else if (buttonEvent->button == 3) {
         if (!addingMode) {
           removalMode = true;
-          mask->removeFromMask(buttonEvent->x, buttonEvent->y);
+          application->getMask()->remove(buttonEvent->x, buttonEvent->y, application->getMode(), brush->getRadius());
         }
       }
     }
@@ -183,9 +183,9 @@ namespace rtx {
     if (!locateBrush(motionEvent->x, motionEvent->y))
       return false;
     if (addingMode) {
-      mask->add(motionEvent->x, motionEvent->y);
+      application->getMask()->add(motionEvent->x, motionEvent->y, application->getMode(), brush->getRadius());
     } else if (removalMode) {
-      mask->remove(motionEvent->x, motionEvent->y);
+      application->getMask()->remove(motionEvent->x, motionEvent->y, application->getMode(), brush->getRadius());
     }
     return true;
   }
