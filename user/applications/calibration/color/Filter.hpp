@@ -13,6 +13,7 @@
 #include <vector>
 #include <set>
 
+#include "Camera.hpp"
 #include "Mask.hpp"
 
 

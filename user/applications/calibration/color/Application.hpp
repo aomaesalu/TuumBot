@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 
+#include "MainWindow.hpp"
 #include "Mask.hpp"
 #include "Filter.hpp"
 
