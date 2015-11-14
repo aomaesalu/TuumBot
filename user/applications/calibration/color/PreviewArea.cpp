@@ -55,7 +55,7 @@ namespace rtx {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         guint8 *pixel = pixels + x * channels + y * stride;
         guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-        if (filter.has(mode, actualPixel[0], actualPixel[1], actualPixel[2])) {
+        if (filter->has(mode, actualPixel[0], actualPixel[1], actualPixel[2])) {
           pixel[0] *= 0.2;
           pixel[1] *= 0.2;
           pixel[2] *= 0.2;
