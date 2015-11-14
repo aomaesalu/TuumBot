@@ -30,6 +30,8 @@ namespace rtx {
       void reset();
       void reset(const unsigned int&);
 
+      bool has(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
+
       FilterList getValues() const;
       FilterValueSet getValues(const unsigned int&) const;
 

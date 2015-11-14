@@ -40,6 +40,11 @@ namespace rtx {
     }
   }
 
+  void Filter::has(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &y) const {
+    unsigned int index = x << 16 + y << 8 + z;
+    return ((values[mode].find(index) != values[mode].end()) && (removalBuffers[mode].find(index) == removalBuffers[mode].end())) || (additionBuffers[mode].find(index) != additionBuffers[mode].end());
+  }
+
   void Filter::reset(const unsigned int &mode) {
     resetValues(mode);
     resetBuffers(mode);
