@@ -10,6 +10,7 @@
 #include "MaskingArea.hpp"
 
 #include "cameraConstants.hpp"
+#include "Application.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
