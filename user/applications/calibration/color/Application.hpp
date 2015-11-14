@@ -50,6 +50,8 @@ namespace rtx {
       MainWindow *window;
 
       Camera *camera;
+      Frame frame;
+      Frame rgbFrame;
 
       bool playing;
       bool masking;
