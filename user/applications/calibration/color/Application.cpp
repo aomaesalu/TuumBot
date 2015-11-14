@@ -88,6 +88,10 @@ namespace rtx {
   }
 
   void Application::setPlaying(const bool &value) {
+    if (value) {
+      setMasking(false);
+      filter.addBuffersToFilter();
+    }
     window->setPlaying(value);
     playing = value;
   }
