@@ -78,24 +78,31 @@ namespace rtx {
     return removalBuffers[mode];
   }
 
-  // TODO: Refactor for faster live usage (for example, by only adding necessary modes)
-  void Filter::addMasksToBuffers(const Frame&, const MaskList &additionMasks, const MaskList &removalMasks) {
+  // TODO: Refactor for faster live usage (for example, by only adding necessary
+  // modes)
+  void Filter::addMasksToBuffers(const Frame&, const MaskList &additionMasks,
+                                 const MaskList &removalMasks) {
 
     resetBuffers();
 
     guint8 *pixels = frame.data;
-    unsigned int channels = 3; // TODO: Add to frame data structure
-    unsigned int stride = frame.width * channels; // TODO: Add as a method to frame data structure
+    // TODO: Add to frame data structure
+    unsigned int channels = 3;
+    // TODO: Add as a method to frame data structure
+    unsigned int stride = frame.width * channels;
 
-    int delta = 3; // TODO: Add to GUI
+    // TODO: Add to GUI
+    int delta = 3;
 
     for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
 
       // TODO: Remove duplicate code
 
-      for (MaskValueSet::iterator i = additionMasks[mode].begin(); i != additionMasks[mode].end(); ++i) {
+      for (MaskValueSet::iterator i = additionMasks[mode].begin();
+           i != additionMasks[mode].end(); ++i) {
 
-        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels + ((*i) / frameWidth) * stride;
+        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels +
+                        ((*i) / frameWidth) * stride;
 
         for (int x = -delta; x <= delta; ++x) {
           for (int y = -delta; y <= delta; ++y) {
@@ -105,7 +112,9 @@ namespace rtx {
               if (pixel[0] + x >= 0 && pixel[0] + x < 256 &&
                   pixel[1] + y >= 0 && pixel[1] + y < 256 &&
                   pixel[2] + z >= 0 && pixel[2] + z < 256) {
-                additionBuffers[mode].insert((pixel[0] + x) << 16 + (pixel[1] + y) << 8 + pixel[2] + z);
+                additionBuffers[mode].insert((pixel[0] + x) << 16 +
+                                             (pixel[1] + y) << 8 +
+                                             (pixel[2] + z));
               }
 
             }
@@ -114,9 +123,11 @@ namespace rtx {
 
       }
 
-      for (MaskValueSet::iterator i = removalMasks[mode].begin(); i != removalMasks[mode].end(); ++i) {
+      for (MaskValueSet::iterator i = removalMasks[mode].begin();
+           i != removalMasks[mode].end(); ++i) {
 
-        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels + ((*i) / frameWidth) * stride;
+        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels +
+                        ((*i) / frameWidth) * stride;
 
         for (int x = -delta; x <= delta; ++x) {
           for (int y = -delta; y <= delta; ++y) {
@@ -126,7 +137,9 @@ namespace rtx {
               if (pixel[0] + x >= 0 && pixel[0] + x < 256 &&
                   pixel[1] + y >= 0 && pixel[1] + y < 256 &&
                   pixel[2] + z >= 0 && pixel[2] + z < 256) {
-                removalBuffers[mode].insert((pixel[0] + x) << 16 + (pixel[1] + y) << 8 + pixel[2] + z);
+                removalBuffers[mode].insert((pixel[0] + x) << 16 +
+                                            (pixel[1] + y) << 8 +
+                                            (pixel[2] + z));
               }
 
             }
@@ -141,10 +154,12 @@ namespace rtx {
 
   void Filter::addBuffersToFilter() {
     for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
-      for (FilterValueSet::iterator i = removalBuffers[mode].begin(); i != removalBuffers[mode].end(); ++i) {
+      for (FilterValueSet::iterator i = removalBuffers[mode].begin();
+           i != removalBuffers[mode].end(); ++i) {
         values[mode].erase(*i);
       }
-      for (FilterValueSet::iterator i = additionBuffers[mode].begin(); i != additionBuffers[mode].end(); ++i) {
+      for (FilterValueSet::iterator i = additionBuffers[mode].begin();
+           i != additionBuffers[mode].end(); ++i) {
         values[mode].insert(*i);
       }
       resetBuffers(mode);
