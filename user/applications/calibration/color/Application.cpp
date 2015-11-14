@@ -93,6 +93,14 @@ namespace rtx {
   }
 
   void Application::setMasking(const bool &value) {
+    if (value) {
+      if (!isMasking()) {
+        setPlaying(false);
+      }
+    } else {
+      mask.reset();
+      window->getMaskingArea()->resetDrawingModes();
+    }
     masking = value;
   }
 
