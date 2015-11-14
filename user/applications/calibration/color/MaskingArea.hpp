@@ -27,8 +27,6 @@ namespace rtx {
 
       void resetDrawingModes();
 
-      void setMasking(const bool& = true);
-
       void redraw();
 
     protected:
@@ -53,8 +51,6 @@ namespace rtx {
       bool locateBrush(const unsigned int&, const unsigned int&);
       bool applyBrush();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
-
-      void sendMasksToFilter();
 
   }
 
