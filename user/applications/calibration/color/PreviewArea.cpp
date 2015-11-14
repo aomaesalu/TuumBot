@@ -20,9 +20,11 @@ namespace rtx {
 
   PreviewArea::PreviewArea(Application*) {
     // Set properties
-    application = application;
+    this->application = application;
+
     // Initialise area size
     set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+
     // Initialise delta scale // TODO: Separate from this class
     deltascale = application->getWindow()->getDeltaScale();
   }

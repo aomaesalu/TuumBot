@@ -14,7 +14,7 @@ namespace rtx {
 
   Filter::Filter(const unsigned int &numberOfModes) {
     // Set properties
-    numberOfModes = numberOfModes
+    this->numberOfModes = numberOfModes
 
     // Initialise filter values and buffers
     initialise();

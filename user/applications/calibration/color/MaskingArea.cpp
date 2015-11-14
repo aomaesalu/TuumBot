@@ -20,11 +20,14 @@ namespace rtx {
 
   MaskingArea::MaskingArea(Application *application) {
     // Set properties
-    application = application;
+    this->application = application;
+    
     // Initialise area size
     set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+
     // Initialise brush
     brush = new Brush(application->getWindow()->getBrushScale());
+
     // Initialise drawing modes
     resetDrawingModes();
   }

@@ -17,7 +17,7 @@ namespace rtx {
     filter(8)
   {
     // Attach camera information
-    camera = camera;
+    this->camera = camera;
 
     // Initialise modes
     modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file

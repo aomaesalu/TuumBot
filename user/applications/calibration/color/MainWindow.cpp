@@ -22,7 +22,7 @@ namespace rtx {
     previewArea(application)
   {
     // Attach application information
-    application = application;
+    this->application = application;
 
     // Set GUI main properties
     setProperties();

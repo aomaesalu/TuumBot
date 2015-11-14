@@ -15,9 +15,9 @@ namespace rtx {
   Mask::Mask(const unsigned int &numberOfModes, const unsigned int &frameWidth,
              const unsigned int &frameHeight) {
     // Set properties
-    numberOfModes = numberOfModes;
-    frameWidth = frameWidth;
-    frameHeight = frameHeight;
+    this->numberOfModes = numberOfModes;
+    this->frameWidth = frameWidth;
+    this->frameHeight = frameHeight;
 
     // Initialise data
     initialiseLists();
