@@ -59,6 +59,10 @@ namespace rtx {
     return camera;
   }
 
+  Glib::RefPtr<Gdk::Pixbuf> Application::getImage() const {
+    return image;
+  }
+
   std::vector<std::string> Application::getModes() const {
     return modes;
   }

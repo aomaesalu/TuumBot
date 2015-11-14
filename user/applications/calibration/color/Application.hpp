@@ -30,6 +30,8 @@ namespace rtx {
 
       Camera* getCamera() const;
 
+      Glib::RefPtr<Gdk::Pixbuf> getImage() const;
+
       std::vector<std::string> getModes() const;
       unsigned int getMode() const;
 
