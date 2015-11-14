@@ -31,6 +31,9 @@ namespace rtx {
       MainWindow(Application*);
       virtual ~MainWindow();
 
+      MaskingArea* getMaskingArea();
+      PreviewArea* getPreviewArea();
+
       Gtk::Scale* getBrushScale();
       Gtk::Scale* getDeltaScale();
 

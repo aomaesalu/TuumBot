@@ -180,6 +180,14 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
+  MaskingArea* MainWindow::getMaskingArea() {
+    return &maskingArea;
+  }
+
+  PreviewArea* MainWindow::getPreviewArea() {
+    return &previewArea;
+  }
+
   Gtk::Scale* MainWindow::getBrushScale() {
     return &brushSizeScale;
   }
