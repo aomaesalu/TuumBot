@@ -29,11 +29,14 @@ namespace rtx {
     playing = true;
     masking = false;
 
+    // Create initial image
+    initialiseImage();
+
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv, "Robotex Tuum Color Calibration Application");
 
     // Create window
-    window = MainWindow(this);
+    window = new MainWindow(this);
   }
 
   Application::~Application() {
@@ -43,10 +46,6 @@ namespace rtx {
   void Application::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
     //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
-
-    // Show the whole image
-    if (image)
-      set_size_request(image->get_width(), image->get_height());
   }
 
   Glib::RefPtr<Gtk::Application> Application::getGtkApplication() const {
