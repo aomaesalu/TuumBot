@@ -14,12 +14,12 @@
 
 #include "rtxhal.hpp"
 
-#include "MainWindow.hpp"
+#include "Application.hpp"
 
 using namespace rtx;
 
 
-static void process(MainWindow *window) {
+static void process(Application &application) {
   unsigned int frameCounter = 0;
   clock_t startTime = clock();
   clock_t lastTime = startTime;
@@ -30,23 +30,23 @@ static void process(MainWindow *window) {
       frameCounter = 0;
       lastTime = currentTime;
     }
-    if (window->updateFrame()) {
+    if (application.updateFrame()) {
       frameCounter++;
     }
   }
 }
 
 int main(int argc, char *argv[]) {
-  Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
-
   // Initialise hardware
   rtx::hal::setup();
 
-  MainWindow window(hal::hw.getFrontCamera()); // TODO: Add back camera, too
+  // Create application
+  Application application(argc, argv, hal::hw.getFrontCamera(), hal::hw.getBackCamera());
 
-  std::thread frameThread(process, &window);
+  // Run camera frame thread // TODO: Move to application class
+  std::thread frameThread(process, application);
   frameThread.detach();
 
-  // Show windows and return when closed
-  return app->run(window);
+  // Run application and return when closed
+  return application.run();
 }
