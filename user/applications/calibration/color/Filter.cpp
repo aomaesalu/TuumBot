@@ -8,6 +8,8 @@
  */
 
  #include "Filter.hpp"
+ 
+#include <gdkmm/pixbuf.h>
 
 
 namespace rtx {
@@ -88,8 +90,6 @@ namespace rtx {
   void Filter::addMasksToBuffers(const Frame&, const MaskList &additionMasks,
                                  const MaskList &removalMasks) {
 
-    resetBuffers();
-
     guint8 *pixels = frame.data;
     // TODO: Add to frame data structure
     unsigned int channels = 3;
@@ -100,6 +100,8 @@ namespace rtx {
     int delta = 3;
 
     for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+
+      resetBuffers(mode);
 
       // TODO: Remove duplicate code
 
