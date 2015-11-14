@@ -79,6 +79,14 @@ namespace rtx {
     return mode;
   }
 
+  Mask* Application::getMask() const {
+    return &mask;
+  }
+
+  Filter* Application::getFilter() const {
+    return &filter;
+  }
+
   void Application::setPlaying(const bool &value) {
     window->setPlaying(value);
     playing = value;

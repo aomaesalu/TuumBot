@@ -32,11 +32,14 @@ namespace rtx {
 
       Glib::RefPtr<Gdk::Pixbuf> getImage() const;
 
+      bool isPlaying() const;
+      bool isMasking() const;
+
       std::vector<std::string> getModes() const;
       unsigned int getMode() const;
 
-      bool isPlaying() const;
-      bool isMasking() const;
+      Mask* getMask() const;
+      Filter* getFilter() const;
 
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
