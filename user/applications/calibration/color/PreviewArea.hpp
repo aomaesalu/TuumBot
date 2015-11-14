@@ -10,6 +10,7 @@
 #ifndef RTX_APPLIXATIONS_CALIBRATION_COLOR_PREVIEW_AREA_H
 #define RTX_APPLIXATIONS_CALIBRATION_COLOR_PREVIEW_AREA_H
 
+#include <gtkmm.h>
 #include <gtkmm/drawingarea.h>
 
 
