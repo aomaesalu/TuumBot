@@ -63,7 +63,7 @@ namespace rtx {
     return values;
   }
 
-  ModeFilter Filter::getValues(const unsigned int &mode) const {
+  FilterValueSet Filter::getValues(const unsigned int &mode) const {
     return values[mode];
   }
 
@@ -71,7 +71,7 @@ namespace rtx {
     return additionBuffers;
   }
 
-  ModeFilter Filter::getValues(const unsigned int &mode) const {
+  FilterValueSet Filter::getAdditionBuffer(const unsigned int &mode) const {
     return additionBuffers[mode];
   }
 
@@ -79,7 +79,7 @@ namespace rtx {
     return removalBuffers;
   }
 
-  FilterList Filter::getRemovalBuffer(const unsigned int &mode) const {
+  FilterValueSet Filter::getRemovalBuffer(const unsigned int &mode) const {
     return removalBuffers[mode];
   }
 
