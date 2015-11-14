@@ -53,15 +53,15 @@ namespace rtx {
   }
 
   MainWindow* Application::getWindow() const {
-    return mainWindow;
+    return window;
   }
 
   Camera* Application::getCamera() const {
     return camera;
   }
 
-  Frame* Applcation::getFrame() const {
-    return frame;
+  Frame* Application::getFrame() const {
+    return &frame;
   }
 
   Glib::RefPtr<Gdk::Pixbuf> Application::getImage() const {
