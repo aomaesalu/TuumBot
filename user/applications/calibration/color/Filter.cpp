@@ -140,7 +140,15 @@ namespace rtx {
   }
 
   void Filter::addBuffersToFilter() {
-    // TODO
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+      for (FilterValueSet::iterator i = removalBuffers[mode].begin(); i != removalBuffers[mode].end(); ++i) {
+        values[mode].erase(*i);
+      }
+      for (FilterValueSet::iterator i = additionBuffers[mode].begin(); i != additionBuffers[mode].end(); ++i) {
+        values[mode].insert(*i);
+      }
+      resetBuffers(mode);
+    }
   }
 
   // TODO: Refactor for faster output
