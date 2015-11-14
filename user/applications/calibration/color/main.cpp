@@ -19,7 +19,7 @@
 using namespace rtx;
 
 
-static void process(Application &application) {
+static void process(Application *application) {
   unsigned int frameCounter = 0;
   clock_t startTime = clock();
   clock_t lastTime = startTime;
@@ -30,7 +30,7 @@ static void process(Application &application) {
       frameCounter = 0;
       lastTime = currentTime;
     }
-    if (application.updateFrame()) {
+    if (application->updateFrame()) {
       frameCounter++;
     }
   }
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
   Application application(argc, argv, hal::hw.getFrontCamera());
 
   // Run camera frame thread // TODO: Move to application class
-  std::thread frameThread(process, application);
+  std::thread frameThread(process, &application);
   frameThread.detach();
 
   // Run application and return when closed
