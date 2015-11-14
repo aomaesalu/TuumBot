@@ -9,6 +9,8 @@
 
 #include "Application.hpp"
 
+#include "cameraConstants.hpp"
+
 
 namespace rtx {
 

@@ -9,6 +9,8 @@
 
 #include "PreviewArea.hpp"
 
+#include "cameraConstants.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>

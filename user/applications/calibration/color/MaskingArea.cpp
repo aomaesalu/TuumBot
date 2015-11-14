@@ -9,6 +9,8 @@
 
 #include "MaskingArea.hpp"
 
+#include "cameraConstants.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>
@@ -21,7 +23,7 @@ namespace rtx {
   MaskingArea::MaskingArea(Application *application) {
     // Set properties
     this->application = application;
-    
+
     // Initialise area size
     set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
 

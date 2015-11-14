@@ -9,6 +9,8 @@
 
 #include "Brush.hpp"
 
+#include "cameraConstants.hpp"
+
 
 namespace rtx {
 
