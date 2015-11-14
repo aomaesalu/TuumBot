@@ -23,7 +23,7 @@ namespace rtx {
   class Application {
 
     public:
-      Application(int, char*, Camera*);
+      Application(int&, char**, Camera*);
       virtual ~Application();
 
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;

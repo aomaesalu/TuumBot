@@ -14,7 +14,7 @@
 
 namespace rtx {
 
-  Application::Application(int argc, char *argv[], Camera *camera):
+  Application::Application(int &argc, char *argv[], Camera *camera):
     mask(8, CAMERA_WIDTH, CAMERA_HEIGHT),
     filter(8)
   {
