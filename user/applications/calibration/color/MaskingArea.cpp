@@ -53,10 +53,11 @@ namespace rtx {
 
   bool MaskingArea::applyMask() {
     // Note: We currently only apply addition mask
-    application->getImage()->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
+    Mask* mask = application->getMask();
+
+    application->getImage()->copy_area(mask->getMinX(), mask->getMinY(), mask->getMaxX() - mask->getMinX() + 1, mask->getMaxY() - mask->getMinY() + 1, maskedImage, mask->getMinX(), mask->getMinY());
 
     unsigned int mode = application->getMode();
-    Mask *mask = application->getMask();
 
     guint8 *pixels = maskedImage->get_pixels();
     unsigned int channels = maskedImage->get_n_channels();
