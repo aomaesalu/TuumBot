@@ -19,7 +19,7 @@
 namespace rtx {
 
   typedef std::set<unsigned int> FilterValueSet;
-  typedef std::vector<ModeFilter> FilterList;
+  typedef std::vector<FilterValueSet> FilterList;
 
   class Filter {
 
