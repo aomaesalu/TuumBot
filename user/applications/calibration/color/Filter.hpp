@@ -25,7 +25,7 @@ namespace rtx {
   class Filter {
 
     public:
-      Filter();
+      Filter(const unsigned int&);
       virtual ~Filter();
 
       void reset();

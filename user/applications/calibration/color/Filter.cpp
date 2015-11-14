@@ -14,7 +14,7 @@ namespace rtx {
 
   Filter::Filter(const unsigned int &numberOfModes) {
     // Set properties
-    this->numberOfModes = numberOfModes
+    this->numberOfModes = numberOfModes;
 
     // Initialise filter values and buffers
     initialise();
@@ -35,12 +35,12 @@ namespace rtx {
   }
 
   void Filter::reset() {
-    for (unsigned int mode = 0; i < numberOfModes; ++mode) {
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
       reset(mode);
     }
   }
 
-  void Filter::has(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &y) const {
+  bool Filter::has(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &z) const {
     unsigned int index = x << 16 + y << 8 + z;
     return ((values[mode].find(index) != values[mode].end()) && (removalBuffers[mode].find(index) == removalBuffers[mode].end())) || (additionBuffers[mode].find(index) != additionBuffers[mode].end());
   }
