@@ -10,6 +10,8 @@
 #ifndef RTX_APPLIXATIONS_CALIBRATION_COLOR_MASKING_AREA_H
 #define RTX_APPLIXATIONS_CALIBRATION_COLOR_MASKING_AREA_H
 
+#include "Brush.hpp"
+
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/drawingarea.h>

@@ -10,6 +10,8 @@
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_BRUSH_H
 #define RTX_APPLICATIONS_CALIBRATION_COLOR_BRUSH_H
 
+#include <gtkmm.h>
+
 
 namespace rtx {
 
