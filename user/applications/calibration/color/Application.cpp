@@ -110,6 +110,10 @@ namespace rtx {
     masking = value;
   }
 
+  void Application::setMode(const unsigned int &value) {
+    mode = value;
+  }
+
   void Application::sendMasksToFilter() {
     filter.addMasksToBuffers(mask.getAdditionValues(), mask.getRemovalValues());
   }

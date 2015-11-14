@@ -206,7 +206,7 @@ namespace rtx {
   }
 
   void MainWindow::on_modeChooseComboBox_changed() {
-    mode = modeChooseComboBox.get_active_row_number();
+    application->setMode(modeChooseComboBox.get_active_row_number());
     maskingArea.redraw();
     previewArea.queue_draw();
   }
