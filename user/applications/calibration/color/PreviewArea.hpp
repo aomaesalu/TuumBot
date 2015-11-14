@@ -37,7 +37,7 @@ namespace rtx {
       bool applyFilter();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
-  }
+  };
 
 }
 

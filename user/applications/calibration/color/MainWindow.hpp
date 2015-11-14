@@ -103,6 +103,6 @@ namespace rtx {
 
   };
 
-};
+}
 
 #endif // RTX_APPLICATIONS_CALIBRATION_COLOR_MAIN_WINDOW_H

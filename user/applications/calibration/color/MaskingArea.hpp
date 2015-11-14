@@ -54,7 +54,7 @@ namespace rtx {
       bool applyBrush();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
-  }
+  };
 
 }
 

@@ -50,7 +50,7 @@ namespace rtx {
       unsigned int x;
       unsigned int y;
 
-  }
+  };
 
 }
 
