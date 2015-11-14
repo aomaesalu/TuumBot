@@ -107,7 +107,7 @@ namespace rtx {
     return removalMaps;
   }
 
-  MaskMapList Mask::getRemovalMap(const unsigned int &mode) const {
+  MaskValueMap Mask::getRemovalMap(const unsigned int &mode) const {
     return removalMaps[mode];
   }
 
@@ -187,7 +187,7 @@ namespace rtx {
               additionValues[mode].insert(linearCoordinate);
               removalValues[mode].erase(linearCoordinate);
             } else {
-              removalValues[mode]insert(linearCoordinate);
+              removalValues[mode].insert(linearCoordinate);
               additionValues[mode].erase(linearCoordinate);
             }
 

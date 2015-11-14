@@ -76,9 +76,8 @@ namespace rtx {
       unsigned int maxX;
       unsigned int maxY;
 
-      void initialiseLists(const unsigned int&);
-      void initialiseMaps(const unsigned int&, const unsigned int&,
-                          const unsigned int&);
+      void initialiseLists();
+      void initialiseMaps();
       void initialiseBoundaries();
 
       void resetLists();
