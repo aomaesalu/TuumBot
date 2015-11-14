@@ -11,6 +11,8 @@
 
 #include "cameraConstants.hpp"
 
+#include <fstream>
+
 
 namespace rtx {
 
