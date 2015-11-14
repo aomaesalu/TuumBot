@@ -30,6 +30,7 @@ namespace rtx {
       MainWindow* getWindow() const;
 
       Camera* getCamera() const;
+      Frame* getFrame() const;
 
       Glib::RefPtr<Gdk::Pixbuf> getImage() const;
 

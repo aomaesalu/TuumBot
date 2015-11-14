@@ -46,9 +46,9 @@ namespace rtx {
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
-    guint8 *actualPixels = frame->data;
+    guint8 *actualPixels = application->getFrame()->data;
     unsigned int actualChannels = 3;
-    unsigned int actualStride = frame->width * actualChannels;
+    unsigned int actualStride = application->getFrame()->width * actualChannels;
 
     // Color pixels
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {

@@ -61,6 +61,10 @@ namespace rtx {
     return camera;
   }
 
+  Frame* Applcation::getFrame() const {
+    return frame;
+  }
+
   Glib::RefPtr<Gdk::Pixbuf> Application::getImage() const {
     return image;
   }
