@@ -31,10 +31,6 @@ namespace rtx {
     // Construct the GUI
     construct();
 
-    // Initialise video areas
-    maskingArea->initialise();
-    previewArea->initialise();
-
     // Update video frame
     // TODO: updateFrame();
 
@@ -126,7 +122,7 @@ namespace rtx {
   void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
     modeChooseLabel.set_text("Mode:");
     parentContainer.add(modeChooseLabel);
-    for (std::vector<std::string>::iterator mode = modes.begin(); mode != modes.end(); ++mode) {
+    for (std::vector<std::string>::iterator mode = application->getModes().begin(); mode != application->getModes().end(); ++mode) {
       modeChooseComboBox.append(*mode);
     }
     modeChooseComboBox.signal_changed().connect(sigc::mem_fun(*this, &MainWindow::on_modeChooseComboBox_changed));
@@ -184,12 +180,12 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
-  Gtk::Scale* MainWindow::getBrushScale() const {
-    return brushScale;
+  Gtk::Scale* MainWindow::getBrushScale() {
+    return &brushSizeScale;
   }
 
-  Gtk::Scale* MainWindow::getDeltaScale() const {
-    return deltaScale;
+  Gtk::Scale* MainWindow::getDeltaScale() {
+    return &deltaChooseScale;
   }
 
   void MainWindow::setPlaying(const bool &value) {

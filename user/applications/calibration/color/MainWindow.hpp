@@ -31,8 +31,8 @@ namespace rtx {
       MainWindow(Application*);
       virtual ~MainWindow();
 
-      Gtk::Scale* getBrushScale() const;
-      Gtk::Scale* getDeltaScale() const;
+      Gtk::Scale* getBrushScale();
+      Gtk::Scale* getDeltaScale();
 
       void setPlaying(const bool& = true);
 
