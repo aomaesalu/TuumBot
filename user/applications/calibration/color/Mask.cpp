@@ -4,18 +4,55 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November, 2015
+ *  @date 14 November 2015
  */
 
 
 namespace rtx {
 
-  Mask::Mask() {
-    // TODO
+  Mask::Mask(const unsigned int &numberOfModes, const unsigned int &frameWidth, const unsigned int &frameHeight) {
+    // Set properties
+    numberOfModes = numberOfModes;
+    frameWidth = frameWidth;
+    frameHeight = frameHeight;
+    // Initialise data
+    initialiseLists();
+    initialiseMaps();
   }
 
   Mask::~Mask() {
-    // TODO
+    // Nothing to do here
+  }
+
+  void Mask::initialiseLists() {
+    MaskValueSet emptySet;
+    // TODO: Use set/vector initialisation constructors if possible
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+      additionValues.push_back(emptySet);
+      removalValues.push_back(emptySet);
+    }
+  }
+
+  void Mask::initialiseMaps() {
+    MaskMapList emptyMaps(numberOfModes, MaskValueMap(frameWidth, std::vector<bool>(frameHeight, false)));
+    additionMaps = emptyMaps;
+    removalMaps = additionMaps;
+  }
+
+  void Mask::reset() {
+    resetLists();
+    resetMaps();
+  }
+
+  void Mask::resetLists() {
+    for (unsigned int mode = 0; mode < numberOfModes; ++mode) {
+      additionValues[mode].clear();
+      removalValues[mode].clear();
+    }
+  }
+
+  void Mask::resetMaps() {
+    initialiseMaps();
   }
 
   MaskList Mask::getAdditionValues() const {
@@ -71,15 +108,15 @@ namespace rtx {
     return removalValues[mode].empty();
   }
 
-  void add(const unsigned int &x, const unsigned int &y) {
+  void Mask::add(const unsigned int &x, const unsigned int &y) {
     change(x, y, true);
   }
 
-  void remove(const unsigned int &x, const unsigned int &y) {
+  void Mask::remove(const unsigned int &x, const unsigned int &y) {
     change(x, y, false);
   }
 
-  void change(const unsigned int &x, const unsigned int &y, const bool &value) {
+  void Mask::change(const unsigned int &x, const unsigned int &y, const bool &value) {
     // TODO
   }
 

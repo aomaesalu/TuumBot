@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November, 2015
+ *  @date 14 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_MASK_H
@@ -24,8 +24,10 @@ namespace rtx {
   class Mask {
 
     public:
-      Mask();
+      Mask(const unsigned int&, const unsigned int&, const unsigned int&);
       virtual ~Mask();
+
+      void reset();
 
       MaskList getAdditionValues() const;
       MaskValueSet getAdditionValues(const unsigned int&) const;
@@ -48,10 +50,20 @@ namespace rtx {
       void remove(const unsigned int&, const unsigned int&);
 
     private:
+      unsigned int numberOfModes;
+      unsigned int frameWidth;
+      unsigned int frameHeight;
+
       MaskList additionValues;
       MaskList removalValues;
       MaskMapList additionMaps;
       MaskMapList removalMaps;
+
+      void initialiseLists(const unsigned int&);
+      void initialiseMaps(const unsigned int&, const unsigned int&, const unsigned int&);
+
+      void resetLists();
+      void resetMaps();
 
       void change(const unsigned int&, const unsigned int&, const bool&);
 
