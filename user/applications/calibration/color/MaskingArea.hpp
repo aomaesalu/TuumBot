@@ -47,7 +47,7 @@ namespace rtx {
       Brush *brush;
 
       bool addingMode;
-      bool removingMode;
+      bool removalMode;
 
       bool applyMask();
       bool locateBrush(const unsigned int&, const unsigned int&);
