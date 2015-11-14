@@ -23,10 +23,12 @@
 
 namespace rtx {
 
+  class Application;
+
   class MainWindow: public Gtk::Window {
 
     public:
-      MainWindow(Camera*);
+      MainWindow(Application*);
       virtual ~MainWindow();
 
       Gtk::Scale* getBrushScale() const;

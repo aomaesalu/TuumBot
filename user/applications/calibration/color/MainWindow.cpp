@@ -9,6 +9,7 @@
 
 #include "MainWindow.hpp"
 
+#include "Application.hpp"
 #include "cameraConstants.hpp"
 
 #include <iostream> // TODO: Remove
