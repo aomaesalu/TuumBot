@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November, 2015
+ *  @date 14 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_APPLICATION_H
@@ -12,6 +12,9 @@
 
 #include <vector>
 #include <string>
+
+#include "Mask.hpp"
+#include "Filter.hpp"
 
 
 namespace rtx {
@@ -37,6 +40,9 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
+      void readFilterFromFile(const std::string&);
+      void saveFilterToFile(const std::string&);
+
       int run();
 
     private:
@@ -46,11 +52,14 @@ namespace rtx {
       Camera *frontCamera;
       Camera *backCamera;
 
+      bool playing;
+      bool masking;
+
       std::vector<std::string> modes;
       unsigned int mode;
 
-      bool playing;
-      bool masking;
+      Mask mask;
+      Filter filter;
 
   };
 
