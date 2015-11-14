@@ -10,7 +10,8 @@
 
 namespace rtx {
 
-  Mask::Mask(const unsigned int &numberOfModes, const unsigned int &frameWidth, const unsigned int &frameHeight) {
+  Mask::Mask(const unsigned int &numberOfModes, const unsigned int &frameWidth,
+             const unsigned int &frameHeight) {
     // Set properties
     numberOfModes = numberOfModes;
     frameWidth = frameWidth;
@@ -141,15 +142,20 @@ namespace rtx {
     return removalValues[mode].empty();
   }
 
-  void Mask::add(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius) {
+  void Mask::add(const unsigned int &x, const unsigned int &y,
+                 const unsigned int &mode, const int &radius) {
     change(x, y, mode, radius, true);
   }
 
-  void Mask::remove(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius) {
+  void Mask::remove(const unsigned int &x, const unsigned int &y,
+                    const unsigned int &mode, const int &radius) {
     change(x, y, mode, radius, false);
   }
 
-  void Mask::change(const unsigned int &x, const unsigned int &y, const unsigned int &mode, const int &radius, const bool &value) {
+  void Mask::change(const unsigned int &x, const unsigned int &y,
+                    const unsigned int &mode, const int &radius,
+                    const bool &value) {
+
     unsigned int radiusSquared = radius * radius;
 
     for (int i = -radius; i < radius; ++i) {
@@ -160,7 +166,10 @@ namespace rtx {
           unsigned int currentX = x + i;
           unsigned int currentY = y + j;
 
-          if (currentX < frameWidth && currentY < frameHeight) { // If the value overflows, it's already smaller than the maximal value because of usage of unsigned integers, therefore, other checks are not necessary
+          // If the value overflows, it's already smaller than the maximal value
+          // because of usage of unsigned integers, therefore, other checks are
+          // not necessary.
+          if (currentX < frameWidth && currentY < frameHeight) {
 
             // Add values to maps
             additionMaps[mode][currentX][currentY] = value;
