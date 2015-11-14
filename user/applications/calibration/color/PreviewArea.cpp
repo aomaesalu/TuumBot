@@ -29,7 +29,7 @@ namespace rtx {
     set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
 
     // Initialise delta scale // TODO: Separate from this class
-    deltascale = application->getWindow()->getDeltaScale();
+    deltaScale = application->getWindow()->getDeltaScale();
   }
 
   PreviewArea::~PreviewArea() {
