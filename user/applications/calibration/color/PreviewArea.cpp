@@ -37,7 +37,7 @@ namespace rtx {
   }
 
   bool PreviewArea::applyFilter() {
-    filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
+    filteredImage = application->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
     unsigned int mode = application->getMode();
     Filter *filter = application->getFilter();

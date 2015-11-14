@@ -53,7 +53,7 @@ namespace rtx {
 
   bool MaskingArea::applyMask() {
     // Note: We currently only apply addition mask
-    application->getImage->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
+    application->getImage()->copy_area(maskMinX, maskMinY, maskMaxX - maskMinX + 1, maskMaxY - maskMinY + 1, maskedImage, maskMinX, maskMinY);
 
     unsigned int mode = application->getMode();
     Mask *mask = application->getMask();
