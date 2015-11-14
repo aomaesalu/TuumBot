@@ -44,6 +44,8 @@ namespace rtx {
       void setPlaying(const bool& = true);
       void setMasking(const bool& = true);
 
+      void sendMasksToFilter();
+
       void readFilterFromFile(const std::string&);
       void saveFilterToFile(const std::string&);
 
