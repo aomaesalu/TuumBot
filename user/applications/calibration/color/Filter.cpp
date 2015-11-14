@@ -7,8 +7,8 @@
  *  @date 14 November 2015
  */
 
- #include "Filter.hpp"
- 
+#include "Filter.hpp"
+
 #include <gdkmm/pixbuf.h>
 
 
@@ -87,7 +87,8 @@ namespace rtx {
 
   // TODO: Refactor for faster live usage (for example, by only adding necessary
   // modes)
-  void Filter::addMasksToBuffers(const Frame&, const MaskList &additionMasks,
+  void Filter::addMasksToBuffers(const Frame &frame,
+                                 const MaskList &additionMasks,
                                  const MaskList &removalMasks) {
 
     guint8 *pixels = frame.data;
@@ -108,8 +109,8 @@ namespace rtx {
       for (MaskValueSet::iterator i = additionMasks[mode].begin();
            i != additionMasks[mode].end(); ++i) {
 
-        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels +
-                        ((*i) / frameWidth) * stride;
+        guint8 *pixel = pixels + ((*i) % frame.width) * channels +
+                        ((*i) / frame.width) * stride;
 
         for (int x = -delta; x <= delta; ++x) {
           for (int y = -delta; y <= delta; ++y) {
@@ -133,8 +134,8 @@ namespace rtx {
       for (MaskValueSet::iterator i = removalMasks[mode].begin();
            i != removalMasks[mode].end(); ++i) {
 
-        guint8 *pixel = pixels + ((*i)) % frameWidth) * channels +
-                        ((*i) / frameWidth) * stride;
+        guint8 *pixel = pixels + ((*i) % frame.width) * channels +
+                        ((*i) / frame.width) * stride;
 
         for (int x = -delta; x <= delta; ++x) {
           for (int y = -delta; y <= delta; ++y) {
