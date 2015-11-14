@@ -83,8 +83,8 @@ namespace rtx {
       void constructDrawingButtonsBox();
       void constructGeneralButtonsBox();
       void constructMaskingAreaFrame();
-      void constructMaskingAreaFrame();
-      void constructPreviewAreaOptionsBox();
+      void constructPreviewAreaFrame();
+      void constructMaskingAreaOptionsBox();
       void constructPreviewAreaOptionsBox();
 
       void constructModeChooseComboBox(Gtk::Container&);
