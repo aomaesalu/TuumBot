@@ -13,17 +13,22 @@
 namespace rtx {
 
   Application::Application(int argc, char *argv[], Camera *frontCamera, Camera *backCamera) {
+
     // Attach camera information
     frontCamera = frontCamera;
     backCamera = backCamera;
+
     // Initialise modes
     modes = {"Ball", "Blue goal", "Yellow goal", "Field", "White line", "Black line", "Checkerboard white", "Checkerboard black"}; // TODO: Read from file
     mode = 0;
+
     // Initialise properties
     playing = true;
     masking = false;
+
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv, "Robotex Tuum Color Calibration Application");
+    
     // Create window
     window = MainWindow(this);
   }
@@ -56,15 +61,17 @@ namespace rtx {
     return mode;
   }
 
-  void setPlaying(const bool &value) {
-    // TODO
+  void Application::setPlaying(const bool &value) {
+    window->setPlaying(value);
+    playing = value;
   }
 
-  void setMasking(const bool &value) {
-    // TODO
+  void Application::setMasking(const bool &value) {
+    window->setMasking(value);
+    masking = value;
   }
 
-  int run() {
+  int Application::run() {
     // Show windows and return when closed
     return gtkApplication->run(window);
   }
