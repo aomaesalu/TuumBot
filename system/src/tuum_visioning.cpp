@@ -107,7 +107,7 @@ namespace rtx { namespace Visioning {
       if (Vision::blobs[i]->getColor() == BALL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         balls.push_back(new Ball(distance, angle));
       }
@@ -120,13 +120,13 @@ namespace rtx { namespace Visioning {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       }
