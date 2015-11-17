@@ -4,17 +4,24 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #include "Brush.hpp"
 
 #include "cameraConstants.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
   Brush::Brush(Gtk::Scale *scale) {
+    if (scale) {
+      std::cout << "Brush scale exists" << std::endl;
+    } else {
+      std::cout << "Brush scale doesn't exist" << std::endl;
+    }
     scale = scale;
     x = 0;
     y = 0;
@@ -28,11 +35,21 @@ namespace rtx {
     return scale;
   }
 
-  unsigned int Brush::getSize() const {
-    return scale->get_value();
+  double Brush::getSize() const {
+    std::cout << "Brush->getSize()" << std::endl;
+    //std::cout << "Value:" << scale->get_value() << std::endl;
+    if (scale) {
+      std::cout << "Scale exists" << std::endl;
+      std::cout << "Value: " << scale->get_value() << std::endl;
+      return scale->get_value();
+    } else {
+      std::cout << "Scale doesn't exist" << std::endl;
+      return 1;
+    }
   }
 
   unsigned int Brush::getRadius() const {
+    std::cout << "Brush->getRadius()" << std::endl;
     return getSize() / 2;
   }
 

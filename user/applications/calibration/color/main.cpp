@@ -1,9 +1,10 @@
 /**
- * @file main.cpp
- * Color calibration application main module.
+ *  @file main.cpp
+ *  Color calibration application main module.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 17 November 2015
  */
 
 #include <gtkmm/application.h>
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
 
   // Run camera frame thread // TODO: Move to application class
   std::thread frameThread(process, &application);
-  frameThread.detach();
+  //frameThread.detach();
 
   // Run application and return when closed
   return application.run();

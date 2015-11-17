@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_BRUSH_H
@@ -23,7 +23,7 @@ namespace rtx {
 
       Gtk::Scale* getScale() const;
 
-      unsigned int getSize() const;
+      double getSize() const;
       unsigned int getRadius() const;
 
       unsigned int getUpperLimit() const;

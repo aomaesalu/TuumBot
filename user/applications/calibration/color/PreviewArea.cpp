@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #include "PreviewArea.hpp"
@@ -50,51 +50,35 @@ namespace rtx {
   }
 
   bool PreviewArea::applyFilter() {
-    std::cout << "G1" << std::endl;
+    std::cout << "PreviewArea applyFilter started" << std::endl;
+
     filteredImage = application->getImage()->copy(); // TODO: Copy only where is necessary (?)
-    std::cout << "G2" << std::endl;
 
     unsigned int mode = application->getMode();
-    std::cout << "G3" << std::endl;
     Filter *filter = application->getFilter();
-    std::cout << "G4" << std::endl;
 
     guint8 *pixels = filteredImage->get_pixels();
-    std::cout << "G5" << std::endl;
     unsigned int channels = filteredImage->get_n_channels();
-    std::cout << "G6" << std::endl;
     unsigned int stride = filteredImage->get_rowstride();
-    std::cout << "G7" << std::endl;
 
     guint8 *actualPixels = application->getFrame()->data;
-    std::cout << "G8" << std::endl;
     unsigned int actualChannels = 3;
-    std::cout << "G9" << std::endl;
     unsigned int actualStride = application->getFrame()->width * actualChannels;
-    std::cout << "G10" << std::endl;
 
     // Color pixels
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
-        std::cout << x << " " << y << std::endl;
         guint8 *pixel = pixels + x * channels + y * stride;
-        std::cout << "H1" << std::endl;
         guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-        std::cout << "H2" << std::endl;
-        std::cout << mode << std::endl;
-        std::cout << "H3" << std::endl;
-        std::cout << actualPixel[0] << std::endl;
-        std::cout << "H4" << std::endl;
         if (filter->has(mode, actualPixel[0], actualPixel[1], actualPixel[2])) {
-          std::cout << "H5" << std::endl;
           pixel[0] *= 0.2;
           pixel[1] *= 0.2;
           pixel[2] *= 0.2;
-          std::cout << "H6" << std::endl;
         }
       }
     }
-    std::cout << "G11" << std::endl;
+
+    std::cout << "PreviewArea applyFilter ended" << std::endl;
 
     return true;
   }
@@ -121,15 +105,25 @@ namespace rtx {
   }
 
   bool PreviewArea::on_scroll_event(GdkEventScroll *scrollEvent) {
+    std::cout << "L1" << std::endl;
     if (scrollEvent->direction == GDK_SCROLL_UP) {
+      std::cout << "L2" << std::endl;
       if (deltaScale->get_value() < deltaScale->get_adjustment()->property_upper()) {
+        std::cout << "L3" << std::endl;
         deltaScale->set_value(deltaScale->get_value() + deltaScale->get_adjustment()->get_step_increment());
+        std::cout << "L4" << std::endl;
       }
+      std::cout << "L5" << std::endl;
     } else if (scrollEvent->direction == GDK_SCROLL_DOWN) {
+      std::cout << "L6" << std::endl;
       if (deltaScale->get_value() > deltaScale->get_adjustment()->property_lower()) {
+        std::cout << "L7" << std::endl;
         deltaScale->set_value(deltaScale->get_value() - deltaScale->get_adjustment()->get_step_increment());
+        std::cout << "L8" << std::endl;
       }
+      std::cout << "L9" << std::endl;
     }
+    std::cout << "L10" << std::endl;
     return true;
   }
 

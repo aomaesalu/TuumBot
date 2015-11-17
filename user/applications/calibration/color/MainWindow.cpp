@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -31,32 +31,25 @@ namespace rtx {
   }
 
   void MainWindow::initialise() {
+
+    maskingArea.initialise();
     std::cout << "A1" << std::endl;
+    previewArea.initialise();
+    std::cout << "A2" << std::endl;
 
     // Set GUI main properties
     setProperties();
-    std::cout << "A2" << std::endl;
 
+    std::cout << "A3" << std::endl;
     // Construct the GUI
     construct();
-    std::cout << "A3" << std::endl;
-
-    maskingArea.initialise();
     std::cout << "A4" << std::endl;
-    previewArea.initialise();
-    std::cout << "A5" << std::endl;
 
     // Update video frame
     application->updateFrame();
-    std::cout << "A6" << std::endl;
-    /*maskingArea.redraw();
-    std::cout << "A4" << std::endl;
-    previewArea.queue_draw();
-    std::cout << "A5" << std::endl;*/ // TODO
 
     // Show GUI contents
     show_all_children();
-    std::cout << "A7" << std::endl;
   }
 
   void MainWindow::setProperties() {
@@ -120,7 +113,7 @@ namespace rtx {
 
   void MainWindow::constructMaskingAreaFrame() {
     maskingArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
-    maskingAreaFrame.add(maskingArea);
+    maskingAreaFrame.add(maskingArea); // TODO: Fix segmentation fault
     maskingAreaFrame.set_label("Masking");
     maskingAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
     maskingAreaFrame.set_border_width(0);
@@ -137,7 +130,7 @@ namespace rtx {
   }
 
   void MainWindow::constructMaskingAreaOptionsBox() {
-    displayMaskBeforeButton.set_label("Display mask on \"masking\" image"); // TODO: Add scale to change brightness instead
+    displayMaskBeforeButton.set_label("Display mask on masking image"); // TODO: Add scale to change brightness instead
     displayMaskBeforeButton.set_active();
     displayMaskBeforeButton.set_can_focus(false);
     maskingAreaOptionsBox.add(displayMaskBeforeButton);
@@ -145,7 +138,7 @@ namespace rtx {
   }
 
   void MainWindow::constructPreviewAreaOptionsBox() {
-    displayMaskAfterButton.set_label("Display filter on \"preview\" image"); // TODO: Add scale to change brightness instead
+    displayMaskAfterButton.set_label("Display filter on preview image"); // TODO: Add scale to change brightness instead
     displayMaskAfterButton.set_active();
     displayMaskAfterButton.set_can_focus(false);
     previewAreaOptionsBox.add(displayMaskAfterButton);
@@ -153,7 +146,7 @@ namespace rtx {
   }
 
   void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
-    /*modeChooseLabel.set_text("Mode:");
+    modeChooseLabel.set_text("Mode:");
     parentContainer.add(modeChooseLabel);
     for (std::vector<std::string>::const_iterator mode = application->getModes().begin(); mode != application->getModes().end(); ++mode) {
       modeChooseComboBox.append(*mode);
@@ -164,16 +157,18 @@ namespace rtx {
     modeChooseComboBox.set_active(0);
     std::cout << "D8" << std::endl;
     parentContainer.add(modeChooseComboBox);
-    std::cout << "D9" << std::endl;*/ // TODO
+    std::cout << "D9" << std::endl;
   }
 
   void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {
+    std::cout << "Initialising brush size scale" << std::endl;
     brushSizeLabel.set_text("Brush size:");
     parentContainer.add(brushSizeLabel);
     brushSizeScale.set_adjustment(Gtk::Adjustment::create(30, 1, 75, 1, 5));
     brushSizeScale.set_digits(0);
     brushSizeScale.set_size_request(100);
     parentContainer.add(brushSizeScale);
+    std::cout << "Brush size scale initialised" << std::endl;
   }
 
   void MainWindow::constructDeltaChooseScale(Gtk::Container &parentContainer) {

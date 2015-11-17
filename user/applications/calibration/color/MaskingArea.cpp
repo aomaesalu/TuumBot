@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #include "MaskingArea.hpp"
@@ -50,6 +50,7 @@ namespace rtx {
 
     // Initialise images
     maskedImage = application->getImage()->copy();
+    brushedImage = maskedImage->copy();
     std::cout << "E4" << std::endl;
 
     // Initialise drawing modes
@@ -63,20 +64,18 @@ namespace rtx {
   }
 
   void MaskingArea::redraw() {
+    std::cout << "MaskingArea->redraw()" << std::endl;
     // TODO: maximiseMaskBoundaries();
-    std::cout << "J1" << std::endl;
     applyMask();
-    std::cout << "J2" << std::endl;
     queue_draw();
-    std::cout << "J3" << std::endl;
     // TODO: initialiseMaskBoundaries();
   }
 
   bool MaskingArea::applyMask() {
+    std::cout << "MaskingArea applyMask started" << std::endl;
+
     // Note: We currently only apply addition mask
-    std::cout << "K1" << std::endl;
     Mask* mask = application->getMask();
-    std::cout << "K2" << std::endl;
 
     if (application->getImage()) {
       std::cout << "MaskingArea applyMask image +" << std::endl;
@@ -85,17 +84,12 @@ namespace rtx {
     }
 
     application->getImage()->copy_area(mask->getMinX(), mask->getMinY(), mask->getMaxX() - mask->getMinX() + 1, mask->getMaxY() - mask->getMinY() + 1, maskedImage, mask->getMinX(), mask->getMinY());
-    std::cout << "K3" << std::endl;
 
     unsigned int mode = application->getMode();
-    std::cout << "K4" << std::endl;
 
     guint8 *pixels = maskedImage->get_pixels();
-    std::cout << "K5" << std::endl;
     unsigned int channels = maskedImage->get_n_channels();
-    std::cout << "K6" << std::endl;
     unsigned int stride = maskedImage->get_rowstride();
-    std::cout << "K7" << std::endl;
 
     // Color pixels
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
@@ -108,7 +102,7 @@ namespace rtx {
         }
       }
     }
-    std::cout << "K8" << std::endl;
+    std::cout << "MaskingArea applyMask ended" << std::endl;
 
     return true;
   }
@@ -125,15 +119,23 @@ namespace rtx {
   }
 
   bool MaskingArea::applyBrush() {
+    std::cout << "MaskingArea applyBrush started" << std::endl;
+    std::cout << "N1" << std::endl;
     // TODO: Optimise copying (only the necessary area! Maybe should save brush mask matrix, too.)
     brushedImage = maskedImage->copy();
+    std::cout << "N2" << std::endl;
     guint8 *pixels = brushedImage->get_pixels();
+    std::cout << "N3" << std::endl;
     unsigned int channels = brushedImage->get_n_channels();
+    std::cout << "N4" << std::endl;
     unsigned int stride = brushedImage->get_rowstride();
+    std::cout << "N5" << std::endl;
 
     // Color pixels
     unsigned int radius = brush->getRadius();
+    std::cout << "N6" << std::endl;
     unsigned int radiusSquared = radius * radius;
+    std::cout << "N7" << std::endl;
     for (int x = -radius; x < radius; ++x) {
       for (int y = -radius; y < radius; ++y) {
         unsigned int distanceSquared = x * x + y * y;
@@ -148,7 +150,9 @@ namespace rtx {
         }
       }
     }
+    std::cout << "N8" << std::endl;
 
+    std::cout << "MaskingArea applyBrush ended" << std::endl;
     return true;
   }
 
@@ -162,17 +166,30 @@ namespace rtx {
   }
 
   bool MaskingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
-    if (application->isMasking() && !applyMask())
+    std::cout << "MaskingArea on_draw started" << std::endl;
+    std::cout << "M1" << std::endl;
+    if (application->isMasking() && !applyMask()) {
+      std::cout << "M2" << std::endl;
       return false;
+    }
+    std::cout << "M3" << std::endl;
 
-    if (!applyBrush())
+    if (!applyBrush()) {
+      std::cout << "M4" << std::endl;
       return false;
+    }
+    std::cout << "M5" << std::endl;
 
-    if (!drawImage(cairo))
+    if (!drawImage(cairo)) {
+      std::cout << "M6" << std::endl;
       return false;
+    }
+    std::cout << "M7" << std::endl;
 
     cairo->paint();
+    std::cout << "M8" << std::endl;
 
+    std::cout << "MaskingArea on_draw ended" << std::endl;
     return true;
   }
 

@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 14 November 2015
+ *  @date 17 November 2015
  */
 
 #include "Application.hpp"
@@ -159,29 +159,21 @@ namespace rtx {
   }
 
   int Application::run() {
+    std::cout << "Running application..." << std::endl;
     // Show windows and return when closed
     return gtkApplication->run(*window);
   }
 
   bool Application::updateFrame() {
-    std::cout << "Updating frame" << std::endl;
-    std::cout << "I1" << std::endl;
+    std::cout << "Application->updateFrame()" << std::endl;
     if (!playing) {
-      std::cout << "I2" << std::endl;
       return false;
     }
-    std::cout << "I3" << std::endl;
     frame = camera->getFrame();
-    std::cout << "I4" << std::endl;
     rgbFrame = toRGB(frame);
-    std::cout << "I5" << std::endl;
     // TODO: window->updateFrame(&frame, &rgbFrame);
     window->getMaskingArea()->redraw();
-    std::cout << "I6" << std::endl;
     window->getPreviewArea()->queue_draw();
-    std::cout << "I7" << std::endl;
-    std::cout << "Updated frame" << std::endl;
-    std::cout << "I8" << std::endl;
     return true;
   }
 
