@@ -77,47 +77,51 @@ namespace rtx {
               while (!stack.empty()) {
                 std::pair<unsigned int, unsigned int> point = stack.back();
                 stack.pop_back();
+
                 //if (!visited[*mode][point.first][point.second]) { //  Do we need to check it here? We check it again later...
-                  visited[*mode][point.first][point.second] = true;
+
+                visited[*mode][point.first][point.second] = true;
+
+                unsigned char *pixel = pixels + point.first * channels + point.second * stride;
+
+                if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
                   blobPoints.push_back(point);
-
-                  unsigned char *pixel = pixels + point.first * channels + point.second * stride;
-
-                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
-                    if (point.first > 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
-                      if (!visited[*mode][point.first][point.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][point.first][point.second] = true;
-                      }
-                    }
-                    if (point.first < CAMERA_WIDTH - 1) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
-                      if (!visited[*mode][point.first][point.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][point.first][point.second] = true;
-                      }
-                    }
-                    if (point.second > 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
-                      if (!visited[*mode][point.first][point.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][point.first][point.second] = true;
-                      }
-                    }
-                    if (point.second < CAMERA_HEIGHT - 1) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
-                      if (!visited[*mode][point.first][point.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][point.first][point.second] = true;
-                      }
+                  if (point.first > 0) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
+                    if (!visited[*mode][point.first][point.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][point.first][point.second] = true;
                     }
                   }
+                  if (point.first < CAMERA_WIDTH - 1) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
+                    if (!visited[*mode][point.first][point.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][point.first][point.second] = true;
+                    }
+                  }
+                  if (point.second > 0) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
+                    if (!visited[*mode][point.first][point.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][point.first][point.second] = true;
+                    }
+                  }
+                  if (point.second < CAMERA_HEIGHT - 1) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
+                    if (!visited[*mode][point.first][point.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][point.first][point.second] = true;
+                    }
+                  }
+                }
 
                 //}
               }
 
-              blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
+              if (!blobPoints.empty()) {
+                blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
+              }
 
             }
           }
