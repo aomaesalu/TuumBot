@@ -40,8 +40,6 @@ obj/*
 lib/*
 data/*
 
-# Image files
-*.ppm
 =======
 build/*
 =======

@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #include "ImageAfterDrawingArea.hpp"
@@ -152,6 +153,7 @@ namespace rtx {
 
   void ImageAfterDrawingArea::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
+    //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
 
     // Show the whole image
     if (image)
