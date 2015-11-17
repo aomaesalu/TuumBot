@@ -10,6 +10,8 @@
 
 #include "Blob.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
@@ -25,8 +27,8 @@ namespace rtx {
 
   Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
     this->color = color;
-    unsigned int minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
-    unsigned int maxX = 0, maxY = 0;
+    minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
     for (std::vector<Point2D*>::const_iterator i = points.begin(); i != points.end(); ++i) {
       numberOfPoints++;
@@ -91,6 +93,22 @@ namespace rtx {
 
   unsigned int Blob::getHeight() const {
     return height;
+  }
+
+  unsigned int Blob::getMinX() const {
+    return minX;
+  }
+
+  unsigned int Blob::getMaxX() const {
+    return maxX;
+  }
+
+  unsigned int Blob::getMinY() const {
+    return minY;
+  }
+
+  unsigned int Blob::getMaxY() const {
+    return maxY;
   }
 
   unsigned int Blob::getNumberOfPoints() const {
