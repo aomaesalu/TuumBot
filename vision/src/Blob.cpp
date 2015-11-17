@@ -57,6 +57,7 @@ namespace rtx {
     unsigned int minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     unsigned int maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
+    numberOfPoints = 0;
     for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator i = points.begin(); i != points.end(); ++i) {
       numberOfPoints++;
       xSum += i->first;
