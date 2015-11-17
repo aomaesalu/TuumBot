@@ -44,11 +44,7 @@ namespace rtx {
   }
 
   bool GUI::isColored(const unsigned int &mode, const unsigned int &pixel) const {
-    if (filter.size() > pixel) {
-      return (filter[pixel] >> (7 - mode)) & 0x1;
-    } else {
-      return false;
-    }
+    return Vision::isColored(hal::hw.getFrontCamera()->getFrame(), Visioning::filter, pixel, mode);
   }
 
   bool GUI::isColored(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &z) const {
