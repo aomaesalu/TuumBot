@@ -9,6 +9,8 @@
 
 #include "Vision.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
@@ -46,14 +48,17 @@ namespace rtx {
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
       if (filter.size() > pixel) {
+        //std::cout << (7 - mode) << " " << pixel << " " << filter[pixel] << " " << (filter[pixel] >> (7 - mode)) << " " << ((filter[pixel] >> (7 - mode)) & 0x1) << std::endl;
         return (filter[pixel] >> (7 - mode)) & 0x1;
       } else {
+        //std::cout << "Filter is empty" << std::endl;
         return false;
       }
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
-      return isColored(frame, filter, x << 16 + y << 8 + z, mode);
+      //std::cout << x << " " << y << " " << z << " " << (x << 16 + y << 8 + z) << std::endl;
+      return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
