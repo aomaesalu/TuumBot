@@ -45,6 +45,7 @@ int main() {
         std::cout << "Ball(d:" << (*ball)->getDistance() << ", a:" << (*ball)->getAngle() << ");" << std::endl;
       }
       lastTime = currentTime;
+      std::cout << std::endl << std::endl;
     }
   }
 
