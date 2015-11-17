@@ -71,8 +71,8 @@ namespace rtx {
       unsigned int stride = frame.width * channels;
 
       for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
-        for (unsigned int j = CAMERA_HEIGHT - 1; j >= 0; j -= 5) {
-          for (unsigned int i = CAMERA_WIDTH - 1; i >= 0; i -= 5) {
+        for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
+          for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
 
             if (!visited[*mode][i][j]) {
 
