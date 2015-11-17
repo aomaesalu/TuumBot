@@ -89,28 +89,28 @@ namespace rtx {
 
                 if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
                   blobPoints.push_back(point);
-                  if (point.first > 0) {
+                  if (point.first - 1 < CAMERA_WIDTH - 1) {
                     std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
                     if (!visited[*mode][point.first - 1][point.second]) {
                       stack.push_back(newPoint);
                       visited[*mode][point.first - 1][point.second] = true;
                     }
                   }
-                  if (point.first < CAMERA_WIDTH - 1) {
+                  if (point.first + 1 < CAMERA_WIDTH - 1) {
                     std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
                     if (!visited[*mode][point.first + 1][point.second]) {
                       stack.push_back(newPoint);
                       visited[*mode][point.first + 1][point.second] = true;
                     }
                   }
-                  if (point.second > 0) {
+                  if (point.second - 1 < CAMERA_HEIGHT - 1) {
                     std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
                     if (!visited[*mode][point.first][point.second - 1]) {
                       stack.push_back(newPoint);
                       visited[*mode][point.first][point.second - 1] = true;
                     }
                   }
-                  if (point.second < CAMERA_HEIGHT - 1) {
+                  if (point.second + 1 < CAMERA_HEIGHT - 1) {
                     std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
                     if (!visited[*mode][point.first][point.second + 1]) {
                       stack.push_back(newPoint);
@@ -123,6 +123,7 @@ namespace rtx {
 
               if (!blobPoints.empty()) {
                 blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
+                blobPoints.clear();
               }
 
             }
