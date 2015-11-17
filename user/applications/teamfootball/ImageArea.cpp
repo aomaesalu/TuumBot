@@ -38,28 +38,37 @@ namespace rtx {
  }
 
  bool ImageArea::applyFilter() {
+   std::cout << "B1" << std::endl;
    filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
+   std::cout << "B2" << std::endl;
 
    guint8 *pixels = filteredImage->get_pixels();
+   std::cout << "B3" << std::endl;
    unsigned int channels = filteredImage->get_n_channels();
+   std::cout << "B4" << std::endl;
    unsigned int stride = filteredImage->get_rowstride();
+   std::cout << "B5" << std::endl;
 
    guint8 *actualPixels = gui->getFrame()->data;
+   std::cout << "B6" << std::endl;
    unsigned int actualChannels = 3;
+   std::cout << "B7" << std::endl;
    unsigned int actualStride = gui->getFrame()->width * actualChannels;
+   std::cout << "B8" << std::endl;
 
    // Color pixels
    for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
      for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
        guint8 *pixel = pixels + x * channels + y * stride;
        guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-       if (gui->isColored(0, actualPixel[0], actualPixel[1], actualPixel[2])) {
+       if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], 0)) {
          pixel[0] *= 0.2;
          pixel[1] *= 0.2;
          pixel[2] *= 0.2;
        }
      }
    }
+   std::cout << "B9" << std::endl;
 
    return true;
  }
@@ -74,13 +83,17 @@ namespace rtx {
  }
 
  bool ImageArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cairo) {
+   std::cout << "A1" << std::endl;
    if (!applyFilter())
      return false;
+   std::cout << "A2" << std::endl;
 
    if (!drawImage(cairo))
      return false;
+   std::cout << "A3" << std::endl;
 
    cairo->paint();
+   std::cout << "A4" << std::endl;
 
    return true;
  }

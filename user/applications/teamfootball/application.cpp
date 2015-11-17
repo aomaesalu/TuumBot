@@ -17,7 +17,7 @@
 using namespace std;
 using namespace rtx;
 
-static void run() {
+static void run(GUI *gui) {
   clock_t startTime = clock();
   clock_t lastTime = startTime;
   bool running = true;
@@ -29,6 +29,8 @@ static void run() {
     Motion::process();
 
     Logic::process();
+
+    gui->updateFrame();
 
     clock_t currentTime = clock();
     if (float(currentTime - lastTime) / CLOCKS_PER_SEC > 1) {
@@ -56,7 +58,7 @@ int main(int argc, char *argv[]) {
 
   GUI gui(argc, argv, hal::hw.getFrontCamera());
 
-  std::thread applicationThread(run);
+  std::thread applicationThread(run, &gui);
   applicationThread.detach();
 
   return gui.run();

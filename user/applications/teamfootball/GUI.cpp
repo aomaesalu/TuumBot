@@ -11,6 +11,8 @@
 
 #include "cameraConstants.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
@@ -41,14 +43,6 @@ namespace rtx {
   void GUI::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
     //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
-  }
-
-  bool GUI::isColored(const unsigned int &mode, const unsigned int &pixel) const {
-    return Vision::isColored(hal::hw.getFrontCamera()->getFrame(), Visioning::filter, pixel, mode);
-  }
-
-  bool GUI::isColored(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &z) const {
-    return isColored(mode, (x << 16) + (y << 8) + z);
   }
 
   Glib::RefPtr<Gtk::Application> GUI::getGtkApplication() const {
