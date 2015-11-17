@@ -23,7 +23,7 @@
 
 namespace rtx {
 
-  PreviewArea::PreviewArea(Application*) {
+  PreviewArea::PreviewArea(Application* application) {
     // Set properties
     this->application = application;
   }
@@ -35,15 +35,18 @@ namespace rtx {
   void PreviewArea::initialise() {
     // Initialise area size
     // set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    std::cout << "F1" << std::endl;
     if (application->getImage()) {
-      std::cout << "Masking Area +" << std::endl;
+      std::cout << "Preview Area +" << std::endl;
       set_size_request(application->getImage()->get_width(), application->getImage()->get_height());
     } else {
-      std::cout << "Masking Area -" << std::endl;
+      std::cout << "Preview Area -" << std::endl;
     }
+    std::cout << "F2" << std::endl;
 
     // Initialise delta scale // TODO: Separate from this class
     deltaScale = application->getWindow()->getDeltaScale();
+    std::cout << "F3" << std::endl;
   }
 
   bool PreviewArea::applyFilter() {

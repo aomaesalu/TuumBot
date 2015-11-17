@@ -53,15 +53,16 @@ namespace rtx {
 
     // Create initial image
     initialiseImage();
+    std::cout << "3" << std::endl;
 
     window->initialise();
-    std::cout << "3" << std::endl;
+    std::cout << "4" << std::endl;
   }
 
   Application::~Application() {
-    std::cout << "3" << std::endl;
+    std::cout << "5" << std::endl;
     // TODO: delete window;
-    std::cout << "4" << std::endl;
+    std::cout << "6" << std::endl;
   }
 
   void Application::initialiseImage() {

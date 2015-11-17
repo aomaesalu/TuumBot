@@ -35,18 +35,22 @@ namespace rtx {
   void MaskingArea::initialise() {
     // Initialise area size
     //set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    std::cout << "E1" << std::endl;
     if (application->getImage()) {
       std::cout << "Masking Area +" << std::endl;
       set_size_request(application->getImage()->get_width(), application->getImage()->get_height());
     } else {
       std::cout << "Masking Area -" << std::endl;
     }
+    std::cout << "E2" << std::endl;
 
     // Initialise brush
     brush = new Brush(application->getWindow()->getBrushScale());
+    std::cout << "E3" << std::endl;
 
     // Initialise drawing modes
     resetDrawingModes();
+    std::cout << "E4" << std::endl;
   }
 
   void MaskingArea::resetDrawingModes() {
