@@ -27,6 +27,8 @@ namespace rtx {
       MaskingArea(Application*);
       virtual ~MaskingArea();
 
+      void initialise();
+
       void resetDrawingModes();
 
       void redraw();

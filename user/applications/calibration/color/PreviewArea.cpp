@@ -18,22 +18,32 @@
 #include <glibmm/refptr.h>
 #include <glibmm/fileutils.h>
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
   PreviewArea::PreviewArea(Application*) {
     // Set properties
     this->application = application;
-
-    // Initialise area size
-    set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-
-    // Initialise delta scale // TODO: Separate from this class
-    deltaScale = application->getWindow()->getDeltaScale();
   }
 
   PreviewArea::~PreviewArea() {
     // TODO
+  }
+
+  void PreviewArea::initialise() {
+    // Initialise area size
+    // set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    if (application->getImage()) {
+      std::cout << "Masking Area +" << std::endl;
+      set_size_request(application->getImage()->get_width(), application->getImage()->get_height());
+    } else {
+      std::cout << "Masking Area -" << std::endl;
+    }
+
+    // Initialise delta scale // TODO: Separate from this class
+    deltaScale = application->getWindow()->getDeltaScale();
   }
 
   bool PreviewArea::applyFilter() {

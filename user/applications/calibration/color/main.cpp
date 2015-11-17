@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
 
   // Create application
   Application application(argc, argv, hal::hw.getFrontCamera());
+  application.initialise();
 
   // Run camera frame thread // TODO: Move to application class
   std::thread frameThread(process, &application);

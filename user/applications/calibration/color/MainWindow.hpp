@@ -31,6 +31,8 @@ namespace rtx {
       MainWindow(Application*);
       virtual ~MainWindow();
 
+      void initialise();
+
       MaskingArea* getMaskingArea();
       PreviewArea* getPreviewArea();
 

@@ -24,6 +24,13 @@ namespace rtx {
   {
     // Attach application information
     this->application = application;
+  }
+
+  MainWindow::~MainWindow() {
+    // Nothing to do here
+  }
+
+  void MainWindow::initialise() {
     std::cout << "A1" << std::endl;
 
     // Set GUI main properties
@@ -36,18 +43,17 @@ namespace rtx {
 
     // Update video frame
     // TODO: updateFrame();
-    maskingArea.redraw();
+    /*maskingArea.redraw();
     std::cout << "A4" << std::endl;
     previewArea.queue_draw();
-    std::cout << "A5" << std::endl;
+    std::cout << "A5" << std::endl;*/ // TODO
+
+    maskingArea.initialise();
+    previewArea.initialise();
 
     // Show GUI contents
     show_all_children();
     std::cout << "A6" << std::endl;
-  }
-
-  MainWindow::~MainWindow() {
-    // Nothing to do here
   }
 
   void MainWindow::setProperties() {
@@ -144,7 +150,7 @@ namespace rtx {
   }
 
   void MainWindow::constructModeChooseComboBox(Gtk::Container &parentContainer) {
-    modeChooseLabel.set_text("Mode:");
+    /*modeChooseLabel.set_text("Mode:");
     parentContainer.add(modeChooseLabel);
     for (std::vector<std::string>::const_iterator mode = application->getModes().begin(); mode != application->getModes().end(); ++mode) {
       modeChooseComboBox.append(*mode);
@@ -155,7 +161,7 @@ namespace rtx {
     modeChooseComboBox.set_active(0);
     std::cout << "D8" << std::endl;
     parentContainer.add(modeChooseComboBox);
-    std::cout << "D9" << std::endl;
+    std::cout << "D9" << std::endl;*/ // TODO
   }
 
   void MainWindow::constructBrushSizeScale(Gtk::Container &parentContainer) {

@@ -18,25 +18,35 @@
 #include <glibmm/refptr.h>
 #include <glibmm/fileutils.h>
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
   MaskingArea::MaskingArea(Application *application) {
     // Set properties
     this->application = application;
+  }
 
+  MaskingArea::~MaskingArea() {
+    // TODO
+  }
+
+  void MaskingArea::initialise() {
     // Initialise area size
-    set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    //set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    if (application->getImage()) {
+      std::cout << "Masking Area +" << std::endl;
+      set_size_request(application->getImage()->get_width(), application->getImage()->get_height());
+    } else {
+      std::cout << "Masking Area -" << std::endl;
+    }
 
     // Initialise brush
     brush = new Brush(application->getWindow()->getBrushScale());
 
     // Initialise drawing modes
     resetDrawingModes();
-  }
-
-  MaskingArea::~MaskingArea() {
-    // TODO
   }
 
   void MaskingArea::resetDrawingModes() {

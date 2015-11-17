@@ -11,6 +11,13 @@
 
 #include "cameraConstants.hpp"
 
+#include <gtkmm.h>
+#include <cairomm/context.h>
+#include <gdkmm/general.h>
+#include <gdkmm/pixbuf.h>
+#include <glibmm/refptr.h>
+#include <glibmm/fileutils.h>
+
 #include <fstream>
 #include <iostream> // TODO: Remove
 
@@ -19,8 +26,7 @@ namespace rtx {
 
   Application::Application(int &argc, char *argv[], Camera *camera):
     mask(8, CAMERA_WIDTH, CAMERA_HEIGHT),
-    filter(8),
-    modes(std::vector<std::string>(8, ""))
+    filter(8)
   {
     // Attach command line parameters
     this->argc = argc;
@@ -37,20 +43,25 @@ namespace rtx {
     playing = true;
     masking = false;
 
-    // Create initial image
-    initialiseImage();
-
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv);
     std::cout << "1" << std::endl;
-    
+
     // Create window
     window = new MainWindow(this);
     std::cout << "2" << std::endl;
+
+    // Create initial image
+    initialiseImage();
+
+    window->initialise();
+    std::cout << "3" << std::endl;
   }
 
   Application::~Application() {
-    delete window;
+    std::cout << "3" << std::endl;
+    // TODO: delete window;
+    std::cout << "4" << std::endl;
   }
 
   void Application::initialiseImage() {

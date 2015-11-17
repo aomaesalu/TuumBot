@@ -24,6 +24,8 @@ namespace rtx {
       PreviewArea(Application*);
       virtual ~PreviewArea();
 
+      void initialise();
+
     protected:
       virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
       virtual bool on_scroll_event(GdkEventScroll*);
