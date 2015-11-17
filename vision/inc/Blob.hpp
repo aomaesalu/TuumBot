@@ -41,8 +41,6 @@ namespace rtx {
       // TODO: Save a list of points, too, for further analysis?
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
       Point2D *position;
-      unsigned int width;
-      unsigned int height;
       unsigned int minX;
       unsigned int maxX;
       unsigned int minY;
