@@ -13,6 +13,7 @@
 #include <iostream> // TODO: Remove
 
 #include "rtxhal.hpp"
+#include "tuum_visioning.hpp"
 
 #include "MainWindow.hpp"
 
@@ -30,6 +31,7 @@ static void process(MainWindow *window) {
       frameCounter = 0;
       lastTime = currentTime;
     }
+    Visioning::processCheckerboard();
     if (window->updateFrame()) {
       frameCounter++;
     }
@@ -41,6 +43,9 @@ int main(int argc, char *argv[]) {
 
   // Initialise hardware
   rtx::hal::setup();
+
+  // Initialise visioning module
+  Visioning::setup();
 
   MainWindow window(hal::hw.getFrontCamera()); // TODO: Add back camera, too
 
