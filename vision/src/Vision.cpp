@@ -130,7 +130,6 @@ namespace rtx {
 
         }
       }
-
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {

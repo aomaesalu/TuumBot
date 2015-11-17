@@ -143,7 +143,10 @@ namespace rtx {
         unsigned int maxX = (*blob)->getMaxX();
         unsigned int minY = (*blob)->getMinY();
         unsigned int maxY = (*blob)->getMaxY();
-        std::cout << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+        if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
+          continue;
+        }
+        //std::cout << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
         Color color = (*blob)->getColor();
         unsigned int value = 0;
         if (color == CHECKERBOARD_WHITE) {
