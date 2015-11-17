@@ -89,19 +89,19 @@ namespace rtx {
 
                 if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
                   blobPoints.push_back(point);
-                  for (int step = -1; step <= 1; ++step) {
+                  for (int step = -1; step <= 1; step += 2) {
                     if (point.first + step < CAMERA_WIDTH - 1) {
                       std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
-                      if (!visited[*mode][point.first + step][point.second]) {
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
                         stack.push_back(newPoint);
-                        visited[*mode][point.first + step][point.second] = true;
+                        visited[*mode][newPoint.first][newPoint.second] = true;
                       }
                     }
                     if (point.second + step < CAMERA_HEIGHT - 1) {
                       std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
-                      if (!visited[*mode][point.first][point.second + step]) {
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
                         stack.push_back(newPoint);
-                        visited[*mode][point.first][point.second + step] = true;
+                        visited[*mode][newPoint.first][newPoint.second] = true;
                       }
                     }
                   }
