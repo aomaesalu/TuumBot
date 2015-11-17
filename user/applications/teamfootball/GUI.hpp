@@ -26,6 +26,9 @@ namespace rtx {
       GUI(int&, char**, Camera*);
       virtual ~GUI();
 
+      bool isColored(const unsigned int&, const unsigned int&) const;
+      bool isColored(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
+
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;
       MainWindow* getWindow() const;
 

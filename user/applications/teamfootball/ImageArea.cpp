@@ -40,8 +40,6 @@ namespace rtx {
  bool ImageArea::applyFilter() {
    filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
-   Filter *filter = gui->getFilter();
-
    guint8 *pixels = filteredImage->get_pixels();
    unsigned int channels = filteredImage->get_n_channels();
    unsigned int stride = filteredImage->get_rowstride();
@@ -55,7 +53,7 @@ namespace rtx {
      for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
        guint8 *pixel = pixels + x * channels + y * stride;
        guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-       if (filter->has(mode, actualPixel[0], actualPixel[1], actualPixel[2])) {
+       if (gui->isColored(0, actualPixel[0], actualPixel[1], actualPixel[2])) {
          pixel[0] *= 0.2;
          pixel[1] *= 0.2;
          pixel[2] *= 0.2;

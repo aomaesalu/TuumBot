@@ -43,6 +43,18 @@ namespace rtx {
     //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
   }
 
+  bool GUI::isColored(const unsigned int &mode, const unsigned int &pixel) const {
+    if (filter.size() > pixel) {
+      return (filter[pixel] >> (7 - mode)) & 0x1;
+    } else {
+      return false;
+    }
+  }
+
+  bool GUI::isColored(const unsigned int &mode, const unsigned int &x, const unsigned int &y, const unsigned int &z) const {
+    return isColored(mode, (x << 16) + (y << 8) + z);
+  }
+
   Glib::RefPtr<Gtk::Application> GUI::getGtkApplication() const {
     return gtkApplication;
   }
