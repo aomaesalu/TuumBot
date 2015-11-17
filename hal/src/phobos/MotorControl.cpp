@@ -78,13 +78,13 @@ void MotorControl::turn(int degrees){
   for(int i=1; i < (n_motors+1); i++) {
     motors[i]->setSpeed(15);
   }
-  std::cout << "Started" << turntime << std::endl;
+  // DEBUG: std::cout << "Started" << turntime << std::endl;
   //boost::this_thread::sleep(boost::posix_time::milliseconds(turntime));
   usleep(turntime*1000);
   for(int i=1; i < (n_motors+1); i++) {
     motors[i]->stop();
   }
-  std::cout << "Stopped" << std::endl;
+  // DEBUG: std::cout << "Stopped" << std::endl;
 }
 
 void MotorControl::turnsimple(int speed) {
@@ -99,7 +99,7 @@ void MotorControl::OmniDrive(double speed, double angle, double rot){
   int spd2 = speed * sin(angle - M_PI / 4.0) + rot;
   int spd3 = speed * sin(angle + M_PI / 4.0) + rot;
   int spd4 = speed * -sin(angle - M_PI / 4.0) + rot;
-  
+
   int speeds[4] = {spd1, spd2, spd3, spd4};
   for (int i=1; i < (n_motors+1); i++){
     motors[i]->setSpeed(speeds[i-1]);

@@ -25,7 +25,7 @@ std::string MotorDriver::readLine(){
 void MotorDriver::setSpeed(int newSpeed){
   std::string speedcmd = std::to_string(motorid) + ":sd" + std::to_string(newSpeed) + "\n";
   write(port, speedcmd.c_str(), speedcmd.size());
-  std::cout << speedcmd << std::endl;
+  // DEBUG: std::cout << speedcmd << std::endl;
 }
 
 void MotorDriver::stop(){
