@@ -28,6 +28,10 @@ namespace rtx {
       Point2D* getPosition() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
+      unsigned int getMinX() const;
+      unsigned int getMaxX() const;
+      unsigned int getMinY() const;
+      unsigned int getMaxY() const;
       unsigned int getNumberOfPoints() const;
       Color getColor() const;
       unsigned int getBoxArea() const;
@@ -37,8 +41,10 @@ namespace rtx {
       // TODO: Save a list of points, too, for further analysis?
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
       Point2D *position;
-      unsigned int width;
-      unsigned int height;
+      unsigned int minX;
+      unsigned int maxX;
+      unsigned int minY;
+      unsigned int maxY;
       unsigned int numberOfPoints;
       Color color;
 

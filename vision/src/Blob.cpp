@@ -10,13 +10,17 @@
 
 #include "Blob.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
   Blob::Blob(const Blob &other):
     position{new Point2D(*(other.getPosition()))},
-    width{other.getWidth()},
-    height{other.getHeight()},
+    minX{other.getMinX()},
+    maxX{other.getMaxX()},
+    minY{other.getMinY()},
+    maxY{other.getMaxY()},
     numberOfPoints{other.getNumberOfPoints()},
     color{other.getColor()}
   {
@@ -25,9 +29,10 @@ namespace rtx {
 
   Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
     this->color = color;
-    unsigned int minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
-    unsigned int maxX = 0, maxY = 0;
+    minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
+    numberOfPoints = 0;
     for (std::vector<Point2D*>::const_iterator i = points.begin(); i != points.end(); ++i) {
       numberOfPoints++;
       xSum += (*i)->getX();
@@ -45,16 +50,15 @@ namespace rtx {
         maxY = (*i)->getY();
       }
     }
-    width = maxX - minX + 1;
-    height = maxY - minY + 1;
     position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
   Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
     this->color = color;
-    unsigned int minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    unsigned int minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     unsigned int maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
+    numberOfPoints = 0;
     for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator i = points.begin(); i != points.end(); ++i) {
       numberOfPoints++;
       xSum += i->first;
@@ -72,8 +76,6 @@ namespace rtx {
         maxY = i->second;
       }
     }
-    width = maxX - minX + 1;
-    height = maxY - minY + 1;
     position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
@@ -86,11 +88,27 @@ namespace rtx {
   }
 
   unsigned int Blob::getWidth() const {
-    return width;
+    return maxX - minX + 1;
   }
 
   unsigned int Blob::getHeight() const {
-    return height;
+    return maxY - minY + 1;
+  }
+
+  unsigned int Blob::getMinX() const {
+    return minX;
+  }
+
+  unsigned int Blob::getMaxX() const {
+    return maxX;
+  }
+
+  unsigned int Blob::getMinY() const {
+    return minY;
+  }
+
+  unsigned int Blob::getMaxY() const {
+    return maxY;
   }
 
   unsigned int Blob::getNumberOfPoints() const {
@@ -102,7 +120,7 @@ namespace rtx {
   }
 
   unsigned int Blob::getBoxArea() const {
-    return width * height;
+    return getWidth() * getHeight();
   }
 
   double Blob::getDensity() const {

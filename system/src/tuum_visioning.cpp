@@ -4,13 +4,14 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 17 November 2015
  */
 
 #include "tuum_visioning.hpp"
 #include "mathematicalConstants.hpp"
 
 #include <fstream>
+#include <iostream> // TODO: Remove
 
 using namespace rtx;
 
@@ -37,6 +38,11 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
+    if (filter.size() == 0) {
+      std::cout << "Process: Filter is empty" << std::endl;
+      return;
+    }
+
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
 
@@ -46,8 +52,10 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process(frontFrame, filter);
-    //Vision::process(backFrame, filter);
+    if (frontCamera)
+      Vision::process(frontFrame, filter);
+    if (backCamera)
+      Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -55,6 +63,29 @@ namespace rtx { namespace Visioning {
       goalDetection(frontFrame);
       robotDetection(frontFrame);
     }
+
+    // TODO: Add back camera frame processing
+  }
+
+  void processCheckerboard() {
+    if (filter.size() == 0) {
+      std::cout << "Process: Filter is empty" << std::endl;
+      return;
+    }
+
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
+
+    Frame frontFrame, backFrame;
+    if (frontCamera)
+      frontFrame = frontCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
+
+    if (frontCamera)
+      Vision::processCheckerboard(frontFrame, filter);
+    if (backCamera)
+      Vision::processCheckerboard(backFrame, filter);
 
     // TODO: Add back camera frame processing
   }
@@ -72,13 +103,20 @@ namespace rtx { namespace Visioning {
 
   void ballDetection(const Frame &frame) {
     balls.clear();
+    unsigned int maxArea = 0;
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
-      if (Vision::blobs[i]->getColor() == BALL) {
+      Color color = Vision::blobs[i]->getColor();
+      double density = Vision::blobs[i]->getDensity();
+      unsigned int boxArea = Vision::blobs[i]->getBoxArea();
+      if (color == BALL/* && density > 0.4*/ && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT/* && boxArea > 8 * 8*/) {
+        //std::cout << "Dim: " << Vision::blobs[i]->getDensity() << " " << Vision::blobs[i]->getBoxArea() << std::endl;
         // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        balls.push_back(new Ball(distance, angle));
+        if (boxArea > maxArea) {
+          Point2D* point = Vision::blobs[i]->getPosition();
+          unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
+          double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+          balls.push_back(new Ball(distance, angle));
+        }
       }
     }
   }
@@ -89,13 +127,13 @@ namespace rtx { namespace Visioning {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       }
