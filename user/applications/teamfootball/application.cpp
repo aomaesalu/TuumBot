@@ -27,6 +27,8 @@ int main() {
 
   Logic::setup();
 
+  clock_t startTime = clock();
+  clock_t lastTime = startTime;
   bool running = true;
   while(running) {
     rtx::hal::process();
@@ -36,6 +38,14 @@ int main() {
     Motion::process();
 
     Logic::process();
+
+    clock_t currentTime = clock();
+    if (float(currentTime - lastTime) / CLOCKS_PER_SEC > 1) {
+      for (Visioning::BallSet::iterator ball = Visioning::balls.begin(); ball != Visioning::balls.end(); ++ball) {
+        std::cout << "Ball(d:" << (*ball)->getDistance() << ", a:" << (*ball)->getAngle() << ");" << std::endl;
+      }
+      lastTime = currentTime;
+    }
   }
 
   return 0;
