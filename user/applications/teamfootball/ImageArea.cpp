@@ -61,6 +61,57 @@ namespace rtx {
      }
    }
 
+   // Draw rectangles
+   for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
+     if (*blob) {
+       unsigned int x = (*blob)->getPosition()->getX();
+       unsigned int y = (*blob)->getPosition()->getY();
+       unsigned int minX = (*blob)->getMinX();
+       unsigned int maxX = (*blob)->getMaxX();
+       unsigned int minY = (*blob)->getMinY();
+       unsigned int maxY = (*blob)->getMaxY();
+       if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
+         continue;
+       }
+       //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+       Color color = (*blob)->getColor();
+
+       unsigned int value = 0;
+       for (unsigned int i = minX; i <= maxX; ++i) {
+         guint8 *pixel = pixels + i * channels + minY * stride;
+         for (unsigned int p = 0; p < 3; ++p) {
+           pixel[p] = value;
+         }
+         pixel = pixels + i * channels + maxY * stride;
+         for (unsigned int p = 0; p < 3; ++p) {
+           pixel[p] = value;
+         }
+       }
+       for (unsigned int j = minY; j <= maxY; ++j) {
+         guint8 *pixel = pixels + minX * channels + j * stride;
+         for (unsigned int p = 0; p < 3; ++p) {
+           pixel[p] = value;
+         }
+         pixel = pixels + maxX * channels + j * stride;
+         for (unsigned int p = 0; p < 3; ++p) {
+           pixel[p] = value;
+         }
+       }
+
+       for (int dx = -3; dx < 3; ++dx) {
+         for (int dy = -3; dy < 3; ++dy) {
+           if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
+             guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
+             pixel[0] = 255;
+             pixel[1] = 0;
+             pixel[2] = 0;
+           }
+         }
+       }
+
+     }
+   }
+
    return true;
  }
 
