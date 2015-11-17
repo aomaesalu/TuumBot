@@ -14,6 +14,8 @@
 #include <string>
 
 #include "rtxhal.hpp"
+#include "rtxvision.h"
+#include "tuum_visioning.hpp"
 
 #include "MainWindow.hpp"
 

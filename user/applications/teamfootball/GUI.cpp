@@ -71,12 +71,12 @@ namespace rtx {
     return image;
   }
 
-  int Application::run() {
+  int GUI::run() {
     // Show windows and return when closed
     return gtkApplication->run(*window);
   }
 
-  bool Application::updateFrame() {
+  bool GUI::updateFrame() {
     frame = camera->getFrame();
     rgbFrame = toRGB(frame);
     window->getImageArea()->queue_draw();

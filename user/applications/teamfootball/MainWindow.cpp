@@ -66,7 +66,7 @@
    }
 
    void MainWindow::constructImageAreaFrame() {
-     imageAreaFrame.add(previewArea);
+     imageAreaFrame.add(imageArea);
      imageAreaFrame.set_label("Image");
      imageAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
      imageAreaFrame.set_border_width(0);
