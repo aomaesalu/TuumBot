@@ -104,7 +104,8 @@ namespace rtx { namespace Visioning {
   void ballDetection(const Frame &frame) {
     balls.clear();
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
-      if (Vision::blobs[i]->getColor() == BALL && Vision::blobs[i]->getDensity() > 0.4 && Vision::blobs[i]->getDensity() <= 1.0 && Vision::blobs[i]->getBoxArea() > 8 * 8) {
+      if (Vision::blobs[i]->getColor() == BALL/* && Vision::blobs[i]->getDensity() > 0.4*/ && Vision::blobs[i]->getDensity() <= 1.0 && Vision::blobs[i]->getBoxArea() <= CAMERA_WIDTH * CAMERA_HEIGHT/* && Vision::blobs[i]->getBoxArea() > 8 * 8*/) {
+        std::cout << "Dim: " << Vision::blobs[i]->getDensity() << " " << Vision::blobs[i]->getBoxArea() << std::endl;
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
