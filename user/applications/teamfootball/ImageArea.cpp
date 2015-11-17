@@ -62,6 +62,7 @@ namespace rtx {
    }
 
    // Draw rectangles
+   std::cout << "Blobs in GUI: " << Vision::blobs.size() << std::endl;
    for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
      if (*blob) {
        unsigned int x = (*blob)->getPosition()->getX();

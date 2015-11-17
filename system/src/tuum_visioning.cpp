@@ -104,6 +104,7 @@ namespace rtx { namespace Visioning {
   void ballDetection(const Frame &frame) {
     balls.clear();
     unsigned int maxArea = 0;
+    std::cout << "Blobs in visioning: " << Vision::blobs.size() << std::endl;
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       Color color = Vision::blobs[i]->getColor();
       double density = Vision::blobs[i]->getDensity();
