@@ -4,13 +4,14 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 17 November 2015
  */
 
 #include "tuum_visioning.hpp"
 #include "mathematicalConstants.hpp"
 
 #include <fstream>
+#include <iostream> // TODO: Remove
 
 using namespace rtx;
 
@@ -37,6 +38,11 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
+    if (filter.size() == 0) {
+      std::cout << "Process: Filter is empty" << std::endl;
+      return;
+    }
+
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
 
@@ -46,8 +52,10 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process(frontFrame, filter);
-    //Vision::process(backFrame, filter);
+    if (frontCamera)
+      Vision::process(frontFrame, filter);
+    if (backCamera)
+      Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -55,6 +63,29 @@ namespace rtx { namespace Visioning {
       goalDetection(frontFrame);
       robotDetection(frontFrame);
     }
+
+    // TODO: Add back camera frame processing
+  }
+
+  void processCheckerboard() {
+    if (filter.size() == 0) {
+      std::cout << "Process: Filter is empty" << std::endl;
+      return;
+    }
+
+    Camera *frontCamera = hal::hw.getFrontCamera();
+    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
+
+    Frame frontFrame, backFrame;
+    if (frontCamera)
+      frontFrame = frontCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
+
+    if (frontCamera)
+      Vision::processCheckerboard(frontFrame, filter);
+    if (backCamera)
+      Vision::processCheckerboard(backFrame, filter);
 
     // TODO: Add back camera frame processing
   }
