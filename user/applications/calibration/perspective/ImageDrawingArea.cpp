@@ -11,6 +11,7 @@
 
 #include "MainWindow.hpp"
 #include "cameraConstants.hpp"
+#include "tuum_visioning.hpp" // TODO: Correct
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -132,6 +133,13 @@ namespace rtx {
           pixel[1] = 0;
           pixel[2] = 0;
         }
+      }
+    }
+
+    for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
+      if (*blob) {
+        std::cout << "A1 " << *blob << std::endl;
+        std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << std::endl;
       }
     }
     return true;
