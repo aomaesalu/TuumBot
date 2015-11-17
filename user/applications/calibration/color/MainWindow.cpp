@@ -41,19 +41,22 @@ namespace rtx {
     construct();
     std::cout << "A3" << std::endl;
 
+    maskingArea.initialise();
+    std::cout << "A4" << std::endl;
+    previewArea.initialise();
+    std::cout << "A5" << std::endl;
+
     // Update video frame
-    // TODO: updateFrame();
+    application->updateFrame();
+    std::cout << "A6" << std::endl;
     /*maskingArea.redraw();
     std::cout << "A4" << std::endl;
     previewArea.queue_draw();
     std::cout << "A5" << std::endl;*/ // TODO
 
-    maskingArea.initialise();
-    previewArea.initialise();
-
     // Show GUI contents
     show_all_children();
-    std::cout << "A6" << std::endl;
+    std::cout << "A7" << std::endl;
   }
 
   void MainWindow::setProperties() {

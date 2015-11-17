@@ -50,31 +50,51 @@ namespace rtx {
   }
 
   bool PreviewArea::applyFilter() {
+    std::cout << "G1" << std::endl;
     filteredImage = application->getImage()->copy(); // TODO: Copy only where is necessary (?)
+    std::cout << "G2" << std::endl;
 
     unsigned int mode = application->getMode();
+    std::cout << "G3" << std::endl;
     Filter *filter = application->getFilter();
+    std::cout << "G4" << std::endl;
 
     guint8 *pixels = filteredImage->get_pixels();
+    std::cout << "G5" << std::endl;
     unsigned int channels = filteredImage->get_n_channels();
+    std::cout << "G6" << std::endl;
     unsigned int stride = filteredImage->get_rowstride();
+    std::cout << "G7" << std::endl;
 
     guint8 *actualPixels = application->getFrame()->data;
+    std::cout << "G8" << std::endl;
     unsigned int actualChannels = 3;
+    std::cout << "G9" << std::endl;
     unsigned int actualStride = application->getFrame()->width * actualChannels;
+    std::cout << "G10" << std::endl;
 
     // Color pixels
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
+        std::cout << x << " " << y << std::endl;
         guint8 *pixel = pixels + x * channels + y * stride;
+        std::cout << "H1" << std::endl;
         guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
+        std::cout << "H2" << std::endl;
+        std::cout << mode << std::endl;
+        std::cout << "H3" << std::endl;
+        std::cout << actualPixel[0] << std::endl;
+        std::cout << "H4" << std::endl;
         if (filter->has(mode, actualPixel[0], actualPixel[1], actualPixel[2])) {
+          std::cout << "H5" << std::endl;
           pixel[0] *= 0.2;
           pixel[1] *= 0.2;
           pixel[2] *= 0.2;
+          std::cout << "H6" << std::endl;
         }
       }
     }
+    std::cout << "G11" << std::endl;
 
     return true;
   }

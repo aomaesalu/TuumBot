@@ -48,9 +48,13 @@ namespace rtx {
     brush = new Brush(application->getWindow()->getBrushScale());
     std::cout << "E3" << std::endl;
 
+    // Initialise images
+    maskedImage = application->getImage()->copy();
+    std::cout << "E4" << std::endl;
+
     // Initialise drawing modes
     resetDrawingModes();
-    std::cout << "E4" << std::endl;
+    std::cout << "E6" << std::endl;
   }
 
   void MaskingArea::resetDrawingModes() {
@@ -60,22 +64,38 @@ namespace rtx {
 
   void MaskingArea::redraw() {
     // TODO: maximiseMaskBoundaries();
+    std::cout << "J1" << std::endl;
     applyMask();
+    std::cout << "J2" << std::endl;
     queue_draw();
+    std::cout << "J3" << std::endl;
     // TODO: initialiseMaskBoundaries();
   }
 
   bool MaskingArea::applyMask() {
     // Note: We currently only apply addition mask
+    std::cout << "K1" << std::endl;
     Mask* mask = application->getMask();
+    std::cout << "K2" << std::endl;
+
+    if (application->getImage()) {
+      std::cout << "MaskingArea applyMask image +" << std::endl;
+    } else {
+      std::cout << "MaskingArea applyMask image -" << std::endl;
+    }
 
     application->getImage()->copy_area(mask->getMinX(), mask->getMinY(), mask->getMaxX() - mask->getMinX() + 1, mask->getMaxY() - mask->getMinY() + 1, maskedImage, mask->getMinX(), mask->getMinY());
+    std::cout << "K3" << std::endl;
 
     unsigned int mode = application->getMode();
+    std::cout << "K4" << std::endl;
 
     guint8 *pixels = maskedImage->get_pixels();
+    std::cout << "K5" << std::endl;
     unsigned int channels = maskedImage->get_n_channels();
+    std::cout << "K6" << std::endl;
     unsigned int stride = maskedImage->get_rowstride();
+    std::cout << "K7" << std::endl;
 
     // Color pixels
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
@@ -88,6 +108,7 @@ namespace rtx {
         }
       }
     }
+    std::cout << "K8" << std::endl;
 
     return true;
   }

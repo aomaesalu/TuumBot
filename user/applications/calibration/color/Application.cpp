@@ -164,14 +164,24 @@ namespace rtx {
   }
 
   bool Application::updateFrame() {
+    std::cout << "Updating frame" << std::endl;
+    std::cout << "I1" << std::endl;
     if (!playing) {
+      std::cout << "I2" << std::endl;
       return false;
     }
+    std::cout << "I3" << std::endl;
     frame = camera->getFrame();
+    std::cout << "I4" << std::endl;
     rgbFrame = toRGB(frame);
+    std::cout << "I5" << std::endl;
     // TODO: window->updateFrame(&frame, &rgbFrame);
     window->getMaskingArea()->redraw();
+    std::cout << "I6" << std::endl;
     window->getPreviewArea()->queue_draw();
+    std::cout << "I7" << std::endl;
+    std::cout << "Updated frame" << std::endl;
+    std::cout << "I8" << std::endl;
     return true;
   }
 
