@@ -1,5 +1,5 @@
 /**
- *  @file Interface.hpp
+ *  @file GUI.hpp
  *  Team football application GUI interface class.
  *
  *  @authors Ants-Oskar Mäesalu
@@ -7,22 +7,24 @@
  *  @date 18 November 2015
  */
 
-#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_INTERFACE_H
-#define RTX_APPLICATIONS_TEAMFOOTBALL_INTERFACE_H
+#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
+#define RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
 
 #include <vector>
 #include <string>
+
+#include "rtxhal.hpp"
 
 #include "MainWindow.hpp"
 
 
 namespace rtx {
 
-  class Interface {
+  class GUI {
 
     public:
-      Interface(int&, char**, Camera*);
-      virtual ~Interface();
+      GUI(int&, char**, Camera*);
+      virtual ~GUI();
 
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;
       MainWindow* getWindow() const;
@@ -54,4 +56,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_APPLICATIONS_TEAMFOOTBALL_INTERFACE_H
+#endif // RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H

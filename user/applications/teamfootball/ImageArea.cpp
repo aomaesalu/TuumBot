@@ -7,19 +7,10 @@
  *  @date 18 November 2015
  */
 
- /**
-  *  @file PreviewArea.cpp
-  *  Color calibration application preview area.
-  *
-  *  @authors Ants-Oskar Mäesalu
-  *  @version 0.1
-  *  @date 17 November 2015
-  */
-
 #include "ImageArea.hpp"
 
 #include "cameraConstants.hpp"
-#include "Interface.hpp"
+#include "GUI.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -32,9 +23,9 @@
 
 namespace rtx {
 
- ImageArea::ImageArea(Interface *interface) {
-   // Set properties
-   this->interface = interface;
+ ImageArea::ImageArea(GUI *gui) {
+   // Attach GUI interface information
+   this->gui = gui;
  }
 
  ImageArea::~ImageArea() {
@@ -43,21 +34,21 @@ namespace rtx {
 
  void ImageArea::initialise() {
    // Initialise area size
-   set_size_request(application->getImage()->get_width(), application->getImage()->get_height());
+   set_size_request(gui->getImage()->get_width(), gui->getImage()->get_height());
  }
 
  bool ImageArea::applyFilter() {
-   filteredImage = interface->getImage()->copy(); // TODO: Copy only where is necessary (?)
+   filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
-   Filter *filter = interface->getFilter();
+   Filter *filter = gui->getFilter();
 
    guint8 *pixels = filteredImage->get_pixels();
    unsigned int channels = filteredImage->get_n_channels();
    unsigned int stride = filteredImage->get_rowstride();
 
-   guint8 *actualPixels = interface->getFrame()->data;
+   guint8 *actualPixels = gui->getFrame()->data;
    unsigned int actualChannels = 3;
-   unsigned int actualStride = interface->getFrame()->width * actualChannels;
+   unsigned int actualStride = gui->getFrame()->width * actualChannels;
 
    // Color pixels
    for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {

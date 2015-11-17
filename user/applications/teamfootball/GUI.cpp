@@ -1,5 +1,5 @@
 /**
- *  @file Interface.cpp
+ *  @file GUI.cpp
  *  Team football application GUI interface class.
  *
  *  @authors Ants-Oskar Mäesalu
@@ -7,14 +7,14 @@
  *  @date 18 November 2015
  */
 
-#include "Interface.hpp"
+#include "GUI.hpp"
 
 #include "cameraConstants.hpp"
 
 
 namespace rtx {
 
-  Interface::Interface(int &argc, char *argv[], Camera *camera) {
+  GUI::GUI(int &argc, char *argv[], Camera *camera) {
     // Attach command line parameters
     this->argc = argc;
     this->argv = argv;
@@ -34,32 +34,32 @@ namespace rtx {
     window->initialise();
   }
 
-  Interface::~Interface() {
+  GUI::~GUI() {
     // TODO: Delete window?
   }
 
-  void Interface::initialiseImage() {
+  void GUI::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
     //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
   }
 
-  Glib::RefPtr<Gtk::Application> Interface::getGtkApplication() const {
+  Glib::RefPtr<Gtk::Application> GUI::getGtkApplication() const {
     return gtkApplication;
   }
 
-  MainWindow* Interface::getWindow() const {
+  MainWindow* GUI::getWindow() const {
     return window;
   }
 
-  Camera* Interface::getCamera() const {
+  Camera* GUI::getCamera() const {
     return camera;
   }
 
-  Frame* Interface::getFrame() {
+  Frame* GUI::getFrame() {
     return &frame;
   }
 
-  Glib::RefPtr<Gdk::Pixbuf> Interface::getImage() const {
+  Glib::RefPtr<Gdk::Pixbuf> GUI::getImage() const {
     return image;
   }
 

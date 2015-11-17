@@ -9,7 +9,7 @@
 
  #include "MainWindow.hpp"
 
- #include "Interface.hpp"
+ #include "GUI.hpp"
  #include "cameraConstants.hpp"
 
  #include <iostream> // TODO: Remove
@@ -18,11 +18,11 @@
 
  namespace rtx {
 
-   MainWindow::MainWindow(Interface *interface):
-     imageArea(interface)
+   MainWindow::MainWindow(GUI *gui):
+     imageArea(gui)
    {
      // Attach GUI interface information
-     this->interface = interface;
+     this->gui = gui;
    }
 
    MainWindow::~MainWindow() {
@@ -39,7 +39,7 @@
      construct();
 
      // Update video frame
-     interface->updateFrame();
+     gui->updateFrame();
 
      // Show GUI contents
      show_all_children();

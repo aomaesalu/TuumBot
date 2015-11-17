@@ -22,12 +22,12 @@
 
 namespace rtx {
 
-  class Interace;
+  class GUI;
 
   class MainWindow: public Gtk::Window {
 
     public:
-      MainWindow(Interface*);
+      MainWindow(GUI*);
       virtual ~MainWindow();
 
       void initialise();
@@ -44,7 +44,7 @@ namespace rtx {
       ImageArea imageArea;
 
     private:
-      Interface *interface;
+      GUI *gui;
 
       void setProperties();
 

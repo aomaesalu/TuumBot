@@ -16,12 +16,12 @@
 
 namespace rtx {
 
-  class Interface;
+  class GUI;
 
   class ImageArea: public Gtk::DrawingArea {
 
     public:
-      ImageArea(Application*);
+      ImageArea(GUI*);
       virtual ~ImageArea();
 
       void initialise();
@@ -30,7 +30,7 @@ namespace rtx {
       virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
 
     private:
-      Interface *interface;
+      GUI *gui;
 
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
