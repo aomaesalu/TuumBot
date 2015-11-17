@@ -73,6 +73,7 @@ namespace rtx {
   bool GUI::updateFrame() {
     frame = camera->getFrame();
     rgbFrame = toRGB(frame);
+    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame.data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame.width, (int) rgbFrame.height, (int) rgbFrame.width * 3);
     window->getImageArea()->queue_draw();
     return true;
   }
