@@ -70,10 +70,10 @@ namespace rtx {
       unsigned int channels = 3;
       unsigned int stride = frame.width * channels;
 
-      for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
-        for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
+      for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
+        for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
+          for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
 
-          for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
             if (!visited[*mode][i][j]) {
 
               std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
@@ -89,32 +89,20 @@ namespace rtx {
 
                 if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
                   blobPoints.push_back(point);
-                  if (point.first - 1 < CAMERA_WIDTH - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
-                    if (!visited[*mode][point.first - 1][point.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first - 1][point.second] = true;
+                  for (int step = -1; step <= 1; ++step) {
+                    if (point.first + step < CAMERA_WIDTH - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
+                      if (!visited[*mode][point.first + step][point.second]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][point.first + step][point.second] = true;
+                      }
                     }
-                  }
-                  if (point.first + 1 < CAMERA_WIDTH - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
-                    if (!visited[*mode][point.first + 1][point.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first + 1][point.second] = true;
-                    }
-                  }
-                  if (point.second - 1 < CAMERA_HEIGHT - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
-                    if (!visited[*mode][point.first][point.second - 1]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first][point.second - 1] = true;
-                    }
-                  }
-                  if (point.second + 1 < CAMERA_HEIGHT - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
-                    if (!visited[*mode][point.first][point.second + 1]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first][point.second + 1] = true;
+                    if (point.second + step < CAMERA_HEIGHT - 1) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
+                      if (!visited[*mode][point.first][point.second + step]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][point.first][point.second + step] = true;
+                      }
                     }
                   }
                 }
@@ -127,10 +115,11 @@ namespace rtx {
               }
 
             }
-          }
 
+          }
         }
       }
+
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
