@@ -176,13 +176,18 @@ namespace rtx {
           }
         }
 
+        unsigned int firstValue = 255, secondValue = 0;
+        if (color == CHECKERBOARD_WHITE) {
+          firstValue = 0;
+          secondValue = 255;
+        }
         for (int dx = -3; dx < 3; ++dx) {
           for (int dy = -3; dy < 3; ++dy) {
             if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
               guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
-              pixel[0] = 255;
+              pixel[0] = firstValue;
               pixel[1] = 0;
-              pixel[2] = 0;
+              pixel[2] = secondValue;
             }
           }
         }
