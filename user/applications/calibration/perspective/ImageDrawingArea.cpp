@@ -1,17 +1,16 @@
 /**
- * @file ImageDrawingArea.cpp
- * Perspective calibration application image drawing area.
+ *  @file ImageDrawingArea.cpp
+ *  Perspective calibration application image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 11. November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 18 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
 
 #include "MainWindow.hpp"
 #include "cameraConstants.hpp"
-#include "tuum_visioning.hpp" // TODO: Correct
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -20,6 +19,7 @@
 #include <glibmm/fileutils.h>
 
 #include <iostream> // TODO: Remove
+#include <cstdlib>
 
 
 namespace rtx {
@@ -136,8 +136,37 @@ namespace rtx {
       }
     }
 
-    for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
-      std::cout << "Blob" << std::endl;
+    Vision::BlobSet blobs = Vision::blobs;
+    while (Vision::editingBlobs) {
+      blobs = Vision::blobs;
+    }
+
+    if (lastBlobs.empty()) {
+      lastBlobs = blobs;
+    }
+
+    /*std::vector<unsigned int> existing;
+    unsigned int maxDifference = 2;
+
+    for (unsigned int i = 0; i < lastBlobs.size(); ++i) {
+      for (unsigned int j = 0; j < blobs.size(); ++j) {
+        if (abs(lastBlobs[i]->getPosition()->getX() - blobs[j]->getPosition()->getX()) <= maxDifference && abs(lastBlobs[i]->getPosition()->getY() - blobs[j]->getPosition()->getY()) <= maxDifference) {
+          existing.push_back(i);
+          continue;
+        }
+      }
+    }
+
+    int lastIndex = -1;
+    unsigned int removed = 0;
+    for (std::vector<unsigned int>::iterator i = existing.begin(); i != existing.end(); ++i) {
+      if (*i - 1 > lastIndex) {
+        lastBlobs.erase(lastBlobs.begin() + lastIndex, lastBlobs.begin() + *i);
+        removed += *i - 1 - lastIndex;
+      }
+    }*/
+
+    for (Vision::BlobSet::iterator blob = lastBlobs.begin(); blob != lastBlobs.end(); ++blob) {
       if (*blob) {
         unsigned int x = (*blob)->getPosition()->getX();
         unsigned int y = (*blob)->getPosition()->getY();
@@ -148,41 +177,49 @@ namespace rtx {
         if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
           continue;
         }
-        std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
         Color color = (*blob)->getColor();
+        double density = (*blob)->getDensity();
+        unsigned int boxArea = (*blob)->getBoxArea();
 
-        unsigned int value = 0;
-        if (color == CHECKERBOARD_WHITE) {
-          value = 235;
-        }
-        for (unsigned int i = minX; i <= maxX; ++i) {
-          guint8 *pixel = pixels + i * channels + minY * stride;
-          for (unsigned int p = 0; p < 3; ++p) {
-            pixel[p] = value;
+        if (boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) {
+          unsigned int value = 0;
+          if (color == CHECKERBOARD_WHITE) {
+            value = 255;
           }
-          pixel = pixels + i * channels + maxY * stride;
-          for (unsigned int p = 0; p < 3; ++p) {
-            pixel[p] = value;
+          for (unsigned int i = minX; i <= maxX; ++i) {
+            guint8 *pixel = pixels + i * channels + minY * stride;
+            for (unsigned int p = 0; p < 3; ++p) {
+              pixel[p] = value;
+            }
+            pixel = pixels + i * channels + maxY * stride;
+            for (unsigned int p = 0; p < 3; ++p) {
+              pixel[p] = value;
+            }
           }
-        }
-        for (unsigned int j = minY; j <= maxY; ++j) {
-          guint8 *pixel = pixels + minX * channels + j * stride;
-          for (unsigned int p = 0; p < 3; ++p) {
-            pixel[p] = value;
+          for (unsigned int j = minY; j <= maxY; ++j) {
+            guint8 *pixel = pixels + minX * channels + j * stride;
+            for (unsigned int p = 0; p < 3; ++p) {
+              pixel[p] = value;
+            }
+            pixel = pixels + maxX * channels + j * stride;
+            for (unsigned int p = 0; p < 3; ++p) {
+              pixel[p] = value;
+            }
           }
-          pixel = pixels + maxX * channels + j * stride;
-          for (unsigned int p = 0; p < 3; ++p) {
-            pixel[p] = value;
-          }
-        }
 
-        for (int dx = -3; dx < 3; ++dx) {
-          for (int dy = -3; dy < 3; ++dy) {
-            if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
-              guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
-              pixel[0] = 255;
-              pixel[1] = 0;
-              pixel[2] = 0;
+          unsigned int firstValue = 255, secondValue = 0;
+          if (color == CHECKERBOARD_WHITE) {
+            firstValue = 0;
+            secondValue = 255;
+          }
+          for (int dx = -3; dx < 3; ++dx) {
+            for (int dy = -3; dy < 3; ++dy) {
+              if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
+                guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
+                pixel[0] = firstValue;
+                pixel[1] = 0;
+                pixel[2] = secondValue;
+              }
             }
           }
         }
