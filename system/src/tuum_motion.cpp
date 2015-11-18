@@ -143,7 +143,7 @@ namespace rtx { namespace Motion {
 
     if(motionInProgress || dirty) {
       if((!isTargetAchieved() && motorCmdTimer.isTime()) || dirty) {
-        printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+        // DEBUG: printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
         mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
         motorCmdTimer.start();
       }

@@ -102,12 +102,25 @@ namespace rtx { namespace Visioning {
   }
 
   void ballDetection(const Frame &frame) {
+
+    Vision::BlobSet blobs = Vision::blobs;
+    while (Vision::editingBlobs) {
+      blobs = Vision::blobs;
+    }
+
+    // DEBUG: std::cout << "Blobs in visioning: " << Vision::blobs.size() << std::endl;
+
     balls.clear();
-    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
-      if (Vision::blobs[i]->getColor() == BALL) {
+
+    for (unsigned int i = 0; i < blobs.size(); ++i) {
+      Color color = blobs[i]->getColor();
+      double density = blobs[i]->getDensity();
+      unsigned int boxArea = blobs[i]->getBoxArea();
+      if (color == BALL/* && density > 0.6*/ && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
+        //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
         // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        Point2D* point = blobs[i]->getPosition();
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         balls.push_back(new Ball(distance, angle));
       }
@@ -120,13 +133,13 @@ namespace rtx { namespace Visioning {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = 1; // TODO: Calculate based on perspective
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goals.push_back(new Goal(distance, angle));
       }

@@ -26,8 +26,11 @@ namespace rtx {
     typedef std::vector<Feature> CornerSet;
 
     extern BlobSet blobs;
+    extern BlobSet blobsBuffer;
     extern LineSet lines;
     extern CornerSet corners;
+
+    extern bool editingBlobs;
 
     void setup();
     void process(const Frame&, const std::string&);

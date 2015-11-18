@@ -10,6 +10,8 @@
 #include "Vision.hpp"
 
 #include <iostream> // TODO: Remove
+#include <algorithm>
+#include <set>
 
 
 namespace rtx {
@@ -17,8 +19,11 @@ namespace rtx {
   namespace Vision {
 
     BlobSet blobs;
+    BlobSet blobsBuffer;
     LineSet lines;
     CornerSet corners;
+
+    bool editingBlobs = false;
 
     /*void emptyVector(std::vector<Feature*> &vector) {
       for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
@@ -61,60 +66,87 @@ namespace rtx {
       return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
-      blobs.clear();
+    void translateBlobsBuffer() {
+      editingBlobs = true;
 
-      std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false)));
+      blobs.clear();
+      blobs = blobsBuffer;
+      blobsBuffer.clear();
+
+      editingBlobs = false;
+    }
+
+    // Joins same-colored blobs if their box areas are close or overlap
+    void joinBlobsInBuffer() {
+      std::set<unsigned int> toBeRemoved;
+
+      // Join blobs
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
+          for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
+            if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+            }
+          }
+        }
+      }
+
+      unsigned int removed = 0; // TODO: Refactor
+
+      // Remove unnecessary blobs from the buffer
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
+        removed++;
+      }
+
+      toBeRemoved.clear();
+    }
+
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+      blobsBuffer.clear();
+
+      std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
 
       unsigned char *pixels = frame.data;
       unsigned int channels = 3;
       unsigned int stride = frame.width * channels;
 
-      for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
-        for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
+      for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
+        for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
+          for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
 
-          for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
             if (!visited[*mode][i][j]) {
 
               std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
               std::vector<std::pair<unsigned int, unsigned int>> stack;
               stack.push_back(std::pair<unsigned int, unsigned int>(i, j));
+              visited[*mode][i][j] = true;
+
               while (!stack.empty()) {
                 std::pair<unsigned int, unsigned int> point = stack.back();
                 stack.pop_back();
-
-                visited[*mode][point.first][point.second] = true;
 
                 unsigned char *pixel = pixels + point.first * channels + point.second * stride;
 
                 if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
                   blobPoints.push_back(point);
-                  if (point.first - 1 < CAMERA_WIDTH - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first - 1, point.second);
-                    if (!visited[*mode][point.first - 1][point.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first - 1][point.second] = true;
+                  for (int step = -1; step <= 1; step += 2) {
+                    if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][newPoint.first][newPoint.second] = true;
+                      }
                     }
-                  }
-                  if (point.first + 1 < CAMERA_WIDTH - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first + 1, point.second);
-                    if (!visited[*mode][point.first + 1][point.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first + 1][point.second] = true;
-                    }
-                  }
-                  if (point.second - 1 < CAMERA_HEIGHT - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second - 1);
-                    if (!visited[*mode][point.first][point.second - 1]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first][point.second - 1] = true;
-                    }
-                  }
-                  if (point.second + 1 < CAMERA_HEIGHT - 1) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + 1);
-                    if (!visited[*mode][point.first][point.second + 1]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][point.first][point.second + 1] = true;
+                    if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][newPoint.first][newPoint.second] = true;
+                      }
                     }
                   }
                 }
@@ -122,15 +154,19 @@ namespace rtx {
               }
 
               if (!blobPoints.empty()) {
-                blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
-                blobPoints.clear();
+                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
               }
 
             }
-          }
 
+          }
         }
       }
+
+      joinBlobsInBuffer();
+
+      translateBlobsBuffer();
+
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
