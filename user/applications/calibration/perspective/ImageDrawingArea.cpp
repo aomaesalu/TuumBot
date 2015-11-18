@@ -146,6 +146,8 @@ namespace rtx {
 
     unsigned int maxDifference = 2;
 
+    std::vector<Blob*> additionalBlobs;
+
     for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
       for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
         unsigned int dx = abs(blobOccurrence->first->getPosition()->getX() - (*blob)->getPosition()->getX());
@@ -155,6 +157,11 @@ namespace rtx {
           continue;
         }
       }
+      additionalBlobs.push_back(*blob);
+    }
+
+    for (unsigned int i = 0; i < additionalBlobs.size(); ++i) {
+      blobCounts.insert(std::pair<Blob*, unsigned int>(additionalBlobs[i], 1));
     }
 
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
