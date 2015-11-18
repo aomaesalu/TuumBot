@@ -17,8 +17,11 @@ namespace rtx {
   namespace Vision {
 
     BlobSet blobs;
+    BlobSet blobsBuffer;
     LineSet lines;
     CornerSet corners;
+
+    bool editingBlobs = false;
 
     /*void emptyVector(std::vector<Feature*> &vector) {
       for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
@@ -61,8 +64,18 @@ namespace rtx {
       return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+    void translateBlobsBuffer() {
+      editingBlobs = true;
+
       blobs.clear();
+      blobs = blobsBuffer;
+      blobsBuffer.clear();
+
+      editingBlobs = false;
+    }
+
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+      blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
 
@@ -110,7 +123,7 @@ namespace rtx {
               }
 
               if (!blobPoints.empty()) {
-                blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
+                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
               }
 
             }
@@ -118,6 +131,8 @@ namespace rtx {
           }
         }
       }
+
+      translateBlobsBuffer();
 
     }
 
