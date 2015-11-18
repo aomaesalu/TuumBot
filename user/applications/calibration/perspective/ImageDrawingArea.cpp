@@ -137,7 +137,6 @@ namespace rtx {
     }
 
     for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
-      std::cout << "Blob" << std::endl;
       if (*blob) {
         unsigned int x = (*blob)->getPosition()->getX();
         unsigned int y = (*blob)->getPosition()->getY();
@@ -148,7 +147,6 @@ namespace rtx {
         if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
           continue;
         }
-        std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
         Color color = (*blob)->getColor();
         double density = (*blob)->getDensity();
         unsigned int boxArea = (*blob)->getBoxArea();
