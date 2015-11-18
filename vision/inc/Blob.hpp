@@ -37,6 +37,9 @@ namespace rtx {
       unsigned int getBoxArea() const;
       double getDensity() const;
 
+      bool overlaps(const Blob&) const;
+      void join(const Blob&);
+
     private:
       // TODO: Save a list of points, too, for further analysis?
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...

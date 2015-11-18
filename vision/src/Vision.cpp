@@ -10,6 +10,8 @@
 #include "Vision.hpp"
 
 #include <iostream> // TODO: Remove
+#include <algorithm>
+#include <set>
 
 
 namespace rtx {
@@ -74,6 +76,32 @@ namespace rtx {
       editingBlobs = false;
     }
 
+    // Joins same-colored blobs if their box areas overlap
+    void joinBlobsInBuffer() {
+      std::set<unsigned int> toBeRemoved;
+
+      // Join blobs
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
+          for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
+            if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
+              if (blobsBuffer[i]->overlaps(*blobsBuffer[j])) {
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+            }
+          }
+        }
+      }
+
+      // Remove unnecessary blobs from the buffer
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i);
+      }
+
+      toBeRemoved.clear();
+    }
+
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
       blobsBuffer.clear();
 
@@ -131,6 +159,8 @@ namespace rtx {
           }
         }
       }
+
+      joinBlobsInBuffer();
 
       translateBlobsBuffer();
 

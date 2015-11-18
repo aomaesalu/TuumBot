@@ -10,6 +10,7 @@
 
 #include "Blob.hpp"
 
+#include <algorithm>
 #include <iostream> // TODO: Remove
 
 
@@ -125,6 +126,23 @@ namespace rtx {
 
   double Blob::getDensity() const {
     return 1.0 * numberOfPoints / getBoxArea();
+  }
+
+  bool Blob::overlaps(const Blob &other) const {
+    return color == other.getColor() && minX < other.getMaxX() && maxX > other.getMinX() && minY < other.getMaxY() && maxY > other.getMinY();
+  }
+
+  void Blob::join(const Blob &other) {
+    // Define new box area
+    minX = std::min(minX, other.getMinX());
+    maxX = std::max(maxX, other.getMaxX());
+    minY = std::min(minY, other.getMinY());
+    maxY = std::max(maxY, other.getMaxY());
+    // TODO: Add points
+    numberOfPoints += other.getNumberOfPoints();
+    // Calculate new position // TODO: Calculate based on points
+    position->setX((position->getX() + other.getPosition()->getX()) / 2);
+    position->setY((position->getY() + other.getPosition()->getY()) / 2);
   }
 
 };
