@@ -30,6 +30,7 @@ namespace rtx {
     initialiseProperties();
     initialiseImage();
     initialiseConstants();
+    totalCount = 0;
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -141,49 +142,39 @@ namespace rtx {
       blobs = Vision::blobs;
     }
 
-    if (lastBlobs.empty()) {
-      lastBlobs = blobs;
-    }
+    totalCount++;
 
-    std::vector<unsigned int> existing;
     unsigned int maxDifference = 2;
 
-    for (unsigned int i = 0; i < lastBlobs.size(); ++i) {
-      for (unsigned int j = 0; j < blobs.size(); ++j) {
-        unsigned int dx = abs(lastBlobs[i]->getPosition()->getX() - blobs[j]->getPosition()->getX());
-        unsigned int dy = abs(lastBlobs[i]->getPosition()->getY() - blobs[j]->getPosition()->getY());
+    for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
+      for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+        unsigned int dx = abs(blobOccurrence->first->getPosition()->getX() - (*blob)->getPosition()->getX());
+        unsigned int dy = abs(blobOccurrence->first->getPosition()->getY() - (*blob)->getPosition()->getY());
         if (dx * dx + dy * dy <= maxDifference * maxDifference) {
-          lastBlobs[i] = blobs[j];
-          existing.push_back(i);
+          blobOccurrence->second++;
           continue;
         }
       }
     }
 
-    int lastIndex = -1;
-    unsigned int removed = 0;
-    for (std::vector<unsigned int>::iterator i = existing.begin(); i != existing.end(); ++i) {
-      if (*i - 1 > lastIndex) {
-        lastBlobs.erase(lastBlobs.begin() + lastIndex - removed, lastBlobs.begin() + *i - removed);
-        removed += *i - lastIndex;
+    for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+      if (blobOccurrence->second < totalCount / 2) {
+        continue;
       }
-      lastIndex = *i;
-    }
-
-    for (Vision::BlobSet::iterator blob = lastBlobs.begin(); blob != lastBlobs.end(); ++blob) {
-      if (*blob) {
-        unsigned int x = (*blob)->getPosition()->getX();
-        unsigned int y = (*blob)->getPosition()->getY();
-        unsigned int minX = (*blob)->getMinX();
-        unsigned int maxX = (*blob)->getMaxX();
-        unsigned int minY = (*blob)->getMinY();
-        unsigned int maxY = (*blob)->getMaxY();
+      Blob *blob = blobOccurrence->first;
+      if (blob) {
+        unsigned int x = blob->getPosition()->getX();
+        unsigned int y = blob->getPosition()->getY();
+        unsigned int minX = blob->getMinX();
+        unsigned int maxX = blob->getMaxX();
+        unsigned int minY = blob->getMinY();
+        unsigned int maxY = blob->getMaxY();
         if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
           continue;
         }
-        Color color = (*blob)->getColor();
-        double density = (*blob)->getDensity();
-        unsigned int boxArea = (*blob)->getBoxArea();
+        Color color = blob->getColor();
+        double density = blob->getDensity();
+        unsigned int boxArea = blob->getBoxArea();
 
         if (boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) {
           unsigned int value = 0;

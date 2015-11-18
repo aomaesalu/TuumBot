@@ -10,10 +10,11 @@
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
 #define RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
 
-#include <gtkmm/drawingarea.h>
-
 #include <gtkmm.h>
 #include <gdkmm/pixbuf.h>
+#include <gtkmm/drawingarea.h>
+
+#include <map>
 
 #include "Camera.hpp"
 #include "tuum_visioning.hpp"
@@ -50,7 +51,8 @@ namespace rtx {
       Frame *frame;
       Frame *rgbFrame;
 
-      Vision::BlobSet lastBlobs;
+      unsigned int totalCount;
+      std::map<Blob*, unsigned int> blobCounts;
 
       void initialiseProperties();
       void initialiseImage();
