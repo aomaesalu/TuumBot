@@ -144,27 +144,31 @@ namespace rtx {
     if (color != other.getColor())
       return false;
     if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
-      if (maxX <= other.getMinX()) { // Current is to the left of other
-        unsigned int intermediateWidth = other.getMinX() - maxX;
-        if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
-          return true;
-        }
-      } else if (minX >= other.getMaxX()) { // Current is to the right of other
-        unsigned int intermediateWidth = minX - other.getMaxX();
-        if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
-          return true;
+      if (std::min(getHeight(), other.getHeight()) - (std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) < 0.5) { // The Y coordinate overlapping is over half of the height of the smaller blob
+        if (maxX <= other.getMinX()) { // Current is to the left of other
+          unsigned int intermediateWidth = other.getMinX() - maxX;
+          if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
+            return true;
+          }
+        } else if (minX >= other.getMaxX()) { // Current is to the right of other
+          unsigned int intermediateWidth = minX - other.getMaxX();
+          if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
+            return true;
+          }
         }
       }
     } else if (minX <= other.getMaxX() && maxX >= other.getMinX()) { // The rectangles overlap by the X coordinate
-      if (maxY <= other.getMinY()) { // Current is above the other
-        unsigned int intermediateHeight = other.getMinY() - maxY;
-        if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
-          return true;
-        }
-      } else if (minY >= other.getMaxY()) { // Current is below the other
-        unsigned int intermediateHeight = minY - other.getMaxY();
-        if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
-          return true;
+      if (std::min(getWidth(), other.getWidth()) - (std::min(maxX, other.getMaxX()) - std::max(minX, other.getMinX())) < 0.5) { // The X coordinate overlapping is over half of the width of the smaller blob
+        if (maxY <= other.getMinY()) { // Current is above the other
+          unsigned int intermediateHeight = other.getMinY() - maxY;
+          if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
+            return true;
+          }
+        } else if (minY >= other.getMaxY()) { // Current is below the other
+          unsigned int intermediateHeight = minY - other.getMaxY();
+          if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
+            return true;
+          }
         }
       }
     }
