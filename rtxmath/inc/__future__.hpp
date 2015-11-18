@@ -8,6 +8,7 @@
  */
 
 #include <random>
+#include <unistd.h>
 
 #include "rtxc.h"
 
@@ -16,6 +17,8 @@
 
 // TODO: these belong in loc module? or create dedicated system module?
 namespace rtx {
+
+  unsigned int millis();
 
   struct MotionVec {
     int distance;
@@ -27,17 +30,17 @@ namespace rtx {
 
 
   struct Timer {
-    uint32_t _start;
+    uint32_t _start = 0;
     uint32_t period;
-    uint32_t _end;
+    uint32_t _end = 0;
 
     void start() {
-      // _start = ?
+      _start = millis();
       _end = _start + period;
     }
 
     bool isTime() {
-      return _end > 0; // Replace '0' with some 'getTime' function
+      return millis() > _end;
     }
 
     void setPeriod(uint32_t T) {
