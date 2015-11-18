@@ -161,7 +161,7 @@ namespace rtx {
     unsigned int removed = 0;
     for (std::vector<unsigned int>::iterator i = existing.begin(); i != existing.end(); ++i) {
       if (*i - 1 > lastIndex) {
-        lastBlobs.erase(lastBlobs.begin() + lastIndex, lastBlobs.begin() + *i);
+        lastBlobs.erase(lastBlobs.begin() + lastIndex - removed, lastBlobs.begin() + *i - removed);
         removed += *i - 1 - lastIndex;
       }
       lastIndex = *i;
