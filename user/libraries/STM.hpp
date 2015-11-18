@@ -41,6 +41,7 @@ namespace rtx {
   class Controller {
   public:
     virtual void run() {}
+    virtual void init() {}
     virtual bool isRunnable() { return true; }
     virtual bool isInterruptable() { return true; }
   };
@@ -73,6 +74,7 @@ namespace rtx {
     bool canEnter();
     bool canExit();
 
+    void setup();
     void process();
   };
 

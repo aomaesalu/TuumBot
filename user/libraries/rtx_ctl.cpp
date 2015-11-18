@@ -18,8 +18,8 @@ namespace rtx { namespace ctl {
   void LSInit::run() {
     switch(ctx.phase) {
       case CP_INIT:
-        //Motion::setBehaviour(Motion::MOT_CURVED);
-      	//Motion::setTarget(Transform({{0, 15}, M_PI/4}));
+        Motion::setBehaviour(Motion::MOT_CURVED);
+      	Motion::setTarget(Transform({{10, 10}, 0}));
 
         ctx.phase = CP_RUN;
         break;
@@ -28,8 +28,6 @@ namespace rtx { namespace ctl {
         ctx.phase = CP_DONE;
         break;
       case CP_DONE:
-        break;
-      default:
         break;
     }
   }
@@ -44,8 +42,21 @@ namespace rtx { namespace ctl {
 
 
   // Ball search
+  void LSBallLocate::init() {
+    ctx.phase = CP_INIT;
+  }
+
   void LSBallLocate::run() {
-    //TODO: Spin to win
+    switch(ctx.phase) {
+      case CP_INIT:
+	Motion::setBehaviour(Motion::MOT_SCAN);
+	ctx.phase = CP_RUN;
+	break;
+      case CP_RUN:
+	break;
+      case CP_DONE:
+	break;
+    }
   }
 
   bool LSBallLocate::isRunnable() {
@@ -54,16 +65,16 @@ namespace rtx { namespace ctl {
 
 
   // Ball retrieval
+  void LSBallRetrieve::init() {
+    Motion::();
+  }
+
   void LSBallRetrieve::run() {
-    //TODO
+
   }
 
   bool LSBallRetrieve::isRunnable() {
-    if(Visioning::balls.size() > 0) {
-      // Detected balls are reachable?
-    }
-
-    return true;
+    return Visioning::balls.size() > 0;
   }
 
 

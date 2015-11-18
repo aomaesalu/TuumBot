@@ -24,13 +24,14 @@ namespace rtx {
   }
 
   void STM::setState(State* st) {
-    /*std::cout << "[STM]Transition: ";
+    std::cout << "[STM]Transition: ";
     if(m_state != nullptr) {
       std::cout << m_state->getName() << " => ";
     }
-    std::cout << st->getName() << std::endl;*/
+    std::cout << st->getName() << std::endl;
 
     m_state = st;
+    st->setup();
   }
 
   State* STM::createState(std::string name) {
@@ -59,6 +60,12 @@ namespace rtx {
       if(ctrl->isInterruptable() == false) return false;
     }
     return true;
+  }
+
+  void State::setup() {
+    for(auto& ctrl : this->m_controllers) {
+      ctrl->init();
+    }
   }
 
   void State::process() {

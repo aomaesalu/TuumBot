@@ -9,6 +9,8 @@
 #ifndef RTX_CTL_H
 #define RTX_CTL_H
 
+#include "__future__.hpp"
+
 #include "STM.hpp"
 
 namespace rtx { namespace ctl {
@@ -28,8 +30,11 @@ namespace rtx { namespace ctl {
 
   class LSBallLocate : public Controller {
   public:
-    LSBallLocate(Context _ctx) : ctx(_ctx) {}
+    LSBallLocate(Context _ctx) : ctx(_ctx) {
 
+    }
+
+    void init();
     void run();
     bool isRunnable();
 
@@ -42,12 +47,14 @@ namespace rtx { namespace ctl {
   public:
     LSBallRetrieve(Context _ctx) : ctx(_ctx) {}
 
+    void init();
     void run();
     bool isRunnable();
 
   private:
     Context ctx;
   };
+
 
   class LSGoalLocate : public Controller {
   public:
@@ -59,6 +66,7 @@ namespace rtx { namespace ctl {
   private:
     Context ctx;
   };
+
 
   class LSGoalShoot : public Controller {
   public:
