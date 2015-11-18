@@ -26,6 +26,7 @@ namespace rtx { namespace Motion {
 
   int setTarget(Transform target);
   void setSpeed(int v);
+  void stop();
 
   void setBehaviour(MotionType mt);
 
