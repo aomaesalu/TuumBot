@@ -1,9 +1,10 @@
 /**
- * @file ImageDrawingArea.hpp
- * Perspective calibration application image drawing area.
+ *  @file ImageDrawingArea.hpp
+ *  Perspective calibration application image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 18 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
@@ -15,6 +16,8 @@
 #include <gdkmm/pixbuf.h>
 
 #include "Camera.hpp"
+#include "tuum_visioning.hpp"
+#include "rtxvision.h"
 
 
 namespace rtx {
@@ -46,6 +49,8 @@ namespace rtx {
 
       Frame *frame;
       Frame *rgbFrame;
+
+      Vision::BlobSet lastBlobs;
 
       void initialiseProperties();
       void initialiseImage();

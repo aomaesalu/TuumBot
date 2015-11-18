@@ -1,17 +1,16 @@
 /**
- * @file ImageDrawingArea.cpp
- * Perspective calibration application image drawing area.
+ *  @file ImageDrawingArea.cpp
+ *  Perspective calibration application image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 11. November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 18 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
 
 #include "MainWindow.hpp"
 #include "cameraConstants.hpp"
-#include "tuum_visioning.hpp" // TODO: Correct
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -20,6 +19,7 @@
 #include <glibmm/fileutils.h>
 
 #include <iostream> // TODO: Remove
+#include <cstdlib>
 
 
 namespace rtx {
@@ -136,7 +136,37 @@ namespace rtx {
       }
     }
 
-    for (Vision::BlobSet::iterator blob = Vision::blobs.begin(); blob != Vision::blobs.end(); ++blob) {
+    Vision::BlobSet blobs = Vision::blobs;
+    while (Vision::editingBlobs) {
+      blobs = Vision::blobs;
+    }
+
+    if (lastBlobs.empty()) {
+      lastBlobs = blobs;
+    }
+
+    std::vector<unsigned int> existing;
+    unsigned int maxDifference = 2;
+
+    for (unsigned int i = 0; i < lastBlobs.size(); ++i) {
+      for (unsigned int j = 0; j < blobs.size(); ++j) {
+        if (abs(lastBlobs[i]->getPosition()->getX() - blobs[j]->getPosition()->getX()) <= maxDifference && abs(lastBlobs[i]->getPosition()->getY() - blobs[j]->getPosition()->getY()) <= maxDifference) {
+          existing.push_back(i);
+          continue;
+        }
+      }
+    }
+
+    int lastIndex = -1;
+    unsigned int removed = 0;
+    for (std::vector<unsigned int>::iterator i = existing.begin(); i != existing.end(); ++i) {
+      if (*i - 1 > lastIndex) {
+        lastBlobs.erase(lastBlobs.begin() + lastIndex, lastBlobs.begin() + *i);
+        removed += *i - 1 - lastIndex;
+      }
+    }
+
+    for (Vision::BlobSet::iterator blob = lastBlobs.begin(); blob != lastBlobs.end(); ++blob) {
       if (*blob) {
         unsigned int x = (*blob)->getPosition()->getX();
         unsigned int y = (*blob)->getPosition()->getY();
@@ -154,7 +184,7 @@ namespace rtx {
         if (boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) {
           unsigned int value = 0;
           if (color == CHECKERBOARD_WHITE) {
-            value = 235;
+            value = 255;
           }
           for (unsigned int i = minX; i <= maxX; ++i) {
             guint8 *pixel = pixels + i * channels + minY * stride;
