@@ -54,6 +54,9 @@ namespace rtx {
       unsigned int totalCount;
       std::map<Blob*, unsigned int> blobCounts;
 
+      double A;
+      double B;
+
       void initialiseProperties();
       void initialiseImage();
       void initialiseConstants();
@@ -65,6 +68,6 @@ namespace rtx {
 
   };
 
-};
+}
 
 #endif // RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H

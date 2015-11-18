@@ -229,6 +229,15 @@ namespace rtx {
       }
     }
 
+    // Regression
+
+    // 1. Establish a condition C when to end the regression algorithm
+    // 2. Generate new model M
+    // 3. For every point, calculate the estimate and the error
+    // 4. Calculate MSE
+    // 5. Check for condition C (and return to step 2 if necessary)
+    // 6. Find model with minimal error
+
     return true;
   }
 
@@ -241,4 +250,4 @@ namespace rtx {
     return true;
   }
 
-};
+}
