@@ -141,7 +141,7 @@ namespace rtx {
   bool Blob::isClose(const Blob &other) const {
     if (overlaps(other))
       return true;
-    if (color != other.getColor())
+    /*if (color != other.getColor())
       return false;
     if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
     //if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
@@ -173,7 +173,7 @@ namespace rtx {
           }
         }
       }
-    }
+    }*/ // TODO
     return false;
   }
 
