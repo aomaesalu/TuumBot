@@ -101,15 +101,16 @@ namespace rtx { namespace Visioning {
     // TODO
   }
 
-  void ballDetection(const Frame &frame) {Vision::BlobSet blobs;
+  void ballDetection(const Frame &frame) {
+
+    Vision::BlobSet blobs = Vision::blobs;
     while (Vision::editingBlobs) {
       blobs = Vision::blobs;
     }
 
-    std::cout << "Blobs in visioning: " << Vision::blobs.size() << std::endl;
+    // DEBUG: std::cout << "Blobs in visioning: " << Vision::blobs.size() << std::endl;
 
     balls.clear();
-    unsigned int maxArea = 0;
 
     for (unsigned int i = 0; i < blobs.size(); ++i) {
       Color color = blobs[i]->getColor();
@@ -118,12 +119,10 @@ namespace rtx { namespace Visioning {
       if (color == BALL/* && density > 0.4*/ && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT/* && boxArea > 8 * 8*/) {
         //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
         // TODO: Refactor
-        if (boxArea > maxArea) {
-          Point2D* point = blobs[i]->getPosition();
-          unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-          double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-          balls.push_back(new Ball(distance, angle));
-        }
+        Point2D* point = blobs[i]->getPosition();
+        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
+        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+        balls.push_back(new Ball(distance, angle));
       }
     }
   }
