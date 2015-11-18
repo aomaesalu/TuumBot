@@ -145,7 +145,7 @@ namespace rtx {
       lastBlobs = blobs;
     }
 
-    std::vector<unsigned int> existing;
+    /*std::vector<unsigned int> existing;
     unsigned int maxDifference = 2;
 
     for (unsigned int i = 0; i < lastBlobs.size(); ++i) {
@@ -164,7 +164,7 @@ namespace rtx {
         lastBlobs.erase(lastBlobs.begin() + lastIndex, lastBlobs.begin() + *i);
         removed += *i - 1 - lastIndex;
       }
-    }
+    }*/
 
     for (Vision::BlobSet::iterator blob = lastBlobs.begin(); blob != lastBlobs.end(); ++blob) {
       if (*blob) {
