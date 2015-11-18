@@ -63,6 +63,11 @@ namespace rtx {
 
       void resetConstants();
 
+      void colorPixels(guint8*, const unsigned int&, const unsigned int&, guint8*, const unsigned int&, const unsigned int&);
+      void regressBlobs();
+      void colorBlobs(guint8*, const unsigned int&, const unsigned int&);
+      void regressConstants();
+
       bool applyCalculations();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 

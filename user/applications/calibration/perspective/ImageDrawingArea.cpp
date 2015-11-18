@@ -103,17 +103,7 @@ namespace rtx {
     // TODO
   }
 
-  bool ImageDrawingArea::applyCalculations() {
-    filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
-
-    guint8 *pixels = filteredImage->get_pixels();
-    unsigned int channels = filteredImage->get_n_channels();
-    unsigned int stride = filteredImage->get_rowstride();
-
-    guint8 *actualPixels = frame->data;
-    unsigned int actualChannels = 3;
-    unsigned int actualStride = frame->width * actualChannels;
-
+  void ImageDrawingArea::colorPixels(guint8 *pixels, const unsigned int &channels, const unsigned int &stride, guint8 *actualPixels, const unsigned int &actualChannels, const unsigned int &actualStride) {
     // Color pixels
     for (unsigned int i = 0; i < CAMERA_WIDTH; ++i) {
       for (unsigned int j = 0; j < CAMERA_HEIGHT; ++j) {
@@ -136,7 +126,9 @@ namespace rtx {
         }
       }
     }
+  }
 
+  void ImageDrawingArea::regressBlobs() {
     Vision::BlobSet blobs = Vision::blobs;
     while (Vision::editingBlobs) {
       blobs = Vision::blobs;
@@ -163,7 +155,9 @@ namespace rtx {
     for (unsigned int i = 0; i < additionalBlobs.size(); ++i) {
       blobCounts.insert(std::pair<Blob*, unsigned int>(additionalBlobs[i], 1));
     }
+  }
 
+  void ImageDrawingArea::colorBlobs(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
       if (blobOccurrence->second < totalCount / 2) {
         continue;
@@ -228,15 +222,35 @@ namespace rtx {
 
       }
     }
+  }
 
-    // Regression
-
+  void ImageDrawingArea::regressConstants() {
     // 1. Establish a condition C when to end the regression algorithm
     // 2. Generate new model M
     // 3. For every point, calculate the estimate and the error
     // 4. Calculate MSE
     // 5. Check for condition C (and return to step 2 if necessary)
     // 6. Find model with minimal error
+  }
+
+  bool ImageDrawingArea::applyCalculations() {
+    filteredImage = image->copy(); // TODO: Copy only where is necessary (?)
+
+    guint8 *pixels = filteredImage->get_pixels();
+    unsigned int channels = filteredImage->get_n_channels();
+    unsigned int stride = filteredImage->get_rowstride();
+
+    guint8 *actualPixels = frame->data;
+    unsigned int actualChannels = 3;
+    unsigned int actualStride = frame->width * actualChannels;
+
+    colorPixels(pixels, channels, stride, actualPixels, actualChannels, actualStride);
+
+    regressBlobs();
+
+    colorBlobs(pixels, channels, stride);
+
+    regressConstants();
 
     return true;
   }
