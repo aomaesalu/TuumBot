@@ -31,7 +31,7 @@ namespace rtx {
   Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
     // TODO: Add points
     this->color = color;
-    minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
+    minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
     numberOfPoints = 0;
@@ -58,8 +58,8 @@ namespace rtx {
   Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
     this->points = points;
     this->color = color;
-    unsigned int minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
-    unsigned int maxX = 0, maxY = 0;
+    minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
+    maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
     numberOfPoints = 0;
     for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator i = points.begin(); i != points.end(); ++i) {
