@@ -139,7 +139,7 @@ namespace rtx {
   }
 
   bool Blob::isClose(const Blob &other) const {
-    /*if (overlaps(other))
+    if (overlaps(other))
       return true;
     if (color != other.getColor())
       return false;
@@ -173,7 +173,7 @@ namespace rtx {
           }
         }
       }
-    }*/ // TODO
+    }
     return false;
   }
 
