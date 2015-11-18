@@ -145,12 +145,12 @@ namespace rtx {
       return false;
     if (maxX < other.getMinX()) {
       unsigned int intermediateArea = (other.getMinX() - maxX) * (std::max(minY, other.getMinY()) - std::min(maxY, other.getMaxY()));
-      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea())) {
+      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea()) / 2) {
         return true;
       }
-    } else { // minX > other.getMax() because of not overlapping
+    } else if (minX > other.getMaxX()) {
       unsigned int intermediateArea = (minX - other.getMaxX()) * (std::max(minY, other.getMinY()) - std::min(maxY, other.getMaxY()));
-      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea())) {
+      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea()) / 2) {
         return true;
       }
     }
