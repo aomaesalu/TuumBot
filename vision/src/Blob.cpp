@@ -29,6 +29,7 @@ namespace rtx {
   }
 
   Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
+    // TODO: Add points
     this->color = color;
     minX = CAMERA_WIDTH, minY = CAMERA_HEIGHT;
     maxX = 0, maxY = 0;
@@ -55,6 +56,7 @@ namespace rtx {
   }
 
   Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
+    this->points = points;
     this->color = color;
     unsigned int minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     unsigned int maxX = 0, maxY = 0;
@@ -82,6 +84,10 @@ namespace rtx {
 
   Blob::~Blob() {
     // TODO
+  }
+
+  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() { // TODO: Constness
+    return points;
   }
 
   Point2D* Blob::getPosition() const {
@@ -132,17 +138,23 @@ namespace rtx {
     return color == other.getColor() && minX < other.getMaxX() && maxX > other.getMinX() && minY < other.getMaxY() && maxY > other.getMinY();
   }
 
-  void Blob::join(const Blob &other) {
+  void Blob::join(Blob &other) {
     // Define new box area
     minX = std::min(minX, other.getMinX());
     maxX = std::max(maxX, other.getMaxX());
     minY = std::min(minY, other.getMinY());
     maxY = std::max(maxY, other.getMaxY());
-    // TODO: Add points
+    // Add points
     numberOfPoints += other.getNumberOfPoints();
+    points.insert(points.end(), other.getPoints().begin(), other.getPoints().end());
     // Calculate new position // TODO: Calculate based on points
-    position->setX((position->getX() + other.getPosition()->getX()) / 2);
-    position->setY((position->getY() + other.getPosition()->getY()) / 2);
+    unsigned int xSum = 0, ySum = 0;
+    for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
+      xSum += point->first;
+      ySum += point->second;
+    }
+    position->setX(xSum / numberOfPoints);
+    position->setY(ySum / numberOfPoints);
   }
 
 };

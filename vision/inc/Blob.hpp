@@ -25,6 +25,7 @@ namespace rtx {
       Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&);
       ~Blob();
 
+      const std::vector<std::pair<unsigned int, unsigned int>>& getPoints();
       Point2D* getPosition() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
@@ -38,11 +39,11 @@ namespace rtx {
       double getDensity() const;
 
       bool overlaps(const Blob&) const;
-      void join(const Blob&);
+      void join(Blob&);
 
     private:
-      // TODO: Save a list of points, too, for further analysis?
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
+      std::vector<std::pair<unsigned int, unsigned int>> points;
       Point2D *position;
       unsigned int minX;
       unsigned int maxX;
