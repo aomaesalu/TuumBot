@@ -135,7 +135,7 @@ namespace rtx {
   }
 
   bool Blob::overlaps(const Blob &other) const {
-    return color == other.getColor() && minX < other.getMaxX() && maxX > other.getMinX() && minY < other.getMaxY() && maxY > other.getMinY();
+    return color == other.getColor() && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
   bool Blob::isClose(const Blob &other) const {
@@ -143,15 +143,29 @@ namespace rtx {
       return true;
     if (color != other.getColor())
       return false;
-    if (maxX < other.getMinX()) {
-      unsigned int intermediateArea = (other.getMinX() - maxX) * (std::min(minY, other.getMinY()) - std::max(maxY, other.getMaxY()));
-      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea())) {
-        return true;
+    if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
+      if (maxX <= other.getMinX()) { // Current is to the left of other
+        unsigned int intermediateWidth = other.getMinX() - maxX;
+        if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
+          return true;
+        }
+      } else if (minX >= other.getMaxX()) { // Current is to the right of other
+        unsigned int intermediateWidth = minX - other.getMaxX();
+        if (intermediateWidth < std::max(getWidth(), other.getWidth()) / 2) {
+          return true;
+        }
       }
-    } else if (minX > other.getMaxX()) {
-      unsigned int intermediateArea = (minX - other.getMaxX()) * (std::min(minY, other.getMinY()) - std::max(maxY, other.getMaxY()));
-      if (intermediateArea < std::max(getBoxArea(), other.getBoxArea())) {
-        return true;
+    } else if (minX <= other.getMaxX() && maxX >= other.getMinX()) { // The rectangles overlap by the X coordinate
+      if (maxY <= other.getMinY()) { // Current is above the other
+        unsigned int intermediateHeight = other.getMinY() - maxY;
+        if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
+          return true;
+        }
+      } else if (minY >= other.getMaxY()) { // Current is below the other
+        unsigned int intermediateHeight = minY - other.getMaxY();
+        if (intermediateHeight < std::max(getHeight(), other.getHeight()) / 2) {
+          return true;
+        }
       }
     }
     return false;
