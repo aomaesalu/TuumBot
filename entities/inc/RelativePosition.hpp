@@ -30,7 +30,7 @@ namespace rtx {
       void setDistance(const unsigned int&);
       void setAngle(const double&);
 
-    private:
+    protected:
       unsigned int distance;
       double angle;
 

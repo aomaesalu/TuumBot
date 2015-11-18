@@ -16,7 +16,7 @@ namespace rtx {
     //Entity(other.getPosition()),
     Circle(other.getRadius())
   {
-
+    m_health = 0;
   }
 
   /*Ball::Ball(const Point2D *position, const double &radius):
@@ -37,7 +37,18 @@ namespace rtx {
     RelativePosition(distance, angle),
     Circle(radius)
   {
-    
+    m_health = 0;
+  }
+
+  void Ball::update(int d, double a) {
+    this->distance = this->distance*0.2 + d*0.8;
+    this->angle = this->angle*0.1 + a*0.9;
+
+    if(m_health < 50) m_health += 2;
+  }
+
+  int Ball::decay() {
+    return --m_health;
   }
 
 };
