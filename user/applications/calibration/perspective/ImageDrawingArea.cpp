@@ -165,7 +165,6 @@ namespace rtx {
     }
 
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
-      std::cout << "Blob: " << blobOccurrence->first->getPosition()->getX() << blobOccurrence->first->getPosition()->getY() << " " << blobOccurrence->second << " " << totalCount << std::endl;
       if (blobOccurrence->second < totalCount / 2) {
         continue;
       }
