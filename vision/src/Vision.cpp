@@ -76,7 +76,7 @@ namespace rtx {
       editingBlobs = false;
     }
 
-    // Joins same-colored blobs if their box areas overlap
+    // Joins same-colored blobs if their box areas are close or overlap
     void joinBlobsInBuffer() {
       std::set<unsigned int> toBeRemoved;
 
@@ -85,7 +85,7 @@ namespace rtx {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
           for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
             if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
-              if (blobsBuffer[i]->overlaps(*blobsBuffer[j])) {
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
                 blobsBuffer[i]->join(*blobsBuffer[j]);
                 toBeRemoved.insert(j);
               }

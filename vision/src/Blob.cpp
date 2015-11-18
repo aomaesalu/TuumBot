@@ -138,6 +138,25 @@ namespace rtx {
     return color == other.getColor() && minX < other.getMaxX() && maxX > other.getMinX() && minY < other.getMaxY() && maxY > other.getMinY();
   }
 
+  bool Blob::isClose(const Blob &other) const {
+    if (overlaps(other))
+      return true;
+    if (color != other.getColor())
+      return false;
+    if (maxX < other.getMinX()) {
+      unsigned int intermediateArea = (other.getMinX() - maxX) * (std::max(minY, other.getMinY()) - std::min(maxY, other.getMaxY()));
+      if (intermediateArea < getBoxArea() + other.getBoxArea()) {
+        return true;
+      }
+    } else { // minX > other.getMax() because of not overlapping
+      unsigned int intermediateArea = (minX - other.getMaxX()) * (std::max(minY, other.getMinY()) - std::min(maxY, other.getMaxY()));
+      if (intermediateArea < getBoxArea() + other.getBoxArea()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void Blob::join(Blob &other) {
     // Define new box area
     minX = std::min(minX, other.getMinX());

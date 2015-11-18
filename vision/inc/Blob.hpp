@@ -39,6 +39,7 @@ namespace rtx {
       double getDensity() const;
 
       bool overlaps(const Blob&) const;
+      bool isClose(const Blob&) const;
       void join(Blob&);
 
     private:
