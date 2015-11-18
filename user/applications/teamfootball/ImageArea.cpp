@@ -84,7 +84,7 @@ namespace rtx {
         double density = (*blob)->getDensity();
         unsigned int boxArea = (*blob)->getBoxArea();
 
-        if (color == BALL && density > 0.6 && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
+        if (color == BALL/* && density > 0.6*/ && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
 
           unsigned int value = 0;
           for (unsigned int i = minX; i <= maxX; ++i) {

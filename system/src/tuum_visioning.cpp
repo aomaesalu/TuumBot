@@ -116,7 +116,7 @@ namespace rtx { namespace Visioning {
       Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
-      if (color == BALL && density > 0.6 && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
+      if (color == BALL/* && density > 0.6*/ && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
         //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
         // TODO: Refactor
         Point2D* point = blobs[i]->getPosition();
