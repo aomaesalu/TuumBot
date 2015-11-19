@@ -38,7 +38,9 @@ namespace rtx {
       double getB() const;
       double getC() const;
 
-      void initialiseConstants();
+      void resetConstants();
+      void resetBlobRegression();
+
       void updateFrame(Frame*, Frame*);
 
     protected:
@@ -65,8 +67,8 @@ namespace rtx {
 
       void initialiseProperties();
       void initialiseImage();
-
-      void resetConstants();
+      void initialiseConstants();
+      void initialiseBlobRegression();
 
       void colorPixels(guint8*, const unsigned int&, const unsigned int&, guint8*, const unsigned int&, const unsigned int&);
       void regressBlobs();

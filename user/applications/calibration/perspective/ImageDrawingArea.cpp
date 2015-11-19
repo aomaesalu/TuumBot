@@ -30,11 +30,8 @@ namespace rtx {
     initialiseProperties();
     initialiseImage();
     initialiseConstants();
-    totalCount = 0;
+    initialiseBlobRegression();
     maxError = 10;
-    bestA = bestB = bestC = 0;
-    bestHorisontalMSE = 9999999;
-    bestVerticalMSE = 9999999;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
   }
 
@@ -95,11 +92,22 @@ namespace rtx {
   }
 
   void ImageDrawingArea::initialiseConstants() {
-    // TODO
+    bestA = bestB = bestC = 0;
+    bestHorisontalMSE = 9999999;
+    bestVerticalMSE = 9999999;
   }
 
   void ImageDrawingArea::resetConstants() {
-    // TODO
+    initialiseConstants();
+  }
+
+  void ImageDrawingArea::initialiseBlobRegression() {
+    totalCount = 0;
+  }
+
+  void ImageDrawingArea::resetBlobRegression() {
+    initialiseBlobRegression();
+    blobCounts.clear();
   }
 
   void ImageDrawingArea::colorPixels(guint8 *pixels, const unsigned int &channels, const unsigned int &stride, guint8 *actualPixels, const unsigned int &actualChannels, const unsigned int &actualStride) {
@@ -302,11 +310,15 @@ namespace rtx {
 
     colorPixels(pixels, channels, stride, actualPixels, actualChannels, actualStride);
 
-    regressBlobs();
+    if (!isCalculating()) {
+      regressBlobs();
+    }
 
     colorBlobs(pixels, channels, stride);
 
-    regressConstants();
+    if (isCalculating()) {
+      regressConstants();
+    }
 
     return true;
   }

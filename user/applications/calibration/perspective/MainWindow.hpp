@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.hpp
- * Perspective calibration application main window.
+ *  @file MainWindow.hpp
+ *  Perspective calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H

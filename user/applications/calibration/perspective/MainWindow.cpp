@@ -58,13 +58,15 @@ namespace rtx {
   void MainWindow::setPlaying(const bool &value) {
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
+    if (value)
+      imageArea.resetBlobRegression();
     playing = value;
     setCalculating(!value);
   }
 
   void MainWindow::setCalculating(const bool &value) {
     if (value)
-      imageArea.initialiseConstants();
+      imageArea.resetConstants();
     calculating = value;
   }
 
