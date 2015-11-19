@@ -27,10 +27,14 @@ namespace rtx {
 
     extern BlobSet blobs;
     extern BlobSet blobsBuffer;
+    
     extern LineSet lines;
+    extern LineSet linesBuffer;
+
     extern CornerSet corners;
 
     extern bool editingBlobs;
+    extern bool editingLines;
 
     void setup();
     void process(const Frame&, const std::string&);
