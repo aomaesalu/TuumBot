@@ -14,6 +14,10 @@
 
 namespace rtx {
 
+  Circle::Circle() {
+    radius = 0;
+  }
+
   Circle::Circle(const Circle &other):
     Shape2D(),
     radius{other.getRadius()}
