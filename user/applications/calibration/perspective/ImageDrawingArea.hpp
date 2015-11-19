@@ -59,6 +59,7 @@ namespace rtx {
       double bestA, bestB, bestC;
       double bestHorisontalMSE, bestVerticalMSE;
       double maxError;
+      unsigned int squareWidth;
 
       void initialiseProperties();
       void initialiseImage();

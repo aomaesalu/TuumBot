@@ -259,38 +259,39 @@ namespace rtx {
       std::vector<double> verticalEstimates, horisontalEstimates;
       std::vector<double> verticalErrors, horisontalErrors;
       for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-        verticalEstimates.push_back(getVerticalDistance(verticalPoints[j]->first, A, B) - getVerticalDistance(verticalPoints[j]->second, A, B));
-        horisontalEstimates.push_back(getHorisontalDistance(horisontalPoints[j]->second, verticalPoints[j]->second, C) - getHorisontalDistance(horisontalPoints[j]->first, verticalPoints[j]->second, C));
+        verticalEstimates.push_back(getVerticalDistance(verticalPoints[j].first, A, B) - getVerticalDistance(verticalPoints[j].second, A, B));
+        horisontalEstimates.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
         verticalErrors.push_back(verticalEstimates.back() - squareWidth);
         horisontalErrors.push_back(horisontalEstimates.back() - squareWidth);
       }
       // 4. Calculate MSEs
       verticalMSE = 0;
       horisontalMSE = 0;
-      for (unsigned int j = 0; j < points.size(); ++j) {
+      for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
         verticalMSE += verticalErrors[j] * verticalErrors[j];
         horisontalMSE += horisontalErrors[j] * horisontalErrors[j];
       }
-      verticalMSE /= points.size();
-      horisontalMSE /= points.size();
+      verticalMSE /= verticalPoints.size();
+      horisontalMSE /= horisontalPoints.size();
       // 6. Find model with minimal error
-      if (verticalMSE <= maxError * points.size() && verticalMSE < bestVerticalMSE) {
+      if (verticalMSE < bestVerticalMSE) {
         bestA = A;
         bestB = B;
         bestVerticalMSE = verticalMSE;
-        std::cout << "Found a vertical function with MSE = " << verMSE << std::endl;
+        std::cout << "Found a vertical function with MSE = " << verticalMSE << std::endl;
       }
       if (horisontalMSE < bestHorisontalMSE) {
         bestC = C;
         bestHorisontalMSE = horisontalMSE;
-        std::cout << "Found a horisontal function with MSE = " << horMSE << std::endl;
+        std::cout << "Found a horisontal function with MSE = " << horisontalMSE << std::endl;
       }
     // 5. Check for condition C (and return to step 2 if necessary)
     }
-    if (bestVerticalMSE <= maxError * points.size()) {
+    // Debug output // TODO: Refactor
+    if (bestVerticalMSE <= maxError * verticalPoints.size()) {
       std::cout << "The vertical function's MSE is low enough." << std::endl;
     }
-    if (bestHorisontalMSE <= maxError * points.size()) {
+    if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
     }
   }
