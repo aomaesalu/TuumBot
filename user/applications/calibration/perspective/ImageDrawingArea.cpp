@@ -93,7 +93,10 @@ namespace rtx {
     bestA = bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
-    boundsList.push_back(std::pair<lowerBound, upperBound>);
+    ABList.push_back(lowerBound);
+    ABList.push_back(upperBound);
+    CList.push_back(lowerBound);
+    CList.push_back(upperBound);
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
     numberOfDivisions = 8;
@@ -260,22 +263,26 @@ namespace rtx {
 
     // Bounds division by best bounds division
     // TODO: Sort vertical results list by MSE (the second value in the pair)
-    if (verticalBoundsList.empty()) {
+    // TODO: Sort horisontal results list by MSE (the second value in the pair)
+    if (ABList.empty()) {
       for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
         if (i >= verticalResultsList.size())
           break;
-        // TODO
+        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
+        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
+        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
       }
       verticalResultsList.clear();
     }
-    // TODO: Sort horisontal results list by MSE (the second value in the pair)
-    if (horisontalBoundsList.empty()) {
+    if (CList.empty()) {
       for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
         if (i >= horisontalResultsList.size())
           break;
-        // TODO
+        // Add area with previous
+        CList.push_back(/* TODO */);
+        CList.push_back(/* TODO */);
+        CList.push_back(/* TODO */);
       }
-      horisontalResultsList.clear();
     }
 
     // 1. Establish a condition C when to end the regression algorithm

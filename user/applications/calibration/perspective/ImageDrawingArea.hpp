@@ -67,8 +67,14 @@ namespace rtx {
       unsigned int squareWidth;
       unsigned int numberOfDivisions;
       unsigned int numberOfBestDivisions;
-      std::vector<std::pair<double, double>> verticalBoundsList, horisontalBoundsList;
-      std::vector<std::pair<double, double>> verticalResultsList, horisontalResultsList;
+      // <A value, B value>
+      std::vector<std::pair<double, double>> ABList;
+      // <C value>
+      std::vector<double> CList;
+      // <<<A value, <A previous value, A next value>>, <B value, <B previous value, B next value>>>, MSE value>
+      std::vector<std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double>> verticalResultsList;
+      // <<C value, C previous value, C next value>, MSE value>
+      std::vector<std::pair<std::pair<double, std::pair<double, double>>, double>> horisontalResultsList;
 
       void initialiseProperties();
       void initialiseImage();
