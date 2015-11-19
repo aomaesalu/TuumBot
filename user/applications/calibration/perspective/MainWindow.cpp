@@ -52,7 +52,7 @@ namespace rtx {
   }
 
   bool MainWindow::isColored(const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
-    return isColored(x * 256 * 256 + y * 256 + z, mode);
+    return isColored((x << 16) + (y << 8) + z, mode);
   }
 
   void MainWindow::setPlaying(const bool &value) {
