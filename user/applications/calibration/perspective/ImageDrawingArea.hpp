@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 19 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
@@ -51,12 +51,14 @@ namespace rtx {
       Frame *frame;
       Frame *rgbFrame;
 
+      // Blob regression data
       unsigned int totalCount;
       std::map<Blob*, unsigned int> blobCounts;
 
-      double A;
-      double B;
-      double C;
+      // Constant regression data
+      double bestA, bestB, bestC;
+      double bestHorisontalMSE, bestVerticalMSE;
+      double maxError;
 
       void initialiseProperties();
       void initialiseImage();

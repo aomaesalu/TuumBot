@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 19 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
@@ -31,6 +31,9 @@ namespace rtx {
     initialiseImage();
     initialiseConstants();
     totalCount = 0;
+    maxError = 10;
+    bestHorisontalMSE = 9999999;
+    bestVerticalMSE = 9999999;
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -234,20 +237,28 @@ namespace rtx {
         points.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getPosition()->getX(), blobOccurrence->first->getPosition()->getY()));
       }
     }
+    // Constant regression step
+    double A, B, C;
+    double horisontalMSE, verticalMSE;
     // 1. Establish a condition C when to end the regression algorithm
-    unsigned int maxError = 10;
-    unsigned int mse = 9999999;
-    do {
-      // 2. Generate new model M
-      // TODO
-      // 3. For every point, calculate the estimate and the error
-      // TODO
-      // 4. Calculate MSE
-      // TODO
-    // 5. Check for condition C (and return to step 2 if necessary)
-    } while (mse >= maxError * points.size());
-    // 6. Find model with minimal error
+    // 2. Generate new model M
     // TODO
+    // 3. For every point, calculate the estimate and the error
+    for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
+      // TODO
+    }
+    // 4. Calculate MSEs
+    // TODO
+    // 5. Check for condition C (and return to step 2 if necessary)
+    // 6. Find model with minimal error
+    if (horisontalMSE <= maxError * points.size() && horisontalMSE < bestHorisontalMSE) {
+      bestHorisontalMSE = horisontalMSE;
+      std::cout << "Found a horisontal function with MSE = " << horMSE << std::endl;
+    }
+    if (verticalMSE <= maxError * points.size() && verticalMSE < bestVerticalMSE) {
+      bestVerticalMSE = verticalMSE;
+      std::cout << "Found a vertical function with MSE = " << verMSE << std::endl;
+    }
   }
 
   bool ImageDrawingArea::applyCalculations() {
