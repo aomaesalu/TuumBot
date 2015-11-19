@@ -1,45 +1,46 @@
-/**
- * @file Entity.cpp
- * Entity class.
+/** @file Entity.cpp
+ *  Entity class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @version 0.2
  */
 
 #include "Entity.hpp"
 
-
 namespace rtx {
 
-  Entity::Entity(const Entity &other):
-    position{new Point2D(other.getPosition()->getX(),
-             other.getPosition()->getY())}
+  Entity::Entity() {
+
+  }
+
+  Entity::Entity(const Entity& entity) {
+    (*this) = entity;
+  }
+
+  Entity::Entity(const Vec2i* pos):
+    m_transform(pos)
   {
 
   }
 
-  Entity::Entity(const Point2D *position):
-    position{new Point2D(position->getX(), position->getY())}
+  Entity::Entity(const int x, const int y):
+    m_transform(x, y)
   {
 
   }
 
-  Entity::Entity(const double &x, const double &y):
-    position{new Point2D(x, y)}
+  Entity::Entity(const Transform transform) {
+    m_transform = transform;
+  }
+
+  Entity::Entity(const int x, const int y, const double o):
+    m_transform(x, y, o)
   {
 
   }
 
-  void Entity::setPosition(const Point2D *position) {
-    this->position = new Point2D(position->getX(), position->getY());
-  }
-
-  void Entity::setPosition(const double &x, const double &y) {
-    this->position = new Point2D(x, y);
-  }
-
-  Point2D* Entity::getPosition() const {
-    return position;
+  Transform* Entity::getTransform() {
+    return &m_transform;
   }
 
 };
