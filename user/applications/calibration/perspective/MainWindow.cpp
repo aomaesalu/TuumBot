@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.cpp
- * Perspective calibration application main window.
+ *  @file MainWindow.cpp
+ *  Perspective calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -55,15 +56,15 @@ namespace rtx {
   }
 
   void MainWindow::setPlaying(const bool &value) {
-    if (value) {
-      imageArea.setCalculating(false);
-    }
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
-    playing = value; // We have to do this at the end of this method because of lock-free threading
+    playing = value;
+    setCalculating(!value);
   }
 
   void MainWindow::setCalculating(const bool &value) {
+    if (value)
+      imageArea->initialiseConstants();
     calculating = value;
   }
 

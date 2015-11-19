@@ -49,24 +49,6 @@ namespace rtx {
     return mainWindow->isCalculating();
   }
 
-  void ImageDrawingArea::setPlaying(const bool &value) {
-    if (value) {
-      setCalculating(false);
-    }
-    mainWindow->setPlaying(value);
-  }
-
-  void ImageDrawingArea::setCalculating(const bool &value) {
-    if (value) {
-      if (!isCalculating()) {
-        setPlaying(false);
-      }
-    } else {
-      initialiseConstants();
-    }
-    mainWindow->setCalculating(value);
-  }
-
   void ImageDrawingArea::updateFrame(Frame *frame, Frame *rgbFrame) {
     this->frame = frame;
     this->rgbFrame = rgbFrame;

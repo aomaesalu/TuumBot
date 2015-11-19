@@ -34,9 +34,7 @@ namespace rtx {
       bool isPlaying() const;
       bool isCalculating() const;
 
-      void setPlaying(const bool& = true);
-      void setCalculating(const bool& = true);
-
+      void initialiseConstants();
       void updateFrame(Frame*, Frame*);
 
     protected:
@@ -63,7 +61,6 @@ namespace rtx {
 
       void initialiseProperties();
       void initialiseImage();
-      void initialiseConstants();
 
       void resetConstants();
 
