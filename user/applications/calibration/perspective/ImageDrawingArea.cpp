@@ -20,13 +20,9 @@
 
 #include <iostream> // TODO: Remove
 #include <cstdlib>
-#include <random>
 
 
 namespace rtx {
-
-  // TODO: Move elsewhere
-  std::default_random_engine randomEngine;
 
   ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
     mainWindow(mainWindow)
@@ -35,8 +31,6 @@ namespace rtx {
     initialiseImage();
     initialiseConstants();
     initialiseBlobRegression();
-    maxError = 10;
-    squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -97,8 +91,13 @@ namespace rtx {
 
   void ImageDrawingArea::initialiseConstants() {
     bestA = bestB = bestC = 0;
-    lowerBound = -10000;
-    upperBound = 10000;
+    lowerBound = -100000;
+    upperBound = 100000;
+    boundsList.push_back(std::pair<lowerBound, upperBound>);
+    maxError = 10;
+    squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
+    numberOfDivisions = 8;
+    numberOfBestDivisions = 3;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
   }
@@ -243,12 +242,6 @@ namespace rtx {
 
   double getHorisontalDistance(const int &horisontalCoordinate, const unsigned int &verticalCoordinate, const double &C) {
     return C * (horisontalCoordinate - CAMERA_WIDTH / 2) / verticalCoordinate;
-  }
-
-  // TODO: Move into maths library
-  double randDouble(const double &lowerBound, const double &upperBound) {
-    std::uniform_real_distribution<double> uniform(lowerBound, upperBound);
-    return uniform(randomEngine);
   }
 
   void ImageDrawingArea::regressConstants() { // TODO: Optimise

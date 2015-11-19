@@ -15,7 +15,6 @@
 #include <gtkmm/drawingarea.h>
 
 #include <map>
-#include <random>
 
 #include "Camera.hpp"
 #include "tuum_visioning.hpp"
@@ -25,9 +24,6 @@
 namespace rtx {
 
   class MainWindow;
-
-  // TODO: Move elsewhere
-  extern std::default_random_engine randomEngine;
 
   class ImageDrawingArea: public Gtk::DrawingArea {
 
@@ -63,12 +59,16 @@ namespace rtx {
       unsigned int totalCount;
       std::map<Blob*, unsigned int> blobCounts;
 
-      // Constant regression data
+      // Constant regression data // TODO: Move regression calculations to separate class
       double bestA, bestB, bestC;
       double lowerBound, upperBound;
-      double bestHorisontalMSE, bestVerticalMSE;
+      double bestVerticalMSE, bestHorisontalMSE;
       double maxError;
       unsigned int squareWidth;
+      unsigned int numberOfDivisions;
+      unsigned int numberOfBestDivisions;
+      std::vector<std::pair<double, double>> verticalBoundsList, horisontalBoundsList;
+      std::vector<std::pair<double, double>> verticalResultsList, horisontalResultsList;
 
       void initialiseProperties();
       void initialiseImage();
