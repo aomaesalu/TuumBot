@@ -20,12 +20,14 @@ namespace rtx {
     Transform();
 
     Transform(const int, const int);
-    Transform(const Vec2i*);
+    Transform(const Vec2i);
 
     Transform(const int, const int, const double);
-    Transform(const Vec2i*, const double);
+    Transform(const Vec2i, const double);
 
+    void setPosition(const int, const int);
     void setPosition(const Vec2i);
+
     Vec2i getPosition();
 
     int getX();

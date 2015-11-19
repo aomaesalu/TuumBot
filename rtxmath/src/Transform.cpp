@@ -15,20 +15,26 @@ namespace rtx {
     o = 0;
   }
 
-  Transform::Transform(const int, const int) {
-
+  Transform::Transform(const int x, const int y) {
+    pos.x = x; pos.y = y;
   }
 
-  Transform::Transform(const Vec2i*) {
-
+  Transform::Transform(const Vec2i vec) {
+    pos = vec;
   }
 
-  Transform::Transform(const int, const int, const double) {
-
+  Transform::Transform(const int x, const int y, const double orient) {
+    pos.x = x; pos.y = y;
+    o = orient;
   }
 
-  Transform::Transform(const Vec2i*, const double) {
+  Transform::Transform(const Vec2i vec, const double orient) {
+    pos = vec;
+    o = orient;
+  }
 
+  void Transform::setPosition(const int x, const int y) {
+    pos.x = x; pos.y = y;
   }
 
   void Transform::setPosition(const Vec2i nPos) {
