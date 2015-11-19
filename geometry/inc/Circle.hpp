@@ -15,18 +15,19 @@
 namespace rtx {
 
   class Circle: public Shape2D {
-    public:
-      Circle(const Circle&);
-      Circle(const double&);
+  private:
+    double radius;
 
-      void setRadius(const double&);
+  public:
+    Circle();
+    Circle(const Circle&);
+    Circle(const double&);
 
-      double getArea() const;
-      double getPerimeter() const;
-      double getRadius() const;
+    void setRadius(const double&);
 
-    private:
-      double radius;
+    double getArea() const;
+    double getPerimeter() const;
+    double getRadius() const;
   };
 
 };

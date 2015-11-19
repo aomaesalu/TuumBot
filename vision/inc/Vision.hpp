@@ -4,7 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 11. November 2015
+ * @date 17 November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -26,17 +26,21 @@ namespace rtx {
     typedef std::vector<Feature> CornerSet;
 
     extern BlobSet blobs;
+    extern BlobSet blobsBuffer;
     extern LineSet lines;
     extern CornerSet corners;
 
+    extern bool editingBlobs;
+
     void setup();
     void process(const Frame&, const std::string&);
+    void processCheckerboard(const Frame&, const std::string&);
 
     bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
     bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
 
-    void blobDetection(const Frame&, const std::string&);
-    void blobDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<Point2D>&);
 
     void lineDetection(const Frame&, const std::string&);
     void lineDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
