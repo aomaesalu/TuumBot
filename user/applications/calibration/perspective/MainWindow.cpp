@@ -71,11 +71,10 @@ namespace rtx {
   }
 
   bool MainWindow::updateFrame() {
-    if (!playing) {
-      return false;
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
     }
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
     imageArea.updateFrame(&frame, &rgbFrame);
     return true;
   }
