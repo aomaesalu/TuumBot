@@ -150,20 +150,16 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
-  void MainWindow::saveConstantsToFile(const std::string &fileName) {
-    std::ofstream outputFile(fileName);
-    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
-    outputFile.close();
-  }
-
-  void MainWindow::readConstantsFromFile(const std::string &fileName) {
-    // TODO
-  }
-
   void MainWindow::readFilterFromFile(const std::string &fileName) {
     std::ifstream inputFile(fileName);
     inputFile >> filter;
     inputFile.close();
+  }
+
+  void MainWindow::saveConstantsToFile(const std::string &fileName) {
+    std::ofstream outputFile(fileName);
+    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
+    outputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {
