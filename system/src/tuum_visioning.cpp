@@ -48,16 +48,41 @@ namespace rtx { namespace Visioning {
       return &tmp_objs;
     }
 
-    void filter() {
+    void update() {
+      {
+        for(auto& b : objs) b->update();
+        for(auto& b : tmp_objs) b->update();
+      }
+
       int health = mn_h;
+
+      //FIXME: Memory leaks?
       tmp_objs.erase(std::remove_if(tmp_objs.begin(), tmp_objs.end(),
         [health](T*& obj_ptr) {
           return obj_ptr->getHealth() < health;
         }), tmp_objs.end());
 
-      //TODO: move healthy objects
-      //TODO: move decaying objects
+      {
+	auto it = tmp_objs.begin();
+	while(it != tmp_objs.end()) {
+	  if((*it)->getHealth() > mx_h) {
+	    objs.push_back(*it);
+	    it = tmp_objs.erase(it);
+	  } else it++;
+	}
+      }
+
+      {
+	auto it = objs.begin();
+	while(it != objs.end()) {
+	  if((*it)->getHealth() < mx_h) {
+	    tmp_objs.push_back(*it);
+	    it = objs.erase(it);
+	  } else it++;
+	}
+      }
     }
+
   };
 
   //BallSet* Visioning::getBalls();
@@ -283,17 +308,16 @@ namespace rtx { namespace Visioning {
     }
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
-    ballDetect.filter();
+    ballDetect.update();
 
     if(debugTimer.isTime()) {
-
       std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
 	        << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
 		<< std::endl;
 
-      for(auto& b : *(ballDetect.getTmpEntities())) {
+      for(auto& b : *(ballDetect.getEntities())) {
 	Transform* t = b->getTransform();
-        std::cout << "<Ball x=" << t->getX() << ", y=" << t->getY() << ">" << std::endl;
+        std::cout << "<Ball hp=" << b->getHealth() << ", x=" << t->getX() << ", y=" << t->getY() << ">" << std::endl;
       }
 
       debugTimer.start();
