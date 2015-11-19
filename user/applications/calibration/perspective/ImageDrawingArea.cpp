@@ -253,15 +253,40 @@ namespace rtx {
       verticalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinY(), blobOccurrence->first->getMaxY()));
       horisontalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinX(), blobOccurrence->first->getMaxX()));
     }
-    // Constant regression step
+
+    // Constant regression step initialisation
     double A = 0, B = 0, C = 0;
     double verticalMSE = 0, horisontalMSE = 0;
+
+    // Bounds division by best bounds division
+    // TODO: Sort vertical results list by MSE (the second value in the pair)
+    if (verticalBoundsList.empty()) {
+      for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
+        if (i >= verticalResultsList.size())
+          break;
+        // TODO
+      }
+      verticalResultsList.clear();
+    }
+    // TODO: Sort horisontal results list by MSE (the second value in the pair)
+    if (horisontalBoundsList.empty()) {
+      for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
+        if (i >= horisontalResultsList.size())
+          break;
+        // TODO
+      }
+      horisontalResultsList.clear();
+    }
+
     // 1. Establish a condition C when to end the regression algorithm
-    // For each frame, calculate 5 different models
+    // TODO: Currently it is enough for the user to decide when to end the algorithm
+
     // 2. Generate new model M (constant A, B and C estimations)
+    // TODO
     A = randDouble(lowerBound, upperBound);
     B = randDouble(lowerBound, upperBound);
     C = randDouble(lowerBound, upperBound);
+
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
     std::vector<double> verticalErrors, horisontalErrors;
@@ -271,6 +296,7 @@ namespace rtx {
       verticalErrors.push_back(verticalEstimates.back() - squareWidth);
       horisontalErrors.push_back(horisontalEstimates.back() - squareWidth);
     }
+
     // 4. Calculate MSEs
     verticalMSE = 0;
     horisontalMSE = 0;
@@ -280,6 +306,7 @@ namespace rtx {
     }
     verticalMSE /= verticalPoints.size();
     horisontalMSE /= horisontalPoints.size();
+
     // 6. Find model with minimal error
     if (verticalMSE < bestVerticalMSE) {
       bestA = A;
@@ -292,7 +319,10 @@ namespace rtx {
       bestHorisontalMSE = horisontalMSE;
       std::cout << "Found a horisontal function with MSE = " << horisontalMSE << "; C = " << C << std::endl;
     }
+
     // 5. Check for condition C (and return to step 2 if necessary)
+    // TODO: Currently it is enough for the user to decide when to end the algorithm
+
     // Debug output // TODO: Refactor
     /*if (bestVerticalMSE <= maxError * verticalPoints.size()) {
       std::cout << "The vertical function's MSE is low enough." << std::endl;
@@ -300,6 +330,7 @@ namespace rtx {
     if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
     }*/
+
   }
 
   bool ImageDrawingArea::applyCalculations() {
