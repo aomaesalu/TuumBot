@@ -110,7 +110,12 @@ namespace rtx { namespace Localization {
   }
 
   Transform getTransform() {
-    return Transform({0, 0, 0.0});
+    return Transform(0, 0, 0.0);
+  }
+
+  Transform toAbsoluteTransform(const int d,const double a) {
+    //TODO: take into account current robot position
+    return Transform((int)(cos(a)*d), (int)(sin(a)*d));
   }
 
 };};
