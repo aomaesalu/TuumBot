@@ -34,6 +34,10 @@ namespace rtx {
       bool isPlaying() const;
       bool isCalculating() const;
 
+      double getA() const;
+      double getB() const;
+      double getC() const;
+
       void initialiseConstants();
       void updateFrame(Frame*, Frame*);
 

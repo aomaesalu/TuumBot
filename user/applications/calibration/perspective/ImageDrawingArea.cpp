@@ -32,6 +32,7 @@ namespace rtx {
     initialiseConstants();
     totalCount = 0;
     maxError = 10;
+    bestA = bestB = bestC = 0;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
@@ -47,6 +48,18 @@ namespace rtx {
 
   bool ImageDrawingArea::isCalculating() const {
     return mainWindow->isCalculating();
+  }
+
+  double ImageDrawingArea::getA() const {
+    return bestA;
+  }
+
+  double ImageDrawingArea::getB() const {
+    return bestB;
+  }
+
+  double ImageDrawingArea::getC() const {
+    return bestC;
   }
 
   void ImageDrawingArea::updateFrame(Frame *frame, Frame *rgbFrame) {

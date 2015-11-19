@@ -151,7 +151,9 @@ namespace rtx {
   }
 
   void MainWindow::saveConstantsToFile(const std::string &fileName) {
-    // TODO
+    std::ofstream outputFile(fileName);
+    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
+    outputFile.close();
   }
 
   void MainWindow::readConstantsFromFile(const std::string &fileName) {
