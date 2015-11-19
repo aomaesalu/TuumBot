@@ -241,23 +241,39 @@ namespace rtx {
     double A, B, C;
     double horisontalMSE, verticalMSE;
     // 1. Establish a condition C when to end the regression algorithm
-    // 2. Generate new model M
-    // TODO
-    // 3. For every point, calculate the estimate and the error
-    for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
+    for (unsigned int i = 0; i < 5; ++i) {
+      // 2. Generate new model M (constant A, B and C estimations)
       // TODO
-    }
-    // 4. Calculate MSEs
-    // TODO
+      // 3. For every point, calculate the estimate and the error
+      std::vector<double> horisontalEstimates, verticalEstimates;
+      std::vector<double> horisontalErrors, verticalErrors;
+      for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
+        horisontalEstimates.push_back(C * ((int) ((*point)->second) - CAMERA_WIDTH / 2) / (*point)->first);
+        verticalEstimates.push_back(A + B / (*point)->first);
+        horisontalErrors.push_back(0);
+        verticalErrors.push_back(0);
+      }
+      // 4. Calculate MSEs
+      // TODO
     // 5. Check for condition C (and return to step 2 if necessary)
+    }
     // 6. Find model with minimal error
-    if (horisontalMSE <= maxError * points.size() && horisontalMSE < bestHorisontalMSE) {
+    if (horisontalMSE < bestHorisontalMSE) {
+      bestC = C;
       bestHorisontalMSE = horisontalMSE;
       std::cout << "Found a horisontal function with MSE = " << horMSE << std::endl;
     }
+    if (horisontalMSE <= maxError * points.size()) {
+      std::cout << "The horisontal function's MSE is low enough." << std::endl;
+    }
     if (verticalMSE <= maxError * points.size() && verticalMSE < bestVerticalMSE) {
+      bestA = A;
+      bestB = B;
       bestVerticalMSE = verticalMSE;
       std::cout << "Found a vertical function with MSE = " << verMSE << std::endl;
+    }
+    if (verticalMSE <= maxError * points.size()) {
+      std::cout << "The vertical function's MSE is low enough." << std::endl;
     }
   }
 
