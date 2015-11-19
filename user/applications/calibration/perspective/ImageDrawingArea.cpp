@@ -223,14 +223,12 @@ namespace rtx {
     }
   }
 
-  double getVerticalDistance(unsigned int coordinate, double A, double B) {
-    // TODO
-    return 0;
+  double getVerticalDistance(const unsigned int &verticalCoordinate, const double &A, const double &B) {
+    return A + B / verticalCoordinate;
   }
 
-  double getHorisontalDistance(unsigned int horisontalCoordinate, unsigned int verticalCoordinate, double C) {
-    // TODO
-    return 0;
+  double getHorisontalDistance(const int &horisontalCoordinate, const unsigned int &verticalCoordinate, const double &C) {
+    return C * (horisontalCoordinate - CAMERA_WIDTH / 2) / verticalCoordinate;
   }
 
   void ImageDrawingArea::regressConstants() { // TODO: Optimise
