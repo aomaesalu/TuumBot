@@ -229,14 +229,13 @@ namespace rtx {
 
   void ImageDrawingArea::regressConstants() {
     // Calculate points
-    /*std::vector<std::pair<unsigned int, unsigned int>> points;
+    std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
-      if (blobOccurrence->second < totalCount / 2) {
+      if (blobOccurrence->second < totalCount / 2)
         continue;
-      } else {
-        points.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getPosition()->getX(), blobOccurrence->first->getPosition()->getY()));
-      }
-    }*/
+      verticalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinY(), blobOccurrence->first->getMaxY()));
+      horisontalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinX(), blobOccurrence->first->getMaxX()));
+    }
     /*// Constant regression step
     double A, B, C;
     double horisontalMSE, verticalMSE;
