@@ -88,9 +88,8 @@ namespace rtx {
       void constructSaveButton(Gtk::Container&);
       void constructExitButton(Gtk::Container&);
 
-      void saveConstantsToFile(const std::string&);
-      void readConstantsFromFile(const std::string&);
       void readFilterFromFile(const std::string&);
+      void saveConstantsToFile(const std::string&);
 
       void on_playButton_clicked();
       void on_stopButton_clicked();
