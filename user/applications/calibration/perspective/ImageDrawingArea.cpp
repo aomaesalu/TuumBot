@@ -34,6 +34,7 @@ namespace rtx {
     maxError = 10;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
+    squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -227,6 +228,16 @@ namespace rtx {
     }
   }
 
+  double getVerticalDistance(unsigned int min, unsigned int max, double A, double B) {
+    // TODO
+    return 0;
+  }
+
+  double getHorisontalDistance(unsigned int min, unsigned int max, double A, double B) {
+    // TODO
+    return 0;
+  }
+
   void ImageDrawingArea::regressConstants() {
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
@@ -236,44 +247,52 @@ namespace rtx {
       verticalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinY(), blobOccurrence->first->getMaxY()));
       horisontalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinX(), blobOccurrence->first->getMaxX()));
     }
-    /*// Constant regression step
+    // Constant regression step
     double A, B, C;
-    double horisontalMSE, verticalMSE;
+    double verticalMSE, horisontalMSE;
     // 1. Establish a condition C when to end the regression algorithm
+    // For each frame, calculate 5 different models
     for (unsigned int i = 0; i < 5; ++i) {
       // 2. Generate new model M (constant A, B and C estimations)
       // TODO
       // 3. For every point, calculate the estimate and the error
-      std::vector<double> horisontalEstimates, verticalEstimates;
-      std::vector<double> horisontalErrors, verticalErrors;
+      std::vector<double> verticalEstimates, horisontalEstimates;
+      std::vector<double> verticalErrors, horisontalErrors;
       for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
-        horisontalEstimates.push_back(C * ((int) ((*point)->second) - CAMERA_WIDTH / 2) / (*point)->first);
-        verticalEstimates.push_back(A + B / (*point)->first);
-        horisontalErrors.push_back(0);
-        verticalErrors.push_back(0);
+        verticalEstimates.push_back(/* TODO */);
+        horisontalEstimates.push_back(/* TODO */);
+        verticalErrors.push_back(verticalEstimates.back() - squareWidth);
+        horisontalErrors.push_back(horisontalErrors.back() - squareWidth);
       }
       // 4. Calculate MSEs
-      // TODO
+      verticalMSE = 0;
+      horisontalMSE = 0;
+      for (unsigned int j = 0; j < points.size(); ++j) {
+        verticalMSE += verticalErrors[j] * verticalErrors[j];
+        horisontalMSE += horisontalErrors[j] * horisontalErrors[j];
+      }
+      verticalMSE /= points.size();
+      horisontalMSE /= points.size();
+      // 6. Find model with minimal error
+      if (verticalMSE <= maxError * points.size() && verticalMSE < bestVerticalMSE) {
+        bestA = A;
+        bestB = B;
+        bestVerticalMSE = verticalMSE;
+        std::cout << "Found a vertical function with MSE = " << verMSE << std::endl;
+      }
+      if (horisontalMSE < bestHorisontalMSE) {
+        bestC = C;
+        bestHorisontalMSE = horisontalMSE;
+        std::cout << "Found a horisontal function with MSE = " << horMSE << std::endl;
+      }
     // 5. Check for condition C (and return to step 2 if necessary)
     }
-    // 6. Find model with minimal error
-    if (horisontalMSE < bestHorisontalMSE) {
-      bestC = C;
-      bestHorisontalMSE = horisontalMSE;
-      std::cout << "Found a horisontal function with MSE = " << horMSE << std::endl;
+    if (bestVerticalMSE <= maxError * points.size()) {
+      std::cout << "The vertical function's MSE is low enough." << std::endl;
     }
-    if (horisontalMSE <= maxError * points.size()) {
+    if (bestHorisontalMSE <= maxError * points.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
     }
-    if (verticalMSE <= maxError * points.size() && verticalMSE < bestVerticalMSE) {
-      bestA = A;
-      bestB = B;
-      bestVerticalMSE = verticalMSE;
-      std::cout << "Found a vertical function with MSE = " << verMSE << std::endl;
-    }
-    if (verticalMSE <= maxError * points.size()) {
-      std::cout << "The vertical function's MSE is low enough." << std::endl;
-    }*/
   }
 
   bool ImageDrawingArea::applyCalculations() {
