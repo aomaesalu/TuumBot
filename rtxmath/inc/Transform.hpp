@@ -27,11 +27,14 @@ namespace rtx {
 
     void setPosition(const int, const int);
     void setPosition(const Vec2i);
+    void setOrientation(const double);
 
     Vec2i getPosition();
 
     int getX();
     int getY();
+
+    double distanceTo(Vec2i);
   };
 
 }

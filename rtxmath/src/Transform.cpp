@@ -41,6 +41,10 @@ namespace rtx {
     pos = nPos;
   }
 
+  void Transform::setOrientation(const double orient) {
+    o = orient;
+  }
+
   Vec2i Transform::getPosition() {
     return pos;
   }
@@ -53,4 +57,7 @@ namespace rtx {
     return pos.y;
   }
 
+  double Transform::distanceTo(Vec2i target) {
+    return sqrt(pow(target.x - pos.x, 2) + pow(target.y - pos.y, 2));
+  }
 }
