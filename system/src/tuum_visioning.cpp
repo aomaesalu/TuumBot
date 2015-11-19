@@ -30,9 +30,11 @@ namespace rtx { namespace Visioning {
   GoalSet goalsBuffer;
 
   RobotSet robots;
+  RobotSet robotsBuffer;
 
   bool editingBalls = false;
   bool editingGoals = false;
+  bool editingRobots = false;
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -126,6 +128,16 @@ namespace rtx { namespace Visioning {
     editingGoals = false;
   }
 
+  void translateRobotsBuffer() {
+    editingRobots = true;
+
+    robots.clear();
+    robots = robotsBuffer;
+    robotsBuffer.clear();
+
+    editingRobots = false;
+  }
+
   void featureDetection(const Frame &frame) {
     features.clear();
     // TODO
@@ -198,6 +210,7 @@ namespace rtx { namespace Visioning {
 
   void goalDetection(const Frame &frame) {
     goalsBuffer.clear();
+
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
@@ -218,8 +231,11 @@ namespace rtx { namespace Visioning {
   }
 
   void robotDetection(const Frame &frame) {
-    robots.clear();
+    robotsBuffer.clear();
+
     // TODO
+
+    translateRobotsBuffer();
   }
 
 }}
