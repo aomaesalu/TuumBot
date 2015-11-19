@@ -165,6 +165,10 @@ namespace rtx { namespace Motion {
     motionActive = true;
   }
 
+  void start() {
+    motionInProgress = true;
+  }
+
   void stop() {
     motionInProgress = false;
     hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
