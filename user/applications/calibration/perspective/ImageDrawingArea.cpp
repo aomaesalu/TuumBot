@@ -267,6 +267,8 @@ namespace rtx {
     A = randDouble(lowerBound, upperBound);
     B = randDouble(lowerBound, upperBound);
     C = randDouble(lowerBound, upperBound);
+    // Debug output
+    std::cout << A << " " << B << " " << C << std::endl;
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
     std::vector<double> verticalErrors, horisontalErrors;
@@ -299,12 +301,12 @@ namespace rtx {
     }
     // 5. Check for condition C (and return to step 2 if necessary)
     // Debug output // TODO: Refactor
-    if (bestVerticalMSE <= maxError * verticalPoints.size()) {
+    /*if (bestVerticalMSE <= maxError * verticalPoints.size()) {
       std::cout << "The vertical function's MSE is low enough." << std::endl;
     }
     if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
-    }
+    }*/
   }
 
   bool ImageDrawingArea::applyCalculations() {
@@ -318,9 +320,8 @@ namespace rtx {
     unsigned int actualChannels = 3;
     unsigned int actualStride = frame->width * actualChannels;
 
-    colorPixels(pixels, channels, stride, actualPixels, actualChannels, actualStride);
-
     if (!isCalculating()) {
+      colorPixels(pixels, channels, stride, actualPixels, actualChannels, actualStride);
       regressBlobs();
     }
 
