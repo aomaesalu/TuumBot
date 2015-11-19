@@ -1,10 +1,10 @@
 /**
- * @file Vision.hpp
- * Computer vision class using YUYV.
+ *  @file Vision.hpp
+ *  Computer vision class using YUYV.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 17 November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -27,10 +27,16 @@ namespace rtx {
 
     extern BlobSet blobs;
     extern BlobSet blobsBuffer;
+
     extern LineSet lines;
+    extern LineSet linesBuffer;
+
     extern CornerSet corners;
+    extern CornerSet cornersBuffer;
 
     extern bool editingBlobs;
+    extern bool editingLines;
+    extern bool editingCorners;
 
     void setup();
     void process(const Frame&, const std::string&);

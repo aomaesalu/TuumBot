@@ -1,9 +1,10 @@
 /** @file tuum_vision.cpp
  *  Vision system implementation.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 17 November 2015
+ *  @date 19 November 2015
  */
 
 #include <algorithm>
@@ -64,8 +65,17 @@ namespace rtx { namespace Visioning {
 
   FeatureSet features;
   BallSet balls; // Healty ball entities vs new/decaying ball entities?
+  BallSet ballsBuffer;
+
   GoalSet goals;
+  GoalSet goalsBuffer;
+
   RobotSet robots;
+  RobotSet robotsBuffer;
+
+  bool editingBalls = false;
+  bool editingGoals = false;
+  bool editingRobots = false;
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -140,6 +150,36 @@ namespace rtx { namespace Visioning {
     std::ifstream inputFile(fileName);
     inputFile >> filter;
     inputFile.close();
+  }
+
+  void translateBallsBuffer() {
+    editingBalls = true;
+
+    balls.clear();
+    balls = ballsBuffer;
+    ballsBuffer.clear();
+
+    editingBalls = false;
+  }
+
+  void translateGoalsBuffer() {
+    editingGoals = true;
+
+    goals.clear();
+    goals = goalsBuffer;
+    goalsBuffer.clear();
+
+    editingGoals = false;
+  }
+
+  void translateRobotsBuffer() {
+    editingRobots = true;
+
+    robots.clear();
+    robots = robotsBuffer;
+    robotsBuffer.clear();
+
+    editingRobots = false;
   }
 
   void featureDetection(const Frame &frame) {
@@ -261,27 +301,33 @@ namespace rtx { namespace Visioning {
  }
 
   void goalDetection(const Frame &frame) {
-    goals.clear();
+    goalsBuffer.clear();
+
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       }
     }
+
+    translateGoalsBuffer();
   }
 
   void robotDetection(const Frame &frame) {
-    robots.clear();
+    robotsBuffer.clear();
+
     // TODO
+
+    translateRobotsBuffer();
   }
 
 }}
