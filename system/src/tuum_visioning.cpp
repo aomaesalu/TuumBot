@@ -186,8 +186,10 @@ namespace rtx { namespace Visioning {
     for(int ix = 0; ix < n_balls.size(); ix++) {
       p = 0.0;
       n_ball_ptr = n_balls[ix];
-      for(int jx = 0; jx < ballsBuffer.size(); jx++) {
-        _p = ballProbability(ballsBuffer[jx], n_ball_ptr);
+      //for(int jx = 0; jx < ballsBuffer.size(); jx++) {
+      //  _p = ballProbability(ballsBuffer[jx], n_ball_ptr);
+      for(int jx = 0; jx < balls.size(); jx++) {
+        _p = ballProbability(balls[jx], n_ball_ptr);
         if(_p > p) {
           p = _p;
           p_ix = jx;
@@ -195,17 +197,22 @@ namespace rtx { namespace Visioning {
       }
 
       if(p < 0.01) {
-        ballsBuffer.push_back(new Ball(*n_ball_ptr));
+        //ballsBuffer.push_back(new Ball(*n_ball_ptr));
+        balls.push_back(new Ball(*n_ball_ptr));
       } else {
-        ballsBuffer[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
+        //ballsBuffer[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
+        balls[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
       }
     }
 
-    ballsBuffer.erase(std::remove_if(ballsBuffer.begin(), ballsBuffer.end(), [](Ball*& b) {
+    //ballsBuffer.erase(std::remove_if(ballsBuffer.begin(), ballsBuffer.end(), [](Ball*& b) {
+    //    return b->decay() < -5;
+    //}), ballsBuffer.end());
+    balls.erase(std::remove_if(balls.begin(), balls.end(), [](Ball*& b) {
         return b->decay() < -5;
-    }), ballsBuffer.end());
+    }), balls.end());
 
-    translateBallsBuffer();
+    //translateBallsBuffer();
   }
 
   void goalDetection(const Frame &frame) {
