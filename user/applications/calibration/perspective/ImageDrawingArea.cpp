@@ -229,15 +229,15 @@ namespace rtx {
 
   void ImageDrawingArea::regressConstants() {
     // Calculate points
-    std::vector<std::pair<unsigned int, unsigned int>> points;
+    /*std::vector<std::pair<unsigned int, unsigned int>> points;
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
       if (blobOccurrence->second < totalCount / 2) {
         continue;
       } else {
         points.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getPosition()->getX(), blobOccurrence->first->getPosition()->getY()));
       }
-    }
-    // Constant regression step
+    }*/
+    /*// Constant regression step
     double A, B, C;
     double horisontalMSE, verticalMSE;
     // 1. Establish a condition C when to end the regression algorithm
@@ -274,7 +274,7 @@ namespace rtx {
     }
     if (verticalMSE <= maxError * points.size()) {
       std::cout << "The vertical function's MSE is low enough." << std::endl;
-    }
+    }*/
   }
 
   bool ImageDrawingArea::applyCalculations() {
