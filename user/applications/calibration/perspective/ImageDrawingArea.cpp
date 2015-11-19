@@ -25,6 +25,9 @@
 
 namespace rtx {
 
+  // TODO: Move elsewhere
+  std::default_random_engine randomEngine;
+
   ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
     mainWindow(mainWindow)
   {
@@ -243,9 +246,8 @@ namespace rtx {
   }
 
   // TODO: Move into maths library
-  int randDouble(const double &lowerBound, const double &upperBound) {
-    std::uniform_real_distribution<double> uniform(lowerBound,upperBound);
-    std::default_random_engine randomEngine;
+  double randDouble(const double &lowerBound, const double &upperBound) {
+    std::uniform_real_distribution<double> uniform(lowerBound, upperBound);
     return uniform(randomEngine);
   }
 
@@ -267,8 +269,6 @@ namespace rtx {
     A = randDouble(lowerBound, upperBound);
     B = randDouble(lowerBound, upperBound);
     C = randDouble(lowerBound, upperBound);
-    // Debug output
-    std::cout << A << " " << B << " " << C << std::endl;
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
     std::vector<double> verticalErrors, horisontalErrors;

@@ -15,6 +15,7 @@
 #include <gtkmm/drawingarea.h>
 
 #include <map>
+#include <random>
 
 #include "Camera.hpp"
 #include "tuum_visioning.hpp"
@@ -24,6 +25,9 @@
 namespace rtx {
 
   class MainWindow;
+
+  // TODO: Move elsewhere
+  extern std::default_random_engine randomEngine;
 
   class ImageDrawingArea: public Gtk::DrawingArea {
 
