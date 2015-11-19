@@ -130,6 +130,10 @@ namespace rtx {
     return getWidth() * getHeight();
   }
 
+  double Blob::getBoxRatio() const {
+    return getWidth() / (double)getHeight();
+  }
+
   double Blob::getDensity() const {
     return 1.0 * numberOfPoints / getBoxArea();
   }
