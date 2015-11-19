@@ -64,7 +64,7 @@ namespace rtx {
 
   void MainWindow::setCalculating(const bool &value) {
     if (value)
-      imageArea->initialiseConstants();
+      imageArea.initialiseConstants();
     calculating = value;
   }
 
