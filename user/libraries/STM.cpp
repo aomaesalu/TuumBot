@@ -81,7 +81,9 @@ namespace rtx {
     while(!m_state->canEnter()) {
       if(m_state->getLastState() == nullptr) return;
 
-      m_state = m_state->getLastState();
+      st_ptr = m_state->getLastState();
+      if(st_ptr != nullptr)
+        setState(st_ptr);
     }
 
     m_state->process();
