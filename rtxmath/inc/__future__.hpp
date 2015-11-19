@@ -94,17 +94,6 @@ namespace rtx {
   typedef Vec2D<double> Vec2f;
   typedef Vec3D<double> Vec3f;
 
-  struct Transform {
-    Vec2i pos;
-    double o;
-
-    Vec2i getPosition() {
-      return pos;
-    }
-
-    int getX() { return pos.x; }
-    int getY() { return pos.y; }
-  };
 };
 
 namespace vis {
