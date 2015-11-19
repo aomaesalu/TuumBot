@@ -238,12 +238,14 @@ namespace rtx { namespace Visioning {
       Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
+      double ratio = blobs[i]->getBoxRatio();
 
       // STEP 1: Filter out invalid blobs
       if(color != BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if(boxArea < 20 * 20) continue;
       if(density > 1.0) continue;
+      if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
       //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
@@ -262,6 +264,7 @@ namespace rtx { namespace Visioning {
       */
  
       // STEP 3: Create ball instance with absolute position
+      //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
       n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle)));
     }
 
