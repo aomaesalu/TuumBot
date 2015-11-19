@@ -53,6 +53,7 @@ namespace rtx { namespace ctl {
 
   private:
     Context ctx;
+    Timer targetUpdate;
   };
 
 

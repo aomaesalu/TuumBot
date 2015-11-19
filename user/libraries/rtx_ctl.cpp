@@ -19,7 +19,7 @@ namespace rtx { namespace ctl {
     switch(ctx.phase) {
       case CP_INIT:
         Motion::setBehaviour(Motion::MOT_CURVED);
-      	Motion::setTarget(Transform({{10, 10}, 0}));
+        Motion::setTarget(Transform(10, 10, 0));
 
         ctx.phase = CP_RUN;
         break;
@@ -50,6 +50,7 @@ namespace rtx { namespace ctl {
     switch(ctx.phase) {
       case CP_INIT:
 	Motion::setBehaviour(Motion::MOT_SCAN);
+	Motion::start();
 	ctx.phase = CP_RUN;
 	break;
       case CP_RUN:
@@ -66,11 +67,17 @@ namespace rtx { namespace ctl {
 
   // Ball retrieval
   void LSBallRetrieve::init() {
-    Motion::();
+    Motion::stop();
+
+    targetUpdate.setPeriod(1000);
+    targetUpdate.start();
   }
 
   void LSBallRetrieve::run() {
-
+    if(targetUpdate.isTime()) {
+      std::cout << "LSBallRetrieve: " << Visioning::balls.size() << " balls." << std::endl;
+      targetUpdate.start();
+    }
   }
 
   bool LSBallRetrieve::isRunnable() {
