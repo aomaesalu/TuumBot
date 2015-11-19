@@ -93,9 +93,19 @@ namespace rtx {
     bestA = bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
-    ABList.push_back(lowerBound);
-    ABList.push_back(upperBound);
+    AList.push_back(lowerBound);
+    AList.push_back(0);
+    AList.push_back(upperBound);
+    BList.push_back(lowerBound);
+    BList.push_back(0);
+    BList.push_back(upperBound);
+    for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
+      for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
+        ABList.push_back(std::pair<*a, *b>);
+      }
+    }
     CList.push_back(lowerBound);
+    CList.push_back(0);
     CList.push_back(upperBound);
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
@@ -265,23 +275,38 @@ namespace rtx {
     // TODO: Sort vertical results list by MSE (the second value in the pair)
     // TODO: Sort horisontal results list by MSE (the second value in the pair)
     if (ABList.empty()) {
-      for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
+      for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= verticalResultsList.size())
           break;
-        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
-        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
-        ABList.push_back(std::pair<std::pair</* TODO */, /* TODO */>>);
+        // Add A value with previous and next values
+        AList.push_back(verticalResultsList[i].first.first.second.first);
+        AList.push_back(verticalResultsList[i].first.first.first);
+        AList.push_back(verticalResultsList[i].first.first.second.second);
+        // Add B value with previous and next values
+        BList.push_back(verticalResultsList[i].first.second.second.first);
+        BList.push_back(verticalResultsList[i].first.second.first);
+        BList.push_back(verticalResultsList[i].first.second.second.second);
+        // Fill ABList with A and B value combinations
+        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 3) {
+          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 3) {
+            for (unsigned int i = 0; i < 3; ++i) {
+              for (unsigned int j = 0; j < 3, ++j) {
+                ABList.push_back(std::pair<*(a + i), *(b + j)>);
+              }
+            }
+          }
+        }
       }
       verticalResultsList.clear();
     }
     if (CList.empty()) {
-      for (unsigned int i = 1; i <= numberOfBestDivisions; ++i) {
+      for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= horisontalResultsList.size())
           break;
-        // Add area with previous
-        CList.push_back(/* TODO */);
-        CList.push_back(/* TODO */);
-        CList.push_back(/* TODO */);
+        // Add C value with previous and next values
+        CList.push_back(horisontalResultsList[i].first.second.first);
+        CList.push_back(horisontalResultsList[i].first.first);
+        CList.push_back(horisontalResultsList[i].first.second.second);
       }
     }
 

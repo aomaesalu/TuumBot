@@ -67,7 +67,11 @@ namespace rtx {
       unsigned int squareWidth;
       unsigned int numberOfDivisions;
       unsigned int numberOfBestDivisions;
-      // <A value, B value>
+      // <A value>
+      std::vector<double> AList;
+      // <B value>
+      std::vector<double> BList;
+      // <<A value, B value>>
       std::vector<std::pair<double, double>> ABList;
       // <C value>
       std::vector<double> CList;
