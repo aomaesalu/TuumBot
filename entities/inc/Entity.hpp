@@ -33,7 +33,7 @@ namespace rtx {
   private:
     Transform m_transform;
 
-    int m_health;
+    int m_health = 0;
 
   public:
     Entity();
@@ -47,9 +47,11 @@ namespace rtx {
     Entity(const Transform);
     Entity(const int, const int, const double);
 
+    int getHealth();
+
     Transform* getTransform();
 
-    void update(const Transform); // Heal
+    void update(Transform); // Heal
     void update(); // Decay
   };
 

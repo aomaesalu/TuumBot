@@ -39,8 +39,23 @@ namespace rtx {
 
   }
 
+  int Entity::getHealth() {
+    return m_health;
+  }
+
   Transform* Entity::getTransform() {
     return &m_transform;
+  }
+
+  void Entity::update(Transform transform) {
+    int x = m_transform.getX()*0.2 + transform.getX()*0.8;
+    int y = m_transform.getY()*0.2 + transform.getY()*0.8;
+
+    if(m_health < 10) m_health += 1;
+  }
+
+  void Entity::update() {
+    m_health--;
   }
 
 };
