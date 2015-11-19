@@ -1,9 +1,10 @@
 /** @file tuum_vision.cpp
  *  Vision system implementation.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 17 November 2015
+ *  @date 19 November 2015
  */
 
 #include "__future__.hpp"
@@ -21,9 +22,15 @@ namespace rtx { namespace Visioning {
   std::string filter;
 
   FeatureSet features;
+
   BallSet balls;
+  BallSet ballsBuffer;
+
   GoalSet goals;
+
   RobotSet robots;
+
+  bool editingBalls = false;
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -97,6 +104,16 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
+  void translateBallsBuffer() {
+    editingBalls = true;
+
+    balls.clear();
+    balls = ballsBuffer;
+    ballsBuffer.clear();
+
+    editingBalls = false;
+  }
+
   void featureDetection(const Frame &frame) {
     features.clear();
     // TODO
@@ -145,8 +162,8 @@ namespace rtx { namespace Visioning {
     for(int ix = 0; ix < n_balls.size(); ix++) {
       p = 0.0;
       n_ball_ptr = n_balls[ix];
-      for(int jx = 0; jx < balls.size(); jx++) {
-        _p = ballProbability(balls[jx], n_ball_ptr);
+      for(int jx = 0; jx < ballsBuffer.size(); jx++) {
+        _p = ballProbability(ballsBuffer[jx], n_ball_ptr);
         if(_p > p) {
           p = _p;
           p_ix = jx;
@@ -154,15 +171,17 @@ namespace rtx { namespace Visioning {
       }
 
       if(p < 0.01) {
-        balls.push_back(new Ball(*n_ball_ptr));
+        ballsBuffer.push_back(new Ball(*n_ball_ptr));
       } else {
-        balls[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
+        ballsBuffer[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
       }
     }
 
-    balls.erase(std::remove_if(balls.begin(), balls.end(), [](Ball*& b) {
+    ballsBuffer.erase(std::remove_if(ballsBuffer.begin(), ballsBuffer.end(), [](Ball*& b) {
         return b->decay() < -5;
-    }), balls.end());
+    }), ballsBuffer.end());
+
+    translateBallsBuffer();
   }
 
   void goalDetection(const Frame &frame) {
