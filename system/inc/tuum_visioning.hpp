@@ -35,10 +35,12 @@ namespace rtx { namespace Visioning {
   extern BallSet ballsBuffer;
 
   extern GoalSet goals;
+  extern GoalSet goalsBuffer;
 
   extern RobotSet robots;
 
   extern bool editingBalls;
+  extern bool editingGoals;
 
   void setup();
   void process();

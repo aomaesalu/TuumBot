@@ -27,10 +27,12 @@ namespace rtx { namespace Visioning {
   BallSet ballsBuffer;
 
   GoalSet goals;
+  GoalSet goalsBuffer;
 
   RobotSet robots;
 
   bool editingBalls = false;
+  bool editingGoals = false;
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -114,6 +116,16 @@ namespace rtx { namespace Visioning {
     editingBalls = false;
   }
 
+  void translateGoalsBuffer() {
+    editingGoals = true;
+
+    goals.clear();
+    goals = goalsBuffer;
+    goalsBuffer.clear();
+
+    editingGoals = false;
+  }
+
   void featureDetection(const Frame &frame) {
     features.clear();
     // TODO
@@ -185,22 +197,24 @@ namespace rtx { namespace Visioning {
   }
 
   void goalDetection(const Frame &frame) {
-    goals.clear();
+    goalsBuffer.clear();
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       }
     }
+
+    translateGoalsBuffer();
   }
 
   void robotDetection(const Frame &frame) {
