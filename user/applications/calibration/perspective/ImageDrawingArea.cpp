@@ -20,6 +20,7 @@
 
 #include <iostream> // TODO: Remove
 #include <cstdlib>
+#include <random>
 
 
 namespace rtx {
@@ -93,6 +94,8 @@ namespace rtx {
 
   void ImageDrawingArea::initialiseConstants() {
     bestA = bestB = bestC = 0;
+    lowerBound = -10000;
+    upperBound = 10000;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
   }
@@ -239,6 +242,13 @@ namespace rtx {
     return C * (horisontalCoordinate - CAMERA_WIDTH / 2) / verticalCoordinate;
   }
 
+  // TODO: Move into maths library
+  int randDouble(const double &lowerBound, const double &upperBound) {
+    std::uniform_real_distribution<double> uniform(lowerBound,upperBound);
+    std::default_random_engine randomEngine;
+    return uniform(randomEngine);
+  }
+
   void ImageDrawingArea::regressConstants() { // TODO: Optimise
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
@@ -254,7 +264,9 @@ namespace rtx {
     // 1. Establish a condition C when to end the regression algorithm
     // For each frame, calculate 5 different models
     // 2. Generate new model M (constant A, B and C estimations)
-    // TODO
+    A = randDouble(lowerBound, upperBound);
+    B = randDouble(lowerBound, upperBound);
+    C = randDouble(lowerBound, upperBound);
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
     std::vector<double> verticalErrors, horisontalErrors;
@@ -278,12 +290,12 @@ namespace rtx {
       bestA = A;
       bestB = B;
       bestVerticalMSE = verticalMSE;
-      std::cout << "Found a vertical function with MSE = " << verticalMSE << std::endl;
+      std::cout << "Found a vertical function with MSE = " << verticalMSE << "; A = " << A << ", B = " << B << std::endl;
     }
     if (horisontalMSE < bestHorisontalMSE) {
       bestC = C;
       bestHorisontalMSE = horisontalMSE;
-      std::cout << "Found a horisontal function with MSE = " << horisontalMSE << std::endl;
+      std::cout << "Found a horisontal function with MSE = " << horisontalMSE << "; C = " << C << std::endl;
     }
     // 5. Check for condition C (and return to step 2 if necessary)
     // Debug output // TODO: Refactor

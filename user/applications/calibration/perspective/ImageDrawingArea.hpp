@@ -61,6 +61,7 @@ namespace rtx {
 
       // Constant regression data
       double bestA, bestB, bestC;
+      double lowerBound, upperBound;
       double bestHorisontalMSE, bestVerticalMSE;
       double maxError;
       unsigned int squareWidth;
