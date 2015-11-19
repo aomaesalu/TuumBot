@@ -1,10 +1,10 @@
 /**
- * @file Vision.cpp
- * Computer vision class using YUYV.
+ *  @file Vision.cpp
+ *  Computer vision class using YUYV.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- *  @date 17 November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #include "Vision.hpp"
@@ -20,10 +20,16 @@ namespace rtx {
 
     BlobSet blobs;
     BlobSet blobsBuffer;
+
     LineSet lines;
+    LineSet linesBuffer;
+
     CornerSet corners;
+    CornerSet cornersBuffer;
 
     bool editingBlobs = false;
+    bool editingLines = false;
+    bool editingCorners = false;
 
     /*void emptyVector(std::vector<Feature*> &vector) {
       for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
@@ -74,6 +80,26 @@ namespace rtx {
       blobsBuffer.clear();
 
       editingBlobs = false;
+    }
+
+    void translateLinesBuffer() {
+      editingLines = true;
+
+      lines.clear();
+      lines = linesBuffer;
+      linesBuffer.clear();
+
+      editingLines = false;
+    }
+
+    void translateCornersBuffer() {
+      editingCorners = true;
+
+      corners.clear();
+      corners = cornersBuffer;
+      cornersBuffer.clear();
+
+      editingCorners = false;
     }
 
     // Joins same-colored blobs if their box areas are close or overlap
@@ -171,22 +197,32 @@ namespace rtx {
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateBlobsBuffer();
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
       // TODO
+
+      translateLinesBuffer();
     }
 
     void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateLinesBuffer();
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter) {
       // TODO
+
+      translateCornersBuffer();
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateCornersBuffer();
     }
 
   };

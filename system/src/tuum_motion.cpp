@@ -38,12 +38,18 @@ namespace rtx { namespace Motion {
 
     int getRotationSpeed() {
       // TODO: Transform orientVelocity into rotationSpeed ( RVelocityToSpeed(r_vel)  )
-      double v = getOrientVelocity();
+      double v = getOrientVelocity() * 0.5;
       return (int)v;
     }
 
     double getOrientVelocity() {
-      return orientDelta / (dV.getMagnitude() / baseVelocity);
+      double mag = dV.getMagnitude();
+      if(!mag) mag = 1;
+
+      double v = baseVelocity;
+      if(!v) v  = 1;
+
+      return orientDelta / (mag / v);
     }
 
     double getVelocityFactor() {
@@ -66,6 +72,8 @@ namespace rtx { namespace Motion {
     }
 
   } motionData;
+
+  bool motionActive = false;
 
   double targetDistanceCondition = 10;
   double targetOrientationCondition = 0.1;
@@ -93,7 +101,7 @@ namespace rtx { namespace Motion {
     bool dirty = false;
     switch(motionType) {
       case MOT_SCAN:
-        if(!motionInProgress) {
+        if(!motionInProgress && motionActive) {
           printf("MOT_SCAN: init\n");
           motionData.baseVelocity = 15;
           motionData.setDirectionVector(0.0, 0.0);
@@ -110,7 +118,7 @@ namespace rtx { namespace Motion {
         // Forward motion => motionData
         break;
       case MOT_CURVED:
-        if(!motionInProgress) {
+        if(!motionInProgress && motionActive) {
           Transform t = Localization::getTransform();
 
           motionData.baseVelocity = 15;
@@ -143,7 +151,7 @@ namespace rtx { namespace Motion {
 
     if(motionInProgress || dirty) {
       if((!isTargetAchieved() && motorCmdTimer.isTime()) || dirty) {
-        // DEBUG: printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+        printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
         mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
         motorCmdTimer.start();
       }
@@ -154,6 +162,16 @@ namespace rtx { namespace Motion {
   int setTarget(Transform target) {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
     motionGoal = target;
+    motionActive = true;
+  }
+
+  void start() {
+    motionInProgress = true;
+  }
+
+  void stop() {
+    motionInProgress = false;
+    hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
   }
 
   void setSpeed(int v) {
@@ -163,7 +181,7 @@ namespace rtx { namespace Motion {
 
   void setBehaviour(MotionType mt) {
     motionType = mt;
-    motionInProgress = false;
+    motionActive = false;
   }
 
   double targetDistance() {

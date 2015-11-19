@@ -1,7 +1,16 @@
+/** @file rtxmath.hpp
+ *  Consolidated rtxmath modules header.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.1
+ *  @date 19. November 2015
+ */
 
-#ifndef RTXVISION_H_
-#define RTXVISION_H_
+#ifndef RTX_MATH_H
+#define RTX_MATH_H
 
 #include "__future__.hpp"
 
-#endif // RTXVISION_H_
+#include "Transform.hpp"
+
+#endif // RTX_MATH_H

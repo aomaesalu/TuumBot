@@ -1,9 +1,8 @@
-/**
- * @file Robot.cpp
- * Robot class.
+/** @file Robot.cpp
+ *  Robot class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @version 0.1
  */
 
 #include "Robot.hpp"
@@ -11,23 +10,16 @@
 
 namespace rtx {
 
-  Robot::Robot(const Robot &other):
-    Entity(other.getPosition()),
-    Circle(other.getRadius())
-  {
+  Robot::Robot() {
 
   }
 
-  Robot::Robot(const Point2D *position, const double &radius):
-    Entity(position),
-    Circle(radius)
-  {
-
+  Robot::Robot(const Robot& robot) {
+    (*this) = robot;
   }
 
-  Robot::Robot(const double &x, const double &y, const double &radius):
-    Entity(new Point2D(x, y)),
-    Circle(radius)
+  Robot::Robot(const Transform transform, const double &radius):
+    Entity(transform), Circle(radius)
   {
 
   }
