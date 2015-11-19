@@ -228,17 +228,17 @@ namespace rtx {
     }
   }
 
-  double getVerticalDistance(unsigned int min, unsigned int max, double A, double B) {
+  double getVerticalDistance(unsigned int coordinate, double A, double B) {
     // TODO
     return 0;
   }
 
-  double getHorisontalDistance(unsigned int min, unsigned int max, double A, double B) {
+  double getHorisontalDistance(unsigned int horisontalCoordinate, unsigned int verticalCoordinate, double C) {
     // TODO
     return 0;
   }
 
-  void ImageDrawingArea::regressConstants() {
+  void ImageDrawingArea::regressConstants() { // TODO: Optimise
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
@@ -248,8 +248,8 @@ namespace rtx {
       horisontalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinX(), blobOccurrence->first->getMaxX()));
     }
     // Constant regression step
-    double A, B, C;
-    double verticalMSE, horisontalMSE;
+    double A = 0, B = 0, C = 0;
+    double verticalMSE = 0, horisontalMSE = 0;
     // 1. Establish a condition C when to end the regression algorithm
     // For each frame, calculate 5 different models
     for (unsigned int i = 0; i < 5; ++i) {
@@ -258,11 +258,11 @@ namespace rtx {
       // 3. For every point, calculate the estimate and the error
       std::vector<double> verticalEstimates, horisontalEstimates;
       std::vector<double> verticalErrors, horisontalErrors;
-      for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
-        verticalEstimates.push_back(/* TODO */);
-        horisontalEstimates.push_back(/* TODO */);
+      for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
+        verticalEstimates.push_back(getVerticalDistance(verticalPoints[j]->first, A, B) - getVerticalDistance(verticalPoints[j]->second, A, B));
+        horisontalEstimates.push_back(getHorisontalDistance(horisontalPoints[j]->second, verticalPoints[j]->second, C) - getHorisontalDistance(horisontalPoints[j]->first, verticalPoints[j]->second, C));
         verticalErrors.push_back(verticalEstimates.back() - squareWidth);
-        horisontalErrors.push_back(horisontalErrors.back() - squareWidth);
+        horisontalErrors.push_back(horisontalEstimates.back() - squareWidth);
       }
       // 4. Calculate MSEs
       verticalMSE = 0;
