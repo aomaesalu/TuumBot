@@ -80,6 +80,22 @@ namespace rtx {
       return returnSet;
     }
 
+    LineSet getLines() {
+      LineSet returnSet = lines;
+      while (editingLines) {
+        returnSet = lines;
+      }
+      return returnSet;
+    }
+
+    CornerSet getCorners() {
+      CornerSet returnSet = corners;
+      while (editingCorners) {
+        returnSet = corners;
+      }
+      return returnSet;
+    }
+
     void translateBlobsBuffer() {
       editingBlobs = true;
 

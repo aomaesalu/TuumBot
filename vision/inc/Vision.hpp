@@ -46,6 +46,8 @@ namespace rtx {
     bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
 
     BlobSet getBlobs();
+    LineSet getLines();
+    CornerSet getCorners();
 
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<Point2D>&);
