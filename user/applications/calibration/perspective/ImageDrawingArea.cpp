@@ -20,9 +20,24 @@
 
 #include <iostream> // TODO: Remove
 #include <cstdlib>
+#include <algorithm>
 
 
 namespace rtx {
+
+  // TODO: Move elsewhere
+  struct verticalResultsSortPredicate {
+    bool operator()(const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &left, const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &right) {
+        return left.second < right.second;
+    }
+  };
+
+  // TODO: Move elsewhere
+  struct horisontalResultsSortPredicate {
+    bool operator()(const std::pair<std::pair<double, std::pair<double, double>>, double> &left, const std::pair<std::pair<double, std::pair<double, double>>, double> &right) {
+        return left.second < right.second;
+    }
+  };
 
   ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
     mainWindow(mainWindow)
@@ -272,20 +287,25 @@ namespace rtx {
     double verticalMSE = 0, horisontalMSE = 0;
 
     // Bounds division by best bounds division
-    // TODO: Sort vertical results list by MSE (the second value in the pair)
-    // TODO: Sort horisontal results list by MSE (the second value in the pair)
+    std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate);
+    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), horisontalResultsSortPredicate);
+
+    // Fill A and B constant combination list with the best bound values
     if (ABList.empty()) {
       for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= verticalResultsList.size())
           break;
+
         // Add A value with previous and next values
         AList.push_back(verticalResultsList[i].first.first.second.first);
         AList.push_back(verticalResultsList[i].first.first.first);
         AList.push_back(verticalResultsList[i].first.first.second.second);
+
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.second.first);
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second.second);
+
         // Fill ABList with A and B value combinations
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 3) {
           for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 3) {
@@ -296,13 +316,20 @@ namespace rtx {
             }
           }
         }
+
+        // Empty A and B value lists
+        AList.clear();
+        BList.clear();
       }
       verticalResultsList.clear();
     }
+
+    // Fill C constant list with the best bound values
     if (CList.empty()) {
       for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= horisontalResultsList.size())
           break;
+
         // Add C value with previous and next values
         CList.push_back(horisontalResultsList[i].first.second.first);
         CList.push_back(horisontalResultsList[i].first.first);
@@ -311,7 +338,7 @@ namespace rtx {
     }
 
     // 1. Establish a condition C when to end the regression algorithm
-    // TODO: Currently it is enough for the user to decide when to end the algorithm
+    // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
     // 2. Generate new model M (constant A, B and C estimations)
     // TODO
@@ -353,7 +380,7 @@ namespace rtx {
     }
 
     // 5. Check for condition C (and return to step 2 if necessary)
-    // TODO: Currently it is enough for the user to decide when to end the algorithm
+    // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
     // Debug output // TODO: Refactor
     /*if (bestVerticalMSE <= maxError * verticalPoints.size()) {
