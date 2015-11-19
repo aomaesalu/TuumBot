@@ -225,12 +225,29 @@ namespace rtx {
   }
 
   void ImageDrawingArea::regressConstants() {
+    // Calculate points
+    std::vector<std::pair<unsigned int, unsigned int>> points;
+    for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+      if (blobOccurrence->second < totalCount / 2) {
+        continue;
+      } else {
+        points.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getPosition()->getX(), blobOccurrence->first->getPosition()->getY()));
+      }
+    }
     // 1. Establish a condition C when to end the regression algorithm
-    // 2. Generate new model M
-    // 3. For every point, calculate the estimate and the error
-    // 4. Calculate MSE
+    unsigned int maxError = 10;
+    unsigned int mse = 9999999;
+    do {
+      // 2. Generate new model M
+      // TODO
+      // 3. For every point, calculate the estimate and the error
+      // TODO
+      // 4. Calculate MSE
+      // TODO
     // 5. Check for condition C (and return to step 2 if necessary)
+    } while (mse >= maxError * points.size());
     // 6. Find model with minimal error
+    // TODO
   }
 
   bool ImageDrawingArea::applyCalculations() {

@@ -56,6 +56,7 @@ namespace rtx {
 
       double A;
       double B;
+      double C;
 
       void initialiseProperties();
       void initialiseImage();
