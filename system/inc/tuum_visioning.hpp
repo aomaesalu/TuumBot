@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 17 November 2015
+ *  @date 19 November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -30,10 +30,19 @@ namespace rtx { namespace Visioning {
   extern std::string filter;
 
   extern FeatureSet features;
+
   extern BallSet balls;
-  extern RobotSet robots;
+  extern BallSet ballsBuffer;
+
   extern GoalSet goals;
+  extern GoalSet goalsBuffer;
+
   extern RobotSet robots;
+  extern RobotSet robotsBuffer;
+
+  extern bool editingBalls;
+  extern bool editingGoals;
+  extern bool editingRobots;
 
   void setup();
   void process();

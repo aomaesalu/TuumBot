@@ -1,9 +1,10 @@
 /** @file tuum_vision.cpp
  *  Vision system implementation.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 17 November 2015
+ *  @date 19 November 2015
  */
 
 #include "__future__.hpp"
@@ -21,9 +22,19 @@ namespace rtx { namespace Visioning {
   std::string filter;
 
   FeatureSet features;
+
   BallSet balls;
+  BallSet ballsBuffer;
+
   GoalSet goals;
+  GoalSet goalsBuffer;
+
   RobotSet robots;
+  RobotSet robotsBuffer;
+
+  bool editingBalls = false;
+  bool editingGoals = false;
+  bool editingRobots = false;
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -97,6 +108,36 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
+  void translateBallsBuffer() {
+    editingBalls = true;
+
+    balls.clear();
+    balls = ballsBuffer;
+    ballsBuffer.clear();
+
+    editingBalls = false;
+  }
+
+  void translateGoalsBuffer() {
+    editingGoals = true;
+
+    goals.clear();
+    goals = goalsBuffer;
+    goalsBuffer.clear();
+
+    editingGoals = false;
+  }
+
+  void translateRobotsBuffer() {
+    editingRobots = true;
+
+    robots.clear();
+    robots = robotsBuffer;
+    robotsBuffer.clear();
+
+    editingRobots = false;
+  }
+
   void featureDetection(const Frame &frame) {
     features.clear();
     // TODO
@@ -145,6 +186,8 @@ namespace rtx { namespace Visioning {
     for(int ix = 0; ix < n_balls.size(); ix++) {
       p = 0.0;
       n_ball_ptr = n_balls[ix];
+      //for(int jx = 0; jx < ballsBuffer.size(); jx++) {
+      //  _p = ballProbability(ballsBuffer[jx], n_ball_ptr);
       for(int jx = 0; jx < balls.size(); jx++) {
         _p = ballProbability(balls[jx], n_ball_ptr);
         if(_p > p) {
@@ -154,39 +197,52 @@ namespace rtx { namespace Visioning {
       }
 
       if(p < 0.01) {
+        //ballsBuffer.push_back(new Ball(*n_ball_ptr));
         balls.push_back(new Ball(*n_ball_ptr));
       } else {
+        //ballsBuffer[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
         balls[p_ix]->update(n_ball_ptr->getDistance(), n_ball_ptr->getAngle());
       }
     }
 
+    //ballsBuffer.erase(std::remove_if(ballsBuffer.begin(), ballsBuffer.end(), [](Ball*& b) {
+    //    return b->decay() < -5;
+    //}), ballsBuffer.end());
     balls.erase(std::remove_if(balls.begin(), balls.end(), [](Ball*& b) {
         return b->decay() < -5;
     }), balls.end());
+
+    //translateBallsBuffer();
   }
 
   void goalDetection(const Frame &frame) {
-    goals.clear();
+    goalsBuffer.clear();
+
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = Vision::blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goals.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle));
       }
     }
+
+    translateGoalsBuffer();
   }
 
   void robotDetection(const Frame &frame) {
-    robots.clear();
+    robotsBuffer.clear();
+
     // TODO
+
+    translateRobotsBuffer();
   }
 
 }}
