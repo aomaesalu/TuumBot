@@ -18,6 +18,8 @@ namespace rtx { namespace Localization {
   SystemState state_estimate;
   ParticleFilter particleFilter;
 
+  Transform transform;
+
   void demo_measurements(LandmarkSet& landmarks, int x, int y) {
     double d;
     for(auto & lm : landmarks) {
@@ -31,6 +33,9 @@ namespace rtx { namespace Localization {
 
   void setup() {
     srand(static_cast<unsigned>(time(0)));
+
+    transform.setPosition(0, 0);
+    transform.setOrientation(0.0);
 
     particleFilter.init(1000, 0, 100, 0, 100);
 
@@ -109,8 +114,8 @@ namespace rtx { namespace Localization {
     //particleFilter.printParticleInfo();
   }
 
-  Transform getTransform() {
-    return Transform(0, 0, 0.0);
+  Transform* getTransform() {
+    return &transform;
   }
 
   Transform toAbsoluteTransform(const int d,const double a) {
