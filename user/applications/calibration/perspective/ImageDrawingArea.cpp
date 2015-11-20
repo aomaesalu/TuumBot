@@ -380,10 +380,11 @@ namespace rtx {
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
     // 2. Generate new model M (constant A, B and C estimations)
-    // TODO
-    A = randDouble(lowerBound, upperBound);
-    B = randDouble(lowerBound, upperBound);
-    C = randDouble(lowerBound, upperBound);
+    A = ABList.back().first;
+    B = ABList.back().second;
+    ABList.pop_back();
+    C = CList.back();
+    CList.pop_back();
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
