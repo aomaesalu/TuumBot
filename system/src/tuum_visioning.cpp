@@ -279,11 +279,9 @@ namespace rtx { namespace Visioning {
 
       debugTimer.start();
     }
- }
+  }
 
   void goalDetection(const Frame &frame) {
-    goalsBuffer.clear();
-
     Vision::BlobSet blobs = Vision::getBlobs();
 
     unsigned int largestYellowArea = 0, largestBlueArea = 0;
@@ -300,8 +298,8 @@ namespace rtx { namespace Visioning {
             if (blueGoalBuffer = nullptr) {
               blueGoalBuffer = new Goal(distance, angle, blobs[i]->getColor());
             } else {
-              blueGoalBuffer.setDistance(distance); // TODO: Compare with previous values as in ball detection
-              blueGoalBuffer.setAngle(angle); // TODO: Compare with previous values as in ball detection
+              blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+              blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
             }
           }
         } else {
@@ -310,8 +308,8 @@ namespace rtx { namespace Visioning {
             if (yellowGoalBuffer = nullptr) {
               yellowGoalBuffer = new Goal(distance, angle, blobs[i]->getColor());
             } else {
-              yellowGoalBuffer.setDistance(distance); // TODO: Compare with previous values as in ball detection
-              yellowGoalBuffer.setAngle(angle); // TODO: Compare with previous values as in ball detection
+              yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+              yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
             }
           }
         }
