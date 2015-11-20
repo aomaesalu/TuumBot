@@ -316,9 +316,8 @@ namespace rtx {
           break;
 
         // Add A value with previous and next values
-        AList.push_back(verticalResultsList[i].first.first.second.first);
         AList.push_back(verticalResultsList[i].first.first.first);
-        AList.push_back(verticalResultsList[i].first.first.second.second);
+        AList.push_back(verticalResultsList[i].first.first.second);
 
         /*std::cout << "Partitioning A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
@@ -335,9 +334,8 @@ namespace rtx {
         std::cout << std::endl << std::endl;*/
 
         // Add B value with previous and next values
-        BList.push_back(verticalResultsList[i].first.second.second.first);
         BList.push_back(verticalResultsList[i].first.second.first);
-        BList.push_back(verticalResultsList[i].first.second.second.second);
+        BList.push_back(verticalResultsList[i].first.second.second);
 
         /*std::cout << "Partitioning B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
@@ -378,9 +376,8 @@ namespace rtx {
           break;
 
         // Add C value with previous and next values
-        CList.push_back(horisontalResultsList[i].first.second.first);
         CList.push_back(horisontalResultsList[i].first.first);
-        CList.push_back(horisontalResultsList[i].first.second.second);
+        CList.push_back(horisontalResultsList[i].first.second);
       }
 
       /*std::cout << "Partitioning C" << std::endl;
@@ -403,44 +400,17 @@ namespace rtx {
 
     // 2. Generate new model M (constant A, B and C estimations)
 
-    // Add prev values
-    if (ABCounter == 0) {
-      prevA = ABList.front().first;
-      prevB = ABList.front().second;
-      ABList.erase(ABList.begin());
-      ABCounter++;
-    }
-    if (CCounter == 0) {
-      prevC = CList.front();
-      CList.erase(CList.begin());
-      CCounter++;
-    }
-
-    // Add current values
     A = ABList.front().first;
     B = ABList.front().second;
     ABList.erase(ABList.begin());
-    ABCounter++;
-    C = CList.front();
-    CList.erase(CList.begin());
-    CCounter++;
+    C = ABList.front();
+    CList.erase(CList.begin();
 
-    // Add next values
-    nextA = ABList.front().first;
-    nextB = ABList.front().second;
+    double nextA = ABList.front().first;
+    double nextB = ABList.front().second;
     ABList.erase(ABList.begin());
-    nextC = CList.front();
-    CList.erase(CList.begin());
-    if (ABCounter == 2 * numberOfDivisions + 1 || ABList.empty()) {
-      ABCounter = 0;
-    } else {
-      ABCounter++;
-    }
-    if (CCounter == 2 * numberOfDivisions + 1 || CList.empty()) {
-      CCounter = 0;
-    } else {
-      CCounter++;
-    }
+    double nextC = CList.front();
+    CList.erase(CList.begin();
 
     // Debug print
     std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
@@ -465,7 +435,7 @@ namespace rtx {
     verticalMSE /= verticalPoints.size();
     horisontalMSE /= horisontalPoints.size();
 
-    // TODO
+    // TODO: Add MSEs to result lists
 
     // 6. Find model with minimal error
     if (verticalMSE < bestVerticalMSE) {
@@ -490,10 +460,6 @@ namespace rtx {
     if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
     }*/
-
-    prevA = nextA;
-    prevB = nextB;
-    prevC = nextC;
 
   }
 
