@@ -109,7 +109,7 @@ namespace rtx { namespace ctl {
 	    Transform* bt = b->getTransform();
 	    // std::cout << b->toString() << std::endl;
 
-	    Transform target(0, 0);
+	    Transform target((*bt) - 75);
 
 	    //TODO: bt position to relative position
 	    double o = bt->getPosition().getOrientation();
