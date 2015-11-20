@@ -27,6 +27,7 @@ namespace rtx {
     private:
       int serialPort;
       MotorDriver* motors[n_motors];
+      MotorDriver* mainboard;
 
     public:
       MotorControl();
@@ -40,6 +41,11 @@ namespace rtx {
       void Move(double, double, double);
 
       void testSequence();
+      void runDribbler(int speed);
+      void stopDribbler();
+      void kick(int ms);
+      void charge();
+
 
   };
 

@@ -52,6 +52,7 @@ void MotorControl::init(){
   for(int i=1; i < (n_motors+1); i++) {
     motors[i] = new MotorDriver(motorids[i-1], serialPort);
   }
+  mainboard = new MotorDriver(0, serialPort);
 }
 
 void MotorControl::forward(int newSpeed){
@@ -99,7 +100,7 @@ void MotorControl::OmniDrive(double speed, double angle, double rot){
   int spd2 = speed * -sin(angle + M_PI / 4.0) + rot;
   int spd3 = speed * -sin(angle - M_PI / 4.0) + rot;
   int spd4 = speed * sin(angle + M_PI / 4.0) + rot;
-  
+
   int speeds[4] = {spd1, spd2, spd3, spd4};
   for (int i=1; i < (n_motors+1); i++){
     motors[i]->setSpeed(speeds[i-1]);
@@ -154,4 +155,23 @@ void MotorControl::testSequence() {
   usleep(1000 * 1000);
 
 
+}
+
+void MotorControl::runDribbler(int speed){
+  std::string runcmd = std::to_string(0) + ":dr" + std::to_string(speed) + "\n";
+  mainboard->sendcmd(runcmd);
+}
+void MotorControl::stopDribbler(){
+  std::string stopcmd = std::to_string(0) + ":dr" + std::to_string(0) + "\n";
+  mainboard->sendcmd(stopcmd);
+}
+
+void MotorControl::kick(int ms){
+  std::string kickcmd = std::to_string(0) + ":k" + std::to_string(ms) + "\n";
+  mainboard->sendcmd(kickcmd);
+}
+
+void MotorControl::charge(){
+  std::string chargecmd = std::to_string(0) + ":c" + "\n";
+  mainboard->sendcmd(chargecmd);
 }
