@@ -195,7 +195,7 @@ namespace rtx {
     initialiseBuffer();
 
     // Flip image
-    flipImage();
+    //flipImage();
   }
 
   void Camera::uninitialiseDevice() {

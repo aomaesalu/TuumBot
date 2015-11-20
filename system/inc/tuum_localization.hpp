@@ -17,7 +17,7 @@ namespace rtx { namespace Localization {
 
   void testSequence();
 
-  Transform getTransform();
+  Transform* getTransform();
 
   Transform toAbsoluteTransform(const int,const double);
 }}

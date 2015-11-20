@@ -119,11 +119,11 @@ namespace rtx { namespace Motion {
         break;
       case MOT_CURVED:
         if(!motionInProgress && motionActive) {
-          Transform t = Localization::getTransform();
+          Transform* t = Localization::getTransform();
 
           motionData.baseVelocity = 15;
-          motionData.orientDelta = motionGoal.o - t.o;
-          motionData.setDirectionVector(motionGoal.getX() - t.getX(), motionGoal.getY() - t.getY());
+          motionData.orientDelta = motionGoal.o - t->o;
+          motionData.setDirectionVector(motionGoal.getX() - t->getX(), motionGoal.getY() - t->getY());
           printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
 
           //printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
@@ -162,11 +162,10 @@ namespace rtx { namespace Motion {
   int setTarget(Transform target) {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
     motionGoal = target;
-    motionActive = true;
   }
 
   void start() {
-    motionInProgress = true;
+    motionActive = true;
   }
 
   void stop() {
@@ -180,12 +179,13 @@ namespace rtx { namespace Motion {
   }
 
   void setBehaviour(MotionType mt) {
+    stop();
     motionType = mt;
     motionActive = false;
   }
 
   double targetDistance() {
-    return Localization::getTransform().getPosition().distanceTo(motionGoal.getPosition());
+    return Localization::getTransform()->getPosition().distanceTo(motionGoal.getPosition());
   }
 
   double targetAngle() {

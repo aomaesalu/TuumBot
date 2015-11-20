@@ -40,11 +40,11 @@ namespace rtx {
     Entity(const Entity&);
 
     // By position
-    Entity(const Vec2i*);
+    Entity(const Vec2i);
     Entity(const int, const int);
 
     // By position & orientation
-    Entity(const Transform);
+    Entity(Transform);
     Entity(const int, const int, const double);
 
     int getHealth();
