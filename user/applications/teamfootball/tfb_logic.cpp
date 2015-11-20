@@ -17,7 +17,7 @@ namespace rtx { namespace Logic {
   }
 
   void process() {
-    switch(logicState) {
+    /*switch(logicState) {
       case LS_INIT:
 
         printf("Logic initial state...\n");
@@ -59,7 +59,7 @@ namespace rtx { namespace Logic {
               goal_ptr = goal;
             }
           }*/
-          if(goal_ptr == nullptr) break;
+          /*if(goal_ptr == nullptr) break;
 
           logicState = LS_GOAL_SHOOT;
         }
@@ -70,7 +70,7 @@ namespace rtx { namespace Logic {
 
         logicState = LS_BALL_RETRIEVE;
         break;
-    }
+    }*/
   }
 
   void printSystemState() {
