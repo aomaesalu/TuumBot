@@ -114,7 +114,7 @@ namespace rtx { namespace Motion {
   }
 
   void process() {
-    MotorControl* mco = hal::hw.getMotorControl();
+    hal::MotorControl* mco = hal::hw.getMotorControl();
 
     bool dirty = false;
     switch(motionType) {
