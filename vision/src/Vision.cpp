@@ -135,9 +135,21 @@ namespace rtx {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
           for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
             if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
-              if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
-                blobsBuffer[i]->join(*blobsBuffer[j]);
-                toBeRemoved.insert(j);
+              if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  toBeRemoved.insert(j);
+                }
+              } else {
+                if ((blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) && (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j])) {
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  }
+                  toBeRemoved.insert(j);
+                }
               }
             }
           }
