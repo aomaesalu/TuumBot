@@ -450,9 +450,37 @@ namespace rtx {
 
     if (isCalculating()) {
       regressConstants();
+
+      drawPerspective(pixels, channels, stride);
     }
 
     return true;
+  }
+
+  std::pair<unsigned int, unsigned int> ImageDrawingArea::realToPixel(const double &x, const double &y) {
+    unsigned int verticalCoordinate = bestB / (y - bestA);
+    unsigned int horisontalCoordinate = x * verticalCoordinate / bestC + CAMERA_WIDTH / 2;
+    return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
+  }
+
+  bool ImageDrawingArea::drawPerspective(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+    if (bestA != 0 && bestB != 0 && bestC != 0) {
+      for (unsigned int i = 0; i < 10000; i += 50) {
+        for (unsigned int j = 0; j < 10000; j += 50) {
+          std::pair<unsigned int, unsigned int> coordinates = realToPixel(i, j);
+          if (coordinates.first < CAMERA_WIDTH && coordinates.second < CAMERA_HEIGHT) {
+            for (int k = -1; k <= 1; k++) {
+              for (int m = -1; m <= 1; ++m) {
+                guint8 *pixel = pixels + (coordinates.first + k) * channels + (coordinates.second + m) * stride;
+                pixel[0] = 255;
+                pixel[1] = 0;
+                pixel[2] = 0;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   bool ImageDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {

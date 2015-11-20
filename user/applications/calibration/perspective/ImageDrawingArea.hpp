@@ -91,6 +91,8 @@ namespace rtx {
       void regressConstants();
 
       bool applyCalculations();
+      std::pair<unsigned int, unsigned int> realToPixel(const double&, const double&);
+      bool drawPerspective(guint8*, const unsigned int&, const unsigned int&);
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
   };
