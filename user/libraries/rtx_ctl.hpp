@@ -13,6 +13,8 @@
 
 #include "STM.hpp"
 
+#include "Ball.hpp"
+
 namespace rtx { namespace ctl {
 
   class LSInit : public Controller {
@@ -54,6 +56,7 @@ namespace rtx { namespace ctl {
   private:
     Context ctx;
     Timer targetUpdate;
+    Ball* targetBall;
   };
 
 

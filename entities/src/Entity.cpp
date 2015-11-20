@@ -17,7 +17,7 @@ namespace rtx {
     (*this) = entity;
   }
 
-  Entity::Entity(const Vec2i* pos):
+  Entity::Entity(const Vec2i pos):
     m_transform(pos)
   {
 
@@ -29,7 +29,7 @@ namespace rtx {
 
   }
 
-  Entity::Entity(const Transform transform) {
+  Entity::Entity(Transform transform) {
     m_transform = transform;
   }
 
@@ -50,8 +50,9 @@ namespace rtx {
   void Entity::update(Transform transform) {
     int x = m_transform.getX()*0.2 + transform.getX()*0.8;
     int y = m_transform.getY()*0.2 + transform.getY()*0.8;
+    m_transform.setPosition(x, y);
 
-    if(m_health < 10) m_health += 1;
+    if(m_health < 10) m_health += 2;
   }
 
   void Entity::update() {

@@ -36,6 +36,7 @@ namespace rtx {
       unsigned int getNumberOfPoints() const;
       Color getColor() const;
       unsigned int getBoxArea() const;
+      double getBoxRatio() const;
       double getDensity() const;
 
       bool overlaps(const Blob&) const;
