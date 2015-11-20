@@ -5,6 +5,9 @@
  *  @version 0.1
  *  @date 1. November 2015
  */
+
+#include <iostream>
+
 #include "rtxhal.hpp"
 #include "MotorControl.hpp"
 
@@ -38,18 +41,23 @@ namespace rtx { namespace Motion {
 
     int getRotationSpeed() {
       // TODO: Transform orientVelocity into rotationSpeed ( RVelocityToSpeed(r_vel)  )
-      double v = getOrientVelocity() * 0.5;
+      double v = getOrientVelocity();
       return (int)v;
     }
 
     double getOrientVelocity() {
-      double mag = dV.getMagnitude();
-      if(!mag) mag = 1;
+      std::cout << orientDelta << std::endl;
+      double oD = fabs(orientDelta);
+      if(oD <= 0.08) return 0;
 
-      double v = baseVelocity;
-      if(!v) v  = 1;
+      //TODO: is this correct?
+      //if(oD > 3.14) oD = 3.14 - orientDelta;
 
-      return orientDelta / (mag / v);
+      if(oD > 0.3) return baseVelocity;
+
+      int sign = 1;
+      if(orientDelta < 0) sign = -1;
+      return (oD - 0.08) * baseVelocity * sign / 0.22;
     }
 
     double getVelocityFactor() {
@@ -162,6 +170,7 @@ namespace rtx { namespace Motion {
   int setTarget(Transform target) {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
     motionGoal = target;
+    motionInProgress = false;
   }
 
   void start() {
