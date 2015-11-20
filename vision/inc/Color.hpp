@@ -25,6 +25,8 @@ namespace rtx {
   };
 
   Color intToColor(const unsigned int&);
+  
+  void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
 };
 
