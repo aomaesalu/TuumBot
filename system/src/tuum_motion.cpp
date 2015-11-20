@@ -31,9 +31,9 @@ namespace rtx { namespace Motion {
     double orientDelta;
 
     double getHeading() {
-      Vec2f _dV = dV;
-      _dV.rotate(-orientDelta);
-      return atan2(_dV.x, _dV.y);
+      //Vec2f _dV = dV;
+      //_dV.rotate(-orientDelta);
+      return atan2(dV.y, dV.x);
     }
 
     int getSpeed() {
@@ -49,15 +49,16 @@ namespace rtx { namespace Motion {
 
     double getOrientVelocity() {
       double oD = fabs(orientDelta);
+      int sign = 1;
+      if(orientDelta < 0) sign = -1;
+
       if(oD <= 0.08) return 0;
 
       //TODO: is this correct?
       //if(oD > 3.14) oD = 3.14 - orientDelta;
 
-      if(oD > 0.3) return baseVelocity;
+      if(oD > 0.3) return sign*baseVelocity;
 
-      int sign = 1;
-      if(orientDelta < 0) sign = -1;
       double v = (oD - 0.08) * baseVelocity * sign / 0.22;
 
       if(fabs(v) < 10) {
@@ -142,12 +143,12 @@ namespace rtx { namespace Motion {
           motionData.orientDelta = motionGoal.o - t->o;
           motionData.setDirectionVector(motionGoal.getX() - t->getX(), motionGoal.getY() - t->getY());
 
-          //printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
+          printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
 
-          //printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
+          printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
 
-          //printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
-          //printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
+          printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
+          printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
 
           targetAchieved = false;
           motionInProgress = true;
@@ -168,10 +169,16 @@ namespace rtx { namespace Motion {
     }
 
     if(motionInProgress || dirty) {
-      if((!isTargetAchieved() && motorCmdTimer.isTime()) || dirty) {
-        //printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-        mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-        motorCmdTimer.start();
+      if(!isTargetAchieved()) {
+	if(motorCmdTimer.isTime() || dirty) {
+	  printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	  mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	  motorCmdTimer.start();
+	}
+      } else {
+	printf("[Motion]Target achieved.\n");
+        stop();
+	motionInProgress = false;
       }
     }
 
@@ -181,6 +188,7 @@ namespace rtx { namespace Motion {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
     motionGoal = target;
     motionInProgress = false;
+    targetAchieved = false;
   }
 
   void start() {
@@ -211,7 +219,33 @@ namespace rtx { namespace Motion {
     return 0.0; // TODO: dot(Localization::getOrientation(), motionGoal);
   }
 
+  double stateProbability(Transform* t1, Transform* t2) {
+    double px = gaussian_probability(t1->getX(), 30, t2->getX());
+    double py = gaussian_probability(t1->getY(), 30, t2->getY());
+    double c  = 3.14/180;
+    double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
+
+    /*std::cout << "px=" << px
+              << ", py=" << py
+	      << ", po= " << po
+	      << std::endl;
+    */
+
+    return (px + py + po) / 3;
+  }
+
   bool isTargetAchieved() {
+    if(!targetAchieved) {
+      // (transform - target) <= uncertainty
+
+      Transform* t = Localization::getTransform();
+      double p = stateProbability(t, &motionGoal);
+
+      //std::cout << "P = " << p << std::endl;
+
+      if(p > 0.0115) targetAchieved = true;
+    }
+
     return targetAchieved;
   }
 
