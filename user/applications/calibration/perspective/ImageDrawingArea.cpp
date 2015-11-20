@@ -108,17 +108,21 @@ namespace rtx {
     bestA = bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
+    AList.clear();
     AList.push_back(lowerBound);
     AList.push_back(0);
     AList.push_back(upperBound);
+    BList.clear();
     BList.push_back(lowerBound);
     BList.push_back(0);
     BList.push_back(upperBound);
+    ABList.clear();
     for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
       for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
         ABList.push_back(std::pair<double, double>(*a, *b));
       }
     }
+    CList.clear();
     CList.push_back(lowerBound);
     CList.push_back(0);
     CList.push_back(upperBound);
@@ -301,6 +305,12 @@ namespace rtx {
         AList.push_back(verticalResultsList[i].first.first.first);
         AList.push_back(verticalResultsList[i].first.first.second.second);
 
+        /*std::cout << "Partitioning A" << std::endl;
+        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
+          std::cout << *a << " ";
+        }
+        std::cout << std::endl << std::endl;*/
+
         // Partition A list areas
         unsigned int Asize = AList.size();
         for (unsigned int j = 0; j < Asize; j += 3) {
@@ -314,10 +324,22 @@ namespace rtx {
         }
         AList.erase(AList.begin(), AList.begin() + Asize);
 
+        /*std::cout << "Partitioned A" << std::endl;
+        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
+          std::cout << *a << " ";
+        }
+        std::cout << std::endl << std::endl;*/
+
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.second.first);
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second.second);
+
+        /*std::cout << "Partitioning B" << std::endl;
+        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
+          std::cout << *b << " ";
+        }
+        std::cout << std::endl << std::endl;*/
 
         // Partition B list areas
         unsigned int Bsize = BList.size();
@@ -331,6 +353,12 @@ namespace rtx {
           BList.push_back(BList[j + 2]);
         }
         BList.erase(BList.begin(), BList.begin() + Bsize);
+
+        /*std::cout << "Partitioned B" << std::endl;
+        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
+          std::cout << *b << " ";
+        }
+        std::cout << std::endl << std::endl;*/
 
         // Fill ABList with A and B value combinations
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions + 1) {
@@ -363,6 +391,12 @@ namespace rtx {
       }
     }
 
+    /*std::cout << "Partitioning C" << std::endl;
+    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
+      std::cout << *c << " ";
+    }
+    std::cout << std::endl << std::endl;*/
+
     // Partition C list areas
     unsigned int Csize = CList.size();
     for (unsigned int j = 0; j < Csize; j += 3) {
@@ -376,6 +410,12 @@ namespace rtx {
     }
     CList.erase(CList.begin(), CList.begin() + Csize);
 
+    /*std::cout << "Partitioned C" << std::endl;
+    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
+      std::cout << *c << " ";
+    }
+    std::cout << std::endl << std::endl;*/
+
     // 1. Establish a condition C when to end the regression algorithm
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
@@ -385,6 +425,7 @@ namespace rtx {
     ABList.erase(ABList.begin());
     C = CList.front();
     CList.erase(CList.begin());
+    std::cout << "A = " << A << std::endl << "B = " << B << std::endl << " C = " << C << std::endl << std::endl;
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
