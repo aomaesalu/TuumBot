@@ -131,9 +131,9 @@ namespace rtx {
     BList.push_back(upperBound);
     partitionList(BList, numberOfDivisions);
     ABList.clear();
-    for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-      for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-        ABList.push_back(std::pair<double, double>(*a, *b));
+    for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2) {
+      for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2) {
+        ABList.push_back(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(*a, *(a + 1)), std::pair<double, double>(*b, *(b + 1))));
       }
     }
     AList.clear();
@@ -320,44 +320,49 @@ namespace rtx {
         AList.push_back(verticalResultsList[i].first.first.first);
         AList.push_back(verticalResultsList[i].first.first.second);
 
-        /*std::cout << "Partitioning A" << std::endl;
+        // Debug print
+        std::cout << "Partitioning A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
           std::cout << *a << " ";
         }
-        std::cout << std::endl << std::endl;*/
+        std::cout << std::endl << std::endl;
 
         partitionList(AList, numberOfDivisions);
 
-        /*std::cout << "Partitioned A" << std::endl;
+        // Debug print
+        std::cout << "Partitioned A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
           std::cout << *a << " ";
         }
-        std::cout << std::endl << std::endl;*/
+        std::cout << std::endl << std::endl;
 
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second);
 
-        /*std::cout << "Partitioning B" << std::endl;
+        // Debug print
+        std::cout << "Partitioning B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
           std::cout << *b << " ";
         }
-        std::cout << std::endl << std::endl;*/
+        std::cout << std::endl << std::endl;
 
         partitionList(BList, numberOfDivisions);
 
-        /*std::cout << "Partitioned B" << std::endl;
+        // Debug print
+        std::cout << "Partitioned B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
           std::cout << *b << " ";
         }
-        std::cout << std::endl << std::endl;*/
+        std::cout << std::endl << std::endl;
 
         // Fill ABList with A and B value combinations
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += numberOfDivisions + 1) {
-          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += numberOfDivisions + 1) {
-            for (unsigned int i = 0; i < 2 * numberOfDivisions + 1; ++i) {
-              for (unsigned int j = 0; j < 2 * numberOfDivisions + 1; ++j) {
-                ABList.push_back(std::pair<double, double>(*(a + i), *(b + j)));
+        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions) {
+          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions) {
+            for (unsigned int i = 0; i < 2 * numberOfDivisions; i += 2) {
+              for (unsigned int j = 0; j < 2 * numberOfDivisions; j += 2) {
+                std::cout << "Adding: " << *(a + i) << " " << *(b + j) << std::endl;
+                ABList.push_back(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(*(a + i), *(a + i + 1)), std::pair<double, double>(*(b + j), *(b + j + 1))));
               }
             }
           }
@@ -381,14 +386,16 @@ namespace rtx {
         CList.push_back(horisontalResultsList[i].first.second);
       }
 
-      /*std::cout << "Partitioning C" << std::endl;
+      // Debug print
+      std::cout << "Partitioning C" << std::endl;
       for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
         std::cout << *c << " ";
       }
-      std::cout << std::endl << std::endl;*/
+      std::cout << std::endl << std::endl;
 
       partitionList(CList, numberOfDivisions);
 
+      // Debug print
       std::cout << "Partitioned C" << std::endl;
       for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
         std::cout << *c << " ";
@@ -401,15 +408,13 @@ namespace rtx {
 
     // 2. Generate new model M (constant A, B and C estimations)
 
-    A = ABList.front().first;
-    B = ABList.front().second;
+    A = ABList.front().first.first;
+    nextA = ABList.front().first.second;
+    B = ABList.front().second.first;
+    nextB = ABList.front().second.second;
     ABList.erase(ABList.begin());
     C = CList.front();
     CList.erase(CList.begin());
-
-    nextA = ABList.front().first;
-    nextB = ABList.front().second;
-    ABList.erase(ABList.begin());
     nextC = CList.front();
     CList.erase(CList.begin());
 
