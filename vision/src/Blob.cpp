@@ -138,6 +138,18 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
+  bool Blob::isOrange() const {
+    return color == BALL;
+  }
+
+  bool Blob::isBlue() const {
+    return color == BLUE_GOAL;
+  }
+
+  bool Blob::isYellow() const {
+    return color == YELLOW_GOAL;
+  }
+
   bool Blob::overlaps(const Blob &other) const {
     return color == other.getColor() && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }

@@ -39,6 +39,10 @@ namespace rtx {
       double getBoxRatio() const;
       double getDensity() const;
 
+      bool isOrange() const;
+      bool isBlue() const;
+      bool isYellow() const;
+
       bool overlaps(const Blob&) const;
       bool isClose(const Blob&) const;
       void join(Blob&);
