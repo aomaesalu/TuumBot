@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #include <algorithm>
@@ -178,7 +178,7 @@ namespace rtx { namespace Visioning {
       // STEP 1: Filter out invalid blobs
       if(color != BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
-      if(boxArea < 20 * 20) continue;
+      if(boxArea < 10 * 10) continue;
       if(density > 1.0) continue;
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
@@ -268,16 +268,16 @@ namespace rtx { namespace Visioning {
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
-    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
-      if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
+    for (unsigned int i = 0; i < blobs.size(); ++i) {
+      if (blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
+        Point2D* point = blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goalsBuffer.push_back(new Goal(distance, angle));
-      } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
+      } else if (blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
+        Point2D* point = blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
         goalsBuffer.push_back(new Goal(distance, angle));
