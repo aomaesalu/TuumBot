@@ -138,6 +138,10 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
+  void Blob::setColor(const Color &color) {
+    this->color = color;
+  }
+
   bool Blob::isOrange() const {
     return color == BALL;
   }
@@ -151,14 +155,12 @@ namespace rtx {
   }
 
   bool Blob::overlaps(const Blob &other) const {
-    return color == other.getColor() && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+    return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
   bool Blob::isClose(const Blob &other) const {
     if (overlaps(other))
       return true;
-    if (color != other.getColor())
-      return false;
     if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
     //if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
       if ((std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) >= std::max(getHeight(), other.getHeight()) / 2) { // The Y coordinate overlapping is over half of the height of the smaller blob
@@ -191,6 +193,10 @@ namespace rtx {
       }
     }
     return false;
+  }
+
+  bool Blob::isSameColor(const Blob&) const {
+    return color == other.getColor();
   }
 
   void Blob::join(Blob &other) {

@@ -43,8 +43,11 @@ namespace rtx {
       bool isBlue() const;
       bool isYellow() const;
 
+      void setColor(const Color&);
+
       bool overlaps(const Blob&) const;
       bool isClose(const Blob&) const;
+      bool isSameColor(const Blob&) const;
       void join(Blob&);
 
     private:
