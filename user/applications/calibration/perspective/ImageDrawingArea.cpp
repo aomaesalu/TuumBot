@@ -40,7 +40,6 @@ namespace rtx {
   };
 
   void partitionList(std::vector<double> &list, const unsigned int &numberOfDivisions) {
-    // Partition list areas
     unsigned int size = list.size();
     for (unsigned int j = 0; j < size; j += 2) {
       double difference = (list[j + 1] - list[j]) / numberOfDivisions;
@@ -120,6 +119,8 @@ namespace rtx {
   }
 
   void ImageDrawingArea::initialiseConstants() {
+    numberOfDivisions = 8;
+    numberOfBestDivisions = 4;
     bestA = bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
@@ -137,14 +138,14 @@ namespace rtx {
         ABList.push_back(std::pair<double, double>(*a, *b));
       }
     }
+    AList.clear();
+    BList.clear();
     CList.clear();
     CList.push_back(lowerBound);
     CList.push_back(upperBound);
     partitionList(CList, numberOfDivisions);
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
-    numberOfDivisions = 8;
-    numberOfBestDivisions = 4;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
   }
