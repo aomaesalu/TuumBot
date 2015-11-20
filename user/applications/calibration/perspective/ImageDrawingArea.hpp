@@ -80,6 +80,8 @@ namespace rtx {
       // <<C value, C previous value, C next value>, MSE value>
       std::vector<std::pair<std::pair<double, std::pair<double, double>>, double>> horisontalResultsList;
 
+      unsigned int debugCount;
+
       void initialiseProperties();
       void initialiseImage();
       void initialiseConstants();

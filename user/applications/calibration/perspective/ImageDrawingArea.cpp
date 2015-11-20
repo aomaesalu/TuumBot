@@ -46,6 +46,8 @@ namespace rtx {
     initialiseImage();
     initialiseConstants();
     initialiseBlobRegression();
+    // TODO: Remove
+    debugCount = 0;
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -389,32 +391,33 @@ namespace rtx {
         CList.push_back(horisontalResultsList[i].first.first);
         CList.push_back(horisontalResultsList[i].first.second.second);
       }
-    }
 
-    /*std::cout << "Partitioning C" << std::endl;
-    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-      std::cout << *c << " ";
-    }
-    std::cout << std::endl << std::endl;*/
-
-    // Partition C list areas
-    unsigned int Csize = CList.size();
-    for (unsigned int j = 0; j < Csize; j += 3) {
-      for (unsigned int k = 0; k < 2; ++k) {
-        double difference = (CList[j + k + 1] - CList[j + k]) / numberOfDivisions;
-        for (unsigned m = 0; m < numberOfDivisions; ++m) {
-          CList.push_back(CList[j + k] + m * difference);
-        }
+      /*std::cout << "Partitioning C" << std::endl;
+      for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
+        std::cout << *c << " ";
       }
-      CList.push_back(CList[j + 2]);
-    }
-    CList.erase(CList.begin(), CList.begin() + Csize);
+      std::cout << std::endl << std::endl;*/
 
-    /*std::cout << "Partitioned C" << std::endl;
-    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-      std::cout << *c << " ";
+      // Partition C list areas
+      unsigned int Csize = CList.size();
+      for (unsigned int j = 0; j < Csize; j += 3) {
+        for (unsigned int k = 0; k < 2; ++k) {
+          std::cout << "Area: " << CList[j + k + 1] << " " << CList[j + k] << std::endl;
+          double difference = (CList[j + k + 1] - CList[j + k]) / numberOfDivisions;
+          for (unsigned m = 0; m < numberOfDivisions; ++m) {
+            CList.push_back(CList[j + k] + m * difference);
+          }
+        }
+        CList.push_back(CList[j + 2]);
+      }
+      CList.erase(CList.begin(), CList.begin() + Csize);
+
+      std::cout << "Partitioned C" << std::endl;
+      for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
+        std::cout << *c << " ";
+      }
+      std::cout << std::endl << std::endl;
     }
-    std::cout << std::endl << std::endl;*/
 
     // 1. Establish a condition C when to end the regression algorithm
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
@@ -425,7 +428,9 @@ namespace rtx {
     ABList.erase(ABList.begin());
     C = CList.front();
     CList.erase(CList.begin());
-    std::cout << "A = " << A << std::endl << "B = " << B << std::endl << " C = " << C << std::endl << std::endl;
+
+    // Debug print
+    std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
@@ -491,8 +496,9 @@ namespace rtx {
 
     colorBlobs(pixels, channels, stride);
 
-    if (isCalculating()) {
+    if (isCalculating() && debugCount < 4) {
       regressConstants();
+      debugCount++;
     }
 
     return true;
