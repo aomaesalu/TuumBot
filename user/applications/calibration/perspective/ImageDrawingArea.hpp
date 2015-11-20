@@ -88,7 +88,7 @@ namespace rtx {
       void colorPixels(guint8*, const unsigned int&, const unsigned int&, guint8*, const unsigned int&, const unsigned int&);
       void regressBlobs();
       void colorBlobs(guint8*, const unsigned int&, const unsigned int&);
-      void regressConstants();
+      void regressConstants(guint8*, const unsigned int&, const unsigned int&);
 
       bool applyCalculations();
       std::pair<unsigned int, unsigned int> realToPixel(const double&, const double&);

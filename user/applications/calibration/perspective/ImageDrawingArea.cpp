@@ -290,7 +290,7 @@ namespace rtx {
     return C * (horisontalCoordinate - CAMERA_WIDTH / 2) / verticalCoordinate;
   }
 
-  void ImageDrawingArea::regressConstants() { // TODO: Optimise
+  void ImageDrawingArea::regressConstants(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) { // TODO: Optimise
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
@@ -418,11 +418,13 @@ namespace rtx {
       bestB = (verticalMSECurrent < verticalMSENext) ? B : nextB;
       bestVerticalMSE = std::min(verticalMSECurrent, verticalMSENext);
       std::cout << "Found a vertical function with MSE = " << bestVerticalMSE << "; A = " << A << ", B = " << B << std::endl;
+      drawPerspective(pixels, channels, stride);
     }
     if (std::min(horisontalMSECurrent, horisontalMSENext) < bestHorisontalMSE) {
       bestC = (horisontalMSECurrent < horisontalMSENext) ? C : nextC;
       bestHorisontalMSE = std::min(horisontalMSECurrent, horisontalMSENext);
       std::cout << "Found a horisontal function with MSE = " << bestHorisontalMSE << "; C = " << C << std::endl;
+      drawPerspective(pixels, channels, stride);
     }
 
     // 5. Check for condition C (and return to step 2 if necessary)
@@ -449,9 +451,7 @@ namespace rtx {
     colorBlobs(pixels, channels, stride);
 
     if (isCalculating()) {
-      regressConstants();
-
-      drawPerspective(pixels, channels, stride);
+      regressConstants(pixels, channels, stride);
     }
 
     return true;
@@ -465,16 +465,18 @@ namespace rtx {
 
   bool ImageDrawingArea::drawPerspective(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     if (bestA != 0 && bestB != 0 && bestC != 0) {
-      for (unsigned int i = 0; i < 10000; i += 50) {
-        for (unsigned int j = 0; j < 10000; j += 50) {
+      for (unsigned int i = -100000; i < 100000; i += 50) {
+        for (unsigned int j = -100000; j < 100000; j += 50) {
           std::pair<unsigned int, unsigned int> coordinates = realToPixel(i, j);
           if (coordinates.first < CAMERA_WIDTH && coordinates.second < CAMERA_HEIGHT) {
             for (int k = -1; k <= 1; k++) {
               for (int m = -1; m <= 1; ++m) {
-                guint8 *pixel = pixels + (coordinates.first + k) * channels + (coordinates.second + m) * stride;
-                pixel[0] = 255;
-                pixel[1] = 0;
-                pixel[2] = 0;
+                if (coordinates.first + k < CAMERA_WIDTH && coordinates.second + m < CAMERA_HEIGHT) {
+                  guint8 *pixel = pixels + (coordinates.first + k) * channels + (coordinates.second + m) * stride;
+                  pixel[0] = 255;
+                  pixel[1] = 0;
+                  pixel[2] = 0;
+                }
               }
             }
           }
