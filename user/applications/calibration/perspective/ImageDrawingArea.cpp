@@ -333,10 +333,10 @@ namespace rtx {
         BList.erase(BList.begin(), BList.begin() + Bsize);
 
         // Fill ABList with A and B value combinations
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 3) {
-          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 3) {
-            for (unsigned int i = 0; i < 3; ++i) {
-              for (unsigned int j = 0; j < 3, ++j) {
+        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions + 1) {
+          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions + 1) {
+            for (unsigned int i = 0; i < 2 * numberOfDivisions + 1; ++i) {
+              for (unsigned int j = 0; j < 2 * numberOfDivisions + 1, ++j) {
                 ABList.push_back(std::pair<*(a + i), *(b + j)>);
               }
             }
