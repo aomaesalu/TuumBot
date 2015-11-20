@@ -19,6 +19,17 @@
 //TODO: Refactor MotionData structure to separate source
 namespace rtx { namespace Motion {
 
+  enum MotionPhase {
+    MOP_STANDBY,
+    MOP_INIT,
+    MOP_RUN,
+    MOP_DONE
+  };
+
+  struct MotionContext {
+    MotionPhase phase;
+  } motionCtx;
+
   MotionType motionType;
 
   Transform motionGoal; // (x, y, orient)
@@ -116,19 +127,18 @@ namespace rtx { namespace Motion {
   void process() {
     hal::MotorControl* mco = hal::hw.getMotorControl();
 
-    bool dirty = false;
     switch(motionType) {
       case MOT_SCAN:
-        if(!motionInProgress && motionActive) {
-          //printf("MOT_SCAN: init\n");
-          motionData.baseVelocity = 0;
-          motionData.setDirectionVector(0.0, 0.0);
-          motionData.orientDelta = M_PI;
+	switch(motionCtx.phase) {
+	  case MOP_INIT:
+	    motionData.baseVelocity = 0;
+	    motionData.setDirectionVector(0.0, 0.0);
+	    motionData.orientDelta = M_PI;
 
-          motionInProgress = true;
-          targetAchieved = false;
-          dirty = true;
-        }
+	    targetAchieved = false;
+	    motionCtx.phase = MOP_RUN;
+	    break;
+	}
         break;
       case MOT_NAIVE:
         // Correct orientation => motionData
@@ -136,23 +146,32 @@ namespace rtx { namespace Motion {
         // Forward motion => motionData
         break;
       case MOT_CURVED:
-        if(!motionInProgress && motionActive) {
-          Transform* t = Localization::getTransform();
+        switch(motionCtx.phase) {
+	  case MOP_INIT:
+	  {
+	    Transform* t = Localization::getTransform();
 
-          motionData.baseVelocity = 25;
-          motionData.orientDelta = motionGoal.o - t->o;
-          motionData.setDirectionVector(motionGoal.getX() - t->getX(), motionGoal.getY() - t->getY());
+	    motionData.baseVelocity = 25;
+	    motionData.orientDelta = motionGoal.o - t->o;
+	    motionData.setDirectionVector(motionGoal.getX() - t->getX(), motionGoal.getY() - t->getY());
 
-          printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
+	    /*
+	    printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
 
-          printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
+	    printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
 
-          printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
-          printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
+	    printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
+	    printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
+	    */
 
-          targetAchieved = false;
-          motionInProgress = true;
-          dirty = true;
+	    targetAchieved = false;
+            motionCtx.phase = MOP_RUN;
+	    break;
+	  }
+	  case MOP_RUN:
+	    break;
+	  case MOP_DONE:
+	    break;
         }
         break;
       case MOT_STATIC:
@@ -161,43 +180,41 @@ namespace rtx { namespace Motion {
       case MOT_COMPLEX_CURVED:
         // Complex rotational motion => motionData
         break;
-      default:
-        motionData = {0, 0.0, 0.0};
-        motionInProgress = false;
-        dirty = true;
-        break;
     }
 
-    if(motionInProgress || dirty) {
-      if(!isTargetAchieved()) {
-	if(motorCmdTimer.isTime() || dirty) {
-	  printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-	  mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-	  motorCmdTimer.start();
+    switch(motionCtx.phase) {
+      case MOP_RUN:
+	if(!isTargetAchieved()) {
+	  if(motorCmdTimer.isTime()) {
+	    //printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	    mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	    motorCmdTimer.start();
+	  }
+	} else {
+	  printf("[Motion]Target achieved.\n");
+	  stop();
+	  motionCtx.phase = MOP_DONE;
 	}
-      } else {
-	printf("[Motion]Target achieved.\n");
-        stop();
-	motionInProgress = false;
-      }
+
+	break;
     }
 
   }
 
   int setTarget(Transform target) {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
+    motionCtx.phase = MOP_STANDBY;
     motionGoal = target;
-    motionInProgress = false;
     targetAchieved = false;
   }
 
   void start() {
-    motionActive = true;
+    motionCtx.phase = MOP_INIT;
   }
 
   void stop() {
-    motionInProgress = false;
     hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
+    motionCtx.phase = MOP_STANDBY;
   }
 
   void setSpeed(int v) {
