@@ -41,6 +41,7 @@ namespace rtx {
 
     double getOrientation() {
       double o = atan2(y, x);
+      return o;
     }
   };
 

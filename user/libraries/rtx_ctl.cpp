@@ -49,10 +49,9 @@ namespace rtx { namespace ctl {
   }
 
   void LSBallLocate::run() {
+    //TODO: try to search from probable previous ball areas
     switch(ctx.phase) {
       case CP_INIT:
-        std::cout << "Locate init" << std::endl;
-
 	ctx.phase = CP_RUN;
 	break;
       case CP_RUN:
@@ -74,7 +73,7 @@ namespace rtx { namespace ctl {
 
     ctx.phase = CP_INIT;
 
-    targetUpdate.setPeriod(1000);
+    targetUpdate.setPeriod(100);
     targetUpdate.start();
   }
 
@@ -82,7 +81,6 @@ namespace rtx { namespace ctl {
     switch(ctx.phase) {
       case CP_INIT:
       {
-	// Select ball
 	targetBall = nullptr;
 	Transform* t = Localization::getTransform();
 	double d = 0.0, _d;
@@ -98,20 +96,18 @@ namespace rtx { namespace ctl {
       }
       case CP_RUN:
       {
-	// Check if ball valid
 	if(targetBall->getHealth() < 5) {
           targetBall = nullptr;
 	  ctx.phase = CP_INIT;
 	  break;
 	}
 	
-	// Calculate target position
-	// ( targetPosition = on (ball <-> gate) line & behind ball )
+	//TODO: ( targetPosition = on (ball <-> gate) line & behind ball )
         if(targetUpdate.isTime()) {
 	  if(targetBall != nullptr) {
 	    Ball* b = targetBall;
 	    Transform* bt = b->getTransform();
-	    std::cout << b->toString() << std::endl;
+	    // std::cout << b->toString() << std::endl;
 
 	    Transform target(0, 0);
 

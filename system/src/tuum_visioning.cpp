@@ -249,9 +249,10 @@ namespace rtx { namespace Visioning {
     ballDetect.update();
 
     if(debugTimer.isTime()) {
-      std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
+      /*std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
 	        << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
 		<< std::endl;
+      */
 
       /*for(auto& b : *(ballDetect.getEntities())) {
 	Transform* t = b->getTransform();
