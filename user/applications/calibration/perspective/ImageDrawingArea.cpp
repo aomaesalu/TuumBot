@@ -125,7 +125,7 @@ namespace rtx {
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
     numberOfDivisions = 8;
-    numberOfBestDivisions = 3;
+    numberOfBestDivisions = 4;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
   }
@@ -301,10 +301,36 @@ namespace rtx {
         AList.push_back(verticalResultsList[i].first.first.first);
         AList.push_back(verticalResultsList[i].first.first.second.second);
 
+        // Partition A list areas
+        unsigned int Asize = AList.size();
+        for (unsigned int j = 0; j < Asize; j += 3) {
+          for (unsigned int k = 0; k < 2; ++k) {
+            double difference = (AList[j + k] - AList[j + k + 1]) / numberOfDivisions;
+            for (unsigned m = 0; m < numberOfDivisions; ++m) {
+              AList.push_back(AList[j + k] + m * difference);
+            }
+          }
+          AList.push_back(AList[j + 2]);
+        }
+        AList.erase(AList.begin(), AList.begin() + Asize);
+
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.second.first);
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second.second);
+
+        // Partition B list areas
+        unsigned int Bsize = BList.size();
+        for (unsigned int j = 0; j < Bsize; j += 3) {
+          for (unsigned int k = 0; k < 2; ++k) {
+            double difference = (BList[j + k] - BList[j + k + 1]) / numberOfDivisions;
+            for (unsigned m = 0; m < numberOfDivisions; ++m) {
+              BList.push_back(BList[j + k] + m * difference);
+            }
+          }
+          BList.push_back(BList[j + 2]);
+        }
+        BList.erase(BList.begin(), BList.begin() + Bsize);
 
         // Fill ABList with A and B value combinations
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 3) {
@@ -336,6 +362,19 @@ namespace rtx {
         CList.push_back(horisontalResultsList[i].first.second.second);
       }
     }
+
+    // Partition C list areas
+    unsigned int Csize = CList.size();
+    for (unsigned int j = 0; j < Csize; j += 3) {
+      for (unsigned int k = 0; k < 2; ++k) {
+        double difference = (CList[j + k] - CList[j + k + 1]) / numberOfDivisions;
+        for (unsigned m = 0; m < numberOfDivisions; ++m) {
+          CList.push_back(CList[j + k] + m * difference);
+        }
+      }
+      CList.push_back(CList[j + 2]);
+    }
+    CList.erase(CList.begin(), CList.begin() + Csize);
 
     // 1. Establish a condition C when to end the regression algorithm
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
