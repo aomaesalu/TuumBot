@@ -51,7 +51,8 @@ namespace rtx { namespace Logic {
         // Check minimal state conditions
         // Spin to win
 
-        if(Visioning::goals.size() > 0) {
+        if (Visioning::yellowGoal != nullptr || Visioning::blueGoal != nullptr) {
+        //if(Visioning::goals.size() > 0) { // TODO: Refactor?
           Goal* goal_ptr = nullptr;
           /*for(auto & goal : Visioning::goals) {
             if(goal.getType() = Goal::VAR_OPPOSING)  {
