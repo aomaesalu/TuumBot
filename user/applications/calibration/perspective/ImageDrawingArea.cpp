@@ -58,8 +58,6 @@ namespace rtx {
     initialiseImage();
     initialiseConstants();
     initialiseBlobRegression();
-    // TODO: Remove
-    debugCount = 0;
   }
 
   ImageDrawingArea::~ImageDrawingArea() {
@@ -498,9 +496,8 @@ namespace rtx {
 
     colorBlobs(pixels, channels, stride);
 
-    if (isCalculating() && debugCount < 4) {
+    if (isCalculating()) {
       regressConstants();
-      debugCount++;
     }
 
     return true;
