@@ -38,6 +38,16 @@ namespace rtx {
         g = 255;
         b = 0;
         break;
+      case ROBOT_YELLOW_BLUE:
+        r = 102;
+        g = 0;
+        b = 0;
+        break;
+      case ROBOT_BLUE_YELLOW:
+        r = 102;
+        g = 0;
+        b = 51;
+        break;
       case WHITE_LINE:
       case CHECKERBOARD_WHITE:
         r = 255;
