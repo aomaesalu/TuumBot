@@ -336,7 +336,7 @@ namespace rtx {
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions + 1) {
           for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions + 1) {
             for (unsigned int i = 0; i < 2 * numberOfDivisions + 1; ++i) {
-              for (unsigned int j = 0; j < 2 * numberOfDivisions + 1, ++j) {
+              for (unsigned int j = 0; j < 2 * numberOfDivisions + 1; ++j) {
                 ABList.push_back(std::pair<double, double>(*(a + i), *(b + j)));
               }
             }
