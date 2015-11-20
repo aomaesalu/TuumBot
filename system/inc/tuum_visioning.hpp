@@ -28,8 +28,6 @@ namespace rtx { namespace Visioning {
   typedef std::vector<Feature*> FeatureSet;
   typedef std::vector<Ball*> BallSet;
   typedef std::vector<Robot*> RobotSet;
-  typedef std::vector<Goal*> GoalSet;
-  typedef std::vector<Robot*> RobotSet;
 
   // Entity Detection State
   template<class T>
@@ -98,10 +96,10 @@ namespace rtx { namespace Visioning {
   extern BallSet balls; //TODO: refactor code to utilize 'ballDetect'
   extern BallSet ballsBuffer;
 
-  extern GoalSet goals;
-  extern GoalSet goalsBuffer;
-  extern Goal* blueGoal;
-  extern Goal* yellowGoal;
+  extern Goal *blueGoal;
+  extern Goal *blueGoalBuffer;
+  extern Goal *yellowGoal;
+  extern Goal *yellowGoalBuffer;
 
   extern RobotSet robots;
   extern RobotSet robotsBuffer;
