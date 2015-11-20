@@ -42,14 +42,12 @@ namespace rtx {
   void partitionList(std::vector<double> &list, const unsigned int &numberOfDivisions) {
     // Partition list areas
     unsigned int size = list.size();
-    for (unsigned int j = 0; j < size; j += 3) {
-      for (unsigned int k = 0; k < 2; ++k) {
-        double difference = (list[j + k + 1] - list[j + k]) / numberOfDivisions;
-        for (unsigned m = 0; m < numberOfDivisions; ++m) {
-          list.push_back(list[j + k] + m * difference);
-        }
+    for (unsigned int j = 0; j < size; j += 2) {
+      double difference = (list[j + 1] - list[j]) / numberOfDivisions;
+      for (unsigned m = 0; m < numberOfDivisions; ++m) {
+        list.push_back(list[j] + m * difference);
       }
-      list.push_back(list[j + 2]);
+      list.push_back(list[j + 1]);
     }
     list.erase(list.begin(), list.begin() + size);
   }
@@ -123,18 +121,14 @@ namespace rtx {
 
   void ImageDrawingArea::initialiseConstants() {
     bestA = bestB = bestC = 0;
-    prevA = prevB = prevC = nextA = nextB = nextC = 0;
-    ABCounter = CCounter = 0;
     lowerBound = -100000;
     upperBound = 100000;
     AList.clear();
     AList.push_back(lowerBound);
-    AList.push_back(0);
     AList.push_back(upperBound);
     partitionList(AList, numberOfDivisions);
     BList.clear();
     BList.push_back(lowerBound);
-    BList.push_back(0);
     BList.push_back(upperBound);
     partitionList(BList, numberOfDivisions);
     ABList.clear();
@@ -145,7 +139,6 @@ namespace rtx {
     }
     CList.clear();
     CList.push_back(lowerBound);
-    CList.push_back(0);
     CList.push_back(upperBound);
     partitionList(CList, numberOfDivisions);
     maxError = 10;
