@@ -14,15 +14,36 @@ namespace rtx { namespace hal {
     REF_START,
     REF_STOP,
     REF_PLACEDBAL,
-    REF_ENDHALF
+    REF_ENDHALF,
+    REF_KICKOFF,
+    REF_IFREEK,
+    REF_DFREEK,
+    REF_GOALK,
+    REF_THROWIN,
+    REF_CORNERK,
+    REF_PENALTY,
+    REF_GOAL,
+    REF_CARDY,
 
   };
 
   typedef std::map<std::string, RefereeSignal> RefSigMap;
 
   const RefSigMap refSigMap = {
-    {"START---", REF_START},
-    {"STOP----", REF_STOP}
+    {"START----", REF_START},
+    {"STOP-----", REF_STOP},
+    {"PLACEDBAL", REF_PLACEDBAL},
+    {"ENDHALF--", REF_ENDHALF},
+    {"KICKOFF-", REF_KICKOFF},
+    {"IFREEK--", REF_IFREEK},
+    {"DFREEK--", REF_DFREEK},
+    {"GOALK---", REF_GOALK},
+    {"THROWIN-", REF_THROWIN},
+    {"CORNERK-", REF_CORNERK},
+    {"PENALTY-", REF_PENALTY},
+    {"GOAL---- ", REF_GOAL},
+    {"CARDY---", REF_CARDY}
+
   };
 
   // Field, Robot ID, Team

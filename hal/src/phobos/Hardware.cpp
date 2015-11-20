@@ -20,7 +20,7 @@ namespace rtx { namespace hal {
 
   void Hardware::init() {
     printf("[Hardware::init]Loading hardware...\n");
-    //m_motorControl.init();
+    m_motorControl.init();
     usleep(10000);
     refereeListener.init("/dev/ttyACM0");
     refereeListener2.init("/dev/ttyACM1");

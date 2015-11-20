@@ -37,9 +37,16 @@ namespace rtx { namespace hal {
 
   RefCommand RefereeListener::parseCommand(std::string cmd) {
     // Parse RefTarget
+    std::string newcmd;
+    if((cmd.at(3)=='A') || (cmd.at(3) == 'B')){
+      newcmd = cmd.substr(4);
+    }
+    else{
+      newcmd = cmd.substr(3);
+    }
+    std::cout << newcmd << std::endl;
 
-    auto it = refSigMap.find(cmd);
-
+    auto it = refSigMap.find(newcmd);
     if(it != refSigMap.end()){
       if((cmd.at(3)=='A') || (cmd.at(3) == 'B')){
         return RefCommand({it->second, {cmd.at(1), cmd.at(2), cmd.at(3)}});
@@ -59,7 +66,6 @@ namespace rtx { namespace hal {
 
 		if ((message[0] == 'a') && (message[1] == FIELD)) {
       //TODO
-      message = message.substr(4);
       std::cout << "RefereeListener::on_receive_() : " << message << std::endl;
       this->signal(this->parseCommand(message));
       if (message[2] == ID) this->sendAck();
