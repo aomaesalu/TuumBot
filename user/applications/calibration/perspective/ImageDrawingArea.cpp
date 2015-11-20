@@ -287,8 +287,8 @@ namespace rtx {
     double verticalMSE = 0, horisontalMSE = 0;
 
     // Bounds division by best bounds division
-    std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate);
-    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), horisontalResultsSortPredicate);
+    std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate());
+    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), horisontalResultsSortPredicate());
 
     // Fill A and B constant combination list with the best bound values
     if (ABList.empty()) {
