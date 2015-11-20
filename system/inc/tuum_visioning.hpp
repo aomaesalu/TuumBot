@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -100,6 +100,8 @@ namespace rtx { namespace Visioning {
 
   extern GoalSet goals;
   extern GoalSet goalsBuffer;
+  extern Goal* blueGoal;
+  extern Goal* yellowGoal;
 
   extern RobotSet robots;
   extern RobotSet robotsBuffer;
