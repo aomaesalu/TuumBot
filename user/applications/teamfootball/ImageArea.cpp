@@ -43,6 +43,12 @@ namespace rtx {
     pixel[2] = b;
   }
 
+  void colorPixel(guint8 *pixel, const Color &color) {
+    unsigned int r = 0, g = 0, b = 0;
+    getRGB(color, r, g, b);
+    colorPixel(pixel, r, g, b);
+  }
+
   void ImageArea::colorBlob(const Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     // Get blob parameters
     unsigned int x = blob->getPosition()->getX();
@@ -100,10 +106,14 @@ namespace rtx {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         guint8 *pixel = pixels + x * channels + y * stride;
         guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], 0)) {
-          pixel[0] *= 0.2;
-          pixel[1] *= 0.2;
-          pixel[2] *= 0.2;
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BALL))) {
+          colorPixel(pixel, BALL); // TODO: Optimise
+        }
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BLUE_GOAL))) {
+          colorPixel(pixel, BLUE_GOAL);  // TODO: Optimise
+        }
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(YELLOW_GOAL))) {
+          colorPixel(pixel, YELLOW_GOAL); // TODO: Optimise
         }
       }
     }
