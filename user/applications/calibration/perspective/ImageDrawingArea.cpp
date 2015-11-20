@@ -305,7 +305,7 @@ namespace rtx {
         unsigned int Asize = AList.size();
         for (unsigned int j = 0; j < Asize; j += 3) {
           for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (AList[j + k] - AList[j + k + 1]) / numberOfDivisions;
+            double difference = (AList[j + k + 1] - AList[j + k]) / numberOfDivisions;
             for (unsigned m = 0; m < numberOfDivisions; ++m) {
               AList.push_back(AList[j + k] + m * difference);
             }
@@ -323,7 +323,7 @@ namespace rtx {
         unsigned int Bsize = BList.size();
         for (unsigned int j = 0; j < Bsize; j += 3) {
           for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (BList[j + k] - BList[j + k + 1]) / numberOfDivisions;
+            double difference = (BList[j + k + 1] - BList[j + k]) / numberOfDivisions;
             for (unsigned m = 0; m < numberOfDivisions; ++m) {
               BList.push_back(BList[j + k] + m * difference);
             }
@@ -367,7 +367,7 @@ namespace rtx {
     unsigned int Csize = CList.size();
     for (unsigned int j = 0; j < Csize; j += 3) {
       for (unsigned int k = 0; k < 2; ++k) {
-        double difference = (CList[j + k] - CList[j + k + 1]) / numberOfDivisions;
+        double difference = (CList[j + k + 1] - CList[j + k]) / numberOfDivisions;
         for (unsigned m = 0; m < numberOfDivisions; ++m) {
           CList.push_back(CList[j + k] + m * difference);
         }
@@ -380,11 +380,11 @@ namespace rtx {
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
     // 2. Generate new model M (constant A, B and C estimations)
-    A = ABList.back().first;
-    B = ABList.back().second;
-    ABList.pop_back();
-    C = CList.back();
-    CList.pop_back();
+    A = ABList.front().first;
+    B = ABList.front().second;
+    ABList.erase(ABList.begin());
+    C = CList.front();
+    CList.erase(CList.begin());
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimates, horisontalEstimates;
