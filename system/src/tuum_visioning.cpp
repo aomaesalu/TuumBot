@@ -27,7 +27,7 @@ namespace rtx { namespace Visioning {
   FeatureSet features;
 
   EDS<Ball> ballDetect;
-  BallSet balls; // Healty ball entities vs new/decaying ball entities?
+  BallSet balls; // Healthy ball entities vs new/decaying ball entities?
   BallSet ballsBuffer;
 
   GoalSet goals;
@@ -269,18 +269,12 @@ namespace rtx { namespace Visioning {
     Vision::BlobSet blobs = Vision::getBlobs();
 
     for (unsigned int i = 0; i < blobs.size(); ++i) {
-      if (blobs[i]->getColor() == BLUE_GOAL) {
+      if (blobs[i]->getColor() == BLUE_GOAL || blobs[i]->getColor() == YELLOW_GOAL) {
         // TODO: Refactor
         Point2D* point = blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
-      } else if (blobs[i]->getColor() == YELLOW_GOAL) {
-        // TODO: Refactor
-        Point2D* point = blobs[i]->getPosition();
-        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
+        goalsBuffer.push_back(new Goal(distance, angle, blobs[i]->getColor()));
       }
     }
 
