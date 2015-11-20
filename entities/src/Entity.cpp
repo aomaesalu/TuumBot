@@ -5,38 +5,54 @@
  *  @version 0.2
  */
 
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #include "Entity.hpp"
 
 namespace rtx {
 
-  Entity::Entity() {
+  unsigned int Entity::id_seq = 0;
 
+  unsigned int Entity::newID() {
+    return ++id_seq;
+  }
+
+  Entity::Entity() {
+    id = Entity::newID();
   }
 
   Entity::Entity(const Entity& entity) {
     (*this) = entity;
+    id = Entity::newID();
   }
 
   Entity::Entity(const Vec2i pos):
     m_transform(pos)
   {
-
+    id = Entity::newID();
   }
 
   Entity::Entity(const int x, const int y):
     m_transform(x, y)
   {
-
+    id = Entity::newID();
   }
 
   Entity::Entity(Transform transform) {
+    id = Entity::newID();
     m_transform = transform;
   }
 
   Entity::Entity(const int x, const int y, const double o):
     m_transform(x, y, o)
   {
+    id = Entity::newID();
+  }
 
+  unsigned int Entity::getID() {
+    return id;
   }
 
   int Entity::getHealth() {
@@ -57,6 +73,18 @@ namespace rtx {
 
   void Entity::update() {
     m_health--;
+  }
+
+  std::string Entity::toString() {
+    std::stringstream output;
+    output << "Target: <Ball #"
+           << getID()
+           << ", hp="
+           << getHealth()
+	   << ", x=" << m_transform.getX()
+	   << ", y=" << m_transform.getY()
+	   << ">";
+    return output.str();
   }
 
 };
