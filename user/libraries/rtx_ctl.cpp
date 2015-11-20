@@ -8,6 +8,7 @@
 
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
+#include "tuum_navigation.hpp"
 #include "tuum_motion.hpp"
 
 #include "rtx_ctl.hpp"
@@ -73,29 +74,20 @@ namespace rtx { namespace ctl {
 
     ctx.phase = CP_INIT;
 
-    targetUpdate.setPeriod(100);
+    targetUpdate.setPeriod(50);
     targetUpdate.start();
   }
 
   void LSBallRetrieve::run() {
     switch(ctx.phase) {
       case CP_INIT:
-      {
-	targetBall = nullptr;
-	Transform* t = Localization::getTransform();
-	double d = 0.0, _d;
-	for(auto b : *Visioning::ballDetect.getEntities()) {
-          _d = t->distanceTo(b->getTransform()->getPosition());
-	  if(d < _d) {
-	    d = _d;
-	    targetBall = b;
-	  }
-	}
+        targetBall = Navigation::getNearestBall();
 	if(targetBall != nullptr) ctx.phase = CP_RUN;
 	break;
-      }
       case CP_RUN:
       {
+	if(hw.isBallInDribbler()) break;
+
 	if(targetBall->getHealth() < 5) {
           targetBall = nullptr;
 	  ctx.phase = CP_INIT;
@@ -106,17 +98,9 @@ namespace rtx { namespace ctl {
         if(targetUpdate.isTime()) {
 	  if(targetBall != nullptr) {
 	    Ball* b = targetBall;
-	    Transform* bt = b->getTransform();
-	    // std::cout << b->toString() << std::endl;
 
-	    Transform target((*bt) - 75);
-
-	    //TODO: bt position to relative position
-	    double o = bt->getPosition().getOrientation();
-	    target.setOrientation(o);
-
-	    Motion::setTarget(target);
-	    Motion::start();
+	    Motion::setTarget(Navigation::calcBallPickupPos(b->getTransform()));
+	    if(!Motion::isTargetAchieved()) Motion::start();
 	  }
 
 	  targetUpdate.start();
