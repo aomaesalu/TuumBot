@@ -66,23 +66,23 @@ namespace rtx { namespace Visioning {
         }), tmp_objs.end());
 
       {
-	auto it = tmp_objs.begin();
-	while(it != tmp_objs.end()) {
-	  if((*it)->getHealth() > mx_h) {
-	    objs.push_back(*it);
-	    it = tmp_objs.erase(it);
-	  } else it++;
-	}
+        auto it = tmp_objs.begin();
+        while(it != tmp_objs.end()) {
+          if((*it)->getHealth() > mx_h) {
+            objs.push_back(*it);
+            it = tmp_objs.erase(it);
+          } else it++;
+        }
       }
 
       {
-	auto it = objs.begin();
-	while(it != objs.end()) {
-	  if((*it)->getHealth() < mx_h) {
-	    tmp_objs.push_back(*it);
-	    it = objs.erase(it);
-	  } else it++;
-	}
+        auto it = objs.begin();
+        while(it != objs.end()) {
+          if((*it)->getHealth() < mx_h) {
+            tmp_objs.push_back(*it);
+            it = objs.erase(it);
+          } else it++;
+        }
       }
     }
 
