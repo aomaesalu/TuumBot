@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 20 November 2015
  */
 
 #include "ImageArea.hpp"
@@ -37,6 +37,59 @@ namespace rtx {
     set_size_request(gui->getImage()->get_width(), gui->getImage()->get_height());
   }
 
+  void colorPixel(guint8 *pixel, const unsigned int &r, const unsigned int &g, const unsigned int &b) {
+    pixel[0] = r;
+    pixel[1] = g;
+    pixel[2] = b;
+  }
+
+  void colorPixel(guint8 *pixel, const Color &color) {
+    unsigned int r = 0, g = 0, b = 0;
+    getRGB(color, r, g, b);
+    colorPixel(pixel, r, g, b);
+  }
+
+  void ImageArea::colorBlob(const Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+    // Get blob parameters
+    unsigned int x = blob->getPosition()->getX();
+    unsigned int y = blob->getPosition()->getY();
+    unsigned int minX = blob->getMinX();
+    unsigned int maxX = blob->getMaxX();
+    unsigned int minY = blob->getMinY();
+    unsigned int maxY = blob->getMaxY();
+    Color color = blob->getColor();
+
+    // Get color parameters
+    unsigned int r = 0, g = 0, b = 0;
+    getRGB(color, r, g, b);
+
+    // Color blob box area
+    for (unsigned int i = minX; i <= maxX; ++i) {
+      guint8 *pixel = pixels + i * channels + minY * stride;
+      colorPixel(pixel, r, g, b);
+      pixel = pixels + i * channels + maxY * stride;
+      colorPixel(pixel, r, g, b);
+    }
+    for (unsigned int j = minY; j <= maxY; ++j) {
+      guint8 *pixel = pixels + minX * channels + j * stride;
+      colorPixel(pixel, r, g, b);
+      pixel = pixels + maxX * channels + j * stride;
+      colorPixel(pixel, r, g, b);
+    }
+
+    // Color center
+    for (int dx = -3; dx < 3; ++dx) {
+      for (int dy = -3; dy < 3; ++dy) {
+        if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
+          guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
+          pixel[0] = 255;
+          pixel[1] = 0;
+          pixel[2] = 0;
+        }
+      }
+    }
+  }
+
   bool ImageArea::applyFilter() {
     filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
@@ -53,10 +106,14 @@ namespace rtx {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         guint8 *pixel = pixels + x * channels + y * stride;
         guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], 0)) {
-          pixel[0] *= 0.2;
-          pixel[1] *= 0.2;
-          pixel[2] *= 0.2;
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BALL))) {
+          colorPixel(pixel, BALL); // TODO: Optimise
+        }
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BLUE_GOAL))) {
+          colorPixel(pixel, BLUE_GOAL);  // TODO: Optimise
+        }
+        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(YELLOW_GOAL))) {
+          colorPixel(pixel, YELLOW_GOAL); // TODO: Optimise
         }
       }
     }
@@ -70,55 +127,33 @@ namespace rtx {
     // DEBUG: std::cout << "Blobs in GUI: " << Vision::blobs.size() << std::endl;
     for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
       if (*blob) {
-        unsigned int x = (*blob)->getPosition()->getX();
-        unsigned int y = (*blob)->getPosition()->getY();
         unsigned int minX = (*blob)->getMinX();
         unsigned int maxX = (*blob)->getMaxX();
         unsigned int minY = (*blob)->getMinY();
         unsigned int maxY = (*blob)->getMaxY();
-        if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
+        if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT)
           continue;
-        }
+
         //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
-        Color color = (*blob)->getColor();
+
         double density = (*blob)->getDensity();
         unsigned int boxArea = (*blob)->getBoxArea();
 
-        if (color == BALL/* && density > 0.6*/ && boxArea > 20 * 20 && density <= 1.0 && boxArea <= CAMERA_WIDTH * CAMERA_HEIGHT) { // TODO: Remove self-explanatory checks
+        if (density > 1.0 || boxArea > CAMERA_WIDTH * CAMERA_HEIGHT)
+          continue;
 
-          unsigned int value = 0;
-          for (unsigned int i = minX; i <= maxX; ++i) {
-            guint8 *pixel = pixels + i * channels + minY * stride;
-            for (unsigned int p = 0; p < 3; ++p) {
-              pixel[p] = value;
-            }
-            pixel = pixels + i * channels + maxY * stride;
-            for (unsigned int p = 0; p < 3; ++p) {
-              pixel[p] = value;
-            }
-          }
-          for (unsigned int j = minY; j <= maxY; ++j) {
-            guint8 *pixel = pixels + minX * channels + j * stride;
-            for (unsigned int p = 0; p < 3; ++p) {
-              pixel[p] = value;
-            }
-            pixel = pixels + maxX * channels + j * stride;
-            for (unsigned int p = 0; p < 3; ++p) {
-              pixel[p] = value;
-            }
-          }
+        Color color = (*blob)->getColor();
 
-          for (int dx = -3; dx < 3; ++dx) {
-            for (int dy = -3; dy < 3; ++dy) {
-              if (x + dx < CAMERA_WIDTH && x + dx >= 0 && y + dy < CAMERA_HEIGHT && y + dy >= 0) {
-                guint8 *pixel = pixels + (x + dx) * channels + (y + dy) * stride;
-                pixel[0] = 255;
-                pixel[1] = 0;
-                pixel[2] = 0;
-              }
-            }
-          }
+        if (color == BALL/* && density > 0.6*/ && boxArea > 10 * 10) {
+          colorBlob(*blob, pixels, channels, stride);
+        }
 
+        if (color == BLUE_GOAL && boxArea > 30 * 30) {
+          colorBlob(*blob, pixels, channels, stride);
+        }
+
+        if (color == YELLOW_GOAL && boxArea > 30 * 30) {
+          colorBlob(*blob, pixels, channels, stride);
         }
 
       }
