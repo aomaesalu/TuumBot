@@ -27,14 +27,14 @@ namespace rtx {
 
   // TODO: Move elsewhere
   struct verticalResultsSortPredicate {
-    bool operator()(const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &left, const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &right) {
+    bool operator()(const std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double> &left, const std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double> &right) {
         return left.second < right.second;
     }
   };
 
   // TODO: Move elsewhere
   struct horisontalResultsSortPredicate {
-    bool operator()(const std::pair<std::pair<double, std::pair<double, double>>, double> &left, const std::pair<std::pair<double, std::pair<double, double>>, double> &right) {
+    bool operator()(const std::pair<std::pair<double, double>, double> &left, const std::pair<std::pair<double, double>, double> &right) {
         return left.second < right.second;
     }
   };
@@ -303,7 +303,9 @@ namespace rtx {
 
     // Constant regression step initialisation
     double A = 0, B = 0, C = 0;
-    double verticalMSE = 0, horisontalMSE = 0;
+    double nextA = 0, nextB = 0, nextC = 0;
+    double verticalMSECurrent = 0, horisontalMSECurrent = 0;
+    double verticalMSENext = 0, horisontalMSENext = 0;
 
     // Bounds division by best bounds division
     std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate());
@@ -403,51 +405,65 @@ namespace rtx {
     A = ABList.front().first;
     B = ABList.front().second;
     ABList.erase(ABList.begin());
-    C = ABList.front();
-    CList.erase(CList.begin();
+    C = CList.front();
+    CList.erase(CList.begin());
 
-    double nextA = ABList.front().first;
-    double nextB = ABList.front().second;
+    nextA = ABList.front().first;
+    nextB = ABList.front().second;
     ABList.erase(ABList.begin());
-    double nextC = CList.front();
-    CList.erase(CList.begin();
+    nextC = CList.front();
+    CList.erase(CList.begin());
 
     // Debug print
     std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
 
     // 3. For every point, calculate the estimate and the error
-    std::vector<double> verticalEstimates, horisontalEstimates;
-    std::vector<double> verticalErrors, horisontalErrors;
+    std::vector<double> verticalEstimatesCurrent, verticalEstimatesNext;
+    std::vector<double> horisontalEstimatesCurrent, horisontalEstimatesNext;
+    std::vector<double> verticalErrorsCurrent, verticalErrorsNext;
+    std::vector<double> horisontalErrorsCurrent, horisontalErrorsNext;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-      verticalEstimates.push_back(getVerticalDistance(verticalPoints[j].first, A, B) - getVerticalDistance(verticalPoints[j].second, A, B));
-      horisontalEstimates.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
-      verticalErrors.push_back(verticalEstimates.back() - squareWidth);
-      horisontalErrors.push_back(horisontalEstimates.back() - squareWidth);
+      verticalEstimatesCurrent.push_back(getVerticalDistance(verticalPoints[j].first, A, B) - getVerticalDistance(verticalPoints[j].second, A, B));
+      verticalEstimatesNext.push_back(getVerticalDistance(verticalPoints[j].first, nextA, nextB) - getVerticalDistance(verticalPoints[j].second, nextA, nextB));
+      horisontalEstimatesCurrent.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
+      horisontalEstimatesNext.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, nextC) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, nextC));
+      verticalErrorsCurrent.push_back(verticalEstimatesCurrent.back() - squareWidth);
+      verticalErrorsNext.push_back(verticalEstimatesNext.back() - squareWidth);
+      horisontalErrorsCurrent.push_back(horisontalEstimatesCurrent.back() - squareWidth);
+      horisontalErrorsNext.push_back(horisontalEstimatesNext.back() - squareWidth);
     }
 
     // 4. Calculate MSEs
-    verticalMSE = 0;
-    horisontalMSE = 0;
+    verticalMSECurrent = 0;
+    verticalMSENext = 0;
+    horisontalMSECurrent = 0;
+    horisontalMSENext = 0;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-      verticalMSE += verticalErrors[j] * verticalErrors[j];
-      horisontalMSE += horisontalErrors[j] * horisontalErrors[j];
+      verticalMSECurrent += verticalErrorsCurrent[j] * verticalErrorsCurrent[j];
+      verticalMSECurrent += verticalErrorsNext[j] * verticalErrorsNext[j];
+      horisontalMSECurrent += horisontalErrorsCurrent[j] * horisontalErrorsCurrent[j];
+      horisontalMSECurrent += horisontalErrorsNext[j] * horisontalErrorsNext[j];
     }
-    verticalMSE /= verticalPoints.size();
-    horisontalMSE /= horisontalPoints.size();
+    verticalMSECurrent /= verticalPoints.size();
+    verticalMSENext /= verticalPoints.size();
+    horisontalMSECurrent /= horisontalPoints.size();
+    horisontalMSENext /= horisontalPoints.size();
 
-    // TODO: Add MSEs to result lists
+    // Add MSEs to result lists
+    verticalResultsList.push_back(std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double>(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(A, nextA), std::pair<double, double>(B, nextB)), std::min(verticalMSECurrent, verticalMSENext)));
+    horisontalResultsList.push_back(std::pair<std::pair<double, double>, double>(std::pair<double, double>(C, nextC), std::min(horisontalMSECurrent, horisontalMSENext)));
 
     // 6. Find model with minimal error
-    if (verticalMSE < bestVerticalMSE) {
-      bestA = A;
-      bestB = B;
-      bestVerticalMSE = verticalMSE;
-      std::cout << "Found a vertical function with MSE = " << verticalMSE << "; A = " << A << ", B = " << B << std::endl;
+    if (std::min(verticalMSECurrent, verticalMSENext) < bestVerticalMSE) {
+      bestA = (verticalMSECurrent < verticalMSENext) ? A : nextA;
+      bestB = (verticalMSECurrent < verticalMSENext) ? B : nextB;
+      bestVerticalMSE = std::min(verticalMSECurrent, verticalMSENext);
+      std::cout << "Found a vertical function with MSE = " << bestVerticalMSE << "; A = " << A << ", B = " << B << std::endl;
     }
-    if (horisontalMSE < bestHorisontalMSE) {
-      bestC = C;
-      bestHorisontalMSE = horisontalMSE;
-      std::cout << "Found a horisontal function with MSE = " << horisontalMSE << "; C = " << C << std::endl;
+    if (std::min(horisontalMSECurrent, horisontalMSENext) < bestHorisontalMSE) {
+      bestC = (horisontalMSECurrent < horisontalMSENext) ? C : nextC;
+      bestHorisontalMSE = std::min(horisontalMSECurrent, horisontalMSENext);
+      std::cout << "Found a horisontal function with MSE = " << bestHorisontalMSE << "; C = " << C << std::endl;
     }
 
     // 5. Check for condition C (and return to step 2 if necessary)
