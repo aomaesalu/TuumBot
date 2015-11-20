@@ -32,6 +32,7 @@ static void run(GUI *gui) {
 
     gui->updateFrame();
 
+    /*
     clock_t currentTime = clock();
     if (float(currentTime - lastTime) / CLOCKS_PER_SEC > 1) {
       for (Visioning::BallSet::iterator ball = Visioning::balls.begin(); ball != Visioning::balls.end(); ++ball) {
@@ -40,6 +41,7 @@ static void run(GUI *gui) {
       lastTime = currentTime;
       std::cout << std::endl << std::endl;
     }
+    */
   }
 }
 
