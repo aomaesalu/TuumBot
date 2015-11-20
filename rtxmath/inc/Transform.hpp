@@ -9,7 +9,10 @@
 #ifndef RTX_TRANSFORM_H
 #define RTX_TRANSFORM_H
 
-#include "__future__.hpp"
+#include <string>
+#include <math.h>
+
+#include "Vec.hpp"
 
 namespace rtx {
 
