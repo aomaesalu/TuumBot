@@ -195,10 +195,7 @@ namespace rtx { namespace Visioning {
 
   void ballDetection(const Frame &frame) {
 
-    Vision::BlobSet blobs = Vision::blobs;
-    while (Vision::editingBlobs) {
-      blobs = Vision::blobs;
-    }
+    Vision::BlobSet blobs = Vision::getBlobs();
 
     BallSet n_balls;
 
@@ -235,7 +232,7 @@ namespace rtx { namespace Visioning {
 	        << std::endl;
       dbg_available = true;
       */
- 
+
       // STEP 3: Create ball instance with absolute position
       n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle)));
     }
@@ -303,6 +300,8 @@ namespace rtx { namespace Visioning {
   void goalDetection(const Frame &frame) {
     goalsBuffer.clear();
 
+    Vision::BlobSet blobs = Vision::getBlobs();
+
     for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
       if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
         // TODO: Refactor
@@ -324,6 +323,8 @@ namespace rtx { namespace Visioning {
 
   void robotDetection(const Frame &frame) {
     robotsBuffer.clear();
+
+    Vision::BlobSet blobs = Vision::getBlobs();
 
     // TODO
 

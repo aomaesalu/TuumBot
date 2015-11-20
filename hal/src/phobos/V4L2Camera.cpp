@@ -193,6 +193,9 @@ namespace rtx {
 
     // TODO
     initialiseBuffer();
+
+    // Flip image
+    flipImage();
   }
 
   void Camera::uninitialiseDevice() {
@@ -266,6 +269,20 @@ namespace rtx {
     // between application and driver, the data itself is not copied.
     if (!(capabilities.capabilities & V4L2_CAP_STREAMING))
       throw std::runtime_error(device + " does not support streaming I/O");
+  }
+
+  void Camera::flipImage() {
+    // V4L2 control structure
+    struct v4l2_control control;
+    control.id = V4L2_CID_HFLIP;
+    control.value = true;
+
+    if (xioctl(fileDescriptor, VIDIOC_G_CTRL, &control) == -1) {
+      if (errno == EINVAL)
+        throw std::runtime_error("VIDIOC_S_CTRL: Image could not be flipped; flipping is not a supported control");
+      else
+        throw std::runtime_error("VIDIOC_S_CTRL: Unknown error on flipping");
+    }
   }
 
   void Camera::initialiseFormat() {

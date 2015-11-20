@@ -72,6 +72,30 @@ namespace rtx {
       return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
     }
 
+    BlobSet getBlobs() {
+      BlobSet returnSet = blobs;
+      while (editingBlobs) {
+        returnSet = blobs;
+      }
+      return returnSet;
+    }
+
+    LineSet getLines() {
+      LineSet returnSet = lines;
+      while (editingLines) {
+        returnSet = lines;
+      }
+      return returnSet;
+    }
+
+    CornerSet getCorners() {
+      CornerSet returnSet = corners;
+      while (editingCorners) {
+        returnSet = corners;
+      }
+      return returnSet;
+    }
+
     void translateBlobsBuffer() {
       editingBlobs = true;
 
