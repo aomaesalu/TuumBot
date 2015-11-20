@@ -68,7 +68,7 @@ namespace rtx {
     int y = m_transform.getY()*0.2 + transform.getY()*0.8;
     m_transform.setPosition(x, y);
 
-    if(m_health < 10) m_health += 2;
+    if(m_health < 30) m_health += 2;
   }
 
   void Entity::update() {
@@ -77,7 +77,7 @@ namespace rtx {
 
   std::string Entity::toString() {
     std::stringstream output;
-    output << "Target: <Ball #"
+    output << "<Entity #"
            << getID()
            << ", hp="
            << getHealth()
