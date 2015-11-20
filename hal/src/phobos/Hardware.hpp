@@ -1,8 +1,7 @@
 /** @file Hardware.hpp
  *  Platform Hardware class for consolidating hardware control.
  *
- *  @authors Meelik Kiik
- *  @authors Ants-Oskar Mäesalu
+ *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
  *  @date 11. November 2015
  */
@@ -12,6 +11,7 @@
 
 #include "Camera.hpp"
 #include "MotorControl.hpp"
+// #include "RefereeListener.hpp"
 
 namespace rtx { namespace hal {
 
@@ -26,7 +26,11 @@ namespace rtx { namespace hal {
       int m_coilGun;
       int m_ballSensor;
     public:
+      //RefereeListener refereeListener;
+      //RefereeListener refereeListener2;
+
       Hardware();
+
       void init();
 
       Camera* getFrontCamera();

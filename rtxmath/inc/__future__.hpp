@@ -50,7 +50,6 @@ namespace rtx {
   };
 };
 
-
 namespace vis {
 
   class Feature {

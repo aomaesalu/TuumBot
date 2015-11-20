@@ -14,7 +14,6 @@ namespace rtx {
     return msec;
   }
 
-
   long double gaussian_probability(double mu, double sig, double x) {
     return exp(- pow(mu - x, 2) / pow(sig, 2) / 2.0) / sqrt(2.0 * PI * pow(sig, 2));
   }
