@@ -61,6 +61,8 @@ namespace rtx {
 
       // Constant regression data // TODO: Move regression calculations to separate class
       double bestA, bestB, bestC;
+      double prevA, prevB, prevC;
+      double nextA, nextB, nextC;
       double lowerBound, upperBound;
       double bestVerticalMSE, bestHorisontalMSE;
       double maxError;
@@ -79,6 +81,7 @@ namespace rtx {
       std::vector<std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double>> verticalResultsList;
       // <<C value, C previous value, C next value>, MSE value>
       std::vector<std::pair<std::pair<double, std::pair<double, double>>, double>> horisontalResultsList;
+      unsigned int ABCounter, CCounter;
 
       unsigned int debugCount;
 

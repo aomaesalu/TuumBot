@@ -39,6 +39,21 @@ namespace rtx {
     }
   };
 
+  void partitionList(std::vector<double> &list, const unsigned int &numberOfDivisions) {
+    // Partition list areas
+    unsigned int size = list.size();
+    for (unsigned int j = 0; j < size; j += 3) {
+      for (unsigned int k = 0; k < 2; ++k) {
+        double difference = (list[j + k + 1] - list[j + k]) / numberOfDivisions;
+        for (unsigned m = 0; m < numberOfDivisions; ++m) {
+          list.push_back(list[j + k] + m * difference);
+        }
+      }
+      list.push_back(list[j + 2]);
+    }
+    list.erase(list.begin(), list.begin() + size);
+  }
+
   ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
     mainWindow(mainWindow)
   {
@@ -108,16 +123,20 @@ namespace rtx {
 
   void ImageDrawingArea::initialiseConstants() {
     bestA = bestB = bestC = 0;
+    prevA = prevB = prevC = nextA = nextB = nextC = 0;
+    ABCounter = CCounter = 0;
     lowerBound = -100000;
     upperBound = 100000;
     AList.clear();
     AList.push_back(lowerBound);
     AList.push_back(0);
     AList.push_back(upperBound);
+    partitionList(AList, numberOfDivisions);
     BList.clear();
     BList.push_back(lowerBound);
     BList.push_back(0);
     BList.push_back(upperBound);
+    partitionList(BList, numberOfDivisions);
     ABList.clear();
     for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
       for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
@@ -128,6 +147,7 @@ namespace rtx {
     CList.push_back(lowerBound);
     CList.push_back(0);
     CList.push_back(upperBound);
+    partitionList(CList, numberOfDivisions);
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
     numberOfDivisions = 8;
@@ -313,18 +333,7 @@ namespace rtx {
         }
         std::cout << std::endl << std::endl;*/
 
-        // Partition A list areas
-        unsigned int Asize = AList.size();
-        for (unsigned int j = 0; j < Asize; j += 3) {
-          for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (AList[j + k + 1] - AList[j + k]) / numberOfDivisions;
-            for (unsigned m = 0; m < numberOfDivisions; ++m) {
-              AList.push_back(AList[j + k] + m * difference);
-            }
-          }
-          AList.push_back(AList[j + 2]);
-        }
-        AList.erase(AList.begin(), AList.begin() + Asize);
+        partitionList(AList, numberOfDivisions);
 
         /*std::cout << "Partitioned A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
@@ -343,18 +352,7 @@ namespace rtx {
         }
         std::cout << std::endl << std::endl;*/
 
-        // Partition B list areas
-        unsigned int Bsize = BList.size();
-        for (unsigned int j = 0; j < Bsize; j += 3) {
-          for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (BList[j + k + 1] - BList[j + k]) / numberOfDivisions;
-            for (unsigned m = 0; m < numberOfDivisions; ++m) {
-              BList.push_back(BList[j + k] + m * difference);
-            }
-          }
-          BList.push_back(BList[j + 2]);
-        }
-        BList.erase(BList.begin(), BList.begin() + Bsize);
+        partitionList(BList, numberOfDivisions);
 
         /*std::cout << "Partitioned B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
@@ -398,19 +396,7 @@ namespace rtx {
       }
       std::cout << std::endl << std::endl;*/
 
-      // Partition C list areas
-      unsigned int Csize = CList.size();
-      for (unsigned int j = 0; j < Csize; j += 3) {
-        for (unsigned int k = 0; k < 2; ++k) {
-          std::cout << "Area: " << CList[j + k + 1] << " " << CList[j + k] << std::endl;
-          double difference = (CList[j + k + 1] - CList[j + k]) / numberOfDivisions;
-          for (unsigned m = 0; m < numberOfDivisions; ++m) {
-            CList.push_back(CList[j + k] + m * difference);
-          }
-        }
-        CList.push_back(CList[j + 2]);
-      }
-      CList.erase(CList.begin(), CList.begin() + Csize);
+      partitionList(CList, numberOfDivisions);
 
       std::cout << "Partitioned C" << std::endl;
       for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
@@ -423,11 +409,45 @@ namespace rtx {
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
     // 2. Generate new model M (constant A, B and C estimations)
+
+    // Add prev values
+    if (ABCounter == 0) {
+      prevA = ABList.front().first;
+      prevB = ABList.front().second;
+      ABList.erase(ABList.begin());
+      ABCounter++;
+    }
+    if (CCounter == 0) {
+      prevC = CList.front();
+      CList.erase(CList.begin());
+      CCounter++;
+    }
+
+    // Add current values
     A = ABList.front().first;
     B = ABList.front().second;
     ABList.erase(ABList.begin());
+    ABCounter++;
     C = CList.front();
     CList.erase(CList.begin());
+    CCounter++;
+
+    // Add next values
+    nextA = ABList.front().first;
+    nextB = ABList.front().second;
+    ABList.erase(ABList.begin());
+    nextC = CList.front();
+    CList.erase(CList.begin());
+    if (ABCounter == 2 * numberOfDivisions + 1 || ABList.empty()) {
+      ABCounter = 0;
+    } else {
+      ABCounter++;
+    }
+    if (CCounter == 2 * numberOfDivisions + 1 || CList.empty()) {
+      CCounter = 0;
+    } else {
+      CCounter++;
+    }
 
     // Debug print
     std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
@@ -452,6 +472,8 @@ namespace rtx {
     verticalMSE /= verticalPoints.size();
     horisontalMSE /= horisontalPoints.size();
 
+    // TODO
+
     // 6. Find model with minimal error
     if (verticalMSE < bestVerticalMSE) {
       bestA = A;
@@ -475,6 +497,10 @@ namespace rtx {
     if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
       std::cout << "The horisontal function's MSE is low enough." << std::endl;
     }*/
+
+    prevA = nextA;
+    prevB = nextB;
+    prevC = nextC;
 
   }
 
