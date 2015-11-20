@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -159,7 +159,7 @@ namespace rtx {
 
   void MainWindow::saveConstantsToFile(const std::string &fileName) {
     std::ofstream outputFile(fileName);
-    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
+    outputFile << imageArea.getB() << " " << imageArea.getC();
     outputFile.close();
   }
 

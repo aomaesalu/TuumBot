@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
@@ -26,14 +26,7 @@
 namespace rtx {
 
   // TODO: Move elsewhere
-  struct verticalResultsSortPredicate {
-    bool operator()(const std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double> &left, const std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double> &right) {
-        return left.second < right.second;
-    }
-  };
-
-  // TODO: Move elsewhere
-  struct horisontalResultsSortPredicate {
+  struct resultsSortPredicate {
     bool operator()(const std::pair<std::pair<double, double>, double> &left, const std::pair<std::pair<double, double>, double> &right) {
         return left.second < right.second;
     }
@@ -70,10 +63,6 @@ namespace rtx {
 
   bool ImageDrawingArea::isCalculating() const {
     return mainWindow->isCalculating();
-  }
-
-  double ImageDrawingArea::getA() const {
-    return bestA;
   }
 
   double ImageDrawingArea::getB() const {
@@ -119,25 +108,13 @@ namespace rtx {
   void ImageDrawingArea::initialiseConstants() {
     numberOfDivisions = 16;
     numberOfBestDivisions = 4;
-    bestA = bestB = bestC = 0;
+    bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
-    AList.clear();
-    AList.push_back(lowerBound);
-    AList.push_back(upperBound);
-    partitionList(AList, numberOfDivisions);
     BList.clear();
     BList.push_back(lowerBound);
     BList.push_back(upperBound);
     partitionList(BList, numberOfDivisions);
-    ABList.clear();
-    for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2) {
-      for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2) {
-        ABList.push_back(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(*a, *(a + 1)), std::pair<double, double>(*b, *(b + 1))));
-      }
-    }
-    AList.clear();
-    BList.clear();
     CList.clear();
     CList.push_back(lowerBound);
     CList.push_back(upperBound);
@@ -282,8 +259,8 @@ namespace rtx {
     }
   }
 
-  double getVerticalDistance(const unsigned int &verticalCoordinate, const double &A, const double &B) {
-    return A + B / verticalCoordinate;
+  double getVerticalDistance(const unsigned int &verticalCoordinate, const double &B) {
+    return B / verticalCoordinate;
   }
 
   double getHorisontalDistance(const int &horisontalCoordinate, const unsigned int &verticalCoordinate, const double &C) {
@@ -301,49 +278,27 @@ namespace rtx {
     }
 
     // Constant regression step initialisation
-    double A = 0, B = 0, C = 0;
-    double nextA = 0, nextB = 0, nextC = 0;
+    double B = 0, C = 0;
+    double nextB = 0, nextC = 0;
     double verticalMSECurrent = 0, horisontalMSECurrent = 0;
     double verticalMSENext = 0, horisontalMSENext = 0;
 
     // Bounds division by best bounds division
-    std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate());
-    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), horisontalResultsSortPredicate());
+    std::sort(verticalResultsList.begin(), verticalResultsList.end(), resultsSortPredicate());
+    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), resultsSortPredicate());
 
-    // Fill A and B constant combination list with the best bound values
-    if (ABList.empty()) {
+    // Fill B constant list with the best bound values
+    if (BList.empty()) {
       for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= verticalResultsList.size())
           break;
 
-        // Add A value with previous and next values
-        AList.push_back(verticalResultsList[i].first.first.first);
-        AList.push_back(verticalResultsList[i].first.first.second);
-
-        partitionList(AList, numberOfDivisions);
-
         // Add B value with previous and next values
-        BList.push_back(verticalResultsList[i].first.second.first);
-        BList.push_back(verticalResultsList[i].first.second.second);
-
-        partitionList(BList, numberOfDivisions);
-
-        // Fill ABList with A and B value combinations
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions) {
-          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions) {
-            for (unsigned int i = 0; i < 2 * numberOfDivisions; i += 2) {
-              for (unsigned int j = 0; j < 2 * numberOfDivisions; j += 2) {
-                ABList.push_back(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(*(a + i), *(a + i + 1)), std::pair<double, double>(*(b + j), *(b + j + 1))));
-              }
-            }
-          }
-        }
-
-        // Empty A and B value lists
-        AList.clear();
-        BList.clear();
+        BList.push_back(verticalResultsList[i].first.first);
+        BList.push_back(verticalResultsList[i].first.second);
       }
-      verticalResultsList.clear();
+
+      partitionList(BList, numberOfDivisions);
     }
 
     // Fill C constant list with the best bound values
@@ -363,13 +318,11 @@ namespace rtx {
     // 1. Establish a condition C when to end the regression algorithm
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
-    // 2. Generate new model M (constant A, B and C estimations)
-
-    A = ABList.front().first.first;
-    nextA = ABList.front().first.second;
-    B = ABList.front().second.first;
-    nextB = ABList.front().second.second;
-    ABList.erase(ABList.begin());
+    // 2. Generate new model M (constant B and C estimations)
+    B = BList.front();
+    BList.erase(BList.begin());
+    nextB = BList.front();
+    BList.erase(BList.begin());
     C = CList.front();
     CList.erase(CList.begin());
     nextC = CList.front();
@@ -381,8 +334,8 @@ namespace rtx {
     std::vector<double> verticalErrorsCurrent, verticalErrorsNext;
     std::vector<double> horisontalErrorsCurrent, horisontalErrorsNext;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-      verticalEstimatesCurrent.push_back(getVerticalDistance(verticalPoints[j].first, A, B) - getVerticalDistance(verticalPoints[j].second, A, B));
-      verticalEstimatesNext.push_back(getVerticalDistance(verticalPoints[j].first, nextA, nextB) - getVerticalDistance(verticalPoints[j].second, nextA, nextB));
+      verticalEstimatesCurrent.push_back(getVerticalDistance(verticalPoints[j].first, B) - getVerticalDistance(verticalPoints[j].second, B));
+      verticalEstimatesNext.push_back(getVerticalDistance(verticalPoints[j].first, nextB) - getVerticalDistance(verticalPoints[j].second, nextB));
       horisontalEstimatesCurrent.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
       horisontalEstimatesNext.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, nextC) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, nextC));
       verticalErrorsCurrent.push_back(verticalEstimatesCurrent.back() - squareWidth);
@@ -409,15 +362,14 @@ namespace rtx {
     horisontalMSENext /= horisontalPoints.size();
 
     // Add MSEs to result lists
-    verticalResultsList.push_back(std::pair<std::pair<std::pair<double, double>, std::pair<double, double>>, double>(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(A, nextA), std::pair<double, double>(B, nextB)), std::min(verticalMSECurrent, verticalMSENext)));
+    verticalResultsList.push_back(std::pair<std::pair<double, double>, double>(std::pair<double, double>(B, nextB), std::min(verticalMSECurrent, horisontalMSENext)));
     horisontalResultsList.push_back(std::pair<std::pair<double, double>, double>(std::pair<double, double>(C, nextC), std::min(horisontalMSECurrent, horisontalMSENext)));
 
     // 6. Find model with minimal error
     if (std::min(verticalMSECurrent, verticalMSENext) < bestVerticalMSE) {
-      bestA = (verticalMSECurrent < verticalMSENext) ? A : nextA;
       bestB = (verticalMSECurrent < verticalMSENext) ? B : nextB;
       bestVerticalMSE = std::min(verticalMSECurrent, verticalMSENext);
-      std::cout << "Found a vertical function with MSE = " << bestVerticalMSE << "; A = " << A << ", B = " << B << std::endl;
+      std::cout << "Found a vertical function with MSE = " << bestVerticalMSE << "; B = " << B << std::endl;
       drawPerspective(pixels, channels, stride);
     }
     if (std::min(horisontalMSECurrent, horisontalMSENext) < bestHorisontalMSE) {
@@ -458,7 +410,7 @@ namespace rtx {
   }
 
   std::pair<unsigned int, unsigned int> ImageDrawingArea::realToPixel(const double &x, const double &y) {
-    unsigned int verticalCoordinate = bestB / (y - bestA);
+    unsigned int verticalCoordinate = bestB / y;
     unsigned int horisontalCoordinate = x * verticalCoordinate / bestC + CAMERA_WIDTH / 2;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }
