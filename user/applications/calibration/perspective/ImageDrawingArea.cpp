@@ -117,7 +117,7 @@ namespace rtx {
   }
 
   void ImageDrawingArea::initialiseConstants() {
-    numberOfDivisions = 8;
+    numberOfDivisions = 16;
     numberOfBestDivisions = 4;
     bestA = bestB = bestC = 0;
     lowerBound = -100000;
@@ -320,41 +320,13 @@ namespace rtx {
         AList.push_back(verticalResultsList[i].first.first.first);
         AList.push_back(verticalResultsList[i].first.first.second);
 
-        // Debug print
-        /*std::cout << "Partitioning A" << std::endl;
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-          std::cout << *a << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
         partitionList(AList, numberOfDivisions);
-
-        // Debug print
-        /*std::cout << "Partitioned A" << std::endl;
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-          std::cout << *a << " ";
-        }
-        std::cout << std::endl << std::endl;*/
 
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second);
 
-        // Debug print
-        /*std::cout << "Partitioning B" << std::endl;
-        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-          std::cout << *b << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
         partitionList(BList, numberOfDivisions);
-
-        // Debug print
-        /*std::cout << "Partitioned B" << std::endl;
-        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-          std::cout << *b << " ";
-        }
-        std::cout << std::endl << std::endl;*/
 
         // Fill ABList with A and B value combinations
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions) {
@@ -385,21 +357,7 @@ namespace rtx {
         CList.push_back(horisontalResultsList[i].first.second);
       }
 
-      // Debug print
-      /*std::cout << "Partitioning C" << std::endl;
-      for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-        std::cout << *c << " ";
-      }
-      std::cout << std::endl << std::endl;*/
-
       partitionList(CList, numberOfDivisions);
-
-      // Debug print
-      /*std::cout << "Partitioned C" << std::endl;
-      for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-        std::cout << *c << " ";
-      }
-      std::cout << std::endl << std::endl;*/
     }
 
     // 1. Establish a condition C when to end the regression algorithm
@@ -416,9 +374,6 @@ namespace rtx {
     CList.erase(CList.begin());
     nextC = CList.front();
     CList.erase(CList.begin());
-
-    // Debug print
-    //std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimatesCurrent, verticalEstimatesNext;
@@ -448,9 +403,6 @@ namespace rtx {
       horisontalMSENext += horisontalErrorsNext[j] * horisontalErrorsNext[j];
     }
 
-    // Debug print
-    std::cout << verticalMSECurrent << " " << verticalMSENext << " " << horisontalMSECurrent << " " << horisontalMSENext << std::endl;
-
     verticalMSECurrent /= verticalPoints.size();
     verticalMSENext /= verticalPoints.size();
     horisontalMSECurrent /= horisontalPoints.size();
@@ -475,14 +427,6 @@ namespace rtx {
 
     // 5. Check for condition C (and return to step 2 if necessary)
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
-
-    // Debug output // TODO: Refactor
-    /*if (bestVerticalMSE <= maxError * verticalPoints.size()) {
-      std::cout << "The vertical function's MSE is low enough." << std::endl;
-    }
-    if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
-      std::cout << "The horisontal function's MSE is low enough." << std::endl;
-    }*/
 
   }
 
