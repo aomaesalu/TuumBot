@@ -68,6 +68,10 @@ namespace rtx {
     return sqrt(pow(target.x - pos.x, 2) + pow(target.y - pos.y, 2));
   }
 
+  Vec2i Transform::operator-(int val) {
+    return pos - val;
+  }
+
   std::string Transform::toString() {
     std::stringstream output;
     output << "<Transform "

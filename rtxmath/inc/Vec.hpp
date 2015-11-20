@@ -43,6 +43,14 @@ namespace rtx {
       double o = atan2(y, x);
       return o;
     }
+
+    Vec2D<T> operator*(double val) {
+      return Vec2D<T>({(int)(x*val), (int)(y*val)});
+    }
+
+    Vec2D<T> operator-(double val) {
+      return (*this) * (1.0 - val / this->getMagnitude());
+    }
   };
 
   template<typename T>

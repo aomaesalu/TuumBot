@@ -40,6 +40,8 @@ namespace rtx {
 
     double distanceTo(Vec2i);
 
+    Vec2i operator-(int);
+
     std::string toString();
   };
 
