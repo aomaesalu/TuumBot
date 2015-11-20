@@ -79,17 +79,6 @@ namespace rtx { namespace ctl {
   }
 
   void LSBallRetrieve::run() {
-    if(targetUpdate.isTime()) {
-      std::cout << "LSBallRetrieve: " << Visioning::ballDetect.size() << " balls." << std::endl;
-      targetUpdate.start();
-
-      if(targetBall != nullptr) {
-        Ball* b = targetBall;
-	Transform* t = b->getTransform();
-        std::cout << "Target: <Ball hp=" << b->getHealth() << ", x=" << t->getX() << ", y=" << t->getY() << ">" << std::endl;
-      }
-    }
-
     switch(ctx.phase) {
       case CP_INIT:
       {
@@ -108,12 +97,37 @@ namespace rtx { namespace ctl {
 	break;
       }
       case CP_RUN:
+      {
 	// Check if ball valid
-	
+	if(targetBall->getHealth() < 5) {
+          targetBall = nullptr;
+	  ctx.phase = CP_INIT;
+	  break;
+	}
 	
 	// Calculate target position
 	// ( targetPosition = on (ball <-> gate) line & behind ball )
+        if(targetUpdate.isTime()) {
+	  if(targetBall != nullptr) {
+	    Ball* b = targetBall;
+	    Transform* bt = b->getTransform();
+	    std::cout << b->toString() << std::endl;
+
+	    Transform target(0, 0);
+
+	    //TODO: bt position to relative position
+	    double o = bt->getPosition().getOrientation();
+	    target.setOrientation(o);
+
+	    Motion::setTarget(target);
+	    Motion::start();
+	  }
+
+	  targetUpdate.start();
+	}
+        
 	break;
+      }
       case CP_DONE:
 	break;
     }
