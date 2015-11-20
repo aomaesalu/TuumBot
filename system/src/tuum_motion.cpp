@@ -5,6 +5,9 @@
  *  @version 0.1
  *  @date 1. November 2015
  */
+
+#include <iostream>
+
 #include "rtxhal.hpp"
 #include "MotorControl.hpp"
 
@@ -12,6 +15,8 @@
 #include "tuum_motion.hpp"
 
 
+//TODO: Implement state machine & controllers
+//TODO: Refactor MotionData structure to separate source
 namespace rtx { namespace Motion {
 
   MotionType motionType;
@@ -26,9 +31,9 @@ namespace rtx { namespace Motion {
     double orientDelta;
 
     double getHeading() {
-      Vec2f _dV = dV;
-      _dV.rotate(-orientDelta);
-      return atan2(_dV.x, _dV.y);
+      //Vec2f _dV = dV;
+      //_dV.rotate(-orientDelta);
+      return atan2(dV.y, dV.x);
     }
 
     int getSpeed() {
@@ -38,18 +43,31 @@ namespace rtx { namespace Motion {
 
     int getRotationSpeed() {
       // TODO: Transform orientVelocity into rotationSpeed ( RVelocityToSpeed(r_vel)  )
-      double v = getOrientVelocity() * 0.5;
+      double v = getOrientVelocity();
       return (int)v;
     }
 
     double getOrientVelocity() {
-      double mag = dV.getMagnitude();
-      if(!mag) mag = 1;
+      double oD = fabs(orientDelta);
+      int sign = 1;
+      if(orientDelta < 0) sign = -1;
 
-      double v = baseVelocity;
-      if(!v) v  = 1;
+      if(oD <= 0.08) return 0;
 
-      return orientDelta / (mag / v);
+      //TODO: is this correct?
+      //if(oD > 3.14) oD = 3.14 - orientDelta;
+
+      if(oD > 0.3) return sign*baseVelocity;
+
+      double v = (oD - 0.08) * baseVelocity * sign / 0.22;
+
+      if(fabs(v) < 10) {
+        sign = 1;
+        if(v < 0) sign = -1;
+	return 10 * sign;
+      }
+      
+      return v;
     }
 
     double getVelocityFactor() {
@@ -87,7 +105,7 @@ namespace rtx { namespace Motion {
 
     motionData = {0, 0.0, 0.0, 0.0};
 
-    motorCmdTimer.setPeriod(1000);
+    motorCmdTimer.setPeriod(100);
     motorCmdTimer.start();
 
     printf("\033[1;32m");
@@ -102,8 +120,8 @@ namespace rtx { namespace Motion {
     switch(motionType) {
       case MOT_SCAN:
         if(!motionInProgress && motionActive) {
-          printf("MOT_SCAN: init\n");
-          motionData.baseVelocity = 15;
+          //printf("MOT_SCAN: init\n");
+          motionData.baseVelocity = 0;
           motionData.setDirectionVector(0.0, 0.0);
           motionData.orientDelta = M_PI;
 
@@ -119,14 +137,15 @@ namespace rtx { namespace Motion {
         break;
       case MOT_CURVED:
         if(!motionInProgress && motionActive) {
-          Transform t = Localization::getTransform();
+          Transform* t = Localization::getTransform();
 
-          motionData.baseVelocity = 15;
-          motionData.orientDelta = motionGoal.o - t.o;
-          motionData.setDirectionVector(motionGoal.getX() - t.getX(), motionGoal.getY() - t.getY());
+          motionData.baseVelocity = 25;
+          motionData.orientDelta = motionGoal.o - t->o;
+          motionData.setDirectionVector(motionGoal.getX() - t->getX(), motionGoal.getY() - t->getY());
+
           printf("MOT_CURVED motionData: vx=%g, vy=%g, do=%g\n", motionData.dV.x, motionData.dV.y, motionData.orientDelta);
 
-          //printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
+          printf("MOT_CURVED: mag=%g, Vb=%i\n", motionData.dV.getMagnitude(), motionData.baseVelocity);
 
           printf("MOT_CURVED: orientVelocity=%g\n", motionData.getOrientVelocity());
           printf("MOT_CURVED: correctedHeading=%g\n", motionData.getHeading());
@@ -150,10 +169,16 @@ namespace rtx { namespace Motion {
     }
 
     if(motionInProgress || dirty) {
-      if((!isTargetAchieved() && motorCmdTimer.isTime()) || dirty) {
-        printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-        mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-        motorCmdTimer.start();
+      if(!isTargetAchieved()) {
+	if(motorCmdTimer.isTime() || dirty) {
+	  printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	  mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+	  motorCmdTimer.start();
+	}
+      } else {
+	printf("[Motion]Target achieved.\n");
+        stop();
+	motionInProgress = false;
       }
     }
 
@@ -162,11 +187,12 @@ namespace rtx { namespace Motion {
   int setTarget(Transform target) {
     printf("[Motion::setTarget]%i, %i, %g\n", target.getX(), target.getY(), target.o);
     motionGoal = target;
-    motionActive = true;
+    motionInProgress = false;
+    targetAchieved = false;
   }
 
   void start() {
-    motionInProgress = true;
+    motionActive = true;
   }
 
   void stop() {
@@ -180,19 +206,46 @@ namespace rtx { namespace Motion {
   }
 
   void setBehaviour(MotionType mt) {
+    stop();
     motionType = mt;
     motionActive = false;
   }
 
   double targetDistance() {
-    return Localization::getTransform().getPosition().distanceTo(motionGoal.getPosition());
+    return Localization::getTransform()->getPosition().distanceTo(motionGoal.getPosition());
   }
 
   double targetAngle() {
     return 0.0; // TODO: dot(Localization::getOrientation(), motionGoal);
   }
 
+  double stateProbability(Transform* t1, Transform* t2) {
+    double px = gaussian_probability(t1->getX(), 30, t2->getX());
+    double py = gaussian_probability(t1->getY(), 30, t2->getY());
+    double c  = 3.14/180;
+    double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
+
+    /*std::cout << "px=" << px
+              << ", py=" << py
+	      << ", po= " << po
+	      << std::endl;
+    */
+
+    return (px + py + po) / 3;
+  }
+
   bool isTargetAchieved() {
+    if(!targetAchieved) {
+      // (transform - target) <= uncertainty
+
+      Transform* t = Localization::getTransform();
+      double p = stateProbability(t, &motionGoal);
+
+      //std::cout << "P = " << p << std::endl;
+
+      if(p > 0.0115) targetAchieved = true;
+    }
+
     return targetAchieved;
   }
 

@@ -8,6 +8,8 @@
 #ifndef RTX_ENTITY_H
 #define RTX_ENTITY_H
 
+#include <string>
+
 #include "rtxmath.hpp"
 
 namespace rtx {
@@ -31,26 +33,36 @@ namespace rtx {
 
   class Entity {
   private:
+    static unsigned int id_seq;
+
     Transform m_transform;
 
-    int m_health;
+    unsigned int id;
+    int m_health = 0;
 
   public:
+    static unsigned int newID();
+
     Entity();
     Entity(const Entity&);
 
     // By position
-    Entity(const Vec2i*);
+    Entity(const Vec2i);
     Entity(const int, const int);
 
     // By position & orientation
-    Entity(const Transform);
+    Entity(Transform);
     Entity(const int, const int, const double);
+
+    unsigned int getID();
+    int getHealth();
 
     Transform* getTransform();
 
-    void update(const Transform); // Heal
+    void update(Transform); // Heal
     void update(); // Decay
+
+    std::string toString();
   };
 
 };

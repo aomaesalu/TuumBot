@@ -168,6 +168,8 @@ namespace rtx {
     */
     void checkV4L2Capabilities();
 
+    void flipImage();
+
     /**
       Initialises the camera device video format.
       Sets the width and height of the image to the values passed to the class

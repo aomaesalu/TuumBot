@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.cpp
- * Perspective calibration application main window.
+ *  @file MainWindow.cpp
+ *  Perspective calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -51,28 +52,29 @@ namespace rtx {
   }
 
   bool MainWindow::isColored(const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
-    return isColored(x * 256 * 256 + y * 256 + z, mode);
+    return isColored((x << 16) + (y << 8) + z, mode);
   }
 
   void MainWindow::setPlaying(const bool &value) {
-    if (value) {
-      imageArea.setCalculating(false);
-    }
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
-    playing = value; // We have to do this at the end of this method because of lock-free threading
+    if (value)
+      imageArea.resetBlobRegression();
+    playing = value;
+    setCalculating(!value);
   }
 
   void MainWindow::setCalculating(const bool &value) {
+    if (value)
+      imageArea.resetConstants();
     calculating = value;
   }
 
   bool MainWindow::updateFrame() {
-    if (!playing) {
-      return false;
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
     }
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
     imageArea.updateFrame(&frame, &rgbFrame);
     return true;
   }
@@ -149,18 +151,16 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
-  void MainWindow::saveConstantsToFile(const std::string &fileName) {
-    // TODO
-  }
-
-  void MainWindow::readConstantsFromFile(const std::string &fileName) {
-    // TODO
-  }
-
   void MainWindow::readFilterFromFile(const std::string &fileName) {
     std::ifstream inputFile(fileName);
     inputFile >> filter;
     inputFile.close();
+  }
+
+  void MainWindow::saveConstantsToFile(const std::string &fileName) {
+    std::ofstream outputFile(fileName);
+    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
+    outputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {

@@ -19,7 +19,7 @@ namespace rtx { namespace ctl {
     switch(ctx.phase) {
       case CP_INIT:
         Motion::setBehaviour(Motion::MOT_CURVED);
-      	Motion::setTarget(Transform({{10, 10}, 0}));
+        Motion::setTarget(Transform(10, 10, 0));
 
         ctx.phase = CP_RUN;
         break;
@@ -44,12 +44,14 @@ namespace rtx { namespace ctl {
   // Ball search
   void LSBallLocate::init() {
     ctx.phase = CP_INIT;
+    Motion::setBehaviour(Motion::MOT_SCAN);
+    Motion::start();
   }
 
   void LSBallLocate::run() {
+    //TODO: try to search from probable previous ball areas
     switch(ctx.phase) {
       case CP_INIT:
-	Motion::setBehaviour(Motion::MOT_SCAN);
 	ctx.phase = CP_RUN;
 	break;
       case CP_RUN:
@@ -66,15 +68,69 @@ namespace rtx { namespace ctl {
 
   // Ball retrieval
   void LSBallRetrieve::init() {
-    Motion::();
+    Motion::setBehaviour(Motion::MOT_CURVED);
+    Motion::stop();
+
+    ctx.phase = CP_INIT;
+
+    targetUpdate.setPeriod(100);
+    targetUpdate.start();
   }
 
   void LSBallRetrieve::run() {
+    switch(ctx.phase) {
+      case CP_INIT:
+      {
+	targetBall = nullptr;
+	Transform* t = Localization::getTransform();
+	double d = 0.0, _d;
+	for(auto b : *Visioning::ballDetect.getEntities()) {
+          _d = t->distanceTo(b->getTransform()->getPosition());
+	  if(d < _d) {
+	    d = _d;
+	    targetBall = b;
+	  }
+	}
+	if(targetBall != nullptr) ctx.phase = CP_RUN;
+	break;
+      }
+      case CP_RUN:
+      {
+	if(targetBall->getHealth() < 5) {
+          targetBall = nullptr;
+	  ctx.phase = CP_INIT;
+	  break;
+	}
+	
+	//TODO: ( targetPosition = on (ball <-> gate) line & behind ball )
+        if(targetUpdate.isTime()) {
+	  if(targetBall != nullptr) {
+	    Ball* b = targetBall;
+	    Transform* bt = b->getTransform();
+	    // std::cout << b->toString() << std::endl;
 
+	    Transform target((*bt) - 75);
+
+	    //TODO: bt position to relative position
+	    double o = bt->getPosition().getOrientation();
+	    target.setOrientation(o);
+
+	    Motion::setTarget(target);
+	    Motion::start();
+	  }
+
+	  targetUpdate.start();
+	}
+        
+	break;
+      }
+      case CP_DONE:
+	break;
+    }
   }
 
   bool LSBallRetrieve::isRunnable() {
-    return Visioning::balls.size() > 0;
+    return Visioning::ballDetect.size() > 0;
   }
 
 

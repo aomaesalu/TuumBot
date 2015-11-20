@@ -22,7 +22,7 @@ namespace rtx { namespace Logic {
 
         printf("Logic initial state...\n");
         Motion::setBehaviour(Motion::MOT_CURVED);
-      	Motion::setTarget(Transform({{0, 15}, M_PI/4}));
+        Motion::setTarget(Transform(0, 15, M_PI/4));
 
         // Motion::isTargetAchieved()
         logicState = LS_PASSIVE;
