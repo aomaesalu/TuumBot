@@ -195,8 +195,16 @@ namespace rtx {
     return false;
   }
 
-  bool Blob::isSameColor(const Blob&) const {
+  bool Blob::isSameColor(const Blob &other) const {
     return color == other.getColor();
+  }
+
+  bool Blob::isAbove(const Blob &other) const {
+    return position->getY() < other.getPosition()->getY();
+  }
+
+  bool Blob::isBelow(const Blob &other) const {
+    return !isAbove(other);
   }
 
   void Blob::join(Blob &other) {
