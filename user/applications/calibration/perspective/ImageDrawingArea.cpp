@@ -116,7 +116,7 @@ namespace rtx {
     BList.push_back(upperBound);
     for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
       for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-        ABList.push_back(std::pair<*a, *b>);
+        ABList.push_back(std::pair<double, double>(*a, *b));
       }
     }
     CList.push_back(lowerBound);
@@ -337,7 +337,7 @@ namespace rtx {
           for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions + 1) {
             for (unsigned int i = 0; i < 2 * numberOfDivisions + 1; ++i) {
               for (unsigned int j = 0; j < 2 * numberOfDivisions + 1, ++j) {
-                ABList.push_back(std::pair<*(a + i), *(b + j)>);
+                ABList.push_back(std::pair<double, double>(*(a + i), *(b + j)));
               }
             }
           }
