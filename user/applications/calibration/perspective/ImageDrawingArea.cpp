@@ -321,47 +321,46 @@ namespace rtx {
         AList.push_back(verticalResultsList[i].first.first.second);
 
         // Debug print
-        std::cout << "Partitioning A" << std::endl;
+        /*std::cout << "Partitioning A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
           std::cout << *a << " ";
         }
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl << std::endl;*/
 
         partitionList(AList, numberOfDivisions);
 
         // Debug print
-        std::cout << "Partitioned A" << std::endl;
+        /*std::cout << "Partitioned A" << std::endl;
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
           std::cout << *a << " ";
         }
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl << std::endl;*/
 
         // Add B value with previous and next values
         BList.push_back(verticalResultsList[i].first.second.first);
         BList.push_back(verticalResultsList[i].first.second.second);
 
         // Debug print
-        std::cout << "Partitioning B" << std::endl;
+        /*std::cout << "Partitioning B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
           std::cout << *b << " ";
         }
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl << std::endl;*/
 
         partitionList(BList, numberOfDivisions);
 
         // Debug print
-        std::cout << "Partitioned B" << std::endl;
+        /*std::cout << "Partitioned B" << std::endl;
         for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
           std::cout << *b << " ";
         }
-        std::cout << std::endl << std::endl;
+        std::cout << std::endl << std::endl;*/
 
         // Fill ABList with A and B value combinations
         for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions) {
           for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions) {
             for (unsigned int i = 0; i < 2 * numberOfDivisions; i += 2) {
               for (unsigned int j = 0; j < 2 * numberOfDivisions; j += 2) {
-                std::cout << "Adding: " << *(a + i) << " " << *(b + j) << std::endl;
                 ABList.push_back(std::pair<std::pair<double, double>, std::pair<double, double>>(std::pair<double, double>(*(a + i), *(a + i + 1)), std::pair<double, double>(*(b + j), *(b + j + 1))));
               }
             }
@@ -387,20 +386,20 @@ namespace rtx {
       }
 
       // Debug print
-      std::cout << "Partitioning C" << std::endl;
+      /*std::cout << "Partitioning C" << std::endl;
       for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
         std::cout << *c << " ";
       }
-      std::cout << std::endl << std::endl;
+      std::cout << std::endl << std::endl;*/
 
       partitionList(CList, numberOfDivisions);
 
       // Debug print
-      std::cout << "Partitioned C" << std::endl;
+      /*std::cout << "Partitioned C" << std::endl;
       for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
         std::cout << *c << " ";
       }
-      std::cout << std::endl << std::endl;
+      std::cout << std::endl << std::endl;*/
     }
 
     // 1. Establish a condition C when to end the regression algorithm
@@ -419,7 +418,7 @@ namespace rtx {
     CList.erase(CList.begin());
 
     // Debug print
-    std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
+    //std::cout << "A = " << A << std::endl << "B = " << B << std::endl << "C = " << C << std::endl << std::endl;
 
     // 3. For every point, calculate the estimate and the error
     std::vector<double> verticalEstimatesCurrent, verticalEstimatesNext;
@@ -444,10 +443,14 @@ namespace rtx {
     horisontalMSENext = 0;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
       verticalMSECurrent += verticalErrorsCurrent[j] * verticalErrorsCurrent[j];
-      verticalMSECurrent += verticalErrorsNext[j] * verticalErrorsNext[j];
+      verticalMSENext += verticalErrorsNext[j] * verticalErrorsNext[j];
       horisontalMSECurrent += horisontalErrorsCurrent[j] * horisontalErrorsCurrent[j];
-      horisontalMSECurrent += horisontalErrorsNext[j] * horisontalErrorsNext[j];
+      horisontalMSENext += horisontalErrorsNext[j] * horisontalErrorsNext[j];
     }
+
+    // Debug print
+    std::cout << verticalMSECurrent << " " << verticalMSENext << " " << horisontalMSECurrent << " " << horisontalMSENext << std::endl;
+
     verticalMSECurrent /= verticalPoints.size();
     verticalMSENext /= verticalPoints.size();
     horisontalMSECurrent /= horisontalPoints.size();
