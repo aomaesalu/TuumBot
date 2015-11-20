@@ -144,15 +144,26 @@ namespace rtx {
 
         Color color = (*blob)->getColor();
 
+        // Debug
+        std::cout << color << std::endl;
+
         if (color == BALL/* && density > 0.6*/ && boxArea > 10 * 10) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == BLUE_GOAL && boxArea > 30 * 30) {
+        if (color == BLUE_GOAL/* && boxArea > 30 * 30*/) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == YELLOW_GOAL && boxArea > 30 * 30) {
+        if (color == YELLOW_GOAL/* && boxArea > 30 * 30*/) {
+          colorBlob(*blob, pixels, channels, stride);
+        }
+
+        if (color == ROBOT_YELLOW_BLUE) {
+          colorBlob(*blob, pixels, channels, stride);
+        }
+
+        if (color == ROBOT_BLUE_YELLOW) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
