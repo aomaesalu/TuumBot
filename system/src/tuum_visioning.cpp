@@ -27,11 +27,13 @@ namespace rtx { namespace Visioning {
   FeatureSet features;
 
   EDS<Ball> ballDetect;
-  BallSet balls; // Healty ball entities vs new/decaying ball entities?
+  BallSet balls; // Healthy ball entities vs new/decaying ball entities?
   BallSet ballsBuffer;
 
-  GoalSet goals;
-  GoalSet goalsBuffer;
+  Goal *yellowGoal;
+  Goal *yellowGoalBuffer;
+  Goal *blueGoal;
+  Goal *blueGoalBuffer;
 
   RobotSet robots;
   RobotSet robotsBuffer;
@@ -128,9 +130,25 @@ namespace rtx { namespace Visioning {
   void translateGoalsBuffer() {
     editingGoals = true;
 
-    goals.clear();
-    goals = goalsBuffer;
-    goalsBuffer.clear();
+    // TODO: Refactor buffer management
+
+    if (blueGoal) {
+      if (blueGoal != blueGoalBuffer) {
+        delete(blueGoal);
+        blueGoal = blueGoalBuffer;
+      }
+    } else {
+      blueGoal = blueGoalBuffer;
+    }
+
+    if (yellowGoal) {
+      if (yellowGoal != yellowGoalBuffer) {
+        delete(yellowGoal);
+        yellowGoal = yellowGoalBuffer;
+      }
+    } else {
+      yellowGoal = yellowGoalBuffer;
+    }
 
     editingGoals = false;
   }
@@ -261,26 +279,40 @@ namespace rtx { namespace Visioning {
 
       debugTimer.start();
     }
- }
+  }
 
   void goalDetection(const Frame &frame) {
-    goalsBuffer.clear();
-
     Vision::BlobSet blobs = Vision::getBlobs();
 
+    unsigned int largestYellowArea = 0, largestBlueArea = 0;
+
     for (unsigned int i = 0; i < blobs.size(); ++i) {
-      if (blobs[i]->getColor() == BLUE_GOAL) {
-        // TODO: Refactor
+      if (blobs[i]->getColor() == BLUE_GOAL || blobs[i]->getColor() == YELLOW_GOAL) {
         Point2D* point = blobs[i]->getPosition();
         unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
         double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
-      } else if (blobs[i]->getColor() == YELLOW_GOAL) {
-        // TODO: Refactor
-        Point2D* point = blobs[i]->getPosition();
-        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
+        // TODO: Remove duplicate code
+        if (blobs[i]->getColor() == BLUE_GOAL) {
+          if (blobs[i]->getBoxArea() > largestBlueArea) {
+            largestBlueArea = blobs[i]->getBoxArea();
+            if (blueGoalBuffer = nullptr) {
+              blueGoalBuffer = new Goal(distance, angle, blobs[i]->getColor());
+            } else {
+              blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+              blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
+            }
+          }
+        } else {
+          if (blobs[i]->getBoxArea() > largestYellowArea) {
+            largestYellowArea = blobs[i]->getBoxArea();
+            if (yellowGoalBuffer = nullptr) {
+              yellowGoalBuffer = new Goal(distance, angle, blobs[i]->getColor());
+            } else {
+              yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+              yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
+            }
+          }
+        }
       }
     }
 
