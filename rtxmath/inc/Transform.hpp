@@ -33,11 +33,14 @@ namespace rtx {
     void setOrientation(const double);
 
     Vec2i getPosition();
+    double getOrientation();
 
     int getX();
     int getY();
 
     double distanceTo(Vec2i);
+
+    std::string toString();
   };
 
 }
