@@ -133,7 +133,7 @@ namespace rtx {
       // Join blobs
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
-          for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
+          for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
             if (i == j)
               continue;
             if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {

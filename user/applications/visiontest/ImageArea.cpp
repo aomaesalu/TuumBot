@@ -159,12 +159,10 @@ namespace rtx {
         }
 
         if (color == ROBOT_YELLOW_BLUE) {
-          std::cout << "Coloring yellow-blue" << std::endl;
           colorBlob(*blob, pixels, channels, stride);
         }
 
         if (color == ROBOT_BLUE_YELLOW) {
-          std::cout << "Coloring blue-yellow" << std::endl;
           colorBlob(*blob, pixels, channels, stride);
         }
 
