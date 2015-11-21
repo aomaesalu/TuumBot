@@ -26,7 +26,7 @@ namespace rtx {
       Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&);
       ~Blob();
 
-      const std::vector<std::pair<unsigned int, unsigned int>>& getPoints();
+      const std::vector<std::pair<unsigned int, unsigned int>>& getPoints() const;
       Point2D* getPosition() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;

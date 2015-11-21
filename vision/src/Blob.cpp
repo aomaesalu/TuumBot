@@ -87,7 +87,7 @@ namespace rtx {
     // TODO
   }
 
-  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() { // TODO: Constness
+  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() const {
     return points;
   }
 
