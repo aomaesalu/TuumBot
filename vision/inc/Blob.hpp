@@ -1,9 +1,10 @@
 /**
- * @file Blob.hpp
- * Blob seen in the camera frame.
+ *  @file Blob.hpp
+ *  Blob seen in the camera frame.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -25,7 +26,7 @@ namespace rtx {
       Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&);
       ~Blob();
 
-      const std::vector<std::pair<unsigned int, unsigned int>>& getPoints();
+      const std::vector<std::pair<unsigned int, unsigned int>>& getPoints() const;
       Point2D* getPosition() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
@@ -39,9 +40,19 @@ namespace rtx {
       double getBoxRatio() const;
       double getDensity() const;
 
+      bool isOrange() const;
+      bool isBlue() const;
+      bool isYellow() const;
+
+      bool isSameColor(const Blob&) const;
+      bool isAbove(const Blob&) const;
+      bool isBelow(const Blob&) const;
+
       bool overlaps(const Blob&) const;
       bool isClose(const Blob&) const;
       void join(Blob&);
+
+      void setColor(const Color&);
 
     private:
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
@@ -56,6 +67,6 @@ namespace rtx {
 
   };
 
-};
+}
 
 #endif // RTX_VISION_BLOB_H

@@ -13,6 +13,9 @@
 #include <gtkmm.h>
 #include <gtkmm/drawingarea.h>
 
+#include "Color.hpp"
+#include "Blob.hpp"
+
 
 namespace rtx {
 
@@ -33,6 +36,8 @@ namespace rtx {
       GUI *gui;
 
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
+
+      void colorBlob(const Blob*, guint8*, const unsigned int&, const unsigned int&);
 
       bool applyFilter();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);

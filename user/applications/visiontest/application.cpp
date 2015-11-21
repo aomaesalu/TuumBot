@@ -7,13 +7,27 @@
  */
 
 #include "application.hpp"
+#include "GUI.hpp"
 
-#include "tfb_logic.hpp"
-
+#include <thread>
 #include <iostream> // TODO: Remove
 
 using namespace std;
 using namespace rtx;
+
+static void run(GUI *gui) {
+  clock_t startTime = clock();
+  clock_t lastTime = startTime;
+  bool running = true;
+  while(running) {
+    rtx::hal::process();
+
+    Visioning::process();
+    Localization::process();
+
+    gui->updateFrame();
+  }
+}
 
 int main(int argc, char *argv[]) {
   printf("main(): Default tuum system application.\n");
@@ -24,20 +38,11 @@ int main(int argc, char *argv[]) {
   // Initialize system modules
   Visioning::setup();
   Localization::setup();
-  Motion::setup();
 
-  Logic::setup();
-  
-  bool running = true;
-  while(running) {
-    rtx::hal::process();
+  GUI gui(argc, argv, hal::hw.getFrontCamera());
 
-    Visioning::process();
-    Localization::process();
-    Motion::process();
+  std::thread applicationThread(run, &gui);
+  applicationThread.detach();
 
-    Logic::process();
-  }
-
-  return 0;
+  return gui.run();
 }

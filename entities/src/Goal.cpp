@@ -1,9 +1,10 @@
 /**
- * @file Goal.cpp
- * Goal class.
+ *  @file Goal.cpp
+ *  Goal class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 20 November 2015
  */
 
 #include "Goal.hpp"
@@ -14,7 +15,8 @@ namespace rtx {
   Goal::Goal(const Goal &other):
     //Entity(other.getPosition()),
     RelativePosition(other.getDistance(), other.getAngle()),
-    Rectangle(other.getWidth(), other.getLength())
+    Rectangle(other.getWidth(), other.getLength()),
+    color(other.getColor())
   {
 
   }
@@ -35,11 +37,24 @@ namespace rtx {
 
   }*/
 
-  Goal::Goal(const unsigned int &distance, const double &angle, const double &width, const double &length):
+  Goal::Goal(const unsigned int &distance, const double &angle, const Color &color, const double &width, const double &length):
     RelativePosition(distance, angle),
-    Rectangle(width, length)
+    Rectangle(width, length),
+    color(color)
   {
 
   }
 
-};
+  Color Goal::getColor() const {
+    return color;
+  }
+
+  bool Goal::isBlue() const {
+    return color == BLUE_GOAL;
+  }
+
+  bool Goal::isYellow() const {
+    return color == YELLOW_GOAL;
+  }
+
+}

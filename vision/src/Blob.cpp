@@ -1,9 +1,10 @@
 /**
- * @file Blob.cpp
- * Blob seen in the camera frame.
+ *  @file Blob.cpp
+ *  Blob seen in the camera frame.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "cameraConstants.hpp"
@@ -86,7 +87,7 @@ namespace rtx {
     // TODO
   }
 
-  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() { // TODO: Constness
+  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() const {
     return points;
   }
 
@@ -138,15 +139,38 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
+  bool Blob::isOrange() const {
+    return color == BALL;
+  }
+
+  bool Blob::isBlue() const {
+    return color == BLUE_GOAL;
+  }
+
+  bool Blob::isYellow() const {
+    return color == YELLOW_GOAL;
+  }
+
+  bool Blob::isSameColor(const Blob &other) const {
+    return color == other.getColor() ||
+          ((color == ROBOT_YELLOW_BLUE || color == ROBOT_BLUE_YELLOW) && (other.isBlue() || other.isYellow()));
+  }
+
+  bool Blob::isAbove(const Blob &other) const {
+    return position->getY() < other.getPosition()->getY();
+  }
+
+  bool Blob::isBelow(const Blob &other) const {
+    return !isAbove(other);
+  }
+
   bool Blob::overlaps(const Blob &other) const {
-    return color == other.getColor() && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+    return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
   bool Blob::isClose(const Blob &other) const {
     if (overlaps(other))
       return true;
-    if (color != other.getColor())
-      return false;
     if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
     //if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
       if ((std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) >= std::max(getHeight(), other.getHeight()) / 2) { // The Y coordinate overlapping is over half of the height of the smaller blob
@@ -200,4 +224,8 @@ namespace rtx {
     position->setY(ySum / numberOfPoints);
   }
 
-};
+  void Blob::setColor(const Color &color) {
+    this->color = color;
+  }
+
+}

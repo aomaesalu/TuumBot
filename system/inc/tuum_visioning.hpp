@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -27,8 +27,6 @@ namespace rtx { namespace Visioning {
 
   typedef std::vector<Feature*> FeatureSet;
   typedef std::vector<Ball*> BallSet;
-  typedef std::vector<Robot*> RobotSet;
-  typedef std::vector<Goal*> GoalSet;
   typedef std::vector<Robot*> RobotSet;
 
   // Entity Detection State
@@ -68,23 +66,23 @@ namespace rtx { namespace Visioning {
         }), tmp_objs.end());
 
       {
-	auto it = tmp_objs.begin();
-	while(it != tmp_objs.end()) {
-	  if((*it)->getHealth() > mx_h) {
-	    objs.push_back(*it);
-	    it = tmp_objs.erase(it);
-	  } else it++;
-	}
+        auto it = tmp_objs.begin();
+        while(it != tmp_objs.end()) {
+          if((*it)->getHealth() > mx_h) {
+            objs.push_back(*it);
+            it = tmp_objs.erase(it);
+          } else it++;
+        }
       }
 
       {
-	auto it = objs.begin();
-	while(it != objs.end()) {
-	  if((*it)->getHealth() < mx_h) {
-	    tmp_objs.push_back(*it);
-	    it = objs.erase(it);
-	  } else it++;
-	}
+        auto it = objs.begin();
+        while(it != objs.end()) {
+          if((*it)->getHealth() < mx_h) {
+            tmp_objs.push_back(*it);
+            it = objs.erase(it);
+          } else it++;
+        }
       }
     }
 
@@ -98,8 +96,10 @@ namespace rtx { namespace Visioning {
   extern BallSet balls; //TODO: refactor code to utilize 'ballDetect'
   extern BallSet ballsBuffer;
 
-  extern GoalSet goals;
-  extern GoalSet goalsBuffer;
+  extern Goal *blueGoal;
+  extern Goal *blueGoalBuffer;
+  extern Goal *yellowGoal;
+  extern Goal *yellowGoalBuffer;
 
   extern RobotSet robots;
   extern RobotSet robotsBuffer;
