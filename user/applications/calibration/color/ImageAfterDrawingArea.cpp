@@ -112,7 +112,7 @@ namespace rtx {
   std::string ImageAfterDrawingArea::getOutput() const {
     std::string output = "";
     for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
-      char colorValue = savingMap.at(isInFilter(filter, 0, i)).at(isInFilter(filter, 1, i)).at(isInFilter(filter, 2, i)).at(isInFilter(filter, 3, i)).at(isInFilter(filter, 4, i)).at(isInFilter(filter, 5, i)).at(isInFilter(filter, 6, i)).at(isInFilter(filter, 7, i));
+      unsigned char colorValue = savingMap.at(isInFilter(filter, 0, i)).at(isInFilter(filter, 1, i)).at(isInFilter(filter, 2, i)).at(isInFilter(filter, 3, i)).at(isInFilter(filter, 4, i)).at(isInFilter(filter, 5, i)).at(isInFilter(filter, 6, i)).at(isInFilter(filter, 7, i));
       /*char colorValue = 0;
       for (unsigned int mode = 0; mode < 8; ++mode) { // We assume 0 < numberOfModes <= 8
         bool modeValue = 0;
@@ -181,15 +181,13 @@ namespace rtx {
   }
 
   void ImageAfterDrawingArea::initialiseSavingMap() {
-    std::cout << "Generating saving map" << std::endl;
-    for (char i = 0; i < 256; ++i) {
+    for (unsigned int i = 0; i < 256; ++i) {
       bool v[8];
       for (unsigned int j = 0; j < 8; ++j) {
-        v[j] = (i >> (7 - j)) && 0x1;
+        v[j] = (i >> (7 - j)) & 0x1;
       }
       savingMap[v[0]][v[1]][v[2]][v[3]][v[4]][v[5]][v[6]][v[7]] = i;
     }
-    std::cout << "Saving map generated" << std::endl;
   }
 
   void ImageAfterDrawingArea::resetFilter() {
