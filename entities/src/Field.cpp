@@ -33,10 +33,8 @@ namespace rtx {
     robotSelf{robotSelf}
   {
     goals = new Goal*[2];
-    goals[0] = new Goal(BLUE_GOAL_POSITION_X, BLUE_GOAL_POSITION_Y, BLUE_GOAL);
-    // TODO: Add goal color information
-    goals[1] = new Goal(YELLOW_GOAL_POSITION_X, YELLOW_GOAL_POSITION_Y, YELLOW_GOAL);
-    // TODO: Add goal color information
+    goals[0] = nullptr;//new Goal(BLUE_GOAL_POSITION_X, BLUE_GOAL_POSITION_Y, BLUE_GOAL);
+    goals[1] = nullptr;//new Goal(YELLOW_GOAL_POSITION_X, YELLOW_GOAL_POSITION_Y, YELLOW_GOAL);
   }
 
   Field::Field(Goal *friendlyGoal, Goal *enemyGoal, Robot *robotSelf,
