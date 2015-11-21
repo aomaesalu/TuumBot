@@ -85,7 +85,7 @@ namespace rtx {
           for (int dy = -2; dy <= 2; ++dy) {
             if (point.first + dx >= CAMERA_WIDTH || point.second + dy >= CAMERA_HEIGHT)
               continue;
-            colorPixel(pixels + (point->first + dx) * channels + (point->second + dy) * stride, r, g, b);
+            colorPixel(pixels + (point.first + dx) * channels + (point.second + dy) * stride, r, g, b);
           }
         }
       }
