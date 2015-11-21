@@ -9,6 +9,8 @@
 
 #include "Checkerboard.hpp"
 
+#include "cameraConstants.hpp"
+
 
 namespace rtx {
 
