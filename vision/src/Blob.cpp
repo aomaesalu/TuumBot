@@ -152,8 +152,7 @@ namespace rtx {
   }
 
   bool Blob::isSameColor(const Blob &other) const {
-    return color == other.getColor() ||
-          ((color == ROBOT_YELLOW_BLUE || color == ROBOT_BLUE_YELLOW) && (other.isBlue() || other.isYellow()));
+    return color == other.getColor();
   }
 
   bool Blob::isAbove(const Blob &other) const {
