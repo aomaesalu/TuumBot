@@ -94,15 +94,16 @@ namespace rtx { namespace Visioning {
 
   extern EDS<Ball> ballDetect;
   extern BallSet balls; //TODO: refactor code to utilize 'ballDetect'
-  extern BallSet ballsBuffer;
+  extern BallSet ballsBuffer; // Unused
 
   extern Goal *blueGoal;
   extern Goal *blueGoalBuffer;
   extern Goal *yellowGoal;
   extern Goal *yellowGoalBuffer;
 
+  extern EDS<Robot> robotDetect;
   extern RobotSet robots;
-  extern RobotSet robotsBuffer;
+  extern RobotSet robotsBuffer; // Unused
 
   extern bool editingBalls;
   extern bool editingGoals;
