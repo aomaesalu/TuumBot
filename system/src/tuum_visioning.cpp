@@ -154,8 +154,14 @@ namespace rtx { namespace Visioning {
       yellowGoal = yellowGoalBuffer;
     }*/
 
-    blueGoal = new Goal(*blueGoalBuffer);
-    yellowGoal = new Goal(*yellowGoalBuffer);
+    if (blueGoalBuffer)
+      blueGoal = new Goal(*blueGoalBuffer);
+    else
+      blueGoal = nullptr;
+    if (yellowGoalBuffer)
+      yellowGoal = new Goal(*yellowGoalBuffer);
+    else
+      yellowGoal = nullptr;
 
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;
