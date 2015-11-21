@@ -14,8 +14,11 @@ namespace rtx { namespace hal {
     MainBoard();
 
     void init(RTX485::WriteHandle wHandle, RTX485::SignalService sigRegister);
+    void signal(RTX485::Message);
 
     void senseBall();
+    void chargeCoil();
+    void releaseCoil();
 
     bool getBallSensorState();
   };

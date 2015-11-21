@@ -26,7 +26,9 @@ namespace rtx { namespace hal {
       std::string data;
     };
 
-    typedef std::function<void(Message)> DeviceCallback;
+    class Device;
+
+    typedef boost::function<void (Message)> DeviceCallback;
     typedef std::map<DeviceID, DeviceCallback> SignalMap; 
 
     struct SignalParams {
@@ -55,22 +57,24 @@ namespace rtx { namespace hal {
       }
 
       void init(WriteHandle wHandle, SignalService sigRegister) {
-	this->init(wHandle, sigRegister, &Device::signal);
+	DeviceCallback f;
+	f = std::bind1st(std::mem_fun(&Device::signal), this);
+	this->init(wHandle, sigRegister, f);
       }
 
-      void init(WriteHandle wHandle, SignalService sigRegister, void(Device::*dcb)(Message)) {
+      void init(WriteHandle wHandle, SignalService sigRegister, DeviceCallback dcb) {
 	this->init(wHandle);
 
 	if(sigRegister != nullptr) {
 	  SignalParams sp;
 	  sp.id = this->id;
-          sp.cb = std::bind1st(std::mem_fun(dcb), this);
+          sp.cb = dcb;
 	  sigRegister(sp);
 	}
       }
 
-      void signal(Message m) {
-	std::cout << "DEVICE SIGNAL CAPTURE" << std::endl;
+      virtual void signal(Message m) {
+	std::cout << "UNHANDLED DEVICE SIGNAL CAPTURE" << std::endl;
       };
 
       DeviceID getID() { return id; }

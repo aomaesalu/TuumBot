@@ -86,7 +86,7 @@ namespace rtx { namespace ctl {
 	break;
       case CP_RUN:
       {
-	if(hw.isBallInDribbler()) break;
+	//if(hw.isBallInDribbler()) break;
 
 	if(targetBall->getHealth() < 5) {
           targetBall = nullptr;
