@@ -10,8 +10,9 @@
 
 #include "Hardware.hpp"
 
-
 namespace rtx { namespace hal {
+
+  const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
     m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT)//,
@@ -23,7 +24,10 @@ namespace rtx { namespace hal {
 
   void Hardware::init() {
     printf("[Hardware::init]Loading hardware...\n");
-    m_motorControl.init();
+    HWBus.init("/dev/ttyUSB0", 19200);
+
+    m_motorControl.init(hw_bus_write);
+    m_mainBoard.init(hw_bus_write, hw_bus_register);
 
     //refereeListener.init("/dev/ttyACM0");
     //refereeListener2.init("/dev/ttyACM1");
@@ -41,12 +45,12 @@ namespace rtx { namespace hal {
     return nullptr; //&m_backCamera;
   }
 
-  MotorControl* Hardware::getMotorControl() {
-    return &m_motorControl;
+  MainBoard* Hardware::getMainBoard() {
+    return &m_mainBoard;
   }
 
-  bool Hardware::isBallInDribbler() {
-    return false;
+  MotorControl* Hardware::getMotorControl() {
+    return &m_motorControl;
   }
 
 }}
