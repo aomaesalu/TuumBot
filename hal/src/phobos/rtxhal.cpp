@@ -29,6 +29,8 @@ namespace rtx { namespace hal {
       mb->senseBall();
       senseTimer.start();
     }
+
+    hw.run();
   }
 
 }}

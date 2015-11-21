@@ -35,6 +35,11 @@ namespace rtx { namespace hal {
     //referee->init("/dev/ttyACM0", 9600);
     //referee2->init("/dev/ttyACM1", 9600);
     //referee->write_some("aABKICKOFF----");
+    m_mainBoard.startDribbler();
+  }
+
+  void Hardware::run() {
+    m_mainBoard.run();
   }
 
   Camera* Hardware::getFrontCamera() {
