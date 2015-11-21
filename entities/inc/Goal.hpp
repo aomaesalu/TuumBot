@@ -25,14 +25,14 @@
 
 namespace rtx {
 
-  class Goal: public RelativePosition, public Rectangle {//public Entity, public Rectangle, public RelativePosition {
+  class Goal: public Entity, public Rectangle {
     public:
       Goal(const Goal&);
       /*Goal(const Point2D*, const double& = GOAL_WIDTH,
            const double& = GOAL_LENGTH);
       Goal(const double&, const double&, const double& = GOAL_WIDTH,
            const double& = GOAL_LENGTH);*/
-      Goal(const unsigned int&, const double&, const Color&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
+      Goal(const Transform, const Color&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
       Color getColor() const;
 

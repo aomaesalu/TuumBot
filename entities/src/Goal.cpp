@@ -13,8 +13,7 @@
 namespace rtx {
 
   Goal::Goal(const Goal &other):
-    //Entity(other.getPosition()),
-    RelativePosition(other.getDistance(), other.getAngle()),
+    Entity(*other.getTransform()),
     Rectangle(other.getWidth(), other.getLength()),
     color(other.getColor())
   {
@@ -37,8 +36,8 @@ namespace rtx {
 
   }*/
 
-  Goal::Goal(const unsigned int &distance, const double &angle, const Color &color, const double &width, const double &length):
-    RelativePosition(distance, angle),
+  Goal::Goal(const Transform transform, const Color &color, const double &width, const double &length):
+    Entity(transform),
     Rectangle(width, length),
     color(color)
   {
