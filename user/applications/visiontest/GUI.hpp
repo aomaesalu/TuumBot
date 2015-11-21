@@ -1,14 +1,14 @@
 /**
  *  @file GUI.hpp
- *  Team football application GUI interface class.
+ *  Vision testing application GUI interface class.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
-#define RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
+#ifndef RTX_APPLICATIONS_VISION_TEST_GUI_H
+#define RTX_APPLICATIONS_VISION_TEST_GUI_H
 
 #include <vector>
 #include <string>
@@ -58,4 +58,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
+#endif // RTX_APPLICATIONS_VISION_TEST_GUI_H
