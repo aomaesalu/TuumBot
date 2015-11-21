@@ -23,6 +23,15 @@ namespace rtx { namespace Navigation {
     return target;
   }
 
+  Transform calcGoalShootPos(Transform* bt) {
+    Transform target((*bt) - 0);
+
+    double o = bt->getPosition().getOrientation();
+    target.setOrientation(o);
+    return target;
+  }
+
+
   Ball* getNearestBall() {
     Ball* ball = nullptr;
     Transform* t = Localization::getTransform();

@@ -89,6 +89,8 @@ namespace rtx { namespace ctl {
 
   private:
     Context ctx;
+
+    Goal* targetGoal;
   };
 
 }}

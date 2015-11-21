@@ -177,11 +177,38 @@ namespace rtx { namespace ctl {
 
   // Shoot to opposing goal
   void LSGoalShoot::run() {
-    //TODO
+    switch(ctx.phase) {
+      case CP_INIT:
+        Motion::setBehaviour(Motion::MOT_CURVED);
+
+        targetGoal = Visioning::blueGoal;
+	if(targetGoal != nullptr) ctx.phase = CP_RUN;
+	break;
+      case CP_RUN:
+      {
+	if(targetGoal != nullptr) {
+	  Motion::setTarget(Navigation::calcGoalShootPos(targetGoal->getTransform()));
+	  if(!Motion::isRunning()) Motion::start();
+
+	  if(Motion::isTargetAchieved()) {
+	    std::cout << "SHOOT" << std::endl;
+	    Motion::stop();
+	    hal::hw.getMainBoard()->doCoilKick();
+	    hal::hw.getMainBoard()->stopDribbler();
+
+	    ctx.phase = CP_DONE;
+	    std::cout << "DONE" << std::endl;
+	  }
+	}
+	break;
+      }
+      case CP_DONE:
+	break;
+    }
   }
 
   bool LSGoalShoot::isRunnable() {
-    std::cout << "LSGoalShoot - " << (Visioning::blueGoal == nullptr) << std::endl;
+    std::cout << "LSGoalShoot - " << (Visioning::blueGoal != nullptr) << std::endl;
     return Visioning::blueGoal != nullptr;
   }
 
