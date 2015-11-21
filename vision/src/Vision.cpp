@@ -126,7 +126,7 @@ namespace rtx {
       editingCorners = false;
     }
 
-    // Joins same-colored blobs if their box areas are close or overlap
+    // Joins same-colored blobs if their box areas are close or overlap; remove too small blobs at the same time
     void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
       std::set<unsigned int> toBeRemoved;
 
@@ -136,6 +136,11 @@ namespace rtx {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
           continue;
 
+        if (blobsBuffer[i]->getNumberOfPoints() < 6) {
+          toBeRemoved.insert(i);
+          continue;
+        }
+
         for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
 
           if (i == j)
@@ -143,6 +148,11 @@ namespace rtx {
 
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
+
+          if (blobsBuffer[j]->getNumberOfPoints() < 6) {
+            toBeRemoved.insert(j);
+            continue;
+          }
 
           if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
 
