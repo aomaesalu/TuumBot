@@ -110,20 +110,14 @@ namespace rtx {
   }
 
   std::string ImageAfterDrawingArea::getOutput() const {
-    std::string output(256 * 256 * 256, 0);
+    std::string output(256 * 256 * 256, (unsigned char) 0);
     unsigned int bitmask = 1 << 7;
     for (unsigned int mode = 0; mode < 8; ++mode) {
       for (std::set<unsigned int>::iterator value = filter[mode].begin(); value != filter[mode].end(); ++value) {
-        std::cout << bitmask << " " << *value << " " << output[*value] << std::endl;
         output[*value] |= bitmask;
       }
       bitmask >>= 1;
     }
-    /*std::string output = "";
-    for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
-      unsigned char colorValue = savingMap.at(isInFilter(filter, 0, i)).at(isInFilter(filter, 1, i)).at(isInFilter(filter, 2, i)).at(isInFilter(filter, 3, i)).at(isInFilter(filter, 4, i)).at(isInFilter(filter, 5, i)).at(isInFilter(filter, 6, i)).at(isInFilter(filter, 7, i));
-      output += colorValue;
-    }*/
     return output;
   }
 
