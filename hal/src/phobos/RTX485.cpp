@@ -13,6 +13,8 @@
 
 namespace rtx { namespace hal {
 
+  static RTX485::SignalMap rs_callbacks;
+
   RTX485::RTX485() {
 
   }
@@ -87,15 +89,15 @@ namespace rtx { namespace hal {
 
   void RTX485::registerDevice(SignalParams sp) {
     std::cout << "[RTX485::registerDevice]" << (unsigned int)(sp.id) << std::endl;
-    callbacks[sp.id] = sp.cb;
+    rs_callbacks[sp.id] = sp.cb;
   }
 
   void RTX485::signal(Message msg) {
-    auto it = callbacks.find(msg.id);
-    if(it != callbacks.end()) {
+    auto it = rs_callbacks.find(msg.id);
+    if(it != rs_callbacks.end()) {
       it->second(msg);
     } else {
-      std::cout << "[RTX485::signal]Message to unknown device." << std::endl;
+      std::cout << "[RTX485::signal]Message to unknown device - "  << (unsigned int)msg.id << ", " << msg.data << std::endl;
     }
   }
 
