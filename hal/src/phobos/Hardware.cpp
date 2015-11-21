@@ -37,6 +37,10 @@ namespace rtx { namespace hal {
     //referee->write_some("aABKICKOFF----");
   }
 
+  void Hardware::run() {
+    m_mainBoard.run();
+  }
+
   Camera* Hardware::getFrontCamera() {
     return &m_frontCamera;
   }

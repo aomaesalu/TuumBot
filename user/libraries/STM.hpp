@@ -26,6 +26,7 @@ namespace rtx {
   typedef std::vector<ConditionFunc> ConditionSet;
 
   typedef std::vector<Controller*> CtrlSet;
+  typedef std::vector<State*> StateSet;
 
   enum CtrlPhase {
     CP_INIT,
@@ -83,13 +84,17 @@ namespace rtx {
     STM();
 
     void setState(State* st);
+    void addRootState(State* st);
+
     State* getState() { return m_state; }
 
     State* createState(std::string);
 
     void process();
   private:
-    std::vector<State*> m_states;
+    StateSet m_states;
+    StateSet m_rootStates;
+
     State* m_state;
   };
 
