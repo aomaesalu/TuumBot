@@ -101,9 +101,13 @@ namespace rtx {
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
-    colorPoints(points, pixels, channels, stride);
+    if (!gui->isPlaying()) {
+      colorPoints(points, pixels, channels, stride);
 
-    drawPerspective(pixels, channels, stride);
+      gui->getCheckerboard()->calculateConstants();
+
+      drawPerspective(pixels, channels, stride);
+    }
 
     return true;
   }

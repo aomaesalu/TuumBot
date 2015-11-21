@@ -29,6 +29,8 @@ namespace rtx {
 
       void addPoint(const unsigned int&, const unsigned int&);
 
+      void calculateConstants();
+
       std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&);
       std::pair<unsigned int, unsigned int> realToVirtual(const double&, const double&);
 

@@ -11,6 +11,8 @@
 
 #include "cameraConstants.hpp"
 
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
@@ -64,6 +66,11 @@ namespace rtx {
       points[filled % (width + 1)][filled / (width + 1)] = std::pair<unsigned int, unsigned int>(x, y);
       filled++;
     }
+  }
+
+  void Checkerboard::calculateConstants() {
+    std::cout << "Calculating constants" << std::endl;
+    // TODO
   }
 
   std::pair<double, double> Checkerboard::virtualToReal(const unsigned int &x, const unsigned int &y) {
