@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
@@ -34,7 +34,6 @@ namespace rtx {
       bool isPlaying() const;
       bool isCalculating() const;
 
-      double getA() const;
       double getB() const;
       double getC() const;
 
@@ -67,18 +66,14 @@ namespace rtx {
       unsigned int squareWidth;
       unsigned int numberOfDivisions;
       unsigned int numberOfBestDivisions;
-      // <A value>
-      std::vector<double> AList;
       // <B value>
       std::vector<double> BList;
-      // <<A value, B value>>
-      std::vector<std::pair<double, double>> ABList;
       // <C value>
       std::vector<double> CList;
-      // <<<A value, <A previous value, A next value>>, <B value, <B previous value, B next value>>>, MSE value>
-      std::vector<std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double>> verticalResultsList;
-      // <<C value, C previous value, C next value>, MSE value>
-      std::vector<std::pair<std::pair<double, std::pair<double, double>>, double>> horisontalResultsList;
+      // <<B value, B next value>, MSE value>
+      std::vector<std::pair<std::pair<double, double>, double>> verticalResultsList;
+      // <<C value, C next value>, MSE value>
+      std::vector<std::pair<std::pair<double, double>, double>> horisontalResultsList;
 
       void initialiseProperties();
       void initialiseImage();
@@ -88,9 +83,11 @@ namespace rtx {
       void colorPixels(guint8*, const unsigned int&, const unsigned int&, guint8*, const unsigned int&, const unsigned int&);
       void regressBlobs();
       void colorBlobs(guint8*, const unsigned int&, const unsigned int&);
-      void regressConstants();
+      void regressConstants(guint8*, const unsigned int&, const unsigned int&);
 
       bool applyCalculations();
+      std::pair<unsigned int, unsigned int> realToPixel(const double&, const double&);
+      bool drawPerspective(guint8*, const unsigned int&, const unsigned int&);
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
   };
