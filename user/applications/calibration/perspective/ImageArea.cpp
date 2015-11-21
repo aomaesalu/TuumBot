@@ -77,8 +77,9 @@ namespace rtx {
     unsigned int b = 255;
 
     // Draw perspective points
-    for (unsigned int i = 0; i < FIELD_LENGTH; ++i) {
-      for (unsigned int j = 0; j < FIELD_LENGTH; ++j) {
+    unsigned int step = gui->getCheckerboard()->getSquareWidth();
+    for (unsigned int i = 0; i < FIELD_LENGTH; i += step) {
+      for (unsigned int j = 0; j < FIELD_LENGTH; j += step) {
         // TODO
       }
     }

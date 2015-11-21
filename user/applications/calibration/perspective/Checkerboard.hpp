@@ -15,12 +15,13 @@ namespace rtx {
   class Checkerboard {
 
     public:
-      Checkerboard(const unsigned int&, const unsigned int&);
+      Checkerboard(const unsigned int&, const unsigned int&, const unsigned int&);
 
       const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>& getPoints() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
       unsigned int getSize() const;
+      unsigned int getSquareWidth() const;
       unsigned int getNumberOfPointsFilled() const;
 
       bool isEmpty() const;
@@ -32,6 +33,7 @@ namespace rtx {
       std::vector<std::vector<std::pair<unsigned int, unsigned int>>> points;
       unsigned int width; // Number of squares in horisontal direction
       unsigned int height; // Number of squares in vertical direction
+      unsigned int squareWidth; // Square width in the real world (in mm)
       unsigned int filled;
 
   };

@@ -12,9 +12,10 @@
 
 namespace rtx {
 
-  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height):
+  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height, const unsigned int& squareWidth):
     width(width),
     height(height),
+    squareWidth(squareWidth),
     points(width + 1, std::vector<std::pair<unsigned int, unsigned int>>(height + 1, std::pair<unsigned int, unsigned int>(0, 0))),
     filled(0)
   {

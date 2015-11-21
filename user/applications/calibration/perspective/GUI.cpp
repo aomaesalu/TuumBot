@@ -25,7 +25,7 @@ namespace rtx {
     this->camera = camera;
 
     // Create empty checkerboard
-    checkerboard = new Checkerboard(7, 7);
+    checkerboard = new Checkerboard(7, 7, 25);
 
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv);
