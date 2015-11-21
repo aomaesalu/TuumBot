@@ -201,8 +201,8 @@ namespace rtx { namespace Visioning {
       // STEP 1: Filter out invalid blobs
       if(color != BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
-      if(boxArea < 4 * 4) continue;
       if(density > 1.0) continue;
+      if(boxArea < 4 * 4) continue;
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
@@ -293,33 +293,44 @@ namespace rtx { namespace Visioning {
 
     for (unsigned int i = 0; i < blobs.size(); ++i) {
       Color color = blobs[i]->getColor();
-      if (color == BLUE_GOAL || color == YELLOW_GOAL) {
-        Point2D* point = blobs[i]->getPosition();
-        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        // TODO: Remove duplicate code
-        if (color == BLUE_GOAL) {
-          if (blobs[i]->getBoxArea() > largestBlueArea) {
-            largestBlueArea = blobs[i]->getBoxArea();
-            if (blueGoalBuffer == nullptr) {
-              blueGoalBuffer = new Goal(distance, angle, color);
-            } else {
-              blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
-              blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
-            }
+      double density = blobs[i]->getDensity();
+      unsigned int boxArea = blobs[i]->getBoxArea();
+      //double ratio = blobs[i]->getBoxRatio();
+
+      // Filter out invalid blobs
+      if (color != BLUE_GOAL && color != YELLOW_GOAL) continue;
+      if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
+      if (density > 1.0) continue;
+      if(boxArea < 20 * 20) continue; // TODO: Calibrate with field tests
+      //if(fabs(1 - ratio) > 0.3) continue;
+      /* && density > 0.6*/
+
+      Point2D* point = blobs[i]->getPosition();
+      unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
+      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+      // TODO: Remove duplicate code
+      if (color == BLUE_GOAL) {
+        if (boxArea > largestBlueArea) {
+          largestBlueArea = boxArea;
+          if (blueGoalBuffer == nullptr) {
+            blueGoalBuffer = new Goal(distance, angle, color);
+          } else {
+            blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+            blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
           }
-        } else {
-          if (blobs[i]->getBoxArea() > largestYellowArea) {
-            largestYellowArea = blobs[i]->getBoxArea();
-            if (yellowGoalBuffer == nullptr) {
-              yellowGoalBuffer = new Goal(distance, angle, color);
-            } else {
-              yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
-              yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
-            }
+        }
+      } else {
+        if (boxArea > largestYellowArea) {
+          largestYellowArea = boxArea;
+          if (yellowGoalBuffer == nullptr) {
+            yellowGoalBuffer = new Goal(distance, angle, color);
+          } else {
+            yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+            yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
           }
         }
       }
+
     }
 
     translateGoalsBuffer();
@@ -340,8 +351,8 @@ namespace rtx { namespace Visioning {
       // STEP 1: Filter out invalid blobs
       if (color != ROBOT_YELLOW_BLUE && color != ROBOT_BLUE_YELLOW) continue;
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
-      //if(boxArea < 10 * 10) continue;
       if (density > 1.0) continue;
+      //if(boxArea < 8 * 3) continue; // TODO: Calibrate with field tests
       //if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
