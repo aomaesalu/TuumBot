@@ -17,6 +17,7 @@
 
 //TODO: Implement state machine & controllers
 //TODO: Refactor MotionData structure to separate source
+//TODO: Refactor code in overall
 namespace rtx { namespace Motion {
 
   enum MotionPhase {
