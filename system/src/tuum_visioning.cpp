@@ -153,6 +153,10 @@ namespace rtx { namespace Visioning {
     } else {
       yellowGoal = yellowGoalBuffer;
     }
+    
+    // TODO: Remove casting to null pointers when localisation is working
+    blueGoalBuffer = nullptr;
+    yellowGoalBuffer = nullptr;
 
     editingGoals = false;
   }
@@ -287,6 +291,10 @@ namespace rtx { namespace Visioning {
   }
 
   void goalDetection(const Frame &frame) {
+    // TODO: Remove casting to null pointers when localisation is working
+    blueGoalBuffer = nullptr;
+    yellowGoalBuffer = nullptr;
+
     Vision::BlobSet blobs = Vision::getBlobs();
 
     unsigned int largestYellowArea = 0, largestBlueArea = 0;
