@@ -43,7 +43,7 @@ void SerialPort::init(const char *com_port_name, int baud_rate)
 	// option settings...
 	port_->set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
 	port_->set_option(boost::asio::serial_port_base::character_size(8));
-	port_->set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
+	port_->set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::two));
 	port_->set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
 	port_->set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 

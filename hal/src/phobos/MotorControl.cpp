@@ -6,58 +6,79 @@
 
 namespace rtx { namespace hal {
 
-  MotorControl::MotorControl() {
+  const char CMD_MOTOR_SPEED[] = "sd";
 
+  MotorControl::MotorControl() {
+    write = nullptr;
   }
 
   MotorControl::~MotorControl() {
 
-    close(serialPort);
   }
 
-  void MotorControl::init() {
-    int motorids[4] = {5,6,7,8};
-    const char* device = "/dev/ttyUSB0";
-    serialPort=open(device, O_RDWR | O_NOCTTY | O_NDELAY); //open port
+  void MotorControl::init(RTX485::WriteHandle wHandle) {
+    int id_seq, ix;
 
-    struct termios portcfg; // struct for settings
+    for(ix=0, id_seq=1; ix < MOTOR_COUNT; ix++, id_seq++) {
+      m_motorIDs[ix] = id_seq;
+    }
 
-    // current settings
+    write = wHandle;
+
+    std::cout << "[MotorControl]Ready." << std::endl;
+  }
+
+
+  std::string getSpeedCmd(int v) {
+    std::stringstream out;
+    out << CMD_MOTOR_SPEED;
+    out << v;
+    return out.str();
+  }
+
+  void MotorControl::OmniDrive(double speed, double angle, double rot) {
+    int spd1 = speed * sin(angle + M_PI / 4.0) + rot;
+    int spd2 = speed * -sin(angle - M_PI / 4.0) + rot;
+    int spd3 = speed * -sin(angle + M_PI / 4.0) + rot;
+    int spd4 = speed * sin(angle - M_PI / 4.0) + rot;
+
+    int speeds[4] = {spd1, spd2, spd3, spd4};
+    for (int ix=0; ix < MOTOR_COUNT; ix++) {
+      write({m_motorIDs[ix], getSpeedCmd(speeds[ix])});
+      usleep(10);
+    }
+  }
+
+}}
+
+
+    //serialPort=open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+
+    /*
+    struct termios portcfg;
     tcgetattr(serialPort, &portcfg);
-
-    // Flush the port's buffers (in and out) before we start using it
     tcflush(serialPort, TCIOFLUSH);
-
-    // Set the input and output baud rates
     cfsetispeed(&portcfg, baudrate);
     cfsetospeed(&portcfg, baudrate);
 
-    // c_cflag contains a few important things- CLOCAL and CREAD, to prevent
-    //   this program from "owning" the port and to enable receipt of data.
-    //   Also, it holds the settings for number of data bits, parity, stop bits,
-    //   and hardware flow control.
     portcfg.c_cflag |= CLOCAL;
     portcfg.c_cflag |= CREAD;
-    // Set up the frame information.
-    portcfg.c_cflag &= ~CSIZE; // clear frame size info
-    portcfg.c_cflag |= CS8;    // 8 bit frames
-    portcfg.c_cflag &= ~PARENB;// no parity
-    portcfg.c_cflag &= ~CSTOPB;// one stop bit
+    portcfg.c_cflag &= ~CSIZE;
+    portcfg.c_cflag |= CS8;
+    portcfg.c_cflag &= ~PARENB;
+    portcfg.c_cflag &= ~CSTOPB;
 
-    // Now that we've populated our options structure, let's push it back to the
-    //   system.
     tcsetattr(serialPort, TCSANOW, &portcfg);
-
-    // Flush the buffer one more time.
     tcflush(serialPort, TCIOFLUSH);
 
     for(int i=1; i < (n_motors+1); i++) {
       motors[i] = new MotorDriver(motorids[i-1], serialPort);
     }
 
-    // mainboard = new MotorDriver(0, serialPort);
-  }
+    mainboard = new MotorDriver(0, serialPort);
+    */
 
+  /*
   void MotorControl::forward(int newSpeed) {
     for(int i=1; i < (n_motors+1); i++) {
       if (i >= 3){
@@ -96,20 +117,10 @@ namespace rtx { namespace hal {
       usleep(100);
     }
   }
+  */
 
-  void MotorControl::OmniDrive(double speed, double angle, double rot) {
-    int spd1 = speed * sin(angle + M_PI / 4.0) + rot;
-    int spd2 = speed * -sin(angle - M_PI / 4.0) + rot;
-    int spd3 = speed * -sin(angle + M_PI / 4.0) + rot;
-    int spd4 = speed * sin(angle - M_PI / 4.0) + rot;
 
-    int speeds[4] = {spd1, spd2, spd3, spd4};
-    for (int i=1; i < (n_motors+1); i++){
-      motors[i]->setSpeed(speeds[i-1]);
-      usleep(100);
-    }
-  }
-
+  /*
   void MotorControl::Move(double x, double y, double db) {
     double spd, a;
     if(x != 0 || y != 0) {
@@ -161,21 +172,22 @@ namespace rtx { namespace hal {
 
   void MotorControl::runDribbler(int speed) {
     std::string runcmd = std::to_string(0) + ":dr" + std::to_string(speed) + "\n";
-    // mainboard->sendcmd(runcmd);
+    mainboard->sendcmd(runcmd);
   }
   void MotorControl::stopDribbler() {
     std::string stopcmd = std::to_string(0) + ":dr" + std::to_string(0) + "\n";
-    // mainboard->sendcmd(stopcmd);
+    mainboard->sendcmd(stopcmd);
   }
 
   void MotorControl::kick(int ms) {
     std::string kickcmd = std::to_string(0) + ":k" + std::to_string(ms) + "\n";
-    // mainboard->sendcmd(kickcmd);
+    mainboard->sendcmd(kickcmd);
   }
 
   void MotorControl::charge() {
     std::string chargecmd = std::to_string(0) + ":c" + "\n";
-    // mainboard->sendcmd(chargecmd);
+    mainboard->sendcmd(chargecmd);
   }
+  */
 
-}}
+
