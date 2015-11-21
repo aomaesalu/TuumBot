@@ -184,6 +184,20 @@ namespace rtx { namespace Motion {
 	    break;
 	}
         break;
+      case MOT_AIM:
+	switch(motionCtx.phase) {
+	  case MOP_INIT:
+	    deltaT = motionGoal - (*Localization::getTransform());
+
+	    motionData.baseVelocity = 25;
+	    motionData.setDirectionVector(0.0, 0.0);
+	    motionData.orientDelta = deltaT.o;
+
+	    targetAchieved = false;
+	    motionCtx.phase = MOP_RUN;
+	    break;
+	}
+	break;
       case MOT_NAIVE:
         // Correct orientation => motionData
         // then

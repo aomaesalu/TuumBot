@@ -192,7 +192,7 @@ namespace rtx {
 
               } else if (blobsBuffer[j]->isBlue()) {
                 // (yellow, blue)
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 2 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   toBeRemoved.insert(j);
 
@@ -206,7 +206,7 @@ namespace rtx {
 
               } else if (blobsBuffer[j]->isYellow()) {
                 // (blue, yellow)
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 2 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   toBeRemoved.insert(j);
 
