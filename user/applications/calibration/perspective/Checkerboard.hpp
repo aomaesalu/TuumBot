@@ -40,9 +40,9 @@ namespace rtx {
       unsigned int filled;
 
       // Perspective constants
-      unsigned int A;
-      unsigned int B;
-      unsigned int C;
+      double A;
+      double B;
+      double C;
 
   };
 
