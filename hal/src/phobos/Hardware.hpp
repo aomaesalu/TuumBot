@@ -46,6 +46,7 @@ namespace rtx { namespace hal {
       Hardware();
 
       void init();
+      void run();
 
       Camera* getFrontCamera();
       Camera* getBackCamera();
