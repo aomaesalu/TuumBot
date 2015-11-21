@@ -29,7 +29,7 @@ static void run(GUI *gui) {
 }
 
 int main(int argc, char *argv[]) {
-  printf("main(): Default tuum system application.\n");
+  printf("main(): Tuum vision test application.\n");
 
   // Initialize hardware
   rtx::hal::setup();
