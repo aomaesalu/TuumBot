@@ -63,6 +63,12 @@ namespace rtx {
     unsigned int r = 0, g = 0, b = 0;
     getRGB(color, r, g, b);
 
+    // Color blob pixels
+    const std::vector<std::pair<unsigned int, unsigned int>> points = blob->getPoints();
+    for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator point = points.begin(); point != points.end(); ++point) {
+      colorPixel(pixels + point->first * channels + point->second * stride, r, g, b);
+    }
+
     // Color blob box area
     for (unsigned int i = minX; i <= maxX; ++i) {
       guint8 *pixel = pixels + i * channels + minY * stride;
@@ -100,23 +106,6 @@ namespace rtx {
     guint8 *actualPixels = gui->getFrame()->data;
     unsigned int actualChannels = 3;
     unsigned int actualStride = gui->getFrame()->width * actualChannels;
-
-    // Color pixels
-    for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
-      for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
-        guint8 *pixel = pixels + x * channels + y * stride;
-        guint8 *actualPixel = actualPixels + x * actualChannels + y * actualStride;
-        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BALL))) {
-          colorPixel(pixel, BALL); // TODO: Optimise
-        }
-        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(BLUE_GOAL))) {
-          colorPixel(pixel, BLUE_GOAL);  // TODO: Optimise
-        }
-        if (Vision::isColored(*(gui->getFrame()), Visioning::filter, actualPixel[0], actualPixel[1], actualPixel[2], intToColor(YELLOW_GOAL))) {
-          colorPixel(pixel, YELLOW_GOAL); // TODO: Optimise
-        }
-      }
-    }
 
     Vision::BlobSet blobs = Vision::blobs;
     while (Vision::editingBlobs) {
