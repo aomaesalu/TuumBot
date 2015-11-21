@@ -133,7 +133,7 @@ namespace rtx {
 
         Color color = (*blob)->getColor();
 
-        if (color == BALL/* && density > 0.6*/ && boxArea > 10 * 10) {
+        if (color == BALL/* && density > 0.6*/ && boxArea > 4 * 4) {
           colorBlob(*blob, pixels, channels, stride);
         }
 

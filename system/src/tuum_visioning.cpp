@@ -201,7 +201,7 @@ namespace rtx { namespace Visioning {
       // STEP 1: Filter out invalid blobs
       if(color != BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
-      if(boxArea < 10 * 10) continue;
+      if(boxArea < 4 * 4) continue;
       if(density > 1.0) continue;
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
