@@ -65,6 +65,7 @@
    }
 
    void MainWindow::constructImageAreaFrame() {
+     imageArea.add_events(Gdk::BUTTON_PRESS_MASK);
      imageAreaFrame.add(imageArea);
      imageAreaFrame.set_label("Image");
      imageAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
