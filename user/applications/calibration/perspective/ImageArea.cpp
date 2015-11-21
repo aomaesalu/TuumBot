@@ -89,7 +89,11 @@ namespace rtx {
   bool ImageArea::on_button_press_event(GdkEventButton *buttonEvent) {
     if (buttonEvent->type == GDK_BUTTON_PRESS) {
       if (buttonEvent->button == 1) { // Left mouse button
-        // TODO: Add point
+        if (!gui->getCheckerboard()->isFilled()) {
+          gui->getCheckerboard()->addPoint(buttonEvent->x, buttonEvent->y);
+        } else {
+          std::cout << "Cannot add new point! Checkerboard is already filled." << std::endl;
+        }
       }
     }
     return true;

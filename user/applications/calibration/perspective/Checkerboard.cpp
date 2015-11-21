@@ -50,7 +50,10 @@ namespace rtx {
   }
 
   void Checkerboard::addPoint(const unsigned int &x, const unsigned int &y) {
-    points[filled % (width + 1)][filled / (width + 1)] = std::pair<unsigned int, unsigned int>(x, y);
+    if (!isFilled()) {
+      points[filled % (width + 1)][filled / (width + 1)] = std::pair<unsigned int, unsigned int>(x, y);
+      filled++;
+    }
   }
 
 }
