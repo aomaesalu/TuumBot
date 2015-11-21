@@ -49,15 +49,7 @@ namespace rtx {
     colorPixel(pixel, r, g, b);
   }
 
-  bool ImageArea::applyFilter() {
-    filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
-
-    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> points = gui->getCheckerboard()->getPoints();
-
-    guint8 *pixels = filteredImage->get_pixels();
-    unsigned int channels = filteredImage->get_n_channels();
-    unsigned int stride = filteredImage->get_rowstride();
-
+  void colorPoints(std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &points, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     // Define RGB color
     unsigned int r = 255;
     unsigned int g = 0;
@@ -75,6 +67,18 @@ namespace rtx {
         }
       }
     }
+  }
+
+  bool ImageArea::applyFilter() {
+    filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
+
+    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> points = gui->getCheckerboard()->getPoints();
+
+    guint8 *pixels = filteredImage->get_pixels();
+    unsigned int channels = filteredImage->get_n_channels();
+    unsigned int stride = filteredImage->get_rowstride();
+
+    colorPoints(points, pixels, channels, stride);
 
     return true;
   }
@@ -105,6 +109,7 @@ namespace rtx {
       if (buttonEvent->button == 1) { // Left mouse button
         if (!gui->getCheckerboard()->isFilled()) {
           gui->getCheckerboard()->addPoint(buttonEvent->x, buttonEvent->y);
+          // TODO: Pause
         } else {
           std::cout << "Cannot add new point! Checkerboard is already filled." << std::endl;
         }
