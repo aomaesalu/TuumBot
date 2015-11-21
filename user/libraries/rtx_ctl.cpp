@@ -86,14 +86,14 @@ namespace rtx { namespace ctl {
 	break;
       case CP_RUN:
       {
-	if(hal::hw.isBallInDribbler()) break;
+	//if(hw.isBallInDribbler()) break;
 
 	if(targetBall->getHealth() < 5) {
           targetBall = nullptr;
 	  ctx.phase = CP_INIT;
 	  break;
 	}
-
+	
 	//TODO: ( targetPosition = on (ball <-> gate) line & behind ball )
         if(targetUpdate.isTime()) {
 	  if(targetBall != nullptr) {
@@ -105,7 +105,7 @@ namespace rtx { namespace ctl {
 
 	  targetUpdate.start();
 	}
-
+        
 	break;
       }
       case CP_DONE:
