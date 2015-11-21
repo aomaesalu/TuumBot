@@ -65,17 +65,19 @@ namespace rtx {
   }
 
   std::pair<double, double> Checkerboard::virtualToReal(const unsigned int &x, const unsigned int &y) {
-    // ActualDistance = A + B/PixelVerticalCoord
-    // ActualRight = C * PixelRight / PixelVerticalCoord
+    // ActualDistance = A + B / PixelVerticalCoord
     double verticalCoordinate = A + B / y;
+    // ActualRight = C * PixelRight / PixelVerticalCoord
     double horisontalCoordinate = C * (x - CAMERA_WIDTH / 2) / y;
     return std::pair<double, double>(horisontalCoordinate, verticalCoordinate);
   }
 
   std::pair<unsigned int, unsigned int> Checkerboard::realToVirtual(const double &x, const double &y) {
-    std::pair<unsigned int, unsigned int> point(0, 0);
-    // TODO
-    return point;
+    // PixelVerticalCoord = B / (ActualDistance - A)
+    unsigned int verticalCoordinate = B / (y - A);
+    // PixelRight = ActualRight * PixelVerticalCoord / C
+    unsigned int horisontalCoordinate = x * verticalCoordinate / C;
+    return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }
 
 }
