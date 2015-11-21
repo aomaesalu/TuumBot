@@ -72,6 +72,10 @@ namespace rtx {
     return pos - val;
   }
 
+  Transform Transform::operator-(Transform t) {
+    return Transform({{pos.x - t.getX(), pos.y - t.getY()}, o - t.o});
+  }
+
   std::string Transform::toString() {
     std::stringstream output;
     output << "<Transform "

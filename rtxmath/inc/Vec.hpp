@@ -44,6 +44,14 @@ namespace rtx {
       return o;
     }
 
+    //FIXME:
+    void extend(T val) {
+      int sign = x < 0 ? -1 : 1;
+      x += val*sign;
+      sign = y < 0 ? -1 : 1;
+      y += val*sign;
+    }
+
     Vec2D<T> operator*(double val) {
       return Vec2D<T>({(int)(x*val), (int)(y*val)});
     }
