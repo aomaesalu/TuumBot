@@ -42,7 +42,7 @@ namespace rtx {
       // TODO: isFriendly(), isEnemy() - needs data about the current game
 
     private:
-      Color color;
+     Color color;
   };
 
 }
