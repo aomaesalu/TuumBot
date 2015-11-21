@@ -29,12 +29,20 @@ namespace rtx {
 
       void addPoint(const unsigned int&, const unsigned int&);
 
+      std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&);
+      std::pair<unsigned int, unsigned int> realToVirtual(const double&, const double&);
+
     private:
       std::vector<std::vector<std::pair<unsigned int, unsigned int>>> points;
       unsigned int width; // Number of squares in horisontal direction
       unsigned int height; // Number of squares in vertical direction
       unsigned int squareWidth; // Square width in the real world (in mm)
       unsigned int filled;
+
+      // Perspective constants
+      unsigned int A;
+      unsigned int B;
+      unsigned int C;
 
   };
 

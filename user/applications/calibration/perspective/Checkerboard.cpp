@@ -17,7 +17,10 @@ namespace rtx {
     height(height),
     squareWidth(squareWidth),
     points(width + 1, std::vector<std::pair<unsigned int, unsigned int>>(height + 1, std::pair<unsigned int, unsigned int>(0, 0))),
-    filled(0)
+    filled(0),
+    A(0),
+    B(0),
+    C(0)
   {
 
   }
@@ -55,6 +58,18 @@ namespace rtx {
       points[filled % (width + 1)][filled / (width + 1)] = std::pair<unsigned int, unsigned int>(x, y);
       filled++;
     }
+  }
+
+  std::pair<double, double> Checkerboard::virtualToReal(const unsigned int &x, const unsigned int &y) {
+    std::pair<double, double> point(0, 0);
+    // TODO
+    return point;
+  }
+
+  std::pair<unsigned int, unsigned int> Checkerboard::realToVirtual(const double &x, const double &y) {
+    std::pair<unsigned int, unsigned int> point(0, 0);
+    // TODO
+    return point;
   }
 
 }

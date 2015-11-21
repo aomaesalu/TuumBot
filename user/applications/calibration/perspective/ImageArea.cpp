@@ -78,9 +78,16 @@ namespace rtx {
 
     // Draw perspective points
     unsigned int step = gui->getCheckerboard()->getSquareWidth();
-    for (unsigned int i = 0; i < FIELD_LENGTH; i += step) {
-      for (unsigned int j = 0; j < FIELD_LENGTH; j += step) {
-        // TODO
+    for (unsigned int x = 0; x < FIELD_LENGTH; x += step) {
+      for (unsigned int y = 0; y < FIELD_LENGTH; y += step) {
+        std::pair<unsigned int, unsigned int> point = gui->getCheckerboard()->realToVirtual(x, y);
+        for (int dx = -2; dx <= 2; ++dx) {
+          for (int dy = -2; dy <= 2; ++dy) {
+            if (point.first + dx >= CAMERA_WIDTH || point.second + dy >= CAMERA_HEIGHT)
+              continue;
+            colorPixel(pixels + (point->first + dx) * channels + (point->second + dy) * stride, r, g, b);
+          }
+        }
       }
     }
   }
