@@ -10,6 +10,7 @@
 #include "ImageArea.hpp"
 
 #include "cameraConstants.hpp"
+#include "entityConstants.hpp"
 #include "GUI.hpp"
 
 #include <cairomm/context.h>
@@ -69,6 +70,20 @@ namespace rtx {
     }
   }
 
+  void ImageArea::drawPerspective(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+    // Define RGB color
+    unsigned int r = 0;
+    unsigned int g = 0;
+    unsigned int b = 255;
+
+    // Draw perspective points
+    for (unsigned int i = 0; i < FIELD_LENGTH; ++i) {
+      for (unsigned int j = 0; j < FIELD_LENGTH; ++j) {
+        // TODO
+      }
+    }
+  }
+
   bool ImageArea::applyFilter() {
     filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
@@ -79,6 +94,8 @@ namespace rtx {
     unsigned int stride = filteredImage->get_rowstride();
 
     colorPoints(points, pixels, channels, stride);
+
+    drawPerspective(pixels, channels, stride);
 
     return true;
   }

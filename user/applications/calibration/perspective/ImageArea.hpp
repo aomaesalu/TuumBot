@@ -37,6 +37,7 @@ namespace rtx {
 
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
+      void drawPerspective(guint8*, const unsigned int&, const unsigned int&);
       bool applyFilter();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
