@@ -204,7 +204,6 @@ namespace rtx {
   void MainWindow::constructOpenButton(Gtk::Container &parentContainer) {
     openButton.set_label("Open");
     openButton.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_openButton_clicked));
-    openButton.set_sensitive(false);
     parentContainer.add(openButton);
   }
 
