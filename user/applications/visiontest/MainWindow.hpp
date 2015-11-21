@@ -1,14 +1,14 @@
 /**
  *  @file MainWindow.hpp
- *  Team football application GUI main window.
+ *  Vision testing application GUI main window.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
-#define RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
+#ifndef RTX_APPLICATIONS_VISION_TEST_MAIN_WINDOW_H
+#define RTX_APPLICATIONS_VISION_TEST_MAIN_WINDOW_H
 
 #include <vector>
 #include <set>
@@ -56,4 +56,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
+#endif // RTX_APPLICATIONS_VISION_TEST_MAIN_WINDOW_H

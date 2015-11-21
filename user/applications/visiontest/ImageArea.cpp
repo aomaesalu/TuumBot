@@ -1,6 +1,6 @@
 /**
  *  @file ImageArea.cpp
- *  Team football application GUI preview area.
+ *  Vision testing application GUI preview area.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
