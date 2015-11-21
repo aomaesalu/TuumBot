@@ -13,6 +13,7 @@
 
 #include <iostream> // TODO: Remove
 #include <fstream>
+#include <sstream>
 
 
 namespace rtx {
@@ -153,7 +154,9 @@ namespace rtx {
 
   void MainWindow::readFilterFromFile(const std::string &fileName) {
     std::ifstream inputFile(fileName);
-    inputFile >> filter;
+    std::stringstream buffer;
+    buffer << inputFile.rdbuf();
+    filter = buffer.str();
     inputFile.close();
   }
 

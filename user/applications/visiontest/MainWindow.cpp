@@ -13,7 +13,6 @@
  #include "cameraConstants.hpp"
 
  #include <iostream> // TODO: Remove
- #include <fstream>
 
 
  namespace rtx {

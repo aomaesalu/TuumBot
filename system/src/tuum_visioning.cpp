@@ -113,7 +113,9 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string &fileName) {
     std::ifstream inputFile(fileName);
-    inputFile >> filter;
+    std::stringstream buffer;
+    buffer << inputFile.rdbuf();
+    filter = buffer.str();
     inputFile.close();
   }
 
