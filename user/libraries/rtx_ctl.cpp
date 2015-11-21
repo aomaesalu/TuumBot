@@ -86,7 +86,7 @@ namespace rtx { namespace ctl {
 	break;
       case CP_RUN:
       {
-	//if(hw.isBallInDribbler()) break;
+	if(hal::hw.getMainBoard()->getBallSensorState()) break;
 
 	if(targetBall->getHealth() < 5) {
           targetBall = nullptr;
@@ -126,6 +126,9 @@ namespace rtx { namespace ctl {
   bool LSGoalLocate::isRunnable() {
     hal::MainBoard* mb = hal::hw.getMainBoard();
     if(mb->getBallSensorState()) {
+      std::cout << "KICK" << std::endl;
+      mb->doCoilKick();
+
       return true;
     }
 
