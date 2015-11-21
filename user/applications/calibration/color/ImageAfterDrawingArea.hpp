@@ -52,10 +52,13 @@ namespace rtx {
       std::vector<std::set<unsigned int>> filterAdditionBufferList;
       std::vector<std::set<unsigned int>> filterRemovalBufferList;
 
+      std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, char>>>>>>>> savingMap;
+
       void initialiseProperties();
       void initialiseImage();
       void initialiseDeltaScale(Gtk::Scale*);
       void initialiseFilters();
+      void initialiseSavingMap();
 
       void resetFilter();
       void resetFilterBuffers();
