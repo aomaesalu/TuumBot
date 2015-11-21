@@ -136,7 +136,7 @@ namespace rtx {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
           continue;
 
-        if (blobsBuffer[i]->getNumberOfPoints() < 6) {
+        if (blobsBuffer[i]->getNumberOfPoints() < 10) {
           toBeRemoved.insert(i);
           continue;
         }
