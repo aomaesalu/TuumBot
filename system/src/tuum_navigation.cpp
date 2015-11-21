@@ -11,7 +11,7 @@
 
 namespace rtx { namespace Navigation {
 
-  const int NAV_BALL_PICKUP_RANGE = 75;
+  const int NAV_BALL_PICKUP_RANGE = 50;
 
 
   //TODO: position to relative position
