@@ -67,7 +67,7 @@ namespace rtx {
       Gtk::Button stopButton;
 
       // General buttons
-      Gtk::ComboBoxText fileChooseComboBox;
+      Gtk::Button openButton;
       Gtk::Button saveButton;
       Gtk::Button exitButton;
 
@@ -108,13 +108,14 @@ namespace rtx {
       void constructPlayButton(Gtk::Container&);
       void constructStopButton(Gtk::Container&);
 
-      void constructFileChooseComboBox(Gtk::Container&);
+      void constructOpenButton(Gtk::Container&);
       void constructSaveButton(Gtk::Container&);
       void constructExitButton(Gtk::Container&);
 
       void saveFilterToFile(const std::string&);
       void readFilterFromFile(const std::string&);
 
+      void on_openButton_clicked();
       void on_playButton_clicked();
       void on_stopButton_clicked();
       void on_modeChooseComboBox_changed();

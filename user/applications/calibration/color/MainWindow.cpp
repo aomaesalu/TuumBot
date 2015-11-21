@@ -118,7 +118,7 @@ namespace rtx {
   }
 
   void MainWindow::constructGeneralButtonsBox() {
-    constructFileChooseComboBox(generalButtonsBox);
+    constructOpenButton(generalButtonsBox);
     constructSaveButton(generalButtonsBox);
     constructExitButton(generalButtonsBox);
     generalButtonsBox.set_spacing(10);
@@ -201,12 +201,11 @@ namespace rtx {
     parentContainer.add(stopButton);
   }
 
-  void MainWindow::constructFileChooseComboBox(Gtk::Container &parentContainer) {
-    fileChooseComboBox.append("New...");
-    // TODO: Add other files
-    fileChooseComboBox.set_active(0);
-    fileChooseComboBox.set_hexpand();
-    parentContainer.add(fileChooseComboBox);
+  void MainWindow::constructOpenButton(Gtk::Container &parentContainer) {
+    openButton.set_label("Open");
+    openButton.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::on_openButton_clicked));
+    openButton.set_sensitive(false);
+    parentContainer.add(openButton);
   }
 
   void MainWindow::constructSaveButton(Gtk::Container &parentContainer) {
@@ -248,6 +247,26 @@ namespace rtx {
     mode = modeChooseComboBox.get_active_row_number();
     imageBeforeArea.redraw();
     imageAfterArea.queue_draw();
+  }
+
+  void MainWindow::on_openButton_clicked() {
+    Gtk::FileChooserDialog dialog("Please choose the calibrated color file to open", Gtk::FILE_CHOOSER_ACTION_OPEN);
+    dialog.set_transient_for(*this);
+    // Add buttons
+    dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+    dialog.add_button("_Open", Gtk::RESPONSE_OK);
+    // TODO
+    // Show dialog and wait for response
+    int result = dialog.run();
+    // Handle response
+    if (result == Gtk::RESPONSE_OK) {
+      std::cout << "Open clicked" << std::endl;
+      readFilterFromFile(dialog.get_filename());
+    } else if (result == Gtk::RESPONSE_CANCEL) {
+      std::cout << "Cancel clicked" << std::endl;
+    } else {
+      std::cout << "Unexpected button clicked." << std::endl;
+    }
   }
 
   void MainWindow::on_saveButton_clicked() {
