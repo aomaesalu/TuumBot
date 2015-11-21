@@ -127,7 +127,7 @@ namespace rtx {
     }
 
     // Joins same-colored blobs if their box areas are close or overlap
-    void joinBlobsInBuffer() {
+    void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
       std::set<unsigned int> toBeRemoved;
 
       // Join blobs
@@ -144,10 +144,22 @@ namespace rtx {
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
 
-          if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) { // TODO: Closeness for robot blobs
-            if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-              blobsBuffer[i]->join(*blobsBuffer[j]);
-              toBeRemoved.insert(j);
+          if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
+
+            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
+
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
+            } else {
+
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
             }
 
           } else {
@@ -173,7 +185,7 @@ namespace rtx {
                 if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   toBeRemoved.insert(j);
-                  
+
                   if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
                     blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
                   } else {
