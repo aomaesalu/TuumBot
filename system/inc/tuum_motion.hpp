@@ -31,6 +31,7 @@ namespace rtx { namespace Motion {
 
     MOT_BLIND,
     MOT_SCAN2,
+    MOT_AIM,
   };
 
   void setup();
