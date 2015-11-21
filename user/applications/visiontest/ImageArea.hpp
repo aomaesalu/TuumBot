@@ -1,14 +1,14 @@
 /**
  *  @file ImageArea.hpp
- *  Team football application GUI preview area.
+ *  Vision testing application GUI preview area.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
-#define RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
+#ifndef RTX_APPLIXATIONS_VISION_TEST_IMAGE_AREA_H
+#define RTX_APPLIXATIONS_VISION_TEST_IMAGE_AREA_H
 
 #include <gtkmm.h>
 #include <gtkmm/drawingarea.h>
@@ -46,4 +46,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
+#endif // RTX_APPLIXATIONS_VISION_TEST_IMAGE_AREA_H

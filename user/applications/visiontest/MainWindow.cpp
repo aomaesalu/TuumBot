@@ -1,10 +1,10 @@
 /**
  *  @file MainWindow.cpp
- *  Team football application GUI main window.
+ *  Vision testing application GUI main window.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
  #include "MainWindow.hpp"
