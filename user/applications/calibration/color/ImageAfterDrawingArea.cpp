@@ -185,7 +185,7 @@ namespace rtx {
     for (char i = 0; i < 256; ++i) {
       bool v[8];
       for (unsigned int j = 0; j < 8; ++j) {
-        v[j] = (i >> 7 - j) && 0x1;
+        v[j] = (i >> (7 - j)) && 0x1;
       }
       savingMap[v[0]][v[1]][v[2]][v[3]][v[4]][v[5]][v[6]][v[7]] = i;
     }
