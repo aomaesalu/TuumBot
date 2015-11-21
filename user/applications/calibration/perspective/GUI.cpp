@@ -43,6 +43,10 @@ namespace rtx {
     // TODO: Delete window?
   }
 
+  bool GUI::isPlaying() const {
+    return playing;
+  }
+
   void GUI::initialiseImage() {
     image = Gdk::Pixbuf::create_from_file("frame.ppm"); // TODO: Remove association with files
     //image = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, (int) image->get_width(), (int) image->get_height());
@@ -72,15 +76,21 @@ namespace rtx {
     return checkerboard;
   }
 
+  void GUI::setPlaying(const bool &value) {
+    playing = value;
+  }
+
   int GUI::run() {
     // Show windows and return when closed
     return gtkApplication->run(*window);
   }
 
   bool GUI::updateFrame() {
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
-    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame.data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame.width, (int) rgbFrame.height, (int) rgbFrame.width * 3);
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
+      image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame.data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame.width, (int) rgbFrame.height, (int) rgbFrame.width * 3);
+    }
     window->getImageArea()->queue_draw();
     return true;
   }

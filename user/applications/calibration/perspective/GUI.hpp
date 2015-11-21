@@ -28,6 +28,8 @@ namespace rtx {
       GUI(int&, char**, Camera*);
       virtual ~GUI();
 
+      bool isPlaying() const;
+
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;
       MainWindow* getWindow() const;
 
@@ -38,12 +40,16 @@ namespace rtx {
 
       Checkerboard* getCheckerboard() const;
 
+      void setPlaying(const bool&);
+
       int run();
       bool updateFrame();
 
     private:
       int argc;
       char **argv;
+
+      bool playing;
 
       Glib::RefPtr<Gtk::Application> gtkApplication;
       MainWindow *window;

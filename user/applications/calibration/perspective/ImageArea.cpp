@@ -134,7 +134,7 @@ namespace rtx {
       if (buttonEvent->button == 1) { // Left mouse button
         if (!gui->getCheckerboard()->isFilled()) {
           gui->getCheckerboard()->addPoint(buttonEvent->x, buttonEvent->y);
-          // TODO: Pause
+          gui->setPlaying(false);
         } else {
           std::cout << "Cannot add new point! Checkerboard is already filled." << std::endl;
         }
