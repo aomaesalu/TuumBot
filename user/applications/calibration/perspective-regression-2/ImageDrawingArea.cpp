@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
@@ -26,18 +26,23 @@
 namespace rtx {
 
   // TODO: Move elsewhere
-  struct verticalResultsSortPredicate {
-    bool operator()(const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &left, const std::pair<std::pair<std::pair<double, std::pair<double, double>>, std::pair<double, std::pair<double, double>>>, double> &right) {
+  struct resultsSortPredicate {
+    bool operator()(const std::pair<std::pair<double, double>, double> &left, const std::pair<std::pair<double, double>, double> &right) {
         return left.second < right.second;
     }
   };
 
-  // TODO: Move elsewhere
-  struct horisontalResultsSortPredicate {
-    bool operator()(const std::pair<std::pair<double, std::pair<double, double>>, double> &left, const std::pair<std::pair<double, std::pair<double, double>>, double> &right) {
-        return left.second < right.second;
+  void partitionList(std::vector<double> &list, const unsigned int &numberOfDivisions) {
+    unsigned int size = list.size();
+    for (unsigned int j = 0; j < size; j += 2) {
+      double difference = (list[j + 1] - list[j]) / numberOfDivisions;
+      for (unsigned m = 0; m < numberOfDivisions; ++m) {
+        list.push_back(list[j] + m * difference);
+        list.push_back(list[j] + (m + 1) * difference); // TODO: Optimise
+      }
     }
-  };
+    list.erase(list.begin(), list.begin() + size);
+  }
 
   ImageDrawingArea::ImageDrawingArea(MainWindow *mainWindow):
     mainWindow(mainWindow)
@@ -58,10 +63,6 @@ namespace rtx {
 
   bool ImageDrawingArea::isCalculating() const {
     return mainWindow->isCalculating();
-  }
-
-  double ImageDrawingArea::getA() const {
-    return bestA;
   }
 
   double ImageDrawingArea::getB() const {
@@ -105,31 +106,21 @@ namespace rtx {
   }
 
   void ImageDrawingArea::initialiseConstants() {
-    bestA = bestB = bestC = 0;
+    numberOfDivisions = 16;
+    numberOfBestDivisions = 4;
+    bestB = bestC = 0;
     lowerBound = -100000;
     upperBound = 100000;
-    AList.clear();
-    AList.push_back(lowerBound);
-    AList.push_back(0);
-    AList.push_back(upperBound);
     BList.clear();
     BList.push_back(lowerBound);
-    BList.push_back(0);
     BList.push_back(upperBound);
-    ABList.clear();
-    for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-      for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-        ABList.push_back(std::pair<double, double>(*a, *b));
-      }
-    }
+    partitionList(BList, numberOfDivisions);
     CList.clear();
     CList.push_back(lowerBound);
-    CList.push_back(0);
     CList.push_back(upperBound);
+    partitionList(CList, numberOfDivisions);
     maxError = 10;
     squareWidth = 25; // In millimeters; TODO: Move to constants file? Or ask from the user
-    numberOfDivisions = 8;
-    numberOfBestDivisions = 4;
     bestHorisontalMSE = 9999999;
     bestVerticalMSE = 9999999;
   }
@@ -268,15 +259,15 @@ namespace rtx {
     }
   }
 
-  double getVerticalDistance(const unsigned int &verticalCoordinate, const double &A, const double &B) {
-    return A + B / verticalCoordinate;
+  double getVerticalDistance(const unsigned int &verticalCoordinate, const double &B) {
+    return B / verticalCoordinate;
   }
 
   double getHorisontalDistance(const int &horisontalCoordinate, const unsigned int &verticalCoordinate, const double &C) {
     return C * (horisontalCoordinate - CAMERA_WIDTH / 2) / verticalCoordinate;
   }
 
-  void ImageDrawingArea::regressConstants() { // TODO: Optimise
+  void ImageDrawingArea::regressConstants(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) { // TODO: Optimise
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
     for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
@@ -287,95 +278,27 @@ namespace rtx {
     }
 
     // Constant regression step initialisation
-    double A = 0, B = 0, C = 0;
-    double verticalMSE = 0, horisontalMSE = 0;
+    double B = 0, C = 0;
+    double nextB = 0, nextC = 0;
+    double verticalMSECurrent = 0, horisontalMSECurrent = 0;
+    double verticalMSENext = 0, horisontalMSENext = 0;
 
     // Bounds division by best bounds division
-    std::sort(verticalResultsList.begin(), verticalResultsList.end(), verticalResultsSortPredicate());
-    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), horisontalResultsSortPredicate());
+    std::sort(verticalResultsList.begin(), verticalResultsList.end(), resultsSortPredicate());
+    std::sort(horisontalResultsList.begin(), horisontalResultsList.end(), resultsSortPredicate());
 
-    // Fill A and B constant combination list with the best bound values
-    if (ABList.empty()) {
+    // Fill B constant list with the best bound values
+    if (BList.empty()) {
       for (unsigned int i = 0; i < numberOfBestDivisions; ++i) {
         if (i >= verticalResultsList.size())
           break;
 
-        // Add A value with previous and next values
-        AList.push_back(verticalResultsList[i].first.first.second.first);
-        AList.push_back(verticalResultsList[i].first.first.first);
-        AList.push_back(verticalResultsList[i].first.first.second.second);
-
-        /*std::cout << "Partitioning A" << std::endl;
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-          std::cout << *a << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
-        // Partition A list areas
-        unsigned int Asize = AList.size();
-        for (unsigned int j = 0; j < Asize; j += 3) {
-          for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (AList[j + k + 1] - AList[j + k]) / numberOfDivisions;
-            for (unsigned m = 0; m < numberOfDivisions; ++m) {
-              AList.push_back(AList[j + k] + m * difference);
-            }
-          }
-          AList.push_back(AList[j + 2]);
-        }
-        AList.erase(AList.begin(), AList.begin() + Asize);
-
-        /*std::cout << "Partitioned A" << std::endl;
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); ++a) {
-          std::cout << *a << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
         // Add B value with previous and next values
-        BList.push_back(verticalResultsList[i].first.second.second.first);
-        BList.push_back(verticalResultsList[i].first.second.first);
-        BList.push_back(verticalResultsList[i].first.second.second.second);
-
-        /*std::cout << "Partitioning B" << std::endl;
-        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-          std::cout << *b << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
-        // Partition B list areas
-        unsigned int Bsize = BList.size();
-        for (unsigned int j = 0; j < Bsize; j += 3) {
-          for (unsigned int k = 0; k < 2; ++k) {
-            double difference = (BList[j + k + 1] - BList[j + k]) / numberOfDivisions;
-            for (unsigned m = 0; m < numberOfDivisions; ++m) {
-              BList.push_back(BList[j + k] + m * difference);
-            }
-          }
-          BList.push_back(BList[j + 2]);
-        }
-        BList.erase(BList.begin(), BList.begin() + Bsize);
-
-        /*std::cout << "Partitioned B" << std::endl;
-        for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); ++b) {
-          std::cout << *b << " ";
-        }
-        std::cout << std::endl << std::endl;*/
-
-        // Fill ABList with A and B value combinations
-        for (std::vector<double>::iterator a = AList.begin(); a != AList.end(); a += 2 * numberOfDivisions + 1) {
-          for (std::vector<double>::iterator b = BList.begin(); b != BList.end(); b += 2 * numberOfDivisions + 1) {
-            for (unsigned int i = 0; i < 2 * numberOfDivisions + 1; ++i) {
-              for (unsigned int j = 0; j < 2 * numberOfDivisions + 1; ++j) {
-                ABList.push_back(std::pair<double, double>(*(a + i), *(b + j)));
-              }
-            }
-          }
-        }
-
-        // Empty A and B value lists
-        AList.clear();
-        BList.clear();
+        BList.push_back(verticalResultsList[i].first.first);
+        BList.push_back(verticalResultsList[i].first.second);
       }
-      verticalResultsList.clear();
+
+      partitionList(BList, numberOfDivisions);
     }
 
     // Fill C constant list with the best bound values
@@ -385,91 +308,79 @@ namespace rtx {
           break;
 
         // Add C value with previous and next values
-        CList.push_back(horisontalResultsList[i].first.second.first);
         CList.push_back(horisontalResultsList[i].first.first);
-        CList.push_back(horisontalResultsList[i].first.second.second);
+        CList.push_back(horisontalResultsList[i].first.second);
       }
-    }
 
-    /*std::cout << "Partitioning C" << std::endl;
-    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-      std::cout << *c << " ";
+      partitionList(CList, numberOfDivisions);
     }
-    std::cout << std::endl << std::endl;*/
-
-    // Partition C list areas
-    unsigned int Csize = CList.size();
-    for (unsigned int j = 0; j < Csize; j += 3) {
-      for (unsigned int k = 0; k < 2; ++k) {
-        double difference = (CList[j + k + 1] - CList[j + k]) / numberOfDivisions;
-        for (unsigned m = 0; m < numberOfDivisions; ++m) {
-          CList.push_back(CList[j + k] + m * difference);
-        }
-      }
-      CList.push_back(CList[j + 2]);
-    }
-    CList.erase(CList.begin(), CList.begin() + Csize);
-
-    /*std::cout << "Partitioned C" << std::endl;
-    for (std::vector<double>::iterator c = CList.begin(); c != CList.end(); ++c) {
-      std::cout << *c << " ";
-    }
-    std::cout << std::endl << std::endl;*/
 
     // 1. Establish a condition C when to end the regression algorithm
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
 
-    // 2. Generate new model M (constant A, B and C estimations)
-    A = ABList.front().first;
-    B = ABList.front().second;
-    ABList.erase(ABList.begin());
+    // 2. Generate new model M (constant B and C estimations)
+    B = BList.front();
+    BList.erase(BList.begin());
+    nextB = BList.front();
+    BList.erase(BList.begin());
     C = CList.front();
     CList.erase(CList.begin());
-    std::cout << "A = " << A << std::endl << "B = " << B << std::endl << " C = " << C << std::endl << std::endl;
+    nextC = CList.front();
+    CList.erase(CList.begin());
 
     // 3. For every point, calculate the estimate and the error
-    std::vector<double> verticalEstimates, horisontalEstimates;
-    std::vector<double> verticalErrors, horisontalErrors;
+    std::vector<double> verticalEstimatesCurrent, verticalEstimatesNext;
+    std::vector<double> horisontalEstimatesCurrent, horisontalEstimatesNext;
+    std::vector<double> verticalErrorsCurrent, verticalErrorsNext;
+    std::vector<double> horisontalErrorsCurrent, horisontalErrorsNext;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-      verticalEstimates.push_back(getVerticalDistance(verticalPoints[j].first, A, B) - getVerticalDistance(verticalPoints[j].second, A, B));
-      horisontalEstimates.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
-      verticalErrors.push_back(verticalEstimates.back() - squareWidth);
-      horisontalErrors.push_back(horisontalEstimates.back() - squareWidth);
+      verticalEstimatesCurrent.push_back(getVerticalDistance(verticalPoints[j].first, B) - getVerticalDistance(verticalPoints[j].second, B));
+      verticalEstimatesNext.push_back(getVerticalDistance(verticalPoints[j].first, nextB) - getVerticalDistance(verticalPoints[j].second, nextB));
+      horisontalEstimatesCurrent.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, C) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, C));
+      horisontalEstimatesNext.push_back(getHorisontalDistance(horisontalPoints[j].second, verticalPoints[j].second, nextC) - getHorisontalDistance(horisontalPoints[j].first, verticalPoints[j].second, nextC));
+      verticalErrorsCurrent.push_back(verticalEstimatesCurrent.back() - squareWidth);
+      verticalErrorsNext.push_back(verticalEstimatesNext.back() - squareWidth);
+      horisontalErrorsCurrent.push_back(horisontalEstimatesCurrent.back() - squareWidth);
+      horisontalErrorsNext.push_back(horisontalEstimatesNext.back() - squareWidth);
     }
 
     // 4. Calculate MSEs
-    verticalMSE = 0;
-    horisontalMSE = 0;
+    verticalMSECurrent = 0;
+    verticalMSENext = 0;
+    horisontalMSECurrent = 0;
+    horisontalMSENext = 0;
     for (unsigned int j = 0; j < verticalPoints.size(); ++j) { // Vertical points and horisontal points have the same amount of points
-      verticalMSE += verticalErrors[j] * verticalErrors[j];
-      horisontalMSE += horisontalErrors[j] * horisontalErrors[j];
+      verticalMSECurrent += verticalErrorsCurrent[j] * verticalErrorsCurrent[j];
+      verticalMSENext += verticalErrorsNext[j] * verticalErrorsNext[j];
+      horisontalMSECurrent += horisontalErrorsCurrent[j] * horisontalErrorsCurrent[j];
+      horisontalMSENext += horisontalErrorsNext[j] * horisontalErrorsNext[j];
     }
-    verticalMSE /= verticalPoints.size();
-    horisontalMSE /= horisontalPoints.size();
+
+    verticalMSECurrent /= verticalPoints.size();
+    verticalMSENext /= verticalPoints.size();
+    horisontalMSECurrent /= horisontalPoints.size();
+    horisontalMSENext /= horisontalPoints.size();
+
+    // Add MSEs to result lists
+    verticalResultsList.push_back(std::pair<std::pair<double, double>, double>(std::pair<double, double>(B, nextB), std::min(verticalMSECurrent, horisontalMSENext)));
+    horisontalResultsList.push_back(std::pair<std::pair<double, double>, double>(std::pair<double, double>(C, nextC), std::min(horisontalMSECurrent, horisontalMSENext)));
 
     // 6. Find model with minimal error
-    if (verticalMSE < bestVerticalMSE) {
-      bestA = A;
-      bestB = B;
-      bestVerticalMSE = verticalMSE;
-      std::cout << "Found a vertical function with MSE = " << verticalMSE << "; A = " << A << ", B = " << B << std::endl;
+    if (std::min(verticalMSECurrent, verticalMSENext) < bestVerticalMSE) {
+      bestB = (verticalMSECurrent < verticalMSENext) ? B : nextB;
+      bestVerticalMSE = std::min(verticalMSECurrent, verticalMSENext);
+      std::cout << "Found a vertical function with MSE = " << bestVerticalMSE << "; B = " << B << std::endl;
+      drawPerspective(pixels, channels, stride);
     }
-    if (horisontalMSE < bestHorisontalMSE) {
-      bestC = C;
-      bestHorisontalMSE = horisontalMSE;
-      std::cout << "Found a horisontal function with MSE = " << horisontalMSE << "; C = " << C << std::endl;
+    if (std::min(horisontalMSECurrent, horisontalMSENext) < bestHorisontalMSE) {
+      bestC = (horisontalMSECurrent < horisontalMSENext) ? C : nextC;
+      bestHorisontalMSE = std::min(horisontalMSECurrent, horisontalMSENext);
+      std::cout << "Found a horisontal function with MSE = " << bestHorisontalMSE << "; C = " << C << std::endl;
+      drawPerspective(pixels, channels, stride);
     }
 
     // 5. Check for condition C (and return to step 2 if necessary)
     // TODO: Currently it is enough for the user to decide when to end the algorithm; should consider automatic calibration.
-
-    // Debug output // TODO: Refactor
-    /*if (bestVerticalMSE <= maxError * verticalPoints.size()) {
-      std::cout << "The vertical function's MSE is low enough." << std::endl;
-    }
-    if (bestHorisontalMSE <= maxError * horisontalPoints.size()) {
-      std::cout << "The horisontal function's MSE is low enough." << std::endl;
-    }*/
 
   }
 
@@ -492,10 +403,38 @@ namespace rtx {
     colorBlobs(pixels, channels, stride);
 
     if (isCalculating()) {
-      regressConstants();
+      regressConstants(pixels, channels, stride);
     }
 
     return true;
+  }
+
+  std::pair<unsigned int, unsigned int> ImageDrawingArea::realToPixel(const double &x, const double &y) {
+    unsigned int verticalCoordinate = bestB / y;
+    unsigned int horisontalCoordinate = x * verticalCoordinate / bestC + CAMERA_WIDTH / 2;
+    return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
+  }
+
+  bool ImageDrawingArea::drawPerspective(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+    if (bestA != 0 && bestB != 0 && bestC != 0) {
+      for (unsigned int i = -100000; i < 100000; i += 50) {
+        for (unsigned int j = -100000; j < 100000; j += 50) {
+          std::pair<unsigned int, unsigned int> coordinates = realToPixel(i, j);
+          if (coordinates.first < CAMERA_WIDTH && coordinates.second < CAMERA_HEIGHT) {
+            for (int k = -1; k <= 1; k++) {
+              for (int m = -1; m <= 1; ++m) {
+                if (coordinates.first + k < CAMERA_WIDTH && coordinates.second + m < CAMERA_HEIGHT) {
+                  guint8 *pixel = pixels + (coordinates.first + k) * channels + (coordinates.second + m) * stride;
+                  pixel[0] = 255;
+                  pixel[1] = 0;
+                  pixel[2] = 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   bool ImageDrawingArea::drawImage(const Cairo::RefPtr<Cairo::Context> &cairo) {
