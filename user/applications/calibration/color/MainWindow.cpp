@@ -232,6 +232,7 @@ namespace rtx {
     buffer << inputFile.rdbuf();
     std::string filterString = buffer.str();
     inputFile.close();
+    imageAfterArea.filterFromString(filterString);
   }
 
   void MainWindow::on_playButton_clicked() {

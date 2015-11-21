@@ -38,6 +38,7 @@ namespace rtx {
   }
 
   void ImageAfterDrawingArea::filterFromString(const std::string &filterString) {
+    std::cout << "Reading filter from string" << std::endl;
     initialiseFilters();
     for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
       unsigned int bitmask = 1 << 7;
