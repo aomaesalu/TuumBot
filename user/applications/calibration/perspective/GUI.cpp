@@ -24,6 +24,9 @@ namespace rtx {
     // Attach camera information
     this->camera = camera;
 
+    // Set playing
+    setPlaying();
+
     // Create empty checkerboard
     checkerboard = new Checkerboard(7, 7, 25);
 

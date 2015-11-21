@@ -40,7 +40,7 @@ namespace rtx {
 
       Checkerboard* getCheckerboard() const;
 
-      void setPlaying(const bool&);
+      void setPlaying(const bool& = true);
 
       int run();
       bool updateFrame();
