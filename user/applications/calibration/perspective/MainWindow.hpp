@@ -39,6 +39,15 @@ namespace rtx {
 
       // Frames and boxes for the layout
       Gtk::Frame imageAreaFrame;
+      Gtk::Box scalesBox;
+
+      // Constant scales
+      Gtk::Scale AScale;
+      Gtk::Label ALabel;
+      Gtk::Scale BScale;
+      Gtk::Label BLabel;
+      Gtk::Scale CScale;
+      Gtk::Label CLabel;
 
       // Image drawing areas and contexts
       ImageArea imageArea;
@@ -51,6 +60,8 @@ namespace rtx {
       void construct();
       void constructGrid();
       void constructImageAreaFrame();
+      void constructScalesBox();
+      void constructScale(Gtk::Container&, Gtk::Scale&, Gtk::Label&, const std::string&);
 
   };
 
