@@ -4,13 +4,16 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 11. November 2015
  */
 
 #include <gtkmm/application.h>
 #include <thread>
 
-#include "cameraConstants.hpp"
-#include "Camera.hpp"
+#include <iostream> // TODO: Remove
+
+#include "rtxhal.hpp"
+#include "tuum_visioning.hpp"
 
 #include "MainWindow.hpp"
 
@@ -28,6 +31,7 @@ static void process(MainWindow *window) {
       frameCounter = 0;
       lastTime = currentTime;
     }
+    Visioning::processCheckerboard();
     if (window->updateFrame()) {
       frameCounter++;
     }
@@ -37,12 +41,16 @@ static void process(MainWindow *window) {
 int main(int argc, char *argv[]) {
   Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.examples.base");
 
-  Camera camera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT);
+  // Initialise hardware
+  rtx::hal::setup();
 
-  MainWindow window(&camera);
+  // Initialise visioning module
+  Visioning::setup();
 
-  //std::thread frameThread(process, &window);
-  //frameThread.detach();
+  MainWindow window(hal::hw.getFrontCamera()); // TODO: Add back camera, too
+
+  std::thread frameThread(process, &window);
+  frameThread.detach();
 
   // Show windows and return when closed
   return app->run(window);

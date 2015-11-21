@@ -11,26 +11,18 @@
 
 namespace rtx {
 
-  Ball::Ball(const Ball &other):
-    Entity(other.getPosition()),
+  Ball::Ball(Ball &other):
+    Entity(*other.getTransform()),
     Circle(other.getRadius())
   {
 
   }
 
-  Ball::Ball(const Point2D *position, const double &radius):
-    Entity(position),
-    Circle(radius)
-  {
-
-  }
-
-  Ball::Ball(const double &x, const double &y, const double &radius):
-    Entity(new Point2D(x, y)),
+  Ball::Ball(const Transform transform, const double &radius):
+    Entity(transform),
     Circle(radius)
   {
 
   }
 
 };
-

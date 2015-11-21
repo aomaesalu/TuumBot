@@ -11,7 +11,7 @@
 #define RTX_GEOMETRY_H
 
 #include "Point2D.hpp"
-#include "Line.hpp"
+#include "Line2D.hpp"
 #include "Circle.hpp"
 #include "Rectangle.hpp"
 

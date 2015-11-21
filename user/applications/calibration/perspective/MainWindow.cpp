@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.cpp
- * Perspective calibration application main window.
+ *  @file MainWindow.cpp
+ *  Perspective calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -12,6 +13,7 @@
 
 #include <iostream> // TODO: Remove
 #include <fstream>
+#include <sstream>
 
 
 namespace rtx {
@@ -20,9 +22,11 @@ namespace rtx {
     camera(camera),
     imageArea(this),
     playing(true),
-    calculating(false)
+    calculating(false),
+    filter("")
   {
     setProperties();
+    readFilterFromFile("../data/colors/1.txt");
     construct();
     show_all_children();
     updateFrame();
@@ -40,25 +44,38 @@ namespace rtx {
     return calculating;
   }
 
-  void MainWindow::setPlaying(const bool &value) {
-    if (value) {
-      imageArea.setCalculating(false);
+  bool MainWindow::isColored(const unsigned int &pixel, const unsigned int &mode) const {
+    if (filter.size() > pixel) {
+      return (filter[pixel] >> (7 - mode)) & 0x1;
+    } else {
+      return false;
     }
+  }
+
+  bool MainWindow::isColored(const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) const {
+    return isColored((x << 16) + (y << 8) + z, mode);
+  }
+
+  void MainWindow::setPlaying(const bool &value) {
     playButton.set_sensitive(!value);
     stopButton.set_sensitive(value);
-    playing = value; // We have to do this at the end of this method because of lock-free threading
+    if (value)
+      imageArea.resetBlobRegression();
+    playing = value;
+    setCalculating(!value);
   }
 
   void MainWindow::setCalculating(const bool &value) {
+    if (value)
+      imageArea.resetConstants();
     calculating = value;
   }
 
   bool MainWindow::updateFrame() {
-    if (!playing) {
-      return false;
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
     }
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
     imageArea.updateFrame(&frame, &rgbFrame);
     return true;
   }
@@ -76,7 +93,6 @@ namespace rtx {
     constructGrid();
     constructGeneralButtonsBox();
     constructImageFrame();
-    constructImageOptionsBox();
   }
 
   void MainWindow::constructGrid() {
@@ -86,28 +102,22 @@ namespace rtx {
   }
 
   void MainWindow::constructGeneralButtonsBox() {
-    /*constructFileChooseComboBox(generalButtonsBox);
+    constructPlayButton(generalButtonsBox);
+    constructStopButton(generalButtonsBox);
+    constructFileChooseComboBox(generalButtonsBox);
     constructSaveButton(generalButtonsBox);
     constructExitButton(generalButtonsBox);
     generalButtonsBox.set_spacing(10);
-    grid.attach(generalButtonsBox, 1, 0, 1, 1);*/ // TODO
+    grid.attach(generalButtonsBox, 0, 0, 1, 1);
   }
 
   void MainWindow::constructImageFrame() {
-    /*imageBeforeArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
-    imageBeforeFrame.add(imageBeforeArea);
-    imageBeforeFrame.set_label("Before");
-    imageBeforeFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
-    imageBeforeFrame.set_border_width(0);
-    grid.attach(imageBeforeFrame, 0, 1, 1, 1);*/ // TODO
-  }
-
-  void MainWindow::constructImageOptionsBox() {
-    /*displayMaskBeforeButton.set_label("Display mask on \"before\" image"); // TODO: Add scale to change brightness instead
-    displayMaskBeforeButton.set_active();
-    displayMaskBeforeButton.set_can_focus(false);
-    imageBeforeOptionsBox.add(displayMaskBeforeButton);
-    grid.attach(imageBeforeOptionsBox, 0, 2, 1, 1);*/ // TODO
+    imageArea.add_events(Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
+    imageFrame.add(imageArea);
+    imageFrame.set_label("Image");
+    imageFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
+    imageFrame.set_border_width(0);
+    grid.attach(imageFrame, 0, 1, 1, 1);
   }
 
   void MainWindow::constructPlayButton(Gtk::Container &parentContainer) {
@@ -142,16 +152,18 @@ namespace rtx {
     parentContainer.add(exitButton);
   }
 
-  void MainWindow::saveConstantsToFile(const std::string &fileName) {
-    // TODO
-  }
-
-  void MainWindow::readConstantsFromFile(const std::string &fileName) {
-    // TODO
-  }
-
   void MainWindow::readFilterFromFile(const std::string &fileName) {
-    // TODO
+    std::ifstream inputFile(fileName);
+    std::stringstream buffer;
+    buffer << inputFile.rdbuf();
+    filter = buffer.str();
+    inputFile.close();
+  }
+
+  void MainWindow::saveConstantsToFile(const std::string &fileName) {
+    std::ofstream outputFile(fileName);
+    outputFile << imageArea.getA() << " " << imageArea.getB() << " " << imageArea.getC();
+    outputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {

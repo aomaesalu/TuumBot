@@ -17,7 +17,10 @@ namespace rtx { namespace Localization {
 
   void testSequence();
 
-  Transform getTransform();
+  Transform* getTransform();
+
+  Transform toAbsoluteTransform(const int,const double);
+
 }}
 
 #endif // RTX_SYS_LOC_H

@@ -7,14 +7,15 @@
  */
 
 #include "application.hpp"
-#include <iostream>
 
 #include "tfb_logic.hpp"
+
+#include <iostream> // TODO: Remove
 
 using namespace std;
 using namespace rtx;
 
-int main() {
+int main(int argc, char *argv[]) {
   printf("main(): Default tuum system application.\n");
 
   // Initialize hardware
@@ -26,7 +27,7 @@ int main() {
   Motion::setup();
 
   Logic::setup();
-
+  
   bool running = true;
   while(running) {
     rtx::hal::process();

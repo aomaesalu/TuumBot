@@ -35,13 +35,10 @@ core
 .depend
 
 # Certain directories
-bin/*
 obj/*
 lib/*
 data/*
 
-# Image files
-*.ppm
 =======
 build/*
 =======

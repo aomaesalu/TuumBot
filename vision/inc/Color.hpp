@@ -4,6 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
+ * @date 20 November 2015
  */
 
 #ifndef RTX_VISION_COLOR_H
@@ -20,10 +21,14 @@ namespace rtx {
     WHITE_LINE,
     BLACK_LINE,
     CHECKERBOARD_WHITE,
-    CHECKERBOARD_BLACK
+    CHECKERBOARD_BLACK,
+    ROBOT_YELLOW_BLUE,
+    ROBOT_BLUE_YELLOW
   };
 
-  // TODO: Add conversion methods
+  Color intToColor(const unsigned int&);
+
+  void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
 };
 

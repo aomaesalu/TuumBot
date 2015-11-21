@@ -1,7 +1,6 @@
 
 #include "__future__.hpp"
 
-
 namespace rtx {
 
   long double gaussian_probability(double mu, double sig, double x) {

@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.hpp
- * Perspective calibration application main window.
+ *  @file MainWindow.hpp
+ *  Perspective calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 19 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
@@ -31,6 +32,8 @@ namespace rtx {
 
       bool isPlaying() const;
       bool isCalculating() const;
+      bool isColored(const unsigned int&, const unsigned int&) const;
+      bool isColored(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
 
       void setPlaying(const bool& = true);
       void setCalculating(const bool& = true);
@@ -43,7 +46,6 @@ namespace rtx {
       // Frames and boxes for the layout
       Gtk::Box generalButtonsBox;
       Gtk::Frame imageFrame;
-      Gtk::Box imageOptionsBox;
 
       // Video control buttons
       Gtk::Button playButton;
@@ -67,6 +69,8 @@ namespace rtx {
       Frame frame;
       Frame rgbFrame;
 
+      std::string filter;
+
       bool playing;
       bool calculating;
 
@@ -77,7 +81,6 @@ namespace rtx {
 
       void constructGeneralButtonsBox();
       void constructImageFrame();
-      void constructImageOptionsBox();
 
       void constructPlayButton(Gtk::Container&);
       void constructStopButton(Gtk::Container&);
@@ -86,9 +89,8 @@ namespace rtx {
       void constructSaveButton(Gtk::Container&);
       void constructExitButton(Gtk::Container&);
 
-      void saveConstantsToFile(const std::string&);
-      void readConstantsFromFile(const std::string&);
       void readFilterFromFile(const std::string&);
+      void saveConstantsToFile(const std::string&);
 
       void on_playButton_clicked();
       void on_stopButton_clicked();

@@ -14,18 +14,15 @@
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
+#include "RelativePosition.hpp"
 
 
 namespace rtx {
 
   class Ball: public Entity, public Circle {
-    public:
-      Ball(const Ball&);
-      Ball(const Point2D*, const double& = BALL_RADIUS);
-      Ball(const double&, const double&, const double& = BALL_RADIUS);
-
-    private:
-      // TODO
+  public:
+    Ball(Ball&);
+    Ball(const Transform, const double& = BALL_RADIUS);
   };
 
 };
