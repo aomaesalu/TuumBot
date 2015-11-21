@@ -11,8 +11,6 @@
 
 #include "cameraConstants.hpp"
 
-#include <iostream> // TODO: Remove
-
 
 namespace rtx {
 
@@ -69,7 +67,6 @@ namespace rtx {
   }
 
   void Checkerboard::calculateConstants() {
-    std::cout << "Calculating constants" << std::endl;
     // TODO
   }
 
