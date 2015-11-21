@@ -1,4 +1,7 @@
 
+#include <sstream>
+#include <stdint.h>
+
 #include "MainBoard.hpp"
 
 namespace rtx { namespace hal {
@@ -15,7 +18,15 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::signal(RTX485::Message m) {
-    std::cout << "MAINBOARD SIGNAL CAPTURE - " << m.data << std::endl;
+    uint32_t ix = m.data.find(":");
+    if(ix != -1) {
+      std::string buf;
+      buf = m.data.substr(0, ix);
+
+      if(buf == CMD_BALL_SENSE) {
+        m_ballSensorState = atoi(m.data.substr(ix+1).c_str());
+      }
+    }
   }
 
   void MainBoard::senseBall() {

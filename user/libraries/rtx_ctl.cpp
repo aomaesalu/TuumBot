@@ -124,11 +124,12 @@ namespace rtx { namespace ctl {
   }
 
   bool LSGoalLocate::isRunnable() {
-    if(hal::hw.isBallInDribbler()) {
-
+    hal::MainBoard* mb = hal::hw.getMainBoard();
+    if(mb->getBallSensorState()) {
+      return true;
     }
 
-    return true;
+    return false;
   }
 
 
