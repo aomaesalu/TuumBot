@@ -28,19 +28,20 @@ namespace rtx { namespace Visioning {
 
   EDS<Ball> ballDetect;
   BallSet balls; // Healthy ball entities vs new/decaying ball entities?
-  BallSet ballsBuffer;
+  BallSet ballsBuffer; // Unused
 
   Goal *yellowGoal;
   Goal *yellowGoalBuffer;
   Goal *blueGoal;
   Goal *blueGoalBuffer;
 
+  EDS<Robot> robotDetect;
   RobotSet robots;
-  RobotSet robotsBuffer;
+  RobotSet robotsBuffer; // Unused
 
-  bool editingBalls = false;
+  bool editingBalls = false; // Unused
   bool editingGoals = false;
-  bool editingRobots = false;
+  bool editingRobots = false; // Unused
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -119,6 +120,7 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
+  // Unused
   void translateBallsBuffer() {
     editingBalls = true;
 
@@ -155,6 +157,7 @@ namespace rtx { namespace Visioning {
     editingGoals = false;
   }
 
+  // Unused
   void translateRobotsBuffer() {
     editingRobots = true;
 
@@ -253,7 +256,7 @@ namespace rtx { namespace Visioning {
         if(_p > p) {
           p = _p;
           p_ix = jx;
-	  if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
+	        if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
         }
       }
 
@@ -323,13 +326,72 @@ namespace rtx { namespace Visioning {
   }
 
   void robotDetection(const Frame &frame) {
-    robotsBuffer.clear();
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
-    // TODO
+    RobotSet n_robots;
 
-    translateRobotsBuffer();
+    for(unsigned int i = 0; i < blobs.size(); ++i) {
+      Color color = blobs[i]->getColor();
+      double density = blobs[i]->getDensity();
+      unsigned int boxArea = blobs[i]->getBoxArea();
+      //double ratio = blobs[i]->getBoxRatio();
+
+      // STEP 1: Filter out invalid blobs
+      if (color != ROBOT_YELLOW_BLUE && color != ROBOT_BLUE_YELLOW) continue;
+      if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
+      //if(boxArea < 10 * 10) continue;
+      if (density > 1.0) continue;
+      //if(fabs(1 - ratio) > 0.3) continue;
+      /* && density > 0.6*/
+
+      // STEP 2: Calculate relative position
+      Point2D* point = blobs[i]->getPosition();
+      // TODO: Calculate based on perspective
+      unsigned int distance = CAMERA_HEIGHT - point->getY();
+      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+
+      // STEP 3: Create robot instance with absolute position
+      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
+    }
+
+    // STEP 4: Unite detected robots with robots from last frame or create new robots
+    double p, _p, p_ix;
+    Robot* n_robot_ptr;
+    RobotSet* robot_set_ptr;
+    for (int ix = 0; ix < n_robots.size(); ix++) {
+      p = 0.0;
+      n_robot_ptr = n_robots[ix];
+
+      // STEP 4.1: Calculate existing entity probability
+      robot_set_ptr = &(robotDetect.objs);
+      for (int jx = 0; jx < robotDetect.objs.size(); jx++) {
+        _p = stateProbability((*robot_set_ptr)[jx]->getTransform(), n_robot_ptr->getTransform());
+        if (_p > p) {
+          p = _p;
+          p_ix = jx;
+        }
+      }
+
+      for (int jx = 0; jx < robotDetect.tmp_objs.size(); jx++) {
+        _p = stateProbability(robotDetect.tmp_objs[jx]->getTransform(), n_robot_ptr->getTransform());
+        if (_p > p) {
+          p = _p;
+          p_ix = jx;
+          if(robot_set_ptr != &(robotDetect.tmp_objs)) robot_set_ptr = &(robotDetect.tmp_objs);
+        }
+      }
+
+      // STEP 4.2: Create or update entities
+      if (p < 0.01) {
+        robotDetect.tmp_objs.push_back(new Robot(*n_robot_ptr));
+      } else {
+        (*robot_set_ptr)[p_ix]->update(*n_robot_ptr->getTransform());
+      }
+    }
+
+    // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
+    robotDetect.update();
   }
 
 }}

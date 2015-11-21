@@ -168,7 +168,7 @@ namespace rtx {
     return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
-  bool Blob::isClose(const Blob &other) const {
+  bool Blob::isClose(const Blob &other, const double &closeness) const {
     if (overlaps(other))
       return true;
     if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
@@ -176,12 +176,12 @@ namespace rtx {
       if ((std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) >= std::max(getHeight(), other.getHeight()) / 2) { // The Y coordinate overlapping is over half of the height of the smaller blob
         if (maxX <= other.getMinX()) { // Current is to the left of other
           unsigned int intermediateWidth = other.getMinX() - maxX;
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) / 4) {
+          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
             return true;
           }
         } else if (minX >= other.getMaxX()) { // Current is to the right of other
           unsigned int intermediateWidth = minX - other.getMaxX();
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) / 4) {
+          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
             return true;
           }
         }
@@ -191,12 +191,12 @@ namespace rtx {
       if ((std::min(maxX, other.getMaxX()) - std::max(minX, other.getMinX())) >= std::max(getWidth(), other.getWidth()) / 2) { // The X coordinate overlapping is over half of the width of the smaller blob
         if (maxY <= other.getMinY()) { // Current is above the other
           unsigned int intermediateHeight = other.getMinY() - maxY;
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) / 4) {
+          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
             return true;
           }
         } else if (minY >= other.getMaxY()) { // Current is below the other
           unsigned int intermediateHeight = minY - other.getMaxY();
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) / 4) {
+          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
             return true;
           }
         }

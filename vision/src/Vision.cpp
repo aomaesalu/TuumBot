@@ -138,12 +138,12 @@ namespace rtx {
               continue;
             if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
               if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   toBeRemoved.insert(j);
                 }
               } else {
-                if ((blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) && (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j])) {
+                if ((blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) && (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Check overlapping too // TODO: Calibrate closeness indicator
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
                     if (blobsBuffer[i]->isYellow()) {
