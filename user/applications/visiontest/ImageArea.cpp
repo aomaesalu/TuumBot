@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 21 November 2015
  */
 
 #include "ImageArea.hpp"
@@ -132,8 +132,6 @@ namespace rtx {
           continue;
 
         Color color = (*blob)->getColor();
-        if (color >= 8)
-          std::cout << color << std::endl;
 
         if (color == BALL/* && density > 0.6*/ && boxArea > 10 * 10) {
           colorBlob(*blob, pixels, channels, stride);
