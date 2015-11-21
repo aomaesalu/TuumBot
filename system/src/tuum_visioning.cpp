@@ -323,7 +323,7 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       Point2D* point = blobs[i]->getPosition();
-      unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
+      unsigned int distance = (CAMERA_HEIGHT - point->getMaxY()) * 10000 / boxArea; // TODO: Calculate based on perspective
       double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
       // TODO: Remove duplicate code
       if (color == BLUE_GOAL) {
