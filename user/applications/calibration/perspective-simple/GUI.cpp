@@ -1,6 +1,6 @@
 /**
  *  @file GUI.cpp
- *  Team football application GUI interface class.
+ *  Perspective calibration application GUI interface class.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
@@ -24,6 +24,12 @@ namespace rtx {
     // Attach camera information
     this->camera = camera;
 
+    // Set playing
+    setPlaying();
+
+    // Create empty checkerboard
+    checkerboard = new Checkerboard(7, 7, 25);
+
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv);
 
@@ -38,6 +44,10 @@ namespace rtx {
 
   GUI::~GUI() {
     // TODO: Delete window?
+  }
+
+  bool GUI::isPlaying() const {
+    return playing;
   }
 
   void GUI::initialiseImage() {
@@ -65,15 +75,25 @@ namespace rtx {
     return image;
   }
 
+  Checkerboard* GUI::getCheckerboard() const {
+    return checkerboard;
+  }
+
+  void GUI::setPlaying(const bool &value) {
+    playing = value;
+  }
+
   int GUI::run() {
     // Show windows and return when closed
     return gtkApplication->run(*window);
   }
 
   bool GUI::updateFrame() {
-    frame = camera->getFrame();
-    rgbFrame = toRGB(frame);
-    image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame.data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame.width, (int) rgbFrame.height, (int) rgbFrame.width * 3);
+    if (playing) {
+      frame = camera->getFrame();
+      rgbFrame = toRGB(frame);
+      image = Gdk::Pixbuf::create_from_data((const guint8*) rgbFrame.data, Gdk::COLORSPACE_RGB, false, 8, (int) rgbFrame.width, (int) rgbFrame.height, (int) rgbFrame.width * 3);
+    }
     window->getImageArea()->queue_draw();
     return true;
   }

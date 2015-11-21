@@ -1,9 +1,10 @@
 /**
- * @file Blob.cpp
- * Blob seen in the camera frame.
+ *  @file Blob.cpp
+ *  Blob seen in the camera frame.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "cameraConstants.hpp"
@@ -86,7 +87,7 @@ namespace rtx {
     // TODO
   }
 
-  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() { // TODO: Constness
+  const std::vector<std::pair<unsigned int, unsigned int>>& Blob::getPoints() const {
     return points;
   }
 
@@ -138,26 +139,48 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
-  bool Blob::overlaps(const Blob &other) const {
-    return color == other.getColor() && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+  bool Blob::isOrange() const {
+    return color == BALL;
   }
 
-  bool Blob::isClose(const Blob &other) const {
+  bool Blob::isBlue() const {
+    return color == BLUE_GOAL;
+  }
+
+  bool Blob::isYellow() const {
+    return color == YELLOW_GOAL;
+  }
+
+  bool Blob::isSameColor(const Blob &other) const {
+    return color == other.getColor();
+  }
+
+  bool Blob::isAbove(const Blob &other) const {
+    return position->getY() < other.getPosition()->getY();
+  }
+
+  bool Blob::isBelow(const Blob &other) const {
+    return !isAbove(other);
+  }
+
+  bool Blob::overlaps(const Blob &other) const {
+    return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+  }
+
+  bool Blob::isClose(const Blob &other, const double &closeness) const {
     if (overlaps(other))
       return true;
-    if (color != other.getColor())
-      return false;
     if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
     //if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
       if ((std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) >= std::max(getHeight(), other.getHeight()) / 2) { // The Y coordinate overlapping is over half of the height of the smaller blob
         if (maxX <= other.getMinX()) { // Current is to the left of other
           unsigned int intermediateWidth = other.getMinX() - maxX;
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) / 4) {
+          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
             return true;
           }
         } else if (minX >= other.getMaxX()) { // Current is to the right of other
           unsigned int intermediateWidth = minX - other.getMaxX();
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) / 4) {
+          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
             return true;
           }
         }
@@ -167,12 +190,12 @@ namespace rtx {
       if ((std::min(maxX, other.getMaxX()) - std::max(minX, other.getMinX())) >= std::max(getWidth(), other.getWidth()) / 2) { // The X coordinate overlapping is over half of the width of the smaller blob
         if (maxY <= other.getMinY()) { // Current is above the other
           unsigned int intermediateHeight = other.getMinY() - maxY;
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) / 4) {
+          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
             return true;
           }
         } else if (minY >= other.getMaxY()) { // Current is below the other
           unsigned int intermediateHeight = minY - other.getMaxY();
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) / 4) {
+          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
             return true;
           }
         }
@@ -200,4 +223,8 @@ namespace rtx {
     position->setY(ySum / numberOfPoints);
   }
 
-};
+  void Blob::setColor(const Color &color) {
+    this->color = color;
+  }
+
+}

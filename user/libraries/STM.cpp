@@ -34,6 +34,10 @@ namespace rtx {
     st->setup();
   }
 
+  void STM::addRootState(State* st) {
+    m_rootStates.push_back(st);
+  }
+
   State* STM::createState(std::string name) {
     State* st = new State(name, this);
     m_states.push_back(st);
@@ -75,8 +79,17 @@ namespace rtx {
   }
 
   void STM::process() {
+    // Process root states
+    for(auto& tmp_st_ptr : m_rootStates) {
+      if(tmp_st_ptr->canEnter() && tmp_st_ptr != m_state) {
+        setState(tmp_st_ptr);
+	return;
+      }
+    }
+
     if(m_state == nullptr) return;
 
+    // Process current state conditions
     State* st_ptr;
     while(!m_state->canEnter()) {
       if(m_state->getLastState() == nullptr) return;
@@ -86,8 +99,10 @@ namespace rtx {
         setState(st_ptr);
     }
 
+    // Process current state
     m_state->process();
 
+    // Process next state conditions
     if(m_state->canExit()) {
       st_ptr = m_state->getNextState();
       if(st_ptr != nullptr) {

@@ -1,9 +1,10 @@
 /**
- * @file ImageDrawingArea.hpp
- * Color calibration application "after" image drawing area.
+ *  @file ImageDrawingArea.hpp
+ *  Color calibration application "after" image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_COLOR_IMAGE_AFTER_DRAWING_AREA_H
@@ -28,6 +29,7 @@ namespace rtx {
       ImageAfterDrawingArea(MainWindow*, Gtk::Scale*);
       virtual ~ImageAfterDrawingArea();
 
+      void filterFromString(const std::string&);
       void calculateFilterBuffer(const std::vector<std::set<unsigned int>>&, const std::vector<std::set<unsigned int>>&);
       void addBufferToFilter();
 
@@ -52,10 +54,13 @@ namespace rtx {
       std::vector<std::set<unsigned int>> filterAdditionBufferList;
       std::vector<std::set<unsigned int>> filterRemovalBufferList;
 
+      std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, std::map<bool, char>>>>>>>> savingMap;
+
       void initialiseProperties();
       void initialiseImage();
       void initialiseDeltaScale(Gtk::Scale*);
       void initialiseFilters();
+      void initialiseSavingMap();
 
       void resetFilter();
       void resetFilterBuffers();

@@ -1,6 +1,6 @@
 /**
  *  @file MainWindow.cpp
- *  Team football application GUI main window.
+ *  Perspective calibration application GUI main window.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
@@ -13,7 +13,6 @@
  #include "cameraConstants.hpp"
 
  #include <iostream> // TODO: Remove
- #include <fstream>
 
 
  namespace rtx {
@@ -57,6 +56,7 @@
    void MainWindow::construct() {
      constructGrid();
      constructImageAreaFrame();
+     constructScalesBox();
    }
 
    void MainWindow::constructGrid() {
@@ -66,11 +66,29 @@
    }
 
    void MainWindow::constructImageAreaFrame() {
+     imageArea.add_events(Gdk::BUTTON_PRESS_MASK);
      imageAreaFrame.add(imageArea);
      imageAreaFrame.set_label("Image");
      imageAreaFrame.set_size_request(CAMERA_WIDTH, CAMERA_HEIGHT);
      imageAreaFrame.set_border_width(0);
-     grid.attach(imageAreaFrame, 1, 1, 1, 1);
+     grid.attach(imageAreaFrame, 0, 0, 1, 1);
+   }
+
+   void MainWindow::constructScalesBox() {
+     constructScale(scalesBox, AScale, ALabel, "A");
+     constructScale(scalesBox, BScale, BLabel, "B");
+     constructScale(scalesBox, CScale, CLabel, "C");
+     scalesBox.set_spacing(10);
+     grid.attach(scalesBox, 1, 0, 1, 1);
+   }
+
+   void MainWindow::constructScale(Gtk::Container &parentContainer, Gtk::Scale &scale, Gtk::Label &label, const std::string &name) {
+     label.set_text(name + ":");
+     parentContainer.add(label);
+     scale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
+     scale.set_digits(0);
+     scale.set_size_request(100);
+     parentContainer.add(scale);
    }
 
    ImageArea* MainWindow::getImageArea() {

@@ -17,7 +17,7 @@ namespace rtx { namespace Logic {
   }
 
   void process() {
-    switch(logicState) {
+    /*switch(logicState) {
       case LS_INIT:
 
         printf("Logic initial state...\n");
@@ -51,14 +51,15 @@ namespace rtx { namespace Logic {
         // Check minimal state conditions
         // Spin to win
 
-        if(Visioning::goals.size() > 0) {
+        if (Visioning::yellowGoal != nullptr || Visioning::blueGoal != nullptr) {
+        //if(Visioning::goals.size() > 0) { // TODO: Refactor?
           Goal* goal_ptr = nullptr;
           /*for(auto & goal : Visioning::goals) {
             if(goal.getType() = Goal::VAR_OPPOSING)  {
               goal_ptr = goal;
             }
           }*/
-          if(goal_ptr == nullptr) break;
+          /*if(goal_ptr == nullptr) break;
 
           logicState = LS_GOAL_SHOOT;
         }
@@ -69,7 +70,7 @@ namespace rtx { namespace Logic {
 
         logicState = LS_BALL_RETRIEVE;
         break;
-    }
+    }*/
   }
 
   void printSystemState() {

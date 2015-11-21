@@ -1,12 +1,15 @@
 /**
- * @file Field.cpp
- * Field class.
+ *  @file Field.cpp
+ *  Field class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 20 November 2015
  */
 
 #include "Field.hpp"
+
+#include "Color.hpp"
 
 
 namespace rtx {
@@ -30,9 +33,9 @@ namespace rtx {
     robotSelf{robotSelf}
   {
     goals = new Goal*[2];
-    goals[0] = new Goal(BLUE_GOAL_POSITION_X, BLUE_GOAL_POSITION_Y);
+    //goals[0] = new Goal(BLUE_GOAL_POSITION_X, BLUE_GOAL_POSITION_Y, BLUE_GOAL);
     // TODO: Add goal color information
-    goals[1] = new Goal(YELLOW_GOAL_POSITION_X, YELLOW_GOAL_POSITION_Y);
+    //goals[1] = new Goal(YELLOW_GOAL_POSITION_X, YELLOW_GOAL_POSITION_Y, YELLOW_GOAL);
     // TODO: Add goal color information
   }
 

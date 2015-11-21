@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 20 November 2015
  */
 
 #include <algorithm>
@@ -27,18 +27,21 @@ namespace rtx { namespace Visioning {
   FeatureSet features;
 
   EDS<Ball> ballDetect;
-  BallSet balls; // Healty ball entities vs new/decaying ball entities?
-  BallSet ballsBuffer;
+  BallSet balls; // Healthy ball entities vs new/decaying ball entities?
+  BallSet ballsBuffer; // Unused
 
-  GoalSet goals;
-  GoalSet goalsBuffer;
+  Goal *yellowGoal;
+  Goal *yellowGoalBuffer;
+  Goal *blueGoal;
+  Goal *blueGoalBuffer;
 
+  EDS<Robot> robotDetect;
   RobotSet robots;
-  RobotSet robotsBuffer;
+  RobotSet robotsBuffer; // Unused
 
-  bool editingBalls = false;
+  bool editingBalls = false; // Unused
   bool editingGoals = false;
-  bool editingRobots = false;
+  bool editingRobots = false; // Unused
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -111,10 +114,13 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string &fileName) {
     std::ifstream inputFile(fileName);
-    inputFile >> filter;
+    std::stringstream buffer;
+    buffer << inputFile.rdbuf();
+    filter = buffer.str();
     inputFile.close();
   }
 
+  // Unused
   void translateBallsBuffer() {
     editingBalls = true;
 
@@ -128,13 +134,34 @@ namespace rtx { namespace Visioning {
   void translateGoalsBuffer() {
     editingGoals = true;
 
-    goals.clear();
-    goals = goalsBuffer;
-    goalsBuffer.clear();
+    // TODO: Refactor buffer management
+
+    if (blueGoal) {
+      if (blueGoal != blueGoalBuffer) {
+        delete(blueGoal);
+        blueGoal = blueGoalBuffer;
+      }
+    } else {
+      blueGoal = blueGoalBuffer;
+    }
+
+    if (yellowGoal) {
+      if (yellowGoal != yellowGoalBuffer) {
+        delete(yellowGoal);
+        yellowGoal = yellowGoalBuffer;
+      }
+    } else {
+      yellowGoal = yellowGoalBuffer;
+    }
+
+    // TODO: Remove casting to null pointers when localisation is working
+    blueGoalBuffer = nullptr;
+    yellowGoalBuffer = nullptr;
 
     editingGoals = false;
   }
 
+  // Unused
   void translateRobotsBuffer() {
     editingRobots = true;
 
@@ -178,8 +205,8 @@ namespace rtx { namespace Visioning {
       // STEP 1: Filter out invalid blobs
       if(color != BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
-      if(boxArea < 20 * 20) continue;
       if(density > 1.0) continue;
+      if(boxArea < 4 * 4) continue;
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
@@ -233,7 +260,7 @@ namespace rtx { namespace Visioning {
         if(_p > p) {
           p = _p;
           p_ix = jx;
-	  if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
+	        if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
         }
       }
 
@@ -249,9 +276,10 @@ namespace rtx { namespace Visioning {
     ballDetect.update();
 
     if(debugTimer.isTime()) {
-      std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
+      /*std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
 	        << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
 		<< std::endl;
+      */
 
       /*for(auto& b : *(ballDetect.getEntities())) {
 	Transform* t = b->getTransform();
@@ -260,40 +288,129 @@ namespace rtx { namespace Visioning {
 
       debugTimer.start();
     }
- }
+  }
 
   void goalDetection(const Frame &frame) {
-    goalsBuffer.clear();
+    // TODO: Remove casting to null pointers when localisation is working
+    blueGoalBuffer = nullptr;
+    yellowGoalBuffer = nullptr;
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
-    for (unsigned int i = 0; i < Vision::blobs.size(); ++i) {
-      if (Vision::blobs[i]->getColor() == BLUE_GOAL) {
-        // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
-      } else if (Vision::blobs[i]->getColor() == YELLOW_GOAL) {
-        // TODO: Refactor
-        Point2D* point = Vision::blobs[i]->getPosition();
-        unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-        double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
-        goalsBuffer.push_back(new Goal(distance, angle));
+    unsigned int largestYellowArea = 0, largestBlueArea = 0;
+
+    for (unsigned int i = 0; i < blobs.size(); ++i) {
+      Color color = blobs[i]->getColor();
+      double density = blobs[i]->getDensity();
+      unsigned int boxArea = blobs[i]->getBoxArea();
+      //double ratio = blobs[i]->getBoxRatio();
+
+      // Filter out invalid blobs
+      if (color != BLUE_GOAL && color != YELLOW_GOAL) continue;
+      if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
+      if (density > 1.0) continue;
+      if(boxArea < 20 * 20) continue; // TODO: Calibrate with field tests
+      //if(fabs(1 - ratio) > 0.3) continue;
+      /* && density > 0.6*/
+
+      Point2D* point = blobs[i]->getPosition();
+      unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
+      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+      // TODO: Remove duplicate code
+      if (color == BLUE_GOAL) {
+        if (boxArea > largestBlueArea) {
+          largestBlueArea = boxArea;
+          //if (blueGoalBuffer == nullptr) {
+          blueGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color);
+          /*} else {
+            blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+            blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
+          }*/
+        }
+      } else {
+        if (boxArea > largestYellowArea) {
+          largestYellowArea = boxArea;
+          //if (yellowGoalBuffer == nullptr) {
+          yellowGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color);
+          /*} else {
+            yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
+            yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
+          }*/
+        }
       }
+
     }
 
     translateGoalsBuffer();
   }
 
   void robotDetection(const Frame &frame) {
-    robotsBuffer.clear();
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
-    // TODO
+    RobotSet n_robots;
 
-    translateRobotsBuffer();
+    for(unsigned int i = 0; i < blobs.size(); ++i) {
+      Color color = blobs[i]->getColor();
+      double density = blobs[i]->getDensity();
+      unsigned int boxArea = blobs[i]->getBoxArea();
+      //double ratio = blobs[i]->getBoxRatio();
+
+      // STEP 1: Filter out invalid blobs
+      if (color != ROBOT_YELLOW_BLUE && color != ROBOT_BLUE_YELLOW) continue;
+      if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
+      if (density > 1.0) continue;
+      //if(boxArea < 8 * 3) continue; // TODO: Calibrate with field tests
+      //if(fabs(1 - ratio) > 0.3) continue;
+      /* && density > 0.6*/
+
+      // STEP 2: Calculate relative position
+      Point2D* point = blobs[i]->getPosition();
+      // TODO: Calculate based on perspective
+      unsigned int distance = CAMERA_HEIGHT - point->getY();
+      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+
+      // STEP 3: Create robot instance with absolute position
+      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
+    }
+
+    // STEP 4: Unite detected robots with robots from last frame or create new robots
+    double p, _p, p_ix;
+    Robot* n_robot_ptr;
+    RobotSet* robot_set_ptr;
+    for (int ix = 0; ix < n_robots.size(); ix++) {
+      p = 0.0;
+      n_robot_ptr = n_robots[ix];
+
+      // STEP 4.1: Calculate existing entity probability
+      robot_set_ptr = &(robotDetect.objs);
+      for (int jx = 0; jx < robotDetect.objs.size(); jx++) {
+        _p = stateProbability((*robot_set_ptr)[jx]->getTransform(), n_robot_ptr->getTransform());
+        if (_p > p) {
+          p = _p;
+          p_ix = jx;
+        }
+      }
+
+      for (int jx = 0; jx < robotDetect.tmp_objs.size(); jx++) {
+        _p = stateProbability(robotDetect.tmp_objs[jx]->getTransform(), n_robot_ptr->getTransform());
+        if (_p > p) {
+          p = _p;
+          p_ix = jx;
+          if(robot_set_ptr != &(robotDetect.tmp_objs)) robot_set_ptr = &(robotDetect.tmp_objs);
+        }
+      }
+
+      // STEP 4.2: Create or update entities
+      if (p < 0.01) {
+        robotDetect.tmp_objs.push_back(new Robot(*n_robot_ptr));
+      } else {
+        (*robot_set_ptr)[p_ix]->update(*n_robot_ptr->getTransform());
+      }
+    }
+
+    // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
+    robotDetect.update();
   }
 
 }}

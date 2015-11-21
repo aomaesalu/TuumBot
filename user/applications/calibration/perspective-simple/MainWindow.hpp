@@ -1,14 +1,14 @@
 /**
  *  @file MainWindow.hpp
- *  Team football application GUI main window.
+ *  Perspective calibration application GUI main window.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
-#define RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
+#ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
+#define RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
 
 #include <vector>
 #include <set>
@@ -39,6 +39,15 @@ namespace rtx {
 
       // Frames and boxes for the layout
       Gtk::Frame imageAreaFrame;
+      Gtk::Box scalesBox;
+
+      // Constant scales
+      Gtk::Scale AScale;
+      Gtk::Label ALabel;
+      Gtk::Scale BScale;
+      Gtk::Label BLabel;
+      Gtk::Scale CScale;
+      Gtk::Label CLabel;
 
       // Image drawing areas and contexts
       ImageArea imageArea;
@@ -51,9 +60,11 @@ namespace rtx {
       void construct();
       void constructGrid();
       void constructImageAreaFrame();
+      void constructScalesBox();
+      void constructScale(Gtk::Container&, Gtk::Scale&, Gtk::Label&, const std::string&);
 
   };
 
 }
 
-#endif // RTX_APPLICATIONS_TEAMFOOTBALL_MAIN_WINDOW_H
+#endif // RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
