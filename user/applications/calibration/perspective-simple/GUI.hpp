@@ -1,23 +1,23 @@
 /**
  *  @file GUI.hpp
- *  Team football application GUI interface class.
+ *  Perspective calibration application GUI interface class.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
-#define RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
+#ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_GUI_H
+#define RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_GUI_H
 
 #include <vector>
 #include <string>
 
 #include "rtxhal.hpp"
 #include "rtxvision.h"
-#include "tuum_visioning.hpp"
 
 #include "MainWindow.hpp"
+#include "Checkerboard.hpp"
 
 
 namespace rtx {
@@ -28,6 +28,8 @@ namespace rtx {
       GUI(int&, char**, Camera*);
       virtual ~GUI();
 
+      bool isPlaying() const;
+
       Glib::RefPtr<Gtk::Application> getGtkApplication() const;
       MainWindow* getWindow() const;
 
@@ -36,12 +38,18 @@ namespace rtx {
 
       Glib::RefPtr<Gdk::Pixbuf> getImage() const;
 
+      Checkerboard* getCheckerboard() const;
+
+      void setPlaying(const bool& = true);
+
       int run();
       bool updateFrame();
 
     private:
       int argc;
       char **argv;
+
+      bool playing;
 
       Glib::RefPtr<Gtk::Application> gtkApplication;
       MainWindow *window;
@@ -52,10 +60,12 @@ namespace rtx {
 
       Glib::RefPtr<Gdk::Pixbuf> image;
 
+      Checkerboard *checkerboard;
+
       void initialiseImage();
 
   };
 
 }
 
-#endif // RTX_APPLICATIONS_TEAMFOOTBALL_GUI_H
+#endif // RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_GUI_H

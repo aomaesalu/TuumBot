@@ -10,10 +10,12 @@
 #define RTX_CTL_H
 
 #include "__future__.hpp"
+#include "hal.hpp"
 
 #include "STM.hpp"
 
 #include "Ball.hpp"
+#include "Goal.hpp"
 
 namespace rtx { namespace ctl {
 
@@ -55,8 +57,13 @@ namespace rtx { namespace ctl {
 
   private:
     Context ctx;
-    Timer targetUpdate;
+
     Ball* targetBall;
+
+    Timer targetUpdate;
+    Timer ballPickupTimeout;
+
+    bool m_catchingBall;
   };
 
 
@@ -64,6 +71,7 @@ namespace rtx { namespace ctl {
   public:
     LSGoalLocate(Context _ctx) : ctx(_ctx) {}
 
+    void init();
     void run();
     bool isRunnable();
 
@@ -76,11 +84,14 @@ namespace rtx { namespace ctl {
   public:
     LSGoalShoot(Context _ctx) : ctx(_ctx) {}
 
+    void init();
     void run();
     bool isRunnable();
 
   private:
     Context ctx;
+
+    Goal* targetGoal;
   };
 
 }}

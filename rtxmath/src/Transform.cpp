@@ -6,6 +6,9 @@
  *  @date 19. November 2015
  */
 
+#include <string>
+#include <sstream>
+
 #include "Transform.hpp"
 
 namespace rtx {
@@ -49,6 +52,10 @@ namespace rtx {
     return pos;
   }
 
+  double Transform::getOrientation() {
+    return o;
+  }
+
   int Transform::getX() {
     return pos.x;
   }
@@ -60,4 +67,23 @@ namespace rtx {
   double Transform::distanceTo(Vec2i target) {
     return sqrt(pow(target.x - pos.x, 2) + pow(target.y - pos.y, 2));
   }
+
+  Vec2i Transform::operator-(int val) {
+    return pos - val;
+  }
+
+  Transform Transform::operator-(Transform t) {
+    return Transform({{pos.x - t.getX(), pos.y - t.getY()}, o - t.o});
+  }
+
+  std::string Transform::toString() {
+    std::stringstream output;
+    output << "<Transform "
+           << "(" << pos.x
+	   << ", " << pos.y
+	   << ", " << o
+	   << ")>";
+    return output.str();
+  }
+
 }

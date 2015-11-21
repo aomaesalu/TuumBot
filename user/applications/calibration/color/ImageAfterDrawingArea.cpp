@@ -1,10 +1,10 @@
 /**
- * @file ImageDrawingArea.cpp
- * Color calibration application "after" image drawing area.
+ *  @file ImageDrawingArea.cpp
+ *  Color calibration application "after" image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 11. November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "ImageAfterDrawingArea.hpp"
@@ -30,10 +30,25 @@ namespace rtx {
     initialiseImage();
     initialiseDeltaScale(deltaScale);
     initialiseFilters();
+    initialiseSavingMap();
   }
 
   ImageAfterDrawingArea::~ImageAfterDrawingArea() {
     // Nothing to do here
+  }
+
+  void ImageAfterDrawingArea::filterFromString(const std::string &filterString) {
+    resetFilter();
+    resetFilterBuffers();
+    for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
+      unsigned int bitmask = 1 << 7;
+      for (unsigned int mode = 0; mode < 8; ++mode) {
+        if (filterString[i] & bitmask) {
+          filter[mode].insert(i);
+        }
+        bitmask >>= 1;
+      }
+    }
   }
 
   void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {
@@ -104,20 +119,18 @@ namespace rtx {
     queue_draw();
   }
 
+  bool isInFilter(const std::vector<std::set<unsigned int>> &filter, const unsigned int &mode, const unsigned int &value) {
+    return filter[mode].find(value) != filter[mode].end();
+  }
+
   std::string ImageAfterDrawingArea::getOutput() const {
-    std::string output = "";
-    for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
-      char colorValue = 0;
-      for (unsigned int mode = 0; mode < 8; ++mode) { // We assume 0 < numberOfModes <= 8
-        bool modeValue = 0;
-        if (mode < mainWindow->getModes().size()) {
-          if (filter[mode].find(i) != filter[mode].end()) {
-            modeValue = 1;
-          }
-        }
-        colorValue = (colorValue << 1) + modeValue;
+    std::string output(256 * 256 * 256, (unsigned char) 0);
+    unsigned int bitmask = 1 << 7;
+    for (unsigned int mode = 0; mode < 8; ++mode) {
+      for (std::set<unsigned int>::iterator value = filter[mode].begin(); value != filter[mode].end(); ++value) {
+        output[*value] |= bitmask;
       }
-      output += colorValue;
+      bitmask >>= 1;
     }
     return output;
   }
@@ -171,6 +184,16 @@ namespace rtx {
       filter.push_back(emptySet);
       filterAdditionBufferList.push_back(emptySet);
       filterRemovalBufferList.push_back(emptySet);
+    }
+  }
+
+  void ImageAfterDrawingArea::initialiseSavingMap() {
+    for (unsigned int i = 0; i < 256; ++i) {
+      bool v[8];
+      for (unsigned int j = 0; j < 8; ++j) {
+        v[j] = (i >> (7 - j)) & 0x1;
+      }
+      savingMap[v[0]][v[1]][v[2]][v[3]][v[4]][v[5]][v[6]][v[7]] = i;
     }
   }
 

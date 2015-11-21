@@ -9,7 +9,10 @@
 #ifndef RTX_TRANSFORM_H
 #define RTX_TRANSFORM_H
 
-#include "__future__.hpp"
+#include <string>
+#include <math.h>
+
+#include "Vec.hpp"
 
 namespace rtx {
 
@@ -30,11 +33,17 @@ namespace rtx {
     void setOrientation(const double);
 
     Vec2i getPosition();
+    double getOrientation();
 
     int getX();
     int getY();
 
     double distanceTo(Vec2i);
+
+    Vec2i operator-(int);
+    Transform operator-(Transform);
+
+    std::string toString();
   };
 
 }

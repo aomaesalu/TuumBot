@@ -1,17 +1,19 @@
 /**
  *  @file ImageArea.hpp
- *  Team football application GUI preview area.
+ *  Perspective calibration application GUI preview area.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 21 November 2015
  */
 
-#ifndef RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
-#define RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
+#ifndef RTX_APPLIXATIONS_CALIBRATION_PERSPECTIVE_IMAGE_AREA_H
+#define RTX_APPLIXATIONS_CALIBRATION_PERSPECTIVE_IMAGE_AREA_H
 
 #include <gtkmm.h>
 #include <gtkmm/drawingarea.h>
+
+#include "Color.hpp"
 
 
 namespace rtx {
@@ -28,12 +30,14 @@ namespace rtx {
 
     protected:
       virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
+      virtual bool on_button_press_event(GdkEventButton *buttonEvent);
 
     private:
       GUI *gui;
 
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
+      void drawPerspective(guint8*, const unsigned int&, const unsigned int&);
       bool applyFilter();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);
 
@@ -41,4 +45,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_APPLIXATIONS_TEAMFOOTBALL_IMAGE_AREA_H
+#endif // RTX_APPLIXATIONS_CALIBRATION_PERSPECTIVE_IMAGE_AREA_H
