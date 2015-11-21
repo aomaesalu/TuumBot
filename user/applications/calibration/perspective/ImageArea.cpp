@@ -59,8 +59,8 @@ namespace rtx {
     // Color point pixels
     for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::iterator pointList = points.begin(); pointList != points.end(); ++pointList) {
       for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = pointList->begin(); point != pointList->end(); ++point) {
-        for (int dx = -1; dx < 1; ++dx) {
-          for (int dy = -1; dy < 1; ++dy) {
+        for (int dx = -1; dx <= 1; ++dx) {
+          for (int dy = -1; dy <= 1; ++dy) {
             if (point->first + dx >= CAMERA_WIDTH || point->second + dy >= CAMERA_HEIGHT)
               continue;
             colorPixel(pixels + (point->first + dx) * channels + (point->second + dy) * stride, r, g, b);
