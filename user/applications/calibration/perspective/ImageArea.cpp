@@ -52,15 +52,29 @@ namespace rtx {
   bool ImageArea::applyFilter() {
     filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
+    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> points = gui->getCheckerboard()->getPoints();
+
     guint8 *pixels = filteredImage->get_pixels();
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
-    guint8 *actualPixels = gui->getFrame()->data;
-    unsigned int actualChannels = 3;
-    unsigned int actualStride = gui->getFrame()->width * actualChannels;
+    // Define RGB color
+    unsigned int r = 255;
+    unsigned int g = 0;
+    unsigned int b = 0;
 
-    // TODO
+    // Color point pixels
+    for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::iterator pointList = points.begin(); pointList != points.end(); ++pointList) {
+      for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = pointList->begin(); point != pointList->end(); ++point) {
+        for (int dx = -1; dx < 1; ++dx) {
+          for (int dy = -1; dy < 1; ++dy) {
+            if (point->first + dx >= CAMERA_WIDTH || point->second + dy >= CAMERA_HEIGHT)
+              continue;
+            colorPixel(pixels + (point->first + dx) * channels + (point->second + dy) * stride, r, g, b);
+          }
+        }
+      }
+    }
 
     return true;
   }
