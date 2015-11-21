@@ -12,7 +12,7 @@
 
 namespace rtx {
 
-  Goal::Goal(const Goal &other):
+  Goal::Goal(Goal &other):
     Entity(*other.getTransform()),
     Rectangle(other.getWidth(), other.getLength()),
     color(other.getColor())

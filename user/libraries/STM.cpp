@@ -81,7 +81,7 @@ namespace rtx {
   void STM::process() {
     // Process root states
     for(auto& tmp_st_ptr : m_rootStates) {
-      if(tmp_st_ptr->canEnter()) {
+      if(tmp_st_ptr->canEnter() && tmp_st_ptr != m_state) {
         setState(tmp_st_ptr);
 	return;
       }

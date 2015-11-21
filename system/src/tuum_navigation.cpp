@@ -11,7 +11,7 @@
 
 namespace rtx { namespace Navigation {
 
-  const int NAV_BALL_PICKUP_RANGE = 75;
+  const int NAV_BALL_PICKUP_RANGE = 50;
 
 
   //TODO: position to relative position
@@ -22,6 +22,15 @@ namespace rtx { namespace Navigation {
     target.setOrientation(o);
     return target;
   }
+
+  Transform calcGoalShootPos(Transform* bt) {
+    Transform target((*bt) - 0);
+
+    double o = bt->getPosition().getOrientation();
+    target.setOrientation(o);
+    return target;
+  }
+
 
   Ball* getNearestBall() {
     Ball* ball = nullptr;
