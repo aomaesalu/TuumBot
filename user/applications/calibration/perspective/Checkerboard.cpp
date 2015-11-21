@@ -41,6 +41,10 @@ namespace rtx {
     return width * height;
   }
 
+  unsigned int Checkerboard::getSquareWidth() const {
+    return squareWidth;
+  }
+
   unsigned int Checkerboard::getNumberOfPointsFilled() const {
     return filled;
   }
