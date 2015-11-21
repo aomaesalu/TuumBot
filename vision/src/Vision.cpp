@@ -132,57 +132,66 @@ namespace rtx {
 
       // Join blobs
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
-        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
-          for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
-            if (i == j)
-              continue;
-            if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
 
-              if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) { // TODO: Closeness for robot blobs
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                  blobsBuffer[i]->join(*blobsBuffer[j]);
-                  toBeRemoved.insert(j);
+        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
+          continue;
+
+        for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
+
+          if (i == j)
+            continue;
+
+          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
+            continue;
+
+          if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) { // TODO: Closeness for robot blobs
+            if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+              blobsBuffer[i]->join(*blobsBuffer[j]);
+              toBeRemoved.insert(j);
+            }
+
+          } else {
+
+            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
+              if ((blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                // (yellow-blue, blue) OR (yellow-blue, yellow) OR (blue-yellow, blue) OR (blue-yellow, yellow)
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
+            } else if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) {
+
+              if (blobsBuffer[j]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[j]->getColor() == ROBOT_BLUE_YELLOW) {
+                // (blue, yellow-blue) OR (yellow, yellow-blue) OR (blue, blue-yellow) OR (yellow, blue-yellow)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                  blobsBuffer[j]->join(*blobsBuffer[i]);
+                  toBeRemoved.insert(i);
                 }
 
-              } else {
-
-                if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
-                  if ((blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                    // (yellow-blue, blue) OR (yellow-blue, yellow) OR (blue-yellow, blue) OR (blue-yellow, yellow)
-                    blobsBuffer[i]->join(*blobsBuffer[j]);
-                    toBeRemoved.insert(j);
+              } else if (blobsBuffer[j]->isBlue()) {
+                // (yellow, blue)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  toBeRemoved.insert(j);
+                  
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
                   }
 
-                } else if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) {
-                  
-                  if (blobsBuffer[j]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[j]->getColor() == ROBOT_BLUE_YELLOW) {
-                    // (blue, yellow-blue) OR (yellow, yellow-blue) OR (blue, blue-yellow) OR (yellow, blue-yellow)
-                    if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                      blobsBuffer[j]->join(*blobsBuffer[i]);
-                      toBeRemoved.insert(i);
-                    }
-                  } else if (blobsBuffer[j]->isBlue()) {
-                    // (yellow, blue)
-                    if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                      blobsBuffer[i]->join(*blobsBuffer[j]);
-                      toBeRemoved.insert(j);
-                      if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
-                        blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
-                      } else {
-                        blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
-                      }
-                    }
-                  } else if (blobsBuffer[j]->isYellow()) {
-                    // (blue, yellow)
-                    if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                      blobsBuffer[i]->join(*blobsBuffer[j]);
-                      toBeRemoved.insert(j);
-                      if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
-                        blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
-                      } else {
-                        blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
-                      }
-                    }
+                }
+
+              } else if (blobsBuffer[j]->isYellow()) {
+                // (blue, yellow)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  toBeRemoved.insert(j);
+
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
                   }
 
                 }
@@ -190,8 +199,11 @@ namespace rtx {
               }
 
             }
+
           }
+
         }
+
       }
 
       unsigned int removed = 0; // TODO: Refactor
