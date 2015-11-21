@@ -24,6 +24,9 @@ namespace rtx {
     // Attach camera information
     this->camera = camera;
 
+    // Create empty checkerboard
+    checkerboard = new Checkerboard(7, 7);
+
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv);
 
@@ -63,6 +66,10 @@ namespace rtx {
 
   Glib::RefPtr<Gdk::Pixbuf> GUI::getImage() const {
     return image;
+  }
+
+  Checkerboard* GUI::getCheckerboard() const {
+    return checkerboard;
   }
 
   int GUI::run() {

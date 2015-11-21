@@ -17,6 +17,7 @@
 #include "rtxvision.h"
 
 #include "MainWindow.hpp"
+#include "Checkerboard.hpp"
 
 
 namespace rtx {
@@ -35,6 +36,8 @@ namespace rtx {
 
       Glib::RefPtr<Gdk::Pixbuf> getImage() const;
 
+      Checkerboard* getCheckerboard() const;
+
       int run();
       bool updateFrame();
 
@@ -50,6 +53,8 @@ namespace rtx {
       Frame rgbFrame;
 
       Glib::RefPtr<Gdk::Pixbuf> image;
+
+      Checkerboard *checkerboard;
 
       void initialiseImage();
 
