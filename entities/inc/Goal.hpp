@@ -27,7 +27,7 @@ namespace rtx {
 
   class Goal: public Entity, public Rectangle {
     public:
-      Goal(const Goal&);
+      Goal(Goal&);
       /*Goal(const Point2D*, const double& = GOAL_WIDTH,
            const double& = GOAL_LENGTH);
       Goal(const double&, const double&, const double& = GOAL_WIDTH,
@@ -42,7 +42,7 @@ namespace rtx {
       // TODO: isFriendly(), isEnemy() - needs data about the current game
 
     private:
-      Color color;
+     Color color;
   };
 
 }

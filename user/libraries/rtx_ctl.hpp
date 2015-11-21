@@ -15,6 +15,7 @@
 #include "STM.hpp"
 
 #include "Ball.hpp"
+#include "Goal.hpp"
 
 namespace rtx { namespace ctl {
 
