@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 21 November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -60,6 +60,6 @@ namespace rtx {
 
   };
 
-};
+}
 
 #endif // RTX_VISION_VISION_H

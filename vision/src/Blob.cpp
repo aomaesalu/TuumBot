@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 21 November 2015
  */
 
 #include "cameraConstants.hpp"
@@ -139,10 +139,6 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
-  void Blob::setColor(const Color &color) {
-    this->color = color;
-  }
-
   bool Blob::isOrange() const {
     return color == BALL;
   }
@@ -153,6 +149,18 @@ namespace rtx {
 
   bool Blob::isYellow() const {
     return color == YELLOW_GOAL;
+  }
+
+  bool Blob::isSameColor(const Blob &other) const {
+    return color == other.getColor();
+  }
+
+  bool Blob::isAbove(const Blob &other) const {
+    return position->getY() < other.getPosition()->getY();
+  }
+
+  bool Blob::isBelow(const Blob &other) const {
+    return !isAbove(other);
   }
 
   bool Blob::overlaps(const Blob &other) const {
@@ -196,18 +204,6 @@ namespace rtx {
     return false;
   }
 
-  bool Blob::isSameColor(const Blob &other) const {
-    return color == other.getColor();
-  }
-
-  bool Blob::isAbove(const Blob &other) const {
-    return position->getY() < other.getPosition()->getY();
-  }
-
-  bool Blob::isBelow(const Blob &other) const {
-    return !isAbove(other);
-  }
-
   void Blob::join(Blob &other) {
     // Define new box area
     minX = std::min(minX, other.getMinX());
@@ -227,4 +223,8 @@ namespace rtx {
     position->setY(ySum / numberOfPoints);
   }
 
-};
+  void Blob::setColor(const Color &color) {
+    this->color = color;
+  }
+
+}

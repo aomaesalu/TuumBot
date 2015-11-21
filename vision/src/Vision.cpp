@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 21 November 2015
  */
 
 #include "Vision.hpp"
@@ -134,6 +134,8 @@ namespace rtx {
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end()) {
           for (unsigned int j = i + 1; j < blobsBuffer.size(); ++j) {
+            if (i == j)
+              continue;
             if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) == toBeRemoved.end()) {
               if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
                 if (blobsBuffer[i]->isClose(*blobsBuffer[j])) { // Checks overlapping, too
@@ -144,9 +146,17 @@ namespace rtx {
                 if ((blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) && (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j])) {
                   blobsBuffer[i]->join(*blobsBuffer[j]);
                   if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
-                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                    if (blobsBuffer[i]->isYellow()) {
+                      blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                    } else {
+                      blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                    }
                   } else {
-                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                    if (blobsBuffer[i]->isYellow()) {
+                      blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                    } else {
+                      blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                    }
                   }
                   toBeRemoved.insert(j);
                 }
@@ -263,4 +273,4 @@ namespace rtx {
 
   };
 
-};
+}
