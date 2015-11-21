@@ -1,10 +1,10 @@
 /**
- * @file ImageDrawingArea.cpp
- * Color calibration application "after" image drawing area.
+ *  @file ImageDrawingArea.cpp
+ *  Color calibration application "after" image drawing area.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 11. November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "ImageAfterDrawingArea.hpp"
@@ -35,6 +35,19 @@ namespace rtx {
 
   ImageAfterDrawingArea::~ImageAfterDrawingArea() {
     // Nothing to do here
+  }
+
+  void ImageAfterDrawingArea::filterFromString(const std::string &filterString) {
+    initialiseFilters();
+    for (unsigned int i = 0; i < 256 * 256 * 256; ++i) {
+      unsigned int bitmask = 1 << 7;
+      for (unsigned int mode = 0; mode < 8; ++mode) {
+        if (filterString[i] & bitmask) {
+          filter[mode].insert(i);
+        }
+        bitmask >>= 1;
+      }
+    }
   }
 
   void ImageAfterDrawingArea::calculateFilterBuffer(const std::vector<std::set<unsigned int>> &additionMaskList, const std::vector<std::set<unsigned int>> &removalMaskList) {

@@ -1,9 +1,10 @@
 /**
- * @file MainWindow.cpp
- * Color calibration application main window.
+ *  @file MainWindow.cpp
+ *  Color calibration application main window.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "MainWindow.hpp"
@@ -12,6 +13,7 @@
 
 #include <iostream> // TODO: Remove
 #include <fstream>
+#include <sstream>
 
 
 namespace rtx {
@@ -226,8 +228,12 @@ namespace rtx {
     outputFile.close();
   }
 
-  void MainWindow::readFilterFromFile(const std::string &filename) {
-    // TODO
+  void MainWindow::readFilterFromFile(const std::string &fileName) {
+    std::ifstream inputFile(fileName);
+    std::stringstream buffer;
+    buffer << inputFile.rdbuf();
+    std::string filterString = buffer.str();
+    inputFile.close();
   }
 
   void MainWindow::on_playButton_clicked() {
