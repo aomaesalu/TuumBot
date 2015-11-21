@@ -10,6 +10,7 @@
 #define RTX_CTL_H
 
 #include "__future__.hpp"
+#include "hal.hpp"
 
 #include "STM.hpp"
 
