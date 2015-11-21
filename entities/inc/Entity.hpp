@@ -1,34 +1,70 @@
-/**
- * @file Entity.hpp
- * Entity class.
+/** @file Entity.hpp
+ *  Entity class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @version 0.2
  */
 
-#ifndef RTX_ENTITIES_ENTITY_H
-#define RTX_ENTITIES_ENTITY_H
+#ifndef RTX_ENTITY_H
+#define RTX_ENTITY_H
 
-#include "Point2D.hpp"
+#include <string>
 
+#include "rtxmath.hpp"
 
 namespace rtx {
 
+  /**
+   *  class KalmanFilterObject
+   *    KalmanState m_kfState[2]; // Last, current states
+   *    ...?
+   *
+   *    void kPredict() // Velocity projection
+   *    void kSense(Transform newMeasurement) // Velocity change from measurements
+   *    void kEvaluate() // Updates m_kfState
+   *    Transform kalmanProcess() // runs filter methods and returns probable new Transform
+   *
+   *  class Entity : KalmanFilterObject
+   *    update(Transform transform):
+   *      transform = this->kalmanProcess(Transform)
+   *      ...
+   *    
+   */
+
   class Entity {
-    public:
-      Entity(const Entity&);
-      Entity(const Point2D*);
-      Entity(const double&, const double&);
+  private:
+    static unsigned int id_seq;
 
-      void setPosition(const Point2D*);
-      void setPosition(const double&, const double&);
+    Transform m_transform;
 
-      Point2D* getPosition() const;
+    unsigned int id;
+    int m_health = 0;
 
-    private:
-      Point2D *position;
+  public:
+    static unsigned int newID();
+
+    Entity();
+    Entity(const Entity&);
+
+    // By position
+    Entity(const Vec2i);
+    Entity(const int, const int);
+
+    // By position & orientation
+    Entity(Transform);
+    Entity(const int, const int, const double);
+
+    unsigned int getID();
+    int getHealth();
+
+    Transform* getTransform();
+
+    void update(Transform); // Heal
+    void update(); // Decay
+
+    std::string toString();
   };
 
 };
 
-#endif // RTX_ENTITIES_ENTITY_H
+#endif // RTX_ENTITY_H

@@ -27,7 +27,7 @@ namespace rtx {
       double getWidth() const;
       double getLength() const;
 
-    private:
+    protected:
       double width;
       double length;
   };

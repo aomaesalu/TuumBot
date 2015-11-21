@@ -5,6 +5,7 @@
  *  @version 0.1
  */
 
+#include "hal.hpp"
 #include "Hardware.hpp"
 
 #ifndef RTX_HAL_H

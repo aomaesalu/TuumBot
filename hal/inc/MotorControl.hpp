@@ -9,40 +9,51 @@
 #ifndef RTX_MOTOR_CONTROL_H
 #define RTX_MOTOR_CONTROL_H
 
-#include <termios.h>
 #include <string>
-#include "MotorDriver.hpp"
-//#include <boost/thread/thread.hpp>
-//#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include <math.h>
 #include <unistd.h>
+#include <termios.h>
 
-#define n_motors 4
-#define wheel_d 79
-#define baudrate 19200
+//#include <boost/thread/thread.hpp>
+//#include <boost/date_time/posix_time/posix_time.hpp>
 
-namespace rtx {
+#include "MotorDriver.hpp"
+#include "RTX485.hpp"
+
+#define MOTOR_COUNT 4
+#define WHEEL_DIAMETER 79
+#define BAUDRATE 19200
+
+namespace rtx { namespace hal {
 
   class MotorControl {
-    private:
-      int serialPort;
-      MotorDriver* motors[n_motors];
+  private:
+    RTX485::DeviceID m_motorIDs[MOTOR_COUNT];
+    RTX485::WriteHandle write;
 
-    public:
-      MotorControl();
-      ~MotorControl();
-      void init();
-      void forward(int newSpeed);
-      void turn(int degrees);
-      void turnsimple(int speed);
-      void OmniDrive(double speed, double angle, double rot);
+  public:
+    MotorControl();
+    ~MotorControl();
 
-      void Move(double, double, double);
+    void init(RTX485::WriteHandle);
 
-      void testSequence();
+    //void forward(int newSpeed);
+    //void turn(int degrees);
+    //void turnsimple(int speed);
+    void OmniDrive(double speed, double angle, double rot);
+
+    //void Move(double, double, double);
+
+    //void testSequence();
+
+    //void runDribbler(int speed);
+    //void stopDribbler();
+    //void kick(int ms);
+    //void charge();
 
   };
 
-};
+}}
 
-#endif
+#endif  // RTX_MOTOR_CONTROL_H

@@ -1,10 +1,10 @@
 /**
- * @file Vision.hpp
- * Computer vision class using YUYV.
+ *  @file Vision.hpp
+ *  Computer vision class using YUYV.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- * @date 17 November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -26,8 +26,17 @@ namespace rtx {
     typedef std::vector<Feature> CornerSet;
 
     extern BlobSet blobs;
+    extern BlobSet blobsBuffer;
+
     extern LineSet lines;
+    extern LineSet linesBuffer;
+
     extern CornerSet corners;
+    extern CornerSet cornersBuffer;
+
+    extern bool editingBlobs;
+    extern bool editingLines;
+    extern bool editingCorners;
 
     void setup();
     void process(const Frame&, const std::string&);
@@ -35,6 +44,10 @@ namespace rtx {
 
     bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
     bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
+
+    BlobSet getBlobs();
+    LineSet getLines();
+    CornerSet getCorners();
 
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<Point2D>&);
@@ -47,6 +60,6 @@ namespace rtx {
 
   };
 
-};
+}
 
 #endif // RTX_VISION_VISION_H

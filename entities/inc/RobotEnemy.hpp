@@ -1,9 +1,8 @@
-/**
- * @file RobotEnemy.hpp
- * Enemy robot class.
+/** @file RobotEnemy.hpp
+ *  nemy robot class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
  */
 
 #ifndef RTX_ENTITIES_ROBOT_ENEMY_H

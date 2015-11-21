@@ -1,15 +1,17 @@
 /**
- * @file Vision.cpp
- * Computer vision class using YUYV.
+ *  @file Vision.cpp
+ *  Computer vision class using YUYV.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
- *  @date 17 November 2015
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 21 November 2015
  */
 
 #include "Vision.hpp"
 
 #include <iostream> // TODO: Remove
+#include <algorithm>
+#include <set>
 
 
 namespace rtx {
@@ -17,8 +19,17 @@ namespace rtx {
   namespace Vision {
 
     BlobSet blobs;
+    BlobSet blobsBuffer;
+
     LineSet lines;
+    LineSet linesBuffer;
+
     CornerSet corners;
+    CornerSet cornersBuffer;
+
+    bool editingBlobs = false;
+    bool editingLines = false;
+    bool editingCorners = false;
 
     /*void emptyVector(std::vector<Feature*> &vector) {
       for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
@@ -61,8 +72,175 @@ namespace rtx {
       return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+    BlobSet getBlobs() {
+      BlobSet returnSet = blobs;
+      while (editingBlobs) {
+        returnSet = blobs;
+      }
+      return returnSet;
+    }
+
+    LineSet getLines() {
+      LineSet returnSet = lines;
+      while (editingLines) {
+        returnSet = lines;
+      }
+      return returnSet;
+    }
+
+    CornerSet getCorners() {
+      CornerSet returnSet = corners;
+      while (editingCorners) {
+        returnSet = corners;
+      }
+      return returnSet;
+    }
+
+    void translateBlobsBuffer() {
+      editingBlobs = true;
+
       blobs.clear();
+      blobs = blobsBuffer;
+      blobsBuffer.clear();
+
+      editingBlobs = false;
+    }
+
+    void translateLinesBuffer() {
+      editingLines = true;
+
+      lines.clear();
+      lines = linesBuffer;
+      linesBuffer.clear();
+
+      editingLines = false;
+    }
+
+    void translateCornersBuffer() {
+      editingCorners = true;
+
+      corners.clear();
+      corners = cornersBuffer;
+      cornersBuffer.clear();
+
+      editingCorners = false;
+    }
+
+    // Joins same-colored blobs if their box areas are close or overlap; remove too small blobs at the same time
+    void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
+      std::set<unsigned int> toBeRemoved;
+
+      // Join blobs
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+
+        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
+          continue;
+
+        if (blobsBuffer[i]->getNumberOfPoints() < 10) {
+          toBeRemoved.insert(i);
+          continue;
+        }
+
+        for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
+
+          if (i == j)
+            continue;
+
+          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
+            continue;
+
+          if (blobsBuffer[j]->getNumberOfPoints() < 6) {
+            toBeRemoved.insert(j);
+            continue;
+          }
+
+          if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
+
+            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
+
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
+            } else {
+
+              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
+            }
+
+          } else {
+
+            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
+              if ((blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                // (yellow-blue, blue) OR (yellow-blue, yellow) OR (blue-yellow, blue) OR (blue-yellow, yellow)
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+              }
+
+            } else if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) {
+
+              if (blobsBuffer[j]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[j]->getColor() == ROBOT_BLUE_YELLOW) {
+                // (blue, yellow-blue) OR (yellow, yellow-blue) OR (blue, blue-yellow) OR (yellow, blue-yellow)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                  blobsBuffer[j]->join(*blobsBuffer[i]);
+                  toBeRemoved.insert(i);
+                }
+
+              } else if (blobsBuffer[j]->isBlue()) {
+                // (yellow, blue)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  toBeRemoved.insert(j);
+
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  }
+
+                }
+
+              } else if (blobsBuffer[j]->isYellow()) {
+                // (blue, yellow)
+                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
+                  blobsBuffer[i]->join(*blobsBuffer[j]);
+                  toBeRemoved.insert(j);
+
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+
+      unsigned int removed = 0; // TODO: Refactor
+
+      // Remove unnecessary blobs from the buffer
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
+        removed++;
+      }
+
+      toBeRemoved.clear();
+    }
+
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+      blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
 
@@ -110,7 +288,7 @@ namespace rtx {
               }
 
               if (!blobPoints.empty()) {
-                blobs.push_back(new Blob(blobPoints, intToColor(*mode)));
+                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
               }
 
             }
@@ -119,28 +297,42 @@ namespace rtx {
         }
       }
 
+      joinBlobsInBuffer();
+
+      translateBlobsBuffer();
+
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateBlobsBuffer();
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
       // TODO
+
+      translateLinesBuffer();
     }
 
     void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateLinesBuffer();
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter) {
       // TODO
+
+      translateCornersBuffer();
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
       // TODO
+
+      translateCornersBuffer();
     }
 
   };
 
-};
+}
