@@ -86,4 +86,13 @@ namespace rtx {
     return true;
   }
 
+  bool ImageArea::on_button_press_event(GdkEventButton *buttonEvent) {
+    if (buttonEvent->type == GDK_BUTTON_PRESS) {
+      if (buttonEvent->button == 1) { // Left mouse button
+        // TODO: Add point
+      }
+    }
+    return true;
+  }
+
 }

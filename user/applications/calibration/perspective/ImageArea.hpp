@@ -30,6 +30,7 @@ namespace rtx {
 
     protected:
       virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&);
+      virtual bool on_button_press_event(GdkEventButton *buttonEvent);
 
     private:
       GUI *gui;
