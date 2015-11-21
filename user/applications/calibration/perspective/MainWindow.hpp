@@ -1,10 +1,10 @@
 /**
  *  @file MainWindow.hpp
- *  Perspective calibration application main window.
+ *  Perspective calibration application GUI main window.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 21 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
@@ -17,87 +17,43 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 
-#include "Camera.hpp"
-
-#include "ImageDrawingArea.hpp"
+#include "ImageArea.hpp"
 
 
 namespace rtx {
 
+  class GUI;
+
   class MainWindow: public Gtk::Window {
 
     public:
-      MainWindow(Camera*);
+      MainWindow(GUI*);
       virtual ~MainWindow();
 
-      bool isPlaying() const;
-      bool isCalculating() const;
-      bool isColored(const unsigned int&, const unsigned int&) const;
-      bool isColored(const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&) const;
+      void initialise();
 
-      void setPlaying(const bool& = true);
-      void setCalculating(const bool& = true);
-
-      bool updateFrame();
+      ImageArea* getImageArea();
 
     protected:
       Gtk::Grid grid;
 
       // Frames and boxes for the layout
-      Gtk::Box generalButtonsBox;
-      Gtk::Frame imageFrame;
-
-      // Video control buttons
-      Gtk::Button playButton;
-      Gtk::Button stopButton;
-
-      // General buttons
-      Gtk::ComboBoxText fileChooseComboBox;
-      Gtk::Button saveButton;
-      Gtk::Button exitButton;
-
-      // TODO: Add image options
+      Gtk::Frame imageAreaFrame;
 
       // Image drawing areas and contexts
-      ImageDrawingArea imageArea;
-
-      // Images
-      Glib::RefPtr<Gdk::Pixbuf> image;
+      ImageArea imageArea;
 
     private:
-      Camera *camera;
-      Frame frame;
-      Frame rgbFrame;
-
-      std::string filter;
-
-      bool playing;
-      bool calculating;
+      GUI *gui;
 
       void setProperties();
 
       void construct();
       void constructGrid();
-
-      void constructGeneralButtonsBox();
-      void constructImageFrame();
-
-      void constructPlayButton(Gtk::Container&);
-      void constructStopButton(Gtk::Container&);
-
-      void constructFileChooseComboBox(Gtk::Container&);
-      void constructSaveButton(Gtk::Container&);
-      void constructExitButton(Gtk::Container&);
-
-      void readFilterFromFile(const std::string&);
-      void saveConstantsToFile(const std::string&);
-
-      void on_playButton_clicked();
-      void on_stopButton_clicked();
-      void on_saveButton_clicked();
+      void constructImageAreaFrame();
 
   };
 
-};
+}
 
 #endif // RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
