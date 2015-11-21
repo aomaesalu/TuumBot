@@ -1,9 +1,10 @@
 /**
- * @file Blob.hpp
- * Blob seen in the camera frame.
+ *  @file Blob.hpp
+ *  Blob seen in the camera frame.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 20 November 2015
  */
 
 #ifndef RTX_VISION_BLOB_H

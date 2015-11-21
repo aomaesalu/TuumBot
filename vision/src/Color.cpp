@@ -4,7 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 11. November 2015
+ * @date 20 November 2015
  */
 
 #include "Color.hpp"
