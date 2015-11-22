@@ -11,6 +11,9 @@
 
 #include "cameraConstants.hpp"
 
+#include <algorithm>
+#include <iostream> // TODO: Remove
+
 
 namespace rtx {
 
@@ -67,7 +70,51 @@ namespace rtx {
   }
 
   void Checkerboard::calculateConstants() {
-    // TODO
+    // Vertical formula construction
+    std::vector<double> proportions;
+    for (unsigned int squareSize = 1; squareSize <= std::min(width + 1, height + 1); ++squareSize) {
+      for (unsigned int y = 0; y < height + 1 - squareSize; ++y) {
+        for (unsigned int x = 0; x < width + 1 - squareSize; ++x) {
+          unsigned int lowerLeft = y * (width + 1) + x + 1;
+          unsigned int lowerRight = y * (width + 1) + (x + squareSize) + 1;
+          unsigned int upperLeft = (y + squareSize) * (width + 1) + x + 1;
+          unsigned int upperRight = (y + squareSize) * (width + 1) + (x + squareSize) + 1;
+          if (filled < upperRight)
+            continue;
+          std::cout << squareSize << " " << x << " " << y << std::endl;
+          proportions.push_back(squareSize * ((double) (points[x + squareSize][y + squareSize].first - points[x][y + squareSize].first) / (points[x + squareSize][y].first - points[x][y].first)));
+        }
+      }
+    }
+    B = 0;
+    for (std::vector<double>::iterator p = proportions.begin(); p != proportions.end(); ++p) {
+      std::cout << *p << " ";
+      B += *p;
+    }
+    if (!proportions.empty())
+      B /= proportions.size();
+    std::cout << std::endl << std::endl << B << std::endl << std::endl;
+      // Horisontal formula construction
+      //for (unsigned int y = 0; y < height + 1; ++y) {
+      //  for (unsigned int x = 0; x < width + 1 - squareSize; ++x) {
+      //    unsigned int lowerLeft = y * (width + 1) + x + 1;
+      //    //std::cout << x << " " << y << " " << lowerLeft << std::endl;
+      //    unsigned int lowerRight = y * (width + 1) + (x + squareSize) + 1;
+      //    if (filled < lowerRight)
+      //      continue;
+      //    std::cout << filled << " " << squareSize << " (" << x << ", " << y << ") (" << lowerLeft << ", " << lowerRight << ") " << std::endl;
+          //unsigned int upperLeft = (y + squareSize) * (width + 1) + x + 1;
+          //unsigned int upperRight = (y + squareSize) * (width + 1) + (x + squareSize) + 1;
+          //if (filled < upperRight)
+          //  continue;
+          //std::cout << filled << " " << squareSize << " " << x << " " << y << " " << lowerLeft << " " << lowerRight << " " << upperLeft << " " << upperRight << std::endl;
+          //std::cout << filled << " " << filled % (width + 1) << " " << filled / (width + 1) << " " << squareSize << " " << y * (width + 1) + x + 1 << " " << y * (width + 1) + (x + squareSize) + 1 << " " << (y + squareSize) * (width + 1) + x + 1 << " " << (y + squareSize) * (width + 1) + (x + squareSize) + 1 << std::endl;
+          //std::pair<unsigned int, unsigned int> lowerLeft(/* TODO */, /* TODO */);
+          //std::pair<double, double> lowerRight(/* TODO */, /* TODO */);
+          //std::pair<double, double> upperLeft(/* TODO */, /* TODO */);
+          //std::pair<double, double> upperRight(/* TODO */, /* TODO */);
+      //  }
+      //}
   }
 
   std::pair<double, double> Checkerboard::virtualToReal(const unsigned int &x, const unsigned int &y) {
