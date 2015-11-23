@@ -149,7 +149,7 @@ namespace rtx { namespace ctl {
 
     //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
     Motion::setAimTarget(g->getTransform()->getPosition());
-    std::cout << g->getTransform()->getPosition().toString() << std::endl;;
+    //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
 
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();

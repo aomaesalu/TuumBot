@@ -154,7 +154,6 @@ namespace rtx { namespace Motion {
       if(oD > gradient_upper_limit) return sign;
 
       double v = (oD - MN_ROT_STEP) * sign / (gradient_upper_limit - MN_ROT_STEP);
-      std::cout << v << std::endl;
       return v;
     }
 
