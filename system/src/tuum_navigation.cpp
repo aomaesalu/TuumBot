@@ -33,10 +33,16 @@ namespace rtx { namespace Navigation {
     if(me_p.distanceTo(g_p) > 360) {
       target = g_p - 300;
     } else {
-      //target = 
+      //target =
     }
 
     return target;*/
+  }
+
+
+  Goal* getOpposingGoal() {
+    //TODO: make configurable
+    return Visioning::blueGoal;
   }
 
 

@@ -23,7 +23,7 @@ namespace rtx { namespace ctl {
   public:
     LSInit(Context _ctx) : ctx(_ctx) {}
 
-    void run();
+    int run();
     bool isRunnable();
     bool isInterruptable();
 
@@ -39,7 +39,7 @@ namespace rtx { namespace ctl {
     }
 
     void init();
-    void run();
+    int run();
     bool isRunnable();
 
   private:
@@ -52,7 +52,7 @@ namespace rtx { namespace ctl {
     LSBallRetrieve(Context _ctx) : ctx(_ctx) {}
 
     void init();
-    void run();
+    int run();
     bool isRunnable();
 
   private:
@@ -72,7 +72,7 @@ namespace rtx { namespace ctl {
     LSGoalLocate(Context _ctx) : ctx(_ctx) {}
 
     void init();
-    void run();
+    int run();
     bool isRunnable();
 
   private:
@@ -85,7 +85,7 @@ namespace rtx { namespace ctl {
     LSGoalShoot(Context _ctx) : ctx(_ctx) {}
 
     void init();
-    void run();
+    int run();
     bool isRunnable();
 
   private:

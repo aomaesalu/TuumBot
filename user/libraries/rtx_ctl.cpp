@@ -11,12 +11,20 @@
 #include "tuum_navigation.hpp"
 #include "tuum_motion.hpp"
 
+#include "rtxhal.hpp"
+
 #include "rtx_ctl.hpp"
 
 namespace rtx { namespace ctl {
 
+  hal::MainBoard* mb = hal::hw.getMainBoard();
+
   // Warmup
-  void LSInit::run() {
+  bool LSInit::isRunnable() {
+    return true;
+  }
+
+  int LSInit::run() {
     switch(ctx.phase) {
       case CP_INIT:
         Motion::setBehaviour(Motion::MOT_CURVED);
@@ -33,10 +41,6 @@ namespace rtx { namespace ctl {
     }
   }
 
-  bool LSInit::isRunnable() {
-    return true;
-  }
-
   bool LSInit::isInterruptable() {
     return ctx.phase == CP_DONE;
   }
@@ -44,22 +48,21 @@ namespace rtx { namespace ctl {
 
   // Ball search
   void LSBallLocate::init() {
-    ctx.phase = CP_INIT;
-    Motion::setBehaviour(Motion::MOT_SCAN);
-    Motion::start();
+    Motion::stop();
+    Motion::setBehaviour(Motion::MOT_COMPLEX);
+    Motion::setSpeed(30);
   }
 
-  void LSBallLocate::run() {
-    //TODO: try to search from probable previous ball areas
-    switch(ctx.phase) {
-      case CP_INIT:
-	ctx.phase = CP_RUN;
-	break;
-      case CP_RUN:
-	break;
-      case CP_DONE:
-	break;
+  int LSBallLocate::run() {
+    if(Visioning::ballDetect.size() > 0) {
+      Motion::stop();
+      return 1;
+    } else {
+      Motion::setAimTarget(Vec2i({1, 1}));
+      if(!Motion::isRunning()) Motion::start();
     }
+
+    return 0;
   }
 
   bool LSBallLocate::isRunnable() {
@@ -70,86 +73,44 @@ namespace rtx { namespace ctl {
   // Ball retrieval
   void LSBallRetrieve::init() {
     Motion::stop();
-
-    //hal::hw.getMainBoard()->stopDribbler();
-
-    ctx.phase = CP_INIT;
-
-    targetUpdate.setPeriod(50);
-    targetUpdate.start();
-
-    ballPickupTimeout.setPeriod(2000);
-    m_catchingBall = false;
+    Motion::setSpeed(60);
   }
 
-  void LSBallRetrieve::run() {
-    switch(ctx.phase) {
-      case CP_INIT:
-        Motion::setBehaviour(Motion::MOT_CURVED);
-	hal::hw.getMainBoard()->stopDribbler();
-        targetBall = Navigation::getNearestBall();
-	if(targetBall != nullptr) ctx.phase = CP_RUN;
-	break;
-      case CP_RUN:
-      {
-	if(hal::hw.getMainBoard()->getBallSensorState()) break;
+  int LSBallRetrieve::run() {
+    if(mb->getBallSensorState()) return 1;
+    if(Visioning::ballDetect.size() <= 0) return -1;
 
-	if(!m_catchingBall) {
-	  if(targetBall->getHealth() < 5) {
-	    targetBall = nullptr;
-	    ctx.phase = CP_INIT;
-	    break;
-	  }
-	}
-	
-	//TODO: ( targetPosition = on (ball <-> gate) line & behind ball )
+    Ball* b = Navigation::getNearestBall();
 
-	if(targetBall != nullptr) {
-	  Ball* b = targetBall;
-	  Motion::setTarget(Navigation::calcBallPickupPos(b->getTransform()));
-	  if(!Motion::isRunning()) Motion::start();
+    if(b != nullptr) {
+      Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
 
-	  // Motion::getTargetRange() == Motion::PROXIMITY && Motion::getOrientError() < 0.08
-	  if(Motion::isTargetAchieved()) {
-	    std::cout << "PROXIMITY" << std::endl;
+      Motion::setPositionTarget(pos);
+      Motion::setAimTarget(b->getTransform()->getPosition());
 
-	    Motion::stop();
-	    Motion::setBehaviour(Motion::MOT_BLIND);
-	    Motion::setTarget(Transform({{100, 0}, 0.0}));
+      Transform* t = Localization::getTransform();
+      double d = t->distanceTo(b->getTransform()->getPosition());
 
-	    hal::hw.getMainBoard()->startDribbler();
-	    if(!Motion::isRunning()) Motion::start();
+      //std::cout << d << std::endl;
+      if(d < 250) mb->startDribbler();
+      else mb->stopDribbler();
 
-	    ballPickupTimeout.start();
-	    ctx.phase = CP_DONE;
-	  }
-	}
-	break;
+      if(!Motion::isTargetAchieved()) {
+        if(!Motion::isRunning()) Motion::start();
       }
-      case CP_DONE:
-	if(ballPickupTimeout.isTime()) {
-	  m_catchingBall = false;
-	  std::cout << "CATCH TIMEOUT" << std::endl;
-	  ctx.phase = CP_INIT;
-	}
-	break;
     }
+
+    return 0;
   }
 
   bool LSBallRetrieve::isRunnable() {
-    return Visioning::ballDetect.size() > 0 || m_catchingBall == true;;
+    return Visioning::ballDetect.size() > 0 || mb->getBallSensorState();
   }
 
 
   // Opposing goal search
   bool LSGoalLocate::isRunnable() {
-    return true;
-    hal::MainBoard* mb = hal::hw.getMainBoard();
-    if(mb->getBallSensorState()) {
-      return false;
-    }
-
-    return false;
+    return mb->getBallSensorState();
   }
 
   void LSGoalLocate::init() {
@@ -157,59 +118,42 @@ namespace rtx { namespace ctl {
     ctx.phase = CP_INIT;
   }
 
-  void LSGoalLocate::run() {
-   switch(ctx.phase) {
-     case CP_INIT:
-       Motion::setBehaviour(Motion::MOT_SCAN2);
-       ctx.phase = CP_RUN;
-       break;
-     case CP_RUN:
-       // While opposing goal found
-       break;
-     case CP_DONE:
-       break;
-   }
+  int LSGoalLocate::run() {
+    if(!mb->getBallSensorState()) return -1;
+    if(Navigation::getOpposingGoal() != nullptr) return 1;
+
+    Motion::setAimTarget(Vec2i({1, -1}));
+    if(!Motion::isRunning()) Motion::start();
+    return 0;
   }
 
+
+  // Shoot to opposing goal
   void LSGoalShoot::init() {
     Motion::stop();
   }
 
-  // Shoot to opposing goal
-  void LSGoalShoot::run() {
-    switch(ctx.phase) {
-      case CP_INIT:
-        Motion::setBehaviour(Motion::MOT_CURVED);
+  int LSGoalShoot::run() {
+    if(!mb->getBallSensorState()) return -1;
 
-        targetGoal = Visioning::blueGoal;
-	if(targetGoal != nullptr) ctx.phase = CP_RUN;
-	break;
-      case CP_RUN:
-      {
-	if(targetGoal != nullptr) {
-	  Motion::setTarget(Navigation::calcGoalShootPos(targetGoal->getTransform()));
-	  if(!Motion::isRunning()) Motion::start();
+    Goal* g = Navigation::getOpposingGoal();
+    if(g == nullptr) return -1;
 
-	  if(Motion::isTargetAchieved()) {
-	    std::cout << "SHOOT" << std::endl;
-	    Motion::stop();
-	    hal::hw.getMainBoard()->doCoilKick();
-	    hal::hw.getMainBoard()->stopDribbler();
+    //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
+    Motion::setAimTarget(g->getTransform()->getPosition());
+    std::cout << g->getTransform()->getPosition().toString() << std::endl;;
 
-	    ctx.phase = CP_DONE;
-	    std::cout << "DONE" << std::endl;
-	  }
-	}
-	break;
-      }
-      case CP_DONE:
-	break;
+    if(!Motion::isTargetAchieved()) {
+      if(!Motion::isRunning()) Motion::start();
+    } else {
+      mb->doCoilKick();
     }
+
+    return 0;
   }
 
   bool LSGoalShoot::isRunnable() {
-    std::cout << "LSGoalShoot - " << (Visioning::blueGoal != nullptr) << std::endl;
-    return Visioning::blueGoal != nullptr;
+    return mb->getBallSensorState() && Navigation::getOpposingGoal() != nullptr;
   }
 
 }}
