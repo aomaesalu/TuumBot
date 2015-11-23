@@ -23,12 +23,20 @@ namespace rtx { namespace Navigation {
     return target;
   }
 
-  Transform calcGoalShootPos(Transform* bt) {
-    Transform target((*bt) - 0);
+  Vec2i calcGoalShootPos(Transform* t) {
+    /*Transform me = Localization::getTransform();
+    Vec2i me_p = me.getPosition();
+    Vec2i g_p = t->getPosition();
 
-    double o = bt->getPosition().getOrientation();
-    target.setOrientation(o);
-    return target;
+    Transform target;
+    // 400, 0 (n => )
+    if(me_p.distanceTo(g_p) > 360) {
+      target = g_p - 300;
+    } else {
+      //target = 
+    }
+
+    return target;*/
   }
 
 

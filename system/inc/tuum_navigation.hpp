@@ -15,7 +15,7 @@
 namespace rtx { namespace Navigation {
 
   Transform calcBallPickupPos(Transform*);
-  Transform calcGoalShootPos(Transform*);
+  Vec2i calcGoalShootPos(Transform*);
 
   Ball* getNearestBall();
 

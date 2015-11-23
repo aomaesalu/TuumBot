@@ -18,6 +18,17 @@ Timer debugTimer;
 
 Vec2i p_vec, a_vec;
 
+
+enum LST {
+  BALL_SCAN,
+  BALL_RETRIEVE,
+  GOAL_SCAN,
+  GOAL_SHOOT,
+  HALT,
+};
+
+LST state = BALL_SCAN;
+
 void test1() {
   Motion::stop();
   p_vec = Vec2i({100, 100});
@@ -75,7 +86,7 @@ void test2() {
 
 
 Goal* getGoal() {
-  return Visioning::yellowGoal;
+  return Visioning::blueGoal;
 }
 
 bool ballInDribbler() {
@@ -96,14 +107,15 @@ int ball_scan_ctrl() {
     return 1;
   }
 
+  Motion::setSpeed(30);
   Motion::setAimTarget(Vec2i({1, 1}));
   if(!Motion::isRunning()) Motion::start();
   return 0;
 }
 
 int goal_scan_ctrl() {
-  if(getGoal() != nullptr) return 1;
   if(!ballInDribbler()) return -1;
+  if(getGoal() != nullptr) return 1;
 
   Motion::setAimTarget(Vec2i({1, -1}));
   if(!Motion::isRunning()) Motion::start();
@@ -119,6 +131,7 @@ int ball_locate_ctrl() {
 
 
   Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
+  Motion::setSpeed(60);
   Motion::setPositionTarget(pos);
   Motion::setAimTarget(b->getTransform()->getPosition());
   
@@ -126,7 +139,7 @@ int ball_locate_ctrl() {
   double d = t->distanceTo(b->getTransform()->getPosition());
 
   MainBoard* mb = hal::hw.getMainBoard();
-  std::cout << d << std::endl;
+  //std::cout << d << std::endl;
   if(d < 250) {
     mb->startDribbler();
   } else {
@@ -144,14 +157,15 @@ int ball_locate_ctrl() {
 
 
 int goal_shoot_ctrl() {
-  std::cout << "GOAL SHOOT CTRL" << std::endl;
   if(getGoal() == nullptr) return -1;
-  std::cout << "got goal";
-
   if(!ballInDribbler()) return -1;
-  std::cout << "got ball" << std::endl;
 
-  Motion::setAimTarget(getGoal()->getTransform()->getPosition());
+  Goal* g = getGoal();
+
+  //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
+  Motion::setAimTarget(g->getTransform()->getPosition());
+  std::cout << g->getTransform()->getPosition().toString() << std::endl;;
+
   if(!Motion::isTargetAchieved()) {
     if(!Motion::isRunning()) Motion::start();
   } else {
@@ -161,15 +175,6 @@ int goal_shoot_ctrl() {
   return 0;
 }
 
-enum LST {
-  BALL_SCAN,
-  BALL_RETRIEVE,
-  GOAL_SCAN,
-  GOAL_SHOOT,
-  HALT,
-};
-
-LST state = BALL_SCAN;
 
 int main(int argc, char* argv[]) {
   printf("Running motion tests...\n");
@@ -185,7 +190,6 @@ int main(int argc, char* argv[]) {
   //test2();
 
   bool running = true;
-  std::cout << "BALL_SCAN" << std::endl;
   //hal::hw.getMainBoard()->senseBall();
   while(running) {
     hal::process();
@@ -200,7 +204,6 @@ int main(int argc, char* argv[]) {
 	res = ball_scan_ctrl();
 	if(res == 0) break;
 	else if(res > 0) {
-	  std::cout << "ENTER BALL_RETRIEVE" << std::endl;
 	  state = BALL_RETRIEVE;
 	  Motion::stop();
 	}
@@ -210,11 +213,9 @@ int main(int argc, char* argv[]) {
 	if(res == 0) break;
 	else if(res > 0) {
 	  state = GOAL_SCAN;
-	  std::cout << "ENTER GOAL_SCAN" << std::endl;
 	  Motion::stop();
 	}
 	else if(res < 0) {
-	  std::cout << "ENTER BALL_SCAN" << std::endl;
 	  state = BALL_SCAN;
 	  Motion::stop();
 	}
@@ -225,12 +226,10 @@ int main(int argc, char* argv[]) {
 	else if(res > 0) {
           Motion::stop();
 	  state = GOAL_SHOOT;
-	  std::cout << "ENTER GOAL SHOOT" << std::endl;
 	}
 	else if(res < 0) {
 	  Motion::stop();
           state = BALL_RETRIEVE;
-	  std::cout << "ENTER BALL RETRIEVE" << std::endl;
 	}
 	break;
       case GOAL_SHOOT:

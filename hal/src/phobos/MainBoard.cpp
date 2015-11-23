@@ -89,6 +89,7 @@ namespace rtx { namespace hal {
       m_coilKickActive = true;
       m_coilChargeLevel = 0;
       m_coilKickCharge.start();
+      stopDribbler();
     }
   }
 

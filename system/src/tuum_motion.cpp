@@ -46,6 +46,7 @@ namespace rtx { namespace Motion {
     bool aimTargetSet = false;
 
     void clear() {
+      baseVelocity = 30;
       posTargetSet = false;
       aimTargetSet = false;
       positionTarget = {0, 0};
@@ -223,8 +224,6 @@ namespace rtx { namespace Motion {
       case MOT_SCAN:
         switch(motionCtx.phase) {
           case MOP_INIT:
-            motionData.baseVelocity = 0;
-
             targetAchieved = false;
             motionCtx.phase = MOP_RUN;
             break;
@@ -233,8 +232,6 @@ namespace rtx { namespace Motion {
       case MOT_COMPLEX:
         switch(motionCtx.phase) {
           case MOP_INIT:
-            motionData.baseVelocity = 30;
-
             motionData.calc();
             motionData.applyFactors();
             motionData.clamp();
