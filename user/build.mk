@@ -4,7 +4,7 @@
 
 # determine where user sources are, relative to project root
 ifdef APP
-USER_MAKEFILE ?= $(APP).mk
+USER_MAKEFILE ?= $(notdir $(APP)).mk
 # when TARGET_FILE is defined on the command line,
 endif
 
@@ -13,13 +13,6 @@ ifdef APPDIR
 # if TARGET_DIR is not defined defaults to $(APPDIR)/target
 # if TARGET_FILE_NAME is not defined, defaults to the name of the $(APPDIR)
 SOURCE_PATH = $(APPDIR)
-endif
-
-
-ifdef TEST
-INCLUDE_PLATFORM?=1
-include $(MODULE_PATH)/tests/tests.mk
--include $(MODULE_PATH)/$(USRSRC)/test.mk
 endif
 
 USRSRC_SLASH = $(and $(USRSRC),$(USRSRC)/)
