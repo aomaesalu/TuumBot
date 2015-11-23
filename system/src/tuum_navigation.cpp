@@ -11,7 +11,7 @@
 
 namespace rtx { namespace Navigation {
 
-  const int NAV_BALL_PICKUP_RANGE = 50;
+  const int NAV_BALL_PICKUP_RANGE = 30;
 
 
   //TODO: position to relative position
@@ -36,11 +36,12 @@ namespace rtx { namespace Navigation {
     Ball* ball = nullptr;
     Transform* t = Localization::getTransform();
 
-    double d = 0.0, _d;
+    double d = 1000000.0, _d;
+
     for(auto b : *Visioning::ballDetect.getEntities()) {
       _d = t->distanceTo(b->getTransform()->getPosition());
 
-      if(d < _d) {
+      if(_d < d) {
 	d = _d;
 	ball = b;
       }

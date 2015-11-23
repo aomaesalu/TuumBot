@@ -114,14 +114,14 @@ namespace rtx { namespace Motion {
       else
         _speed = 0;
 
-      if(0)
+      if(aimTargetSet)
         _r_speed = (int)(baseVelocity*0.6*getOVF());
       else
         _r_speed = 0;
 
       //Vec2f _dV = dV;
       //_dV.rotate(-orientDelta);
-      _heading = (positionTarget - Localization::getTransform()->getPosition()).getOrientation();
+      _heading = 0; //(positionTarget - Localization::getTransform()->getPosition()).getOrientation();
     }
 
     void applyFactors() {
@@ -144,7 +144,6 @@ namespace rtx { namespace Motion {
 
     double getOVF() {
       double orientDelta = (aimTarget - positionTarget).getOrientation();
-      std::cout << "oD: " << orientDelta << std::endl;
       double oD = fabs(orientDelta);
 
       int sign = orientDelta < 0 ? -1 : 1;
@@ -252,7 +251,7 @@ namespace rtx { namespace Motion {
       case MOP_RUN:
         if(!isTargetAchieved()) {
           if(motorCmdTimer.isTime()) {
-            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+            //printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
             mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
             motorCmdTimer.start();
           }
