@@ -51,12 +51,13 @@ namespace rtx { namespace ctl {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
     Motion::setSpeed(30);
+    mb->stopDribbler();
   }
 
   int LSBallLocate::run() {
-    if(Visioning::ballDetect.size() > 0) {
+    if(Visioning::ballDetect.probableSize() > 0) {
       Motion::stop();
-      return 1;
+      return 0;
     } else {
       Motion::setAimTarget(Vec2i({1, 1}));
       if(!Motion::isRunning()) Motion::start();
@@ -73,7 +74,7 @@ namespace rtx { namespace ctl {
   // Ball retrieval
   void LSBallRetrieve::init() {
     Motion::stop();
-    Motion::setSpeed(60);
+    Motion::setSpeed(80);
   }
 
   int LSBallRetrieve::run() {
@@ -87,13 +88,14 @@ namespace rtx { namespace ctl {
 
       Motion::setPositionTarget(pos);
       Motion::setAimTarget(b->getTransform()->getPosition());
+      mb->startDribbler();
 
       Transform* t = Localization::getTransform();
       double d = t->distanceTo(b->getTransform()->getPosition());
 
       //std::cout << d << std::endl;
-      if(d < 250) mb->startDribbler();
-      else mb->stopDribbler();
+      //if(d < 250) mb->startDribbler();
+      //else mb->stopDribbler();
 
       if(!Motion::isTargetAchieved()) {
         if(!Motion::isRunning()) Motion::start();
@@ -110,12 +112,18 @@ namespace rtx { namespace ctl {
 
   // Opposing goal search
   bool LSGoalLocate::isRunnable() {
-    return mb->getBallSensorState();
+    if(mb->getBallSensorState()) {
+      mb->startDribbler();
+      return true;
+    }
+    return false;
   }
 
   void LSGoalLocate::init() {
     Motion::stop();
+    Motion::setSpeed(50);
     ctx.phase = CP_INIT;
+    mb->startDribbler();
   }
 
   int LSGoalLocate::run() {
