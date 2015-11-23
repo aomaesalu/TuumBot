@@ -15,6 +15,34 @@
 #include "tuum_motion.hpp"
 
 
+
+//FIXME:
+double stateProbability(Transform* t1, Transform* t2) {
+  //double px = gaussian_probability(t1->getX(), 30, t2->getX());
+  //double py = gaussian_probability(t1->getY(), 30, t2->getY());
+  //double c  = 3.14/180;
+  //double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
+
+  /*std::cout << "px=" << px
+            << ", py=" << py
+      << ", po= " << po
+      << std::endl;
+  */
+
+  double po;
+  const int d = 65;
+  if(fabs(t1->getX() - t2->getX()) < d &&
+      fabs(t1->getY() - t2->getY()) < d &&
+      fabs(t1->o - t2->o) < 0.09)
+  {
+    po = 1.0;
+  } else {
+    po = 0.0;
+  }
+  return po;
+}
+
+
 //TODO: Implement state machine & controllers
 //TODO: Refactor MotionData structure to separate source
 //TODO: Refactor code in overall
@@ -38,9 +66,52 @@ namespace rtx { namespace Motion {
   bool targetAchieved;
 
   struct MotionData {
+    Vec2i positionTarget;
+    Vec2i aimTarget;
+
+    bool posTargetSet = false;
+    bool aimTargetSet = false;
+
+    void clear() {
+      posTargetSet = false;
+      aimTargetSet = false;
+      positionTarget = {0, 0};
+      aimTarget = {0, 0};
+    }
+
+    void setPosTarget(Vec2i vec) {
+      positionTarget = vec;
+      posTargetSet = true;
+    }
+
+    void setAimTarget(Vec2i vec) {
+      aimTarget = vec;
+      aimTargetSet = true;
+    }
+
+    void setTransformTarget(Transform t) {
+      positionTarget = t.getPosition();
+      aimTarget = Vec2i::fromOrientation(t.getOrientation());
+      bool posTargetSet = true;
+      bool aimTargetSet = true;
+    }
+
+    Vec2i getTargetPosition() {
+      if(posTargetSet)
+        return positionTarget;
+      else
+        return Localization::getTransform()->getPosition();
+    }
+
+    double getTargetOrientation() {
+      if(aimTargetSet)
+        return (aimTarget - positionTarget).getOrientation();
+      else
+        return Localization::getTransform()->getOrientation();
+    }
+
+    // Omni drive parameter calculation structure
     int baseVelocity;
-    Vec2f dV;
-    double orientDelta;
 
     double _speed;
     double _r_speed;
@@ -59,12 +130,21 @@ namespace rtx { namespace Motion {
     }
 
     void calc() {
-      _speed = (int)(baseVelocity);
-      _r_speed = (int)(baseVelocity*0.6*getOVF());
+
+      if(posTargetSet)
+        _speed = (int)(baseVelocity);
+      else
+        _speed = 0;
+
+      std::cout << aimTargetSet << std::endl;
+      if(aimTargetSet)
+        _r_speed = (int)(baseVelocity*0.6*getOVF());
+      else
+        _r_speed = 0;
 
       //Vec2f _dV = dV;
       //_dV.rotate(-orientDelta);
-      _heading = atan2(dV.y, dV.x);
+      _heading = (positionTarget - Localization::getTransform()->getPosition()).getOrientation();
     }
 
     void applyFactors() {
@@ -74,18 +154,19 @@ namespace rtx { namespace Motion {
 
     void clamp() {
       if(fabs(_r_speed) < MIN_ROT_SPEED && _r_speed != 0) {
-	_r_speed = MIN_ROT_SPEED * (_r_speed < 0 ? -1 : 1);
+  _r_speed = MIN_ROT_SPEED * (_r_speed < 0 ? -1 : 1);
       }
     }
 
     double getVF() {
-      double mag = dV.getMagnitude();
+      double mag = (positionTarget - Localization::getTransform()->getPosition()).getMagnitude();
 
       if(mag >= CLOSE_RANGE) return 1;
       return mag / CLOSE_RANGE;
     }
 
     double getOVF() {
+      double orientDelta = (aimTarget - positionTarget).getOrientation();
       double oD = fabs(orientDelta);
 
       int sign = 1;
@@ -95,16 +176,8 @@ namespace rtx { namespace Motion {
       if(oD > 0.50) return sign;
 
       double v = (oD - MN_ROT_STEP) * sign / (0.5 - MN_ROT_STEP);
-      
+
       return v;
-    }
-
-    void setDirectionVector(double x, double y) {
-      dV.x = x; dV.y = y;
-    }
-
-    void setDirectionVector(Vec2i vec) {
-      dV.x = vec.x; dV.y = vec.y;
     }
 
   } motionData;
@@ -136,7 +209,7 @@ namespace rtx { namespace Motion {
 
   // Avg orient, orient offset
   // Set target orient: orient - offset
-  // 
+  //
   // while:
   //   if target achieved:
   //     target orient : orient (+/-) offset
@@ -156,7 +229,7 @@ namespace rtx { namespace Motion {
     motionInProgress = false;
     targetAchieved = false;
 
-    motionData = {0, 0.0, 0.0, 0.0};
+    motionData.clear();
 
     motorCmdTimer.setPeriod(100);
     motorCmdTimer.start();
@@ -173,179 +246,90 @@ namespace rtx { namespace Motion {
 
     switch(motionType) {
       case MOT_SCAN:
-	switch(motionCtx.phase) {
-	  case MOP_INIT:
-	    motionData.baseVelocity = 0;
-	    motionData.setDirectionVector(0.0, 0.0);
-	    motionData.orientDelta = M_PI;
-
-	    targetAchieved = false;
-	    motionCtx.phase = MOP_RUN;
-	    break;
-	}
-        break;
-      case MOT_AIM:
-	switch(motionCtx.phase) {
-	  case MOP_INIT:
-	    deltaT = motionGoal - (*Localization::getTransform());
-
-	    motionData.baseVelocity = 25;
-	    motionData.setDirectionVector(0.0, 0.0);
-	    motionData.orientDelta = deltaT.o;
-
-	    targetAchieved = false;
-	    motionCtx.phase = MOP_RUN;
-	    break;
-	}
-	break;
-      case MOT_NAIVE:
-        // Correct orientation => motionData
-        // then
-        // Forward motion => motionData
-        break;
-      case MOT_BLIND:
         switch(motionCtx.phase) {
-	  case MOP_INIT:
-	    deltaT = motionGoal - (*Localization::getTransform());
+          case MOP_INIT:
+            motionData.baseVelocity = 0;
 
-	    motionData.baseVelocity = 35;
-	    motionData.orientDelta = deltaT.o;
-	    motionData.setDirectionVector(deltaT.getPosition());
+            targetAchieved = false;
+            motionCtx.phase = MOP_RUN;
+            break;
+        }
+        break;
+      case MOT_COMPLEX:
+        switch(motionCtx.phase) {
+          case MOP_INIT:
+            motionData.baseVelocity = 30;
 
-	    motionData.calc();
-	    motionData.clamp();
+            motionData.calc();
+            motionData.applyFactors();
+            motionData.clamp();
 
-	    targetAchieved = false;
+            targetAchieved = false;
             motionCtx.phase = MOP_RUN;
 
             printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-	    break;
-	  case MOP_RUN:
-	    break;
-	  case MOP_DONE:
-	    break;
+            break;
         }
-      case MOT_CURVED:
-        switch(motionCtx.phase) {
-	  case MOP_INIT:
-	    deltaT = motionGoal - (*Localization::getTransform());
-
-	    motionData.baseVelocity = 25;
-	    motionData.orientDelta = deltaT.o;
-	    motionData.setDirectionVector(deltaT.getPosition());
-
-	    motionData.calc();
-	    motionData.applyFactors();
-	    motionData.clamp();
-
-	    targetAchieved = false;
-            motionCtx.phase = MOP_RUN;
-
-            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-
-	    break;
-	  case MOP_RUN:
-	    break;
-	  case MOP_DONE:
-	    break;
-        }
-        break;
-      case MOT_SCAN2:
-        switch(motionCtx.phase) {
-	  case MOP_INIT:
-	    motionData.baseVelocity = 30;
-	    motionData.orientDelta = -1.57;
-	    motionData.setDirectionVector(Vec2i({0, 0}));
-
-	    motionData.calc();
-	    motionData.applyFactors();
-	    motionData.clamp();
-
-	    timer0.setPeriod(2000);
-	    timer0.start();
-
-	    targetAchieved = false;
-            motionCtx.phase = MOP_RUN;
-
-            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-	    break;
-	  case MOP_RUN:
-	    if(timer0.isTime()) {
-              motionData.orientDelta *= motionData.orientDelta < 0 ? 1 : -1;
-	      timer0.start();
-	    }
-	    break;
-	  case MOP_DONE:
-	    break;
-        }
-	break;
-      case MOT_STATIC:
-        // Rotational motion => motionData
-        break;
-      case MOT_COMPLEX_CURVED:
-        // Complex rotational motion => motionData
         break;
     }
 
     switch(motionCtx.phase) {
       case MOP_RUN:
-	if(!isTargetAchieved()) {
-	  if(motorCmdTimer.isTime()) {
-	    //mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
-	    motorCmdTimer.start();
-	  }
-	} else {
-	  printf("[Motion]Target achieved.\n");
-	  std::cout << "Target: " << motionGoal.toString() << std::endl;
-	  motionCtx.phase = MOP_DONE;
-	}
+        if(!isTargetAchieved()) {
+          if(motorCmdTimer.isTime()) {
+            //mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+            motorCmdTimer.start();
+          }
+        } else {
+          printf("[Motion]Target achieved.\n");
+          std::cout << "Target: " << motionGoal.toString() << std::endl;
+          motionCtx.phase = MOP_DONE;
+        }
 
-	break;
+        break;
       default:
-	break;
+        break;
     }
 
   }
 
-  void setTarget(Transform target) {
-    Transform t = motionGoal - target;
-    double mag = t.getPosition().getMagnitude();
-    if(mag < MN_DIST_STEP && t.o < MN_ROT_STEP) return;
-
-    printf("[Motion::setTarget]dT: %g, %g\n", t.getPosition().getMagnitude(), t.o);
-    printf("[Motion::setTarget]T: %i, %i, %g\n", target.getX(), target.getY(), target.o);
-
+  // Target API
+  void _setTarget() {
     motionCtx.phase = MOP_STANDBY;
-    motionGoal = target;
     targetAchieved = false;
   }
 
-  bool isRunning() {
-    return motionCtx.phase == MOP_RUN && targetAchieved == false;
+  void setPositionTarget(Vec2i pos) {
+    motionData.setPosTarget(pos);
+    _setTarget();
   }
 
+  void setAimTarget(Vec2i pos) {
+    motionData.setAimTarget(pos);
+    _setTarget();
+  }
+
+  void setTarget(Transform target) {
+    Transform t = getTargetTransform() - target;
+    double mag = t.getPosition().getMagnitude();
+    if(mag < MN_DIST_STEP && t.o < MN_ROT_STEP) return;
+
+    motionData.setTransformTarget(target);
+    printf("[Motion::setTarget]dT: %g, %g\n", t.getPosition().getMagnitude(), t.o);
+    printf("[Motion::setTarget]T: %i, %i, %g\n", target.getX(), target.getY(), target.o);
+
+    _setTarget();
+  }
+
+  // == State control API
   void start() {
+    if(Motion::isRunning()) return;
     motionCtx.phase = MOP_INIT;
   }
 
-  Transform getDeltaTransform() {
-    return motionGoal - *Localization::getTransform();
-  }
-
-  double getOrientError() {
-    return fabs(motionGoal.o - Localization::getTransform()->o);
-  }
-
-  int getTargetRange() {
-    double mag = getDeltaTransform().getPosition().getMagnitude();
-    if(mag <= PROXIMITY) return PROXIMITY;
-    else if(mag <= CLOSE_RANGE) return CLOSE_RANGE;
-    else if(mag <= MID_RANGE) return MID_RANGE;
-    else return LONG_RANGE;
-  }
-
   void stop() {
-    hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
+    //hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
+    motionData.clear();
     motionCtx.phase = MOP_STANDBY;
   }
 
@@ -360,37 +344,22 @@ namespace rtx { namespace Motion {
     motionActive = false;
   }
 
-  double targetDistance() {
-    return Localization::getTransform()->getPosition().distanceTo(motionGoal.getPosition());
+
+  // == State response API
+  bool isRunning() {
+    return motionCtx.phase == MOP_RUN && targetAchieved == false;
   }
 
-  double targetAngle() {
-    return 0.0; // TODO: dot(Localization::getOrientation(), motionGoal);
+  Vec2i getTargetPosition() {
+    return motionData.getTargetPosition();
   }
 
-  //FIXME:
-  double stateProbability(Transform* t1, Transform* t2) {
-    //double px = gaussian_probability(t1->getX(), 30, t2->getX());
-    //double py = gaussian_probability(t1->getY(), 30, t2->getY());
-    //double c  = 3.14/180;
-    //double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
+  double getTargetOrientation() {
+    return motionData.getTargetOrientation();
+  }
 
-    /*std::cout << "px=" << px
-              << ", py=" << py
-	      << ", po= " << po
-	      << std::endl;
-    */
-
-    double po;
-    const int d = 65;
-    if(fabs(t1->getX() - t2->getX()) < d &&
-	fabs(t1->getY() - t2->getY()) < d &&
-	fabs(t1->o - t2->o) < 0.09) {
-      po = 1.0;
-    } else {
-      po = 0.0;
-    }
-    return po;
+  Transform getTargetTransform() {
+    return Transform({motionData.getTargetPosition(), motionData.getTargetOrientation()});
   }
 
   bool isTargetAchieved() {
@@ -408,8 +377,141 @@ namespace rtx { namespace Motion {
     return targetAchieved;
   }
 
-  bool orientationAchieved() {
-    return targetAngle() < targetOrientationCondition;
+  bool isOrientationAchieved() {
+    return getDeltaOrientation() < targetOrientationCondition;
+  }
+
+
+  // State offset getters
+  double getDeltaDistance() {
+    return Localization::getTransform()->getPosition().distanceTo(motionGoal.getPosition());
+  }
+
+  double getDeltaOrientation() {
+    return motionData.getTargetOrientation() - Localization::getTransform()->o;
+  }
+
+  Transform getDeltaTransform() {
+    return getTargetTransform() - *Localization::getTransform();
+  }
+
+  double getOrientError() {
+    return fabs(getDeltaOrientation());
+  }
+
+  int getTargetRange() {
+    double mag = getDeltaTransform().getPosition().getMagnitude();
+    if(mag <= PROXIMITY) return PROXIMITY;
+    else if(mag <= CLOSE_RANGE) return CLOSE_RANGE;
+    else if(mag <= MID_RANGE) return MID_RANGE;
+    else return LONG_RANGE;
   }
 
 }}
+
+
+
+
+
+/*
+
+case MOT_AIM:
+  switch(motionCtx.phase) {
+    case MOP_INIT:
+      deltaT = motionGoal - (*Localization::getTransform());
+
+      motionData.baseVelocity = 25;
+      motionData.setDirectionVector(0.0, 0.0);
+      motionData.orientDelta = deltaT.o;
+
+      targetAchieved = false;
+      motionCtx.phase = MOP_RUN;
+      break;
+  }
+  break;
+case MOT_NAIVE:
+  // Correct orientation => motionData
+  // then
+  // Forward motion => motionData
+  break;
+case MOT_BLIND:
+  switch(motionCtx.phase) {
+    case MOP_INIT:
+      deltaT = motionGoal - (*Localization::getTransform());
+
+      motionData.baseVelocity = 35;
+      motionData.orientDelta = deltaT.o;
+      motionData.setDirectionVector(deltaT.getPosition());
+
+      motionData.calc();
+      motionData.clamp();
+
+      targetAchieved = false;
+            motionCtx.phase = MOP_RUN;
+
+            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+      break;
+    case MOP_RUN:
+      break;
+    case MOP_DONE:
+      break;
+  }
+case MOT_CURVED:
+  switch(motionCtx.phase) {
+    case MOP_INIT:
+      deltaT = motionGoal - (*Localization::getTransform());
+
+      motionData.baseVelocity = 25;
+      motionData.orientDelta = deltaT.o;
+      motionData.setDirectionVector(deltaT.getPosition());
+
+      motionData.calc();
+      motionData.applyFactors();
+      motionData.clamp();
+
+      targetAchieved = false;
+      motionCtx.phase = MOP_RUN;
+
+      printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+
+      break;
+    case MOP_RUN:
+      break;
+    case MOP_DONE:
+      break;
+  }
+  break;
+case MOT_SCAN2:
+  switch(motionCtx.phase) {
+    case MOP_INIT:
+      motionData.baseVelocity = 30;
+      motionData.orientDelta = -1.57;
+      motionData.setDirectionVector(Vec2i({0, 0}));
+
+      motionData.calc();
+      motionData.applyFactors();
+      motionData.clamp();
+
+      timer0.setPeriod(2000);
+      timer0.start();
+
+      targetAchieved = false;
+      motionCtx.phase = MOP_RUN;
+
+      printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+      break;
+    case MOP_RUN:
+      if(timer0.isTime()) {
+              motionData.orientDelta *= motionData.orientDelta < 0 ? 1 : -1;
+        timer0.start();
+      }
+      break;
+    case MOP_DONE:
+      break;
+  }
+break;
+
+case MOT_COMPLEX_CURVED:
+  // Complex rotational motion => motionData
+  break;
+*/
