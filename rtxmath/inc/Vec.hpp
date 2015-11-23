@@ -55,6 +55,10 @@ namespace rtx {
       y += val*sign;
     }
 
+    Vec2D<T> operator+(Vec2D<T> vec) {
+      return Vec2D<T>({x + vec.x, y + vec.y});
+    }
+
     Vec2D<T> operator*(double val) {
       return Vec2D<T>({(int)(x*val), (int)(y*val)});
     }
@@ -67,8 +71,9 @@ namespace rtx {
       return Vec2D<T>({x - vec.x, y - vec.y});
     }
 
-    static Vec2D<T> fromOrientation(double o) {
-      return Vec2D<T>({(T)cos(o), (T)sin(o)});
+    //FIXME:
+    static Vec2D<T> fromOrientation(double o, T mag = 100) {
+      return Vec2D<T>({mag*(T)acos(o), mag*(T)(asin(o))});
     }
 
     std::string toString() {

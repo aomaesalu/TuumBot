@@ -26,7 +26,7 @@ namespace rtx { namespace hal {
   void process() {
     if(senseTimer.isTime()) {
       MainBoard* mb = hw.getMainBoard();
-      mb->senseBall();
+      //mb->senseBall();
       senseTimer.start();
     }
 

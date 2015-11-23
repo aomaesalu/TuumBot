@@ -6,6 +6,7 @@
 
 #include "tuum_motion.hpp"
 #include "tuum_visioning.hpp"
+#include "tuum_navigation.hpp"
 
 using namespace std;
 using namespace rtx;
@@ -69,35 +70,61 @@ void test2() {
   Motion::process();
 }
 
+int ball_locate_ctrl() {
+  if(Visioning::ballDetect.size() <= 0) return -1;
+
+  Ball* b = Navigation::getNearestBall();
+  if(b == nullptr) return -1;
+
+  if(!Motion::isTargetAchieved() || !Motion::isRunning()) {
+    Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
+    Motion::setPositionTarget(pos);
+    Motion::setAimTarget(b->getTransform()->getPosition());
+    Motion::start();
+  }
+}
+
+int goal_locate_ctrl() {
+
+  if(Visioning::yellowGoal != nullptr) {
+    if(!Motion::isTargetAchieved() || !Motion::isRunning()) {
+      Motion::setAimTarget(Visioning::yellowGoal->getTransform()->getPosition());
+      Motion::start();
+    }
+  }
+
+  if(debugTimer.isTime()) {
+    if(Visioning::yellowGoal != nullptr) {
+      Transform* t = Visioning::yellowGoal->getTransform();
+      //std::cout << "YelloGoal: " << t->toString() << std::endl;
+    }
+    debugTimer.start();
+  }
+}
+
 int main(int argc, char* argv[]) {
   printf("Running motion tests...\n");
-  debugTimer.setPeriod(2000);
+  //debugTimer.setPeriod(2000);
 
   hal::setup();
 
+  Visioning::setup();
   Motion::setup();
   Motion::setBehaviour(Motion::MOT_COMPLEX);
 
-  test1();
-  test2();
+  //test1();
+  //test2();
 
   bool running = true;
   //hal::hw.getMainBoard()->senseBall();
   while(running) {
     hal::process();
 
+    Visioning::process();
     Motion::process();
 
-    if(Visioning::blueGoal != nullptr) {
-      Motion::setAimTarget(Visioning::blueGoal->getTransform()->getPosition());
-      Motion::start();
-    }
-
-    if(debugTimer.isTime()) {
-      std::cout << "DEBUG" << std::endl;
-      std::cout << "BlueGoal: " << (Visioning::blueGoal != nullptr) << std::endl;
-      debugTimer.start();
-    }
+    //goal_locate_ctrl();
+    ball_locate_ctrl();
   };
 
   printf("Motion tests done.\n");

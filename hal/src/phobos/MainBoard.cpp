@@ -47,7 +47,6 @@ namespace rtx { namespace hal {
       if(m_dribblerState) {
         startDribbler();
       }
-
       m_updateTimer.start();
     }
 
@@ -61,7 +60,6 @@ namespace rtx { namespace hal {
       }
 
     }
-
   }
 
   bool MainBoard::getBallSensorState() {

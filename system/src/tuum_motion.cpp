@@ -64,9 +64,14 @@ namespace rtx { namespace Motion {
 
     void setTransformTarget(Transform t) {
       positionTarget = t.getPosition();
-      aimTarget = Vec2i::fromOrientation(t.getOrientation());
-      bool posTargetSet = true;
-      bool aimTargetSet = true;
+      std::cout << "CREATE AIM TARGET TO: " << t.getOrientation() << std::endl;
+      aimTarget = positionTarget + Vec2i::fromOrientation(t.getOrientation());
+      std::cout << positionTarget.toString()
+	        << "; " << aimTarget.toString()
+		<< "; AIM ORI: " << (aimTarget - positionTarget).getOrientation()
+		<< std::endl;
+      posTargetSet = true;
+      aimTargetSet = true;
     }
 
     Vec2i getTargetPosition() {
@@ -109,7 +114,7 @@ namespace rtx { namespace Motion {
       else
         _speed = 0;
 
-      if(aimTargetSet)
+      if(0)
         _r_speed = (int)(baseVelocity*0.6*getOVF());
       else
         _r_speed = 0;
@@ -139,6 +144,7 @@ namespace rtx { namespace Motion {
 
     double getOVF() {
       double orientDelta = (aimTarget - positionTarget).getOrientation();
+      std::cout << "oD: " << orientDelta << std::endl;
       double oD = fabs(orientDelta);
 
       int sign = orientDelta < 0 ? -1 : 1;
@@ -286,8 +292,9 @@ namespace rtx { namespace Motion {
     if(mag < MN_DIST_STEP && t.o < MN_ROT_STEP) return;
 
     motionData.setTransformTarget(target);
-    printf("[Motion::setTarget]dT: %g, %g\n", t.getPosition().getMagnitude(), t.o);
-    printf("[Motion::setTarget]T: %i, %i, %g\n", target.getX(), target.getY(), target.o);
+    std::cout << "[Motion]Set target: "
+              << motionData.getTargetPosition().toString()
+	      << std::endl;
 
     _setTarget();
   }
