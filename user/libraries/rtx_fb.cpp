@@ -43,6 +43,7 @@ namespace rtx { namespace Logic {
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSGoalLocate(ctx));
+    stm.addRootState(st);
 
 
     st2 = stm.createState("STGoalShoot");
@@ -52,7 +53,6 @@ namespace rtx { namespace Logic {
     ctx.st = st;
     st->addController(new ctl::LSGoalShoot(ctx));
 
-    stm.addRootState(st);
   }
 
   void process() {
