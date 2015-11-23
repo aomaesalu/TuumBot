@@ -9,38 +9,11 @@
 #include <iostream>
 
 #include "rtxhal.hpp"
-#include "MotorControl.hpp"
 
 #include "tuum_localization.hpp"
 #include "tuum_motion.hpp"
 
 
-
-//FIXME:
-double stateProbability(Transform* t1, Transform* t2) {
-  //double px = gaussian_probability(t1->getX(), 30, t2->getX());
-  //double py = gaussian_probability(t1->getY(), 30, t2->getY());
-  //double c  = 3.14/180;
-  //double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
-
-  /*std::cout << "px=" << px
-            << ", py=" << py
-      << ", po= " << po
-      << std::endl;
-  */
-
-  double po;
-  const int d = 65;
-  if(fabs(t1->getX() - t2->getX()) < d &&
-      fabs(t1->getY() - t2->getY()) < d &&
-      fabs(t1->o - t2->o) < 0.09)
-  {
-    po = 1.0;
-  } else {
-    po = 0.0;
-  }
-  return po;
-}
 
 
 //TODO: Implement state machine & controllers
@@ -136,7 +109,6 @@ namespace rtx { namespace Motion {
       else
         _speed = 0;
 
-      std::cout << aimTargetSet << std::endl;
       if(aimTargetSet)
         _r_speed = (int)(baseVelocity*0.6*getOVF());
       else
@@ -149,12 +121,12 @@ namespace rtx { namespace Motion {
 
     void applyFactors() {
       _speed *= getVF();
-      _r_speed *= getOVF();
+      //_r_speed *= getOVF();
     }
 
     void clamp() {
       if(fabs(_r_speed) < MIN_ROT_SPEED && _r_speed != 0) {
-  _r_speed = MIN_ROT_SPEED * (_r_speed < 0 ? -1 : 1);
+        _r_speed = MIN_ROT_SPEED * (_r_speed < 0 ? -1 : 1);
       }
     }
 
@@ -169,14 +141,12 @@ namespace rtx { namespace Motion {
       double orientDelta = (aimTarget - positionTarget).getOrientation();
       double oD = fabs(orientDelta);
 
-      int sign = 1;
-      if(orientDelta < 0) sign = -1;
+      int sign = orientDelta < 0 ? -1 : 1;
 
-      if(oD <= 0.08) return 0;
+      if(oD <= MN_ROT_STEP) return 0;
       if(oD > 0.50) return sign;
 
       double v = (oD - MN_ROT_STEP) * sign / (0.5 - MN_ROT_STEP);
-
       return v;
     }
 
@@ -267,7 +237,6 @@ namespace rtx { namespace Motion {
             targetAchieved = false;
             motionCtx.phase = MOP_RUN;
 
-            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
             break;
         }
         break;
@@ -277,12 +246,13 @@ namespace rtx { namespace Motion {
       case MOP_RUN:
         if(!isTargetAchieved()) {
           if(motorCmdTimer.isTime()) {
-            //mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+            printf("[rtx::Motion]mco->omniDrive(%i, %g, %i)\n", motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
+            mco->OmniDrive(motionData.getSpeed(), motionData.getHeading(), motionData.getRotationSpeed());
             motorCmdTimer.start();
           }
         } else {
+	  stop();
           printf("[Motion]Target achieved.\n");
-          std::cout << "Target: " << motionGoal.toString() << std::endl;
           motionCtx.phase = MOP_DONE;
         }
 
@@ -305,6 +275,7 @@ namespace rtx { namespace Motion {
   }
 
   void setAimTarget(Vec2i pos) {
+    double orientDelta = pos.getOrientation();
     motionData.setAimTarget(pos);
     _setTarget();
   }
@@ -328,7 +299,7 @@ namespace rtx { namespace Motion {
   }
 
   void stop() {
-    //hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
+    hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
     motionData.clear();
     motionCtx.phase = MOP_STANDBY;
   }
@@ -362,12 +333,44 @@ namespace rtx { namespace Motion {
     return Transform({motionData.getTargetPosition(), motionData.getTargetOrientation()});
   }
 
+
+
+  //FIXME:
+  double stateProbability(Transform* t, MotionData* data) {
+    //double px = gaussian_probability(t1->getX(), 30, t2->getX());
+    //double py = gaussian_probability(t1->getY(), 30, t2->getY());
+    //double c  = 3.14/180;
+    //double po = gaussian_probability(t1->getOrientation()*c, 40, t2->getOrientation()*c);
+
+    /*std::cout << "px=" << px
+	      << ", py=" << py
+	<< ", po= " << po
+	<< std::endl;
+    */
+
+    const int d = 65;
+
+    Vec2i v = data->getTargetPosition();
+    double O = data->getTargetOrientation();
+
+    if(data->posTargetSet) {
+      if(fabs(t->getX() - v.x) > d ||
+	 fabs(t->getY() - v.y) > d) return 0.0;
+    }
+
+    if(data->aimTargetSet) {
+      if(fabs(t->o - O) > 0.08) return 0.0;
+    }
+
+    return 1.0;
+  }
+
   bool isTargetAchieved() {
     if(!targetAchieved) {
       // (transform - target) <= uncertainty
 
       Transform* t = Localization::getTransform();
-      double p = stateProbability(t, &motionGoal);
+      double p = stateProbability(t, &motionData);
 
       //std::cout << "P = " << p << std::endl;
 
