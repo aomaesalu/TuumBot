@@ -9,6 +9,9 @@
 #ifndef RTX_VEC_H
 #define RTX_VEC_H
 
+#include <iostream>
+#include <sstream>
+
 namespace rtx {
 
   template<typename T>
@@ -58,6 +61,22 @@ namespace rtx {
 
     Vec2D<T> operator-(double val) {
       return (*this) * (1.0 - val / this->getMagnitude());
+    }
+
+    Vec2D<T> operator-(Vec2D<T> vec) {
+      return Vec2D<T>({x - vec.x, y - vec.y});
+    }
+
+    static Vec2D<T> fromOrientation(double o) {
+      return Vec2D<T>({(T)cos(o), (T)sin(o)});
+    }
+
+    std::string toString() {
+      std::stringstream out;
+      out << "<Vec2D "
+          << x << ", "
+          << y << ">";
+      return out.str();
     }
   };
 
