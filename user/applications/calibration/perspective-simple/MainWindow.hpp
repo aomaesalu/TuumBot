@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 24 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
@@ -33,6 +33,10 @@ namespace rtx {
       void initialise();
 
       ImageArea* getImageArea();
+
+      Gtk::Scale *getAScale();
+      Gtk::Scale *getBScale();
+      Gtk::Scale *getCScale();
 
     protected:
       Gtk::Grid grid;
