@@ -81,8 +81,8 @@ namespace rtx {
           unsigned int upperRight = (y + squareSize) * (width + 1) + (x + squareSize) + 1;
           if (filled < upperRight)
             continue;
-          std::cout << squareSize << " " << x << " " << y << std::endl;
           proportions.push_back(squareSize * ((double) (points[x + squareSize][y + squareSize].first - points[x][y + squareSize].first) / (points[x + squareSize][y].first - points[x][y].first)));
+        std::cout << squareSize << " " << x << " " << y << " " << proportions.back() << std::endl;
         }
       }
     }
