@@ -116,13 +116,13 @@ namespace rtx { namespace Motion {
         _speed = 0;
 
       if(aimTargetSet)
-        _r_speed = (int)(baseVelocity*0.6*getOVF());
+        _r_speed = (int)(baseVelocity*0.35*getOVF());
       else
         _r_speed = 0;
 
       //Vec2f _dV = dV;
       //_dV.rotate(-orientDelta);
-      _heading = 0; //(positionTarget - Localization::getTransform()->getPosition()).getOrientation();
+      _heading = (positionTarget - Localization::getTransform()->getPosition()).getOrientation();
     }
 
     void applyFactors() {
@@ -148,11 +148,13 @@ namespace rtx { namespace Motion {
       double oD = fabs(orientDelta);
 
       int sign = orientDelta < 0 ? -1 : 1;
+      double gradient_upper_limit = 0.70;
 
       if(oD <= MN_ROT_STEP) return 0;
-      if(oD > 0.50) return sign;
+      if(oD > gradient_upper_limit) return sign;
 
-      double v = (oD - MN_ROT_STEP) * sign / (0.5 - MN_ROT_STEP);
+      double v = (oD - MN_ROT_STEP) * sign / (gradient_upper_limit - MN_ROT_STEP);
+      std::cout << v << std::endl;
       return v;
     }
 

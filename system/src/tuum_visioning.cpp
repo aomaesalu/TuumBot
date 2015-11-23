@@ -319,7 +319,8 @@ namespace rtx { namespace Visioning {
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if (density > 1.0) continue;
       if(boxArea < 20 * 20) continue; // TODO: Calibrate with field tests
-      std::cout << "Ratio: " << blobs[i]->getBoxRatio() << std::endl;
+      if(blobs[i]->getBoxRatio() < 1.2) continue;
+      //std::cout << "Ratio: " << blobs[i]->getBoxRatio() << std::endl;
       //if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 

@@ -33,7 +33,7 @@ namespace rtx { namespace Visioning {
   template<class T>
   struct EDS {
     int mn_h = -5; // Entity removal health condition
-    int mx_h = 5;  // Entity detection health condition
+    int mx_h = 2;  // Entity detection health condition
 
     std::vector<T*> objs;
     std::vector<T*> tmp_objs;
@@ -50,11 +50,17 @@ namespace rtx { namespace Visioning {
     }
 
     int size() { return objs.size(); }
+    int probableSize() { return tmp_objs.size(); }
 
     void update() {
       {
-        for(auto& b : objs) b->update();
-        for(auto& b : tmp_objs) b->update();
+        for(auto& b : objs) {
+	  b->update();
+	}
+
+        for(auto& b : tmp_objs) {
+	  b->update();
+	}
       }
 
       int health = mn_h;
