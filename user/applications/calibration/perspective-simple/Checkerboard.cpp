@@ -17,15 +17,15 @@
 
 namespace rtx {
 
-  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height, const unsigned int& squareWidth):
+  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height, const unsigned int& squareWidth, const double &A, const double &B, const double &C):
     width(width),
     height(height),
     squareWidth(squareWidth),
+    A(A),
+    B(B),
+    C(C),
     points(width + 1, std::vector<std::pair<unsigned int, unsigned int>>(height + 1, std::pair<unsigned int, unsigned int>(0, 0))),
-    filled(0),
-    A(0),
-    B(0),
-    C(0)
+    filled(0)
   {
 
   }
@@ -58,7 +58,7 @@ namespace rtx {
     return A;
   }
 
-  double Checerboard::getB() const {
+  double Checkerboard::getB() const {
     return B;
   }
 
@@ -72,6 +72,24 @@ namespace rtx {
 
   bool Checkerboard::isFilled() const {
     return filled == (width + 1) * (height + 1);
+  }
+
+  void Checkerboard::setA(const double &A) {
+    this->A = A;
+  }
+
+  void Checkerboard::setB(const double &B) {
+    this->B = B;
+  }
+
+  void Checkerboard::setC(const double &C) {
+    this->C = C;
+  }
+
+  void Checkerboard::setConstants(const double &A, const double &B, const double &C) {
+    this->A = A;
+    this->B = B;
+    this->C = C;
   }
 
   void Checkerboard::addPoint(const unsigned int &x, const unsigned int &y) {
@@ -141,7 +159,8 @@ namespace rtx {
     // PixelVerticalCoord = B / (ActualDistance - A)
     unsigned int verticalCoordinate = B / (y - A);
     // PixelRight = ActualRight * PixelVerticalCoord / C
-    unsigned int horisontalCoordinate = x * verticalCoordinate / C;
+    unsigned int horisontalCoordinate = x * verticalCoordinate / C + CAMERA_WIDTH / 2.0;
+    // Debug: std::cout << A << " " << B << " " << C << ": " << x << " " << y << " -> " << horisontalCoordinate << " " << verticalCoordinate << std::endl;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }
 
