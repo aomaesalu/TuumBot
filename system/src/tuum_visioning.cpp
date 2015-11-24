@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iostream> // TODO: Remove
 #include <sstream>
+#include <cmath>
 
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
@@ -120,6 +121,22 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
+  std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y) {
+    // ActualDistance = A + B / PixelVerticalCoord
+    double verticalCoordinate = 21 + 93048 / y;
+    // ActualRight = C * PixelRight / PixelVerticalCoord
+    double horisontalCoordinate = 150 * (x - CAMERA_WIDTH / 2) / y;
+    return std::pair<double, double>(horisontalCoordinate, verticalCoordinate);
+  }
+
+  std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
+    // PixelVerticalCoord = B / (ActualDistance - A)
+    unsigned int verticalCoordinate = 93048 / (y - 21);
+    // PixelRight = ActualRight * PixelVerticalCoord / C
+    unsigned int horisontalCoordinate = x * verticalCoordinate / 150;
+    return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
+  }
+
   // Unused
   void translateBallsBuffer() {
     editingBalls = true;
@@ -223,9 +240,12 @@ namespace rtx { namespace Visioning {
 
       // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
-      // TODO: Calculate based on perspective
-      unsigned int distance = CAMERA_HEIGHT - point->getY();
-      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+      // Relative position
+      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      double distance = position.second;
+      double angle = atan(position.first / position.second);
+      //unsigned int distance = CAMERA_HEIGHT - point->getY();
+      //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
       /*
       dbg << "<Blob d=" << distance << ", a=" << angle
@@ -325,8 +345,12 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       Point2D* point = blobs[i]->getPosition();
-      unsigned int distance = CAMERA_HEIGHT - point->getY(); // TODO: Calculate based on perspective
-      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+      // Relative position
+      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      double distance = position.second;
+      double angle = atan(position.first / position.second);
+      //unsigned int distance = CAMERA_HEIGHT - point->getY();
+      //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
       // TODO: Remove duplicate code
       if (color == BLUE_GOAL) {
         if (boxArea > largestBlueArea) {
@@ -377,9 +401,12 @@ namespace rtx { namespace Visioning {
 
       // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
-      // TODO: Calculate based on perspective
-      unsigned int distance = CAMERA_HEIGHT - point->getY();
-      double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
+      // Relative position
+      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      double distance = position.second;
+      double angle = atan(position.first / position.second);
+      //unsigned int distance = CAMERA_HEIGHT - point->getY();
+      //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
       // STEP 3: Create robot instance with absolute position
       n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
