@@ -22,9 +22,7 @@ namespace rtx { namespace Motion {
     MOT_SCAN,   // In-place rotation
     MOT_NAIVE,  // Turn and move
     MOT_CURVED, // Drive to target in 1 motion
-
-    // Moves without orientation change
-    MOT_STATIC,
+    MOT_COMPLEX,
 
     // Variables curve to achieve given end orientation
     MOT_COMPLEX_CURVED,
@@ -37,26 +35,40 @@ namespace rtx { namespace Motion {
   void setup();
   void process();
 
-  void setTarget(Transform target);
 
-  int getTargetRange();
-  double getOrientError();
+  // Motion target API
+  void setPositionTarget(Vec2i);
+  void setAimTarget(Vec2i);
+  void setTarget(Transform);
 
-  void setSpeed(int v);
 
+  // State control API
   void start();
   void stop();
 
-  bool isRunning();
-
+  void setSpeed(int v);
   void setBehaviour(MotionType mt);
 
-  double targetDistance();
-  double targetAngle();
+
+  // State response API
+  bool isRunning();
+
+  Vec2i getTargetPosition();
+  double getTargetOrientation();
+  Transform getTargetTransform();
 
   bool isTargetAchieved();
-  bool orientationAchieved();
+  bool isOrientationAchieved();
 
+
+  // State offset getters
+  double getDeltaDistance();
+  double getDeltaOrientation();
+
+  Transform getDeltaTransform();
+  double getOrientError();
+
+  int getTargetRange();
 
 }}
 

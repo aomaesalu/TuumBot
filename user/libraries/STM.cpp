@@ -12,11 +12,15 @@
 
 namespace rtx {
 
+  int State::priority_seq = 0;
+
   State::State(std::string name, STM* stm) {
     m_name = name;
     m_stm = stm;
     m_last = nullptr;
     m_next = nullptr;
+
+    m_priority = State::priority_seq++;
   }
 
   STM::STM() {
@@ -81,6 +85,7 @@ namespace rtx {
   void STM::process() {
     // Process root states
     for(auto& tmp_st_ptr : m_rootStates) {
+      if(tmp_st_ptr->getPriority() < m_state->getPriority()) continue;
       if(tmp_st_ptr->canEnter() && tmp_st_ptr != m_state) {
         setState(tmp_st_ptr);
 	return;

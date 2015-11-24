@@ -11,7 +11,7 @@
 
 namespace rtx { namespace Navigation {
 
-  const int NAV_BALL_PICKUP_RANGE = 50;
+  const int NAV_BALL_PICKUP_RANGE = 30;
 
 
   //TODO: position to relative position
@@ -23,12 +23,26 @@ namespace rtx { namespace Navigation {
     return target;
   }
 
-  Transform calcGoalShootPos(Transform* bt) {
-    Transform target((*bt) - 0);
+  Vec2i calcGoalShootPos(Transform* t) {
+    /*Transform me = Localization::getTransform();
+    Vec2i me_p = me.getPosition();
+    Vec2i g_p = t->getPosition();
 
-    double o = bt->getPosition().getOrientation();
-    target.setOrientation(o);
-    return target;
+    Transform target;
+    // 400, 0 (n => )
+    if(me_p.distanceTo(g_p) > 360) {
+      target = g_p - 300;
+    } else {
+      //target =
+    }
+
+    return target;*/
+  }
+
+
+  Goal* getOpposingGoal() {
+    //TODO: make configurable
+    return Visioning::blueGoal;
   }
 
 
@@ -36,11 +50,12 @@ namespace rtx { namespace Navigation {
     Ball* ball = nullptr;
     Transform* t = Localization::getTransform();
 
-    double d = 0.0, _d;
+    double d = 1000000.0, _d;
+
     for(auto b : *Visioning::ballDetect.getEntities()) {
       _d = t->distanceTo(b->getTransform()->getPosition());
 
-      if(d < _d) {
+      if(_d < d) {
 	d = _d;
 	ball = b;
       }

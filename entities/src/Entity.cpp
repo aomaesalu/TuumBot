@@ -68,7 +68,7 @@ namespace rtx {
     int y = m_transform.getY()*0.2 + transform.getY()*0.8;
     m_transform.setPosition(x, y);
 
-    if(m_health < 30) m_health += 2;
+    if(m_health < 35) m_health += 2;
   }
 
   void Entity::update() {

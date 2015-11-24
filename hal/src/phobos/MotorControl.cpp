@@ -19,7 +19,7 @@ namespace rtx { namespace hal {
   void MotorControl::init(RTX485::WriteHandle wHandle) {
     int id_seq, ix;
 
-    for(ix=0, id_seq=5; ix < MOTOR_COUNT; ix++, id_seq++) {
+    for(ix=0, id_seq=1; ix < MOTOR_COUNT; ix++, id_seq++) {
       m_motorIDs[ix] = id_seq;
     }
 
