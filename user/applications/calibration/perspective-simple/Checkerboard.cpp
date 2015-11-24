@@ -58,7 +58,7 @@ namespace rtx {
     return A;
   }
 
-  double Checerboard::getB() const {
+  double Checkerboard::getB() const {
     return B;
   }
 
