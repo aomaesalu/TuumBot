@@ -39,7 +39,6 @@ namespace rtx { namespace hal {
     typedef void (*WriteHandle)(Message);
     typedef void (*SignalService)(SignalParams);
 
-
     class Device {
     protected:
       DeviceID id;
@@ -81,7 +80,6 @@ namespace rtx { namespace hal {
     };
 
   private:
-    SignalMap callbacks;
     WriteHandle writeProxy;
 
     std::string m_dataBuf;

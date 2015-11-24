@@ -136,7 +136,7 @@ namespace rtx { namespace Visioning {
 
     // TODO: Refactor buffer management
 
-    if (blueGoal) {
+    /*if (blueGoal) {
       if (blueGoal != blueGoalBuffer) {
         delete(blueGoal);
         blueGoal = blueGoalBuffer;
@@ -152,7 +152,16 @@ namespace rtx { namespace Visioning {
       }
     } else {
       yellowGoal = yellowGoalBuffer;
-    }
+    }*/
+
+    if (blueGoalBuffer)
+      blueGoal = new Goal(*blueGoalBuffer);
+    else
+      blueGoal = nullptr;
+    if (yellowGoalBuffer)
+      yellowGoal = new Goal(*yellowGoalBuffer);
+    else
+      yellowGoal = nullptr;
 
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;

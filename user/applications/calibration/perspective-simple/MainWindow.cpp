@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 24 November 2015
  */
 
  #include "MainWindow.hpp"
@@ -93,6 +93,18 @@
 
    ImageArea* MainWindow::getImageArea() {
      return &imageArea;
+   }
+
+   Gtk::Scale* MainWindow::getAScale() {
+     return &AScale;
+   }
+
+   Gtk::Scale* MainWindow::getBScale() {
+     return &BScale;
+   }
+
+   Gtk::Scale* MainWindow::getCScale() {
+     return &CScale;
    }
 
  }

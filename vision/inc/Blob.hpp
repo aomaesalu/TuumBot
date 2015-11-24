@@ -3,7 +3,7 @@
  *  Blob seen in the camera frame.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.1
+ *  @version 0.2
  *  @date 21 November 2015
  */
 
