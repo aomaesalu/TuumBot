@@ -125,7 +125,7 @@ namespace rtx { namespace Visioning {
     // ActualDistance = A + B / PixelVerticalCoord
     double verticalCoordinate = 21 + 93048 / y;
     // ActualRight = C * PixelRight / PixelVerticalCoord
-    double horisontalCoordinate = 150 * (x - CAMERA_WIDTH / 2) / y;
+    double horisontalCoordinate = 150 * ((int) x - CAMERA_WIDTH / 2) / y;
     return std::pair<double, double>(horisontalCoordinate, verticalCoordinate);
   }
 
