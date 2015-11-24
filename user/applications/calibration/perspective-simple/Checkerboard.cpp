@@ -17,15 +17,15 @@
 
 namespace rtx {
 
-  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height, const unsigned int& squareWidth):
+  Checkerboard::Checkerboard(const unsigned int &width, const unsigned int &height, const unsigned int& squareWidth, const double &A, const double &B, const double &C):
     width(width),
     height(height),
     squareWidth(squareWidth),
+    A(A),
+    B(B),
+    C(C),
     points(width + 1, std::vector<std::pair<unsigned int, unsigned int>>(height + 1, std::pair<unsigned int, unsigned int>(0, 0))),
-    filled(0),
-    A(0),
-    B(0),
-    C(0)
+    filled(0)
   {
 
   }
@@ -160,6 +160,7 @@ namespace rtx {
     unsigned int verticalCoordinate = B / (y - A);
     // PixelRight = ActualRight * PixelVerticalCoord / C
     unsigned int horisontalCoordinate = x * verticalCoordinate / C;
+    std::cout << A << " " << B << " " << C << ": " << x << " " << y << " -> " << horisontalCoordinate << " " << verticalCoordinate << std::endl;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }
 

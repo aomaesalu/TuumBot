@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 18 November 2015
+ *  @date 24 November 2015
  */
 
 #include "GUI.hpp"
@@ -28,7 +28,7 @@ namespace rtx {
     setPlaying();
 
     // Create empty checkerboard
-    checkerboard = new Checkerboard(7, 7, 25);
+    checkerboard = new Checkerboard(7, 7, 25, 1.0, 1.0, 1.0);
 
     // Create gtkmm application
     gtkApplication = Gtk::Application::create(argc, argv);

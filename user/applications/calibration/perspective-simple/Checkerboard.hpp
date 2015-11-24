@@ -15,7 +15,7 @@ namespace rtx {
   class Checkerboard {
 
     public:
-      Checkerboard(const unsigned int&, const unsigned int&, const unsigned int&);
+      Checkerboard(const unsigned int&, const unsigned int&, const unsigned int&, const double&, const double&, const double&);
 
       const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>& getPoints() const;
       unsigned int getWidth() const;

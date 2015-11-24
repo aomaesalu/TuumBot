@@ -71,7 +71,7 @@ namespace rtx {
   }
 
   void ImageArea::drawPerspective(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
-    std::cout << "Draw perspective" << std::endl;
+    // Debug: std::cout << "Draw perspective" << std::endl;
     // Define RGB color
     unsigned int r = 0;
     unsigned int g = 0;
@@ -102,16 +102,16 @@ namespace rtx {
     unsigned int channels = filteredImage->get_n_channels();
     unsigned int stride = filteredImage->get_rowstride();
 
-    if (!gui->isPlaying()) {
+    //if (!gui->isPlaying()) {
       colorPoints(points, pixels, channels, stride);
 
-      gui->getCheckerboard()->calculateConstants();
+      /*gui->getCheckerboard()->calculateConstants();
       gui->getWindow()->getAScale()->set_value(gui->getCheckerboard()->getA());
       gui->getWindow()->getBScale()->set_value(gui->getCheckerboard()->getB());
-      gui->getWindow()->getCScale()->set_value(gui->getCheckerboard()->getC());
+      gui->getWindow()->getCScale()->set_value(gui->getCheckerboard()->getC());*/
 
       drawPerspective(pixels, channels, stride);
-    }
+    //}
 
     return true;
   }
