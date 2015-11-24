@@ -85,8 +85,8 @@
    void MainWindow::constructScale(Gtk::Container &parentContainer, Gtk::Scale &scale, Gtk::Label &label, const std::string &name) {
      label.set_text(name + ":");
      parentContainer.add(label);
-     scale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
-     scale.set_digits(0);
+     scale.set_adjustment(Gtk::Adjustment::create(0.0, 0.0, 10.0, 1.0, 1.0));
+     scale.set_digits(4);
      scale.set_size_request(100);
      parentContainer.add(scale);
    }
