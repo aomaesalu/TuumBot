@@ -244,7 +244,7 @@ namespace rtx { namespace Visioning {
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
-      std::cout << position.first << " " << position.second << " " << angle << std::endl;
+      std::cout << "Ball: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
@@ -348,6 +348,7 @@ namespace rtx { namespace Visioning {
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
+      std::cout << "Goal: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
       // TODO: Remove duplicate code
@@ -404,6 +405,7 @@ namespace rtx { namespace Visioning {
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
+      std::cout << "Robot: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
