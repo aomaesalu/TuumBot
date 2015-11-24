@@ -31,6 +31,11 @@ namespace rtx {
       bool isEmpty() const;
       bool isFilled() const;
 
+      void setA(const double&);
+      void setB(const double&);
+      void setC(const double&);
+      void setConstants(const double&, const double&, const double&);
+
       void addPoint(const unsigned int&, const unsigned int&);
 
       void calculateConstants();

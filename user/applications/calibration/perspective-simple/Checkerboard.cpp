@@ -74,6 +74,24 @@ namespace rtx {
     return filled == (width + 1) * (height + 1);
   }
 
+  void Checkerboard::setA(const double &A) {
+    this->A = A;
+  }
+
+  void Checkerboard::setB(const double &B) {
+    this->B = B;
+  }
+
+  void Checkerboard::setC(const double &C) {
+    this->C = C;
+  }
+
+  void Checkerboard::setConstants(const double &A, const double &B, const double &C) {
+    this->A = A;
+    this->B = B;
+    this->C = C;
+  }
+
   void Checkerboard::addPoint(const unsigned int &x, const unsigned int &y) {
     if (!isFilled()) {
       points[filled % (width + 1)][filled / (width + 1)] = std::pair<unsigned int, unsigned int>(x, y);
