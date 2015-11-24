@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 24 November 2015
  */
 
 #include "Checkerboard.hpp"
@@ -52,6 +52,18 @@ namespace rtx {
 
   unsigned int Checkerboard::getNumberOfPointsFilled() const {
     return filled;
+  }
+
+  double Checkerboard::getA() const {
+    return A;
+  }
+
+  double Checerboard::getB() const {
+    return B;
+  }
+
+  double Checkerboard::getC() const {
+    return C;
   }
 
   bool Checkerboard::isEmpty() const {

@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 24 November 2015
  */
 
 #include <vector>
@@ -23,6 +23,10 @@ namespace rtx {
       unsigned int getSize() const;
       unsigned int getSquareWidth() const;
       unsigned int getNumberOfPointsFilled() const;
+
+      double getA() const;
+      double getB() const;
+      double getC() const;
 
       bool isEmpty() const;
       bool isFilled() const;
