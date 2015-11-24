@@ -159,7 +159,7 @@ namespace rtx {
     // PixelVerticalCoord = B / (ActualDistance - A)
     unsigned int verticalCoordinate = B / (y - A);
     // PixelRight = ActualRight * PixelVerticalCoord / C
-    unsigned int horisontalCoordinate = x * verticalCoordinate / C;
+    unsigned int horisontalCoordinate = x * verticalCoordinate / C + CAMERA_WIDTH / 2.0;
     // Debug: std::cout << A << " " << B << " " << C << ": " << x << " " << y << " -> " << horisontalCoordinate << " " << verticalCoordinate << std::endl;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }

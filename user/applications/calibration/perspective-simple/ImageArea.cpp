@@ -79,7 +79,7 @@ namespace rtx {
 
     // Draw perspective points
     unsigned int step = gui->getCheckerboard()->getSquareWidth();
-    for (unsigned int x = 0; x < FIELD_LENGTH; x += step) {
+    for (int x = -FIELD_LENGTH / 2; x < FIELD_LENGTH / 2; x += step) {
       for (unsigned int y = 0; y < FIELD_LENGTH; y += step) {
         std::pair<unsigned int, unsigned int> point = gui->getCheckerboard()->realToVirtual(x, y);
         for (int dx = -2; dx <= 2; ++dx) {

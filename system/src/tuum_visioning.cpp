@@ -133,7 +133,7 @@ namespace rtx { namespace Visioning {
     // PixelVerticalCoord = B / (ActualDistance - A)
     unsigned int verticalCoordinate = 93048 / (y - 21);
     // PixelRight = ActualRight * PixelVerticalCoord / C
-    unsigned int horisontalCoordinate = x * verticalCoordinate / 150;
+    unsigned int horisontalCoordinate = x * verticalCoordinate / 150 + CAMERA_WIDTH / 2.0;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
   }
 
