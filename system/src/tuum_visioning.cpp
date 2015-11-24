@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 24 November 2015
  */
 
 #include <algorithm>
@@ -242,7 +242,7 @@ namespace rtx { namespace Visioning {
       Point2D* point = blobs[i]->getPosition();
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
-      double distance = position.second;
+      double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       std::cout << position.first << " " << position.second << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
@@ -346,7 +346,7 @@ namespace rtx { namespace Visioning {
       Point2D* point = blobs[i]->getPosition();
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
-      double distance = position.second;
+      double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
@@ -402,7 +402,7 @@ namespace rtx { namespace Visioning {
       Point2D* point = blobs[i]->getPosition();
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
-      double distance = position.second;
+      double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
