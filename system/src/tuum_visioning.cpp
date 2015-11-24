@@ -243,7 +243,8 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = position.second;
-      double angle = atan(position.first / position.second);
+      double angle = atan2(position.first / position.second);
+      std::cout << position.first << " " << position.second << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
@@ -346,7 +347,7 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = position.second;
-      double angle = atan(position.first / position.second);
+      double angle = atan2(position.first / position.second);
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
       // TODO: Remove duplicate code
@@ -402,7 +403,7 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = position.second;
-      double angle = atan(position.first / position.second);
+      double angle = atan2(position.first / position.second);
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
