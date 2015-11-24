@@ -2,6 +2,8 @@ ifeq (,$(RTEX_MODULE_VERSION))
 $(error RTEX_MODULE_VERSION not defined)
 endif
 
+include $(call rwildcard,$(RTEX_MODULE_PATH)/,include.mk)
+
 # TARGET_FILE sets the file stem of the target. It's typically only specified when building applications.
 ifdef TARGET_FILE
 TARGET_FILE_NAME = $(TARGET_FILE)

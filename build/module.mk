@@ -9,28 +9,28 @@ SOURCE_PATH ?= $(MODULE_PATH)
 target_files = $(patsubst $(SOURCE_PATH)/%,%,$(call rwildcard,$(SOURCE_PATH)/$1,$2))
 
 # import this module's symbols
-include $(MODULE_PATH)/import.mk
+#include $($(MODULE)_MODULE_PATH)/import.mk
 
-$(info $(DEPENDENCIES))
-# pull in the include.mk files from each dependency, and make them relative to
-# the dependency module directory
-DEPS_INCLUDE_SCRIPTS =$(foreach module,$(DEPENDENCIES),$(PROJECT_ROOT)/$(module)/import.mk)
-include $(DEPS_INCLUDE_SCRIPTS)
-$(info MAIN BUILD FILE)
+#DEPS_IMPORT_SCRIPTS =$(foreach module,$($(MODULE)_DEPENDENCIES),$(PROJECT_ROOT)/$(module)/import.mk)
+#include $(DEPS_IMPORT_SCRIPTS)
 
-$(info $(DEPENDENCIES))
-$(info $(DEPS_INCLUDE_SCRIPTS))
+# Add dependency library directories
+LIB_DIRS += $(foreach module,$(MODULES),$($(shell echo $(module) | tr a-z A-Z)_LIB_DIR))
 
-include $(COMMON_BUILD)/module-defaults.mk
+# Add dependency flags
+LIBS += $(MODULES)
 
-include $(call rwildcard,$(MODULE_PATH)/,build.mk)
+MAKE_DEPENDENCIES += $($(MODULE)_DEPENDENCIES)
+
+include $(call rwildcard,$($(MODULE)_MODULE_PATH)/,build.mk)
 
 # add trailing slash
 ifneq ("$(TARGET_PATH)","$(dir $(TARGET_PATH))")
 TARGET_SEP = /
 endif
 
-TARGET_FILE_NAME ?= $(MODULE)
+TARGET_FILE_NAME ?= $($(MODULE)_MODULE_NAME)
+include $(COMMON_BUILD)/module-defaults.mk
 
 ifneq (,$(GLOBAL_DEFINES))
 CFLAGS += $(addprefix -D,$(GLOBAL_DEFINES))

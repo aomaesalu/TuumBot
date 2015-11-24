@@ -1,7 +1,5 @@
-
 # SOURCE_PATH - the root of all sources. Defaults to the module dir
 # USRSRC - relative path to SOURCE_PATH for the sources to build
-
 # determine where user sources are, relative to project root
 ifdef APP
 USER_MAKEFILE ?= $(notdir $(APP)).mk
@@ -33,9 +31,9 @@ else
 include $(usrmakefile)
 endif
 
-INCLUDE_DIRS += $(MODULE_PATH)/libraries
+INCLUDE_DIRS += $(MODULE_PATH)/inc $(MODULE_PATH)/libraries
 
-CPPSRC += $(call target_files,libraries/,*.cpp)
+#CPPSRC += $(call target_files,libraries/,*.cpp)
 
 CPPFLAGS += -std=gnu++11
 

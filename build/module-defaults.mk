@@ -16,11 +16,11 @@ CFLAGS +=
 LDFLAGS += $(LIBS_EXT)
 
 ifneq ("$(LIB_DIRS)","")
-LDFLAGS += $(patsubst %,-L%,$(LIB_DIRS))
+LDFLAGS := $(patsubst %,-L%,$(LIB_DIRS)) $(LDFLAGS)
 endif
 
 ifneq ("$(LIBS)","")
-LDFLAGS += $(patsubst %,-l%,$(LIBS))
+LDFLAGS := $(patsubst %,-l%,$(LIBS)) $(LDFLAGS)
 endif
 
 # Assembler flags
@@ -44,7 +44,7 @@ TARGET_BASE ?= $(TARGET_BASE_DIR)$(TARGET_NAME)
 TARGET ?= $(TARGET_BASE).$(TARGET_TYPE)
 
 # add BUILD_PATH_EXT with a preceeding slash if not empty.
-BUILD_PATH ?= $(BUILD_PATH_BASE)/$(MODULE)$(and $(BUILD_PATH_EXT),/$(BUILD_PATH_EXT))
+BUILD_PATH ?= $(BUILD_PATH_BASE)/$($(MODULE)_MODULE_NAME)$(and $(BUILD_PATH_EXT),/$(BUILD_PATH_EXT))
 
 BUILD_TARGET_PLATFORM = platform-$(PLATFORM_ID)$(MODULAR_EXT)$(LTO_EXT)
 BUILD_PATH_EXT ?= $(BUILD_TARGET_PLATFORM)

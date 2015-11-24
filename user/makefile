@@ -1,6 +1,6 @@
 PROJECT_ROOT?=..
 
-include $(PROJECT_ROOT)/user/user.mk
+include $(PROJECT_ROOT)/user/import.mk
 
 WARNINGS_AS_ERRORS ?= n
 
