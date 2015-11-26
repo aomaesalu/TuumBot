@@ -78,14 +78,15 @@ namespace rtx {
 
     void process(const Frame &frame, const std::string &filter) {
       blobDetection(frame, filter, {0, 1, 2}, samples);
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      lineDetection(frame, filter, samples);
+      cornerDetection(frame, filter, samples);
     }
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
+      // TODO: Include other kind of samples (full board?)
       blobDetection(frame, filter, {6, 7}, samples);
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      lineDetection(frame, filter, samples);
+      cornerDetection(frame, filter, samples);
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
