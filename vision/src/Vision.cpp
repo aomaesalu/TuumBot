@@ -23,8 +23,9 @@ namespace rtx {
 
   namespace Vision {
 
-    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> flatSamples;
-    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+    Samples flatSamples;
+    Samples meshSamples;
+    Samples radialSamples;
 
     BlobSet blobs;
     BlobSet blobsBuffer;
@@ -49,7 +50,8 @@ namespace rtx {
 
     void setup() {
       initialiseFlatSamples();
-      initialiseSamples();
+      initialiseMeshSamples();
+      initialiseRadialSamples();
 
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
@@ -62,11 +64,31 @@ namespace rtx {
         for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
           pointsInRow.push_back(std::pair<unsigned int, unsigned int>(x, y));
         }
-        samples.push_back(pointsInRow);
+        flatSamples.push_back(pointsInRow);
       }
     }
 
-    void initialiseSamples() {
+    void initialiseMeshSamples() {
+      double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
+      std::set<std::pair<unsigned int, unsigned int>> seenPoints;
+      for (double y = 0; y < FIELD_LENGTH; y += step) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
+        for (double x = -FIELD_LENGTH; x <= FIELD_LENGTH; x += step) {
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y);
+          if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
+            if (seenPoints.find(virtualPoint) == seenPoints.end()) {
+              pointsInRow.push_back(virtualPoint);
+              seenPoints.insert(virtualPoint);
+            }
+          }
+        }
+        if (!pointsInRow.empty()) {
+          meshSamples.push_back(pointsInRow);
+        }
+      }
+    }
+
+    void initialiseRadialSamples() {
       double step = 20;
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
       for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
@@ -83,15 +105,15 @@ namespace rtx {
           }
         }
         if (!pointsInRay.empty()) {
-          samples.push_back(pointsInRay);
+          radialSamples.push_back(pointsInRay);
         }
       }
     }
 
     void process(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {0, 1, 2}, samples);
-      lineDetection(frame, filter, samples);
-      cornerDetection(frame, filter, samples);
+      blobDetection(frame, filter, {0, 1, 2}, meshSamples);
+      lineDetection(frame, filter, radialSamples);
+      cornerDetection(frame, filter, meshSamples);
     }
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
