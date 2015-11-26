@@ -18,6 +18,8 @@ namespace rtx {
 
   namespace Vision {
 
+    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+
     BlobSet blobs;
     BlobSet blobsBuffer;
 
@@ -40,9 +42,29 @@ namespace rtx {
     }*/
 
     void setup() {
+      initialiseSamples();
+
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
       printf("\033[0m\n");
+    }
+
+    void initialiseSamples() {
+      double step = 20;
+      for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRay;
+        for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
+          double realHorisontal = distance * sin(angle);
+          double realVertical = distance * cos(angle);
+          std::pair<unsigned int, unsigned int> virtualPoint(realHorisontal, realVertical);
+          if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
+            pointsInRay.push_back(virtualPoint);
+          }
+        }
+        if (!pointsInRay.empty()) {
+          samples.push_back(pointsInRay);
+        }
+      }
     }
 
     void process(const Frame &frame, const std::string &filter) {

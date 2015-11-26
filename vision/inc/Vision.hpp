@@ -25,6 +25,9 @@ namespace rtx {
     typedef std::vector<Feature> LineSet;
     typedef std::vector<Feature> CornerSet;
 
+    // Vector of rays
+    extern std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+
     extern BlobSet blobs;
     extern BlobSet blobsBuffer;
 
@@ -39,6 +42,7 @@ namespace rtx {
     extern bool editingCorners;
 
     void setup();
+    void initialiseSamples();
     void process(const Frame&, const std::string&);
     void processCheckerboard(const Frame&, const std::string&);
 
