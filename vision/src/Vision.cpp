@@ -90,8 +90,9 @@ namespace rtx {
 
     void initialiseRadialSamples() {
       double step = 20;
+      double count = 200; //FIELD_LENGTH * PI / step; // TODO: Calibrate radial count
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
-      for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
+      for (double angle = -PI / 2; angle <= PI / 2; angle += PI / count) { // TODO: Calibrate field of view
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRay;
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
           double realHorisontal = distance * sin(angle);
@@ -108,6 +109,20 @@ namespace rtx {
           radialSamples.push_back(pointsInRay);
         }
       }
+
+      // DEBUG:
+      /*unsigned int elementCount = 0, rayCount = 0;
+      for (Samples::iterator ray = radialSamples.begin(); ray != radialSamples.end(); ++ray) {
+        for (SampleRay::iterator sample = ray->begin(); sample != ray->end(); ++sample) {
+          std::cout << "(" << sample->first << ", " << sample->second << ")" << " ";
+          elementCount++;
+        }
+        rayCount++;
+        std::cout << std::endl << std::endl;
+      }
+      std::cout << std::endl << std::endl;
+      std::cout << "Points: " << elementCount << std::endl;
+      std::cout << "Actual rays: " << rayCount << std::endl;*/
     }
 
     void process(const Frame &frame, const std::string &filter) {
