@@ -335,25 +335,13 @@ namespace rtx {
       translateBlobsBuffer();
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter) {
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateLinesBuffer();
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
-      // TODO
-
-      translateLinesBuffer();
-    }
-
-    void cornerDetection(const Frame &frame, const std::string &filter) {
-      // TODO
-
-      translateCornersBuffer();
-    }
-
-    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateCornersBuffer();

@@ -55,11 +55,9 @@ namespace rtx {
 
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
 
-    void lineDetection(const Frame&, const std::string&);
-    void lineDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
+    void lineDetection(const Frame&, const std::string&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
 
-    void cornerDetection(const Frame&, const std::string&);
-    void cornerDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
+    void cornerDetection(const Frame&, const std::string&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
 
   };
 
