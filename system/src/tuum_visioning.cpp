@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 24 November 2015
+ *  @date 26 November 2015
  */
 
 #include <algorithm>
@@ -12,6 +12,8 @@
 #include <iostream> // TODO: Remove
 #include <sstream>
 #include <cmath>
+
+#include "Perspective.hpp"
 
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
@@ -121,22 +123,6 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
-  std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y) {
-    // ActualDistance = A + B / PixelVerticalCoord
-    double verticalCoordinate = 21 + 93048 / y;
-    // ActualRight = C * PixelRight / PixelVerticalCoord
-    double horisontalCoordinate = 150 * ((double) x - CAMERA_WIDTH / 2.0) / y;
-    return std::pair<double, double>(horisontalCoordinate, verticalCoordinate);
-  }
-
-  std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
-    // PixelVerticalCoord = B / (ActualDistance - A)
-    unsigned int verticalCoordinate = 93048 / (y - 21);
-    // PixelRight = ActualRight * PixelVerticalCoord / C
-    unsigned int horisontalCoordinate = x * verticalCoordinate / 150 + CAMERA_WIDTH / 2.0;
-    return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
-  }
-
   // Unused
   void translateBallsBuffer() {
     editingBalls = true;
@@ -241,7 +227,7 @@ namespace rtx { namespace Visioning {
       // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
       // Relative position
-      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
@@ -347,7 +333,7 @@ namespace rtx { namespace Visioning {
 
       Point2D* point = blobs[i]->getPosition();
       // Relative position
-      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       // std::cout << "Goal: " << distance << " " << angle << std::endl;
@@ -404,7 +390,7 @@ namespace rtx { namespace Visioning {
       // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
       // Relative position
-      std::pair<double, double> position = virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
       // std::cout << "Robot: " << distance << " " << angle << std::endl;

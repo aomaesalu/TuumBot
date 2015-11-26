@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 26 November 2015
  */
 
 #include "Vision.hpp"
@@ -13,10 +13,17 @@
 #include <algorithm>
 #include <set>
 
+#include "Perspective.hpp"
+
+#include "mathematicalConstants.hpp"
+#include "entityConstants.hpp"
+
 
 namespace rtx {
 
   namespace Vision {
+
+    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
 
     BlobSet blobs;
     BlobSet blobsBuffer;
@@ -40,21 +47,46 @@ namespace rtx {
     }*/
 
     void setup() {
+      initialiseSamples();
+
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
       printf("\033[0m\n");
     }
 
+    void initialiseSamples() {
+      double step = 20;
+      std::set<std::pair<unsigned int, unsigned int>> seenPoints;
+      for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRay;
+        for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
+          double realHorisontal = distance * sin(angle);
+          double realVertical = distance * cos(angle);
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical);
+          if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
+            if (seenPoints.find(virtualPoint) == seenPoints.end()) {
+              pointsInRay.push_back(virtualPoint);
+              seenPoints.insert(virtualPoint);
+            }
+          }
+        }
+        if (!pointsInRay.empty()) {
+          samples.push_back(pointsInRay);
+        }
+      }
+    }
+
     void process(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {0, 1, 2});
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      blobDetection(frame, filter, {0, 1, 2}, samples);
+      lineDetection(frame, filter, samples);
+      cornerDetection(frame, filter, samples);
     }
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {6, 7});
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      // TODO: Include other kind of samples (full board?)
+      blobDetection(frame, filter, {6, 7}, samples);
+      lineDetection(frame, filter, samples);
+      cornerDetection(frame, filter, samples);
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
@@ -239,7 +271,7 @@ namespace rtx {
       toBeRemoved.clear();
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
@@ -249,15 +281,16 @@ namespace rtx {
       unsigned int stride = frame.width * channels;
 
       for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
-        for (unsigned int i = 0; i < CAMERA_WIDTH; i += 5) {
-          for (unsigned int j = 0; j < CAMERA_HEIGHT; j += 5) {
 
-            if (!visited[*mode][i][j]) {
+        for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+          for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
+
+            if (!visited[*mode][sample->first][sample->second]) {
 
               std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
               std::vector<std::pair<unsigned int, unsigned int>> stack;
-              stack.push_back(std::pair<unsigned int, unsigned int>(i, j));
-              visited[*mode][i][j] = true;
+              stack.push_back(std::pair<unsigned int, unsigned int>(sample->first, sample->second));
+              visited[*mode][sample->first][sample->second] = true;
 
               while (!stack.empty()) {
                 std::pair<unsigned int, unsigned int> point = stack.back();
@@ -295,39 +328,21 @@ namespace rtx {
 
           }
         }
+
       }
 
       joinBlobsInBuffer();
 
       translateBlobsBuffer();
-
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
-      // TODO
-
-      translateBlobsBuffer();
-    }
-
-    void lineDetection(const Frame &frame, const std::string &filter) {
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateLinesBuffer();
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
-      // TODO
-
-      translateLinesBuffer();
-    }
-
-    void cornerDetection(const Frame &frame, const std::string &filter) {
-      // TODO
-
-      translateCornersBuffer();
-    }
-
-    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<Point2D> &samples) {
+    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateCornersBuffer();
