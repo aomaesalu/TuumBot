@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <set>
 
+#include "Perspective.hpp"
+
 #include "mathematicalConstants.hpp"
 #include "entityConstants.hpp"
 
@@ -52,14 +54,6 @@ namespace rtx {
       printf("\033[0m\n");
     }
 
-    std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
-      // PixelVerticalCoord = B / (ActualDistance - A)
-      unsigned int verticalCoordinate = 93048 / (y - 21);
-      // PixelRight = ActualRight * PixelVerticalCoord / C
-      unsigned int horisontalCoordinate = x * verticalCoordinate / 150 + CAMERA_WIDTH / 2.0;
-      return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
-    }
-
     void initialiseSamples() {
       double step = 20;
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
@@ -68,7 +62,7 @@ namespace rtx {
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
           double realHorisontal = distance * sin(angle);
           double realVertical = distance * cos(angle);
-          std::pair<unsigned int, unsigned int> virtualPoint = realToVirtual(realHorisontal, realVertical);
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical);
           if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
             if (seenPoints.find(virtualPoint) == seenPoints.end()) {
               pointsInRay.push_back(virtualPoint);
