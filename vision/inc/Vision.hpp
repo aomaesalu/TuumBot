@@ -53,7 +53,6 @@ namespace rtx {
     LineSet getLines();
     CornerSet getCorners();
 
-    //void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&); // TODO: Remove temporary commented method
     void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
 
     void lineDetection(const Frame&, const std::string&);
