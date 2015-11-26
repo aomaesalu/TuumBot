@@ -62,6 +62,7 @@ namespace rtx {
 
     void initialiseSamples() {
       double step = 20;
+      std::set<std::pair<unsigned int, unsigned int>> seenPoints;
       for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRay;
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
@@ -69,7 +70,10 @@ namespace rtx {
           double realVertical = distance * cos(angle);
           std::pair<unsigned int, unsigned int> virtualPoint = realToVirtual(realHorisontal, realVertical);
           if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
-            pointsInRay.push_back(virtualPoint);
+            if (seenPoints.find(virtualPoint) == seenPoints.end()) {
+              pointsInRay.push_back(virtualPoint);
+              seenPoints.insert(virtualPoint);
+            }
           }
         }
         if (!pointsInRay.empty()) {
