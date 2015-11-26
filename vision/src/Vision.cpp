@@ -23,6 +23,7 @@ namespace rtx {
 
   namespace Vision {
 
+    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> flatSamples;
     std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
 
     BlobSet blobs;
@@ -47,11 +48,22 @@ namespace rtx {
     }*/
 
     void setup() {
+      initialiseFlatSamples();
       initialiseSamples();
 
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
       printf("\033[0m\n");
+    }
+
+    void initialiseFlatSamples() {
+      for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
+        for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
+          pointsInRow.push_back(std::pair<unsigned int, unsigned int>(x, y));
+        }
+        samples.push_back(pointsInRow);
+      }
     }
 
     void initialiseSamples() {
@@ -84,9 +96,9 @@ namespace rtx {
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
       // TODO: Include other kind of samples (full board?)
-      blobDetection(frame, filter, {6, 7}, samples);
-      lineDetection(frame, filter, samples);
-      cornerDetection(frame, filter, samples);
+      blobDetection(frame, filter, {6, 7});
+      lineDetection(frame, filter);
+      cornerDetection(frame, filter);
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
@@ -271,6 +283,10 @@ namespace rtx {
       toBeRemoved.clear();
     }
 
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+      blobDetection(frame, filter, modeList, flatSamples);
+    }
+
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       blobsBuffer.clear();
 
@@ -336,10 +352,18 @@ namespace rtx {
       translateBlobsBuffer();
     }
 
+    void lineDetection(const Frame &frame, const std::string &filter) {
+      lineDetection(frame, filter, flatSamples);
+    }
+
     void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateLinesBuffer();
+    }
+
+    void cornerDetection(const Frame &frame, const std::string &filter) {
+      cornerDetection(frame, filter, flatSamples);
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
