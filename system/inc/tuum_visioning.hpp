@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 26 November 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -90,6 +90,9 @@ namespace rtx { namespace Visioning {
 
   extern std::string filter;
 
+  // Vector of rays
+  extern std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+
   extern FeatureSet features;
 
   extern EDS<Ball> ballDetect;
@@ -110,6 +113,7 @@ namespace rtx { namespace Visioning {
   extern bool editingRobots;
 
   void setup();
+  void initialiseSamples();
   void process();
   void processCheckerboard();
 
