@@ -23,7 +23,9 @@ namespace rtx {
 
   namespace Vision {
 
-    std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+    Samples flatSamples;
+    Samples meshSamples;
+    Samples radialSamples;
 
     BlobSet blobs;
     BlobSet blobsBuffer;
@@ -47,17 +49,50 @@ namespace rtx {
     }*/
 
     void setup() {
-      initialiseSamples();
+      initialiseFlatSamples();
+      initialiseMeshSamples();
+      initialiseRadialSamples();
 
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
       printf("\033[0m\n");
     }
 
-    void initialiseSamples() {
-      double step = 20;
+    void initialiseFlatSamples() {
+      for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
+        for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
+          pointsInRow.push_back(std::pair<unsigned int, unsigned int>(x, y));
+        }
+        flatSamples.push_back(pointsInRow);
+      }
+    }
+
+    void initialiseMeshSamples() {
+      double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
-      for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
+      for (double y = 0; y < FIELD_LENGTH; y += step) {
+        std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
+        for (double x = -FIELD_LENGTH; x <= FIELD_LENGTH; x += step) {
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y);
+          if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
+            if (seenPoints.find(virtualPoint) == seenPoints.end()) {
+              pointsInRow.push_back(virtualPoint);
+              seenPoints.insert(virtualPoint);
+            }
+          }
+        }
+        if (!pointsInRow.empty()) {
+          meshSamples.push_back(pointsInRow);
+        }
+      }
+    }
+
+    void initialiseRadialSamples() {
+      double step = 20;
+      double count = 200; //FIELD_LENGTH * PI / step; // TODO: Calibrate radial count
+      std::set<std::pair<unsigned int, unsigned int>> seenPoints;
+      for (double angle = -PI / 2; angle <= PI / 2; angle += PI / count) { // TODO: Calibrate field of view
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRay;
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
           double realHorisontal = distance * sin(angle);
@@ -71,22 +106,36 @@ namespace rtx {
           }
         }
         if (!pointsInRay.empty()) {
-          samples.push_back(pointsInRay);
+          radialSamples.push_back(pointsInRay);
         }
       }
+
+      // DEBUG:
+      /*unsigned int elementCount = 0, rayCount = 0;
+      for (Samples::iterator ray = radialSamples.begin(); ray != radialSamples.end(); ++ray) {
+        for (SampleRay::iterator sample = ray->begin(); sample != ray->end(); ++sample) {
+          std::cout << "(" << sample->first << ", " << sample->second << ")" << " ";
+          elementCount++;
+        }
+        rayCount++;
+        std::cout << std::endl << std::endl;
+      }
+      std::cout << std::endl << std::endl;
+      std::cout << "Points: " << elementCount << std::endl;
+      std::cout << "Actual rays: " << rayCount << std::endl;*/
     }
 
     void process(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {0, 1, 2}, samples);
-      lineDetection(frame, filter, samples);
-      cornerDetection(frame, filter, samples);
+      blobDetection(frame, filter, {0, 1, 2}, meshSamples);
+      lineDetection(frame, filter, radialSamples);
+      cornerDetection(frame, filter, meshSamples);
     }
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
       // TODO: Include other kind of samples (full board?)
-      blobDetection(frame, filter, {6, 7}, samples);
-      lineDetection(frame, filter, samples);
-      cornerDetection(frame, filter, samples);
+      blobDetection(frame, filter, {6, 7});
+      lineDetection(frame, filter);
+      cornerDetection(frame, filter);
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
@@ -271,6 +320,10 @@ namespace rtx {
       toBeRemoved.clear();
     }
 
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+      blobDetection(frame, filter, modeList, flatSamples);
+    }
+
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       blobsBuffer.clear();
 
@@ -336,10 +389,18 @@ namespace rtx {
       translateBlobsBuffer();
     }
 
+    void lineDetection(const Frame &frame, const std::string &filter) {
+      lineDetection(frame, filter, flatSamples);
+    }
+
     void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateLinesBuffer();
+    }
+
+    void cornerDetection(const Frame &frame, const std::string &filter) {
+      cornerDetection(frame, filter, flatSamples);
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {

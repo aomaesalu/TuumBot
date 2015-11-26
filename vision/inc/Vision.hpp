@@ -25,8 +25,13 @@ namespace rtx {
     typedef std::vector<Feature> LineSet;
     typedef std::vector<Feature> CornerSet;
 
+    typedef std::vector<std::pair<unsigned int, unsigned int>> SampleRay;
+    typedef std::vector<SampleRay> Samples;
+
     // Vector of rays
-    extern std::vector<std::vector<std::pair<unsigned int, unsigned int>>> samples;
+    extern Samples flatSamples;
+    extern Samples meshSamples;
+    extern Samples radialSamples;
 
     extern BlobSet blobs;
     extern BlobSet blobsBuffer;
@@ -42,7 +47,9 @@ namespace rtx {
     extern bool editingCorners;
 
     void setup();
-    void initialiseSamples();
+    void initialiseFlatSamples();
+    void initialiseMeshSamples();
+    void initialiseRadialSamples();
     void process(const Frame&, const std::string&);
     void processCheckerboard(const Frame&, const std::string&);
 
@@ -53,11 +60,14 @@ namespace rtx {
     LineSet getLines();
     CornerSet getCorners();
 
-    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
+    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const Samples&);
 
-    void lineDetection(const Frame&, const std::string&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
+    void lineDetection(const Frame&, const std::string&);
+    void lineDetection(const Frame&, const std::string&, const Samples&);
 
-    void cornerDetection(const Frame&, const std::string&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
+    void cornerDetection(const Frame&, const std::string&);
+    void cornerDetection(const Frame&, const std::string&, const Samples&);
 
   };
 
