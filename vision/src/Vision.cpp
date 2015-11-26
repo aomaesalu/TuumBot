@@ -13,6 +13,9 @@
 #include <algorithm>
 #include <set>
 
+#include "mathematicalConstants.hpp"
+#include "entityConstants.hpp"
+
 
 namespace rtx {
 
@@ -49,6 +52,14 @@ namespace rtx {
       printf("\033[0m\n");
     }
 
+    std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
+      // PixelVerticalCoord = B / (ActualDistance - A)
+      unsigned int verticalCoordinate = 93048 / (y - 21);
+      // PixelRight = ActualRight * PixelVerticalCoord / C
+      unsigned int horisontalCoordinate = x * verticalCoordinate / 150 + CAMERA_WIDTH / 2.0;
+      return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
+    }
+
     void initialiseSamples() {
       double step = 20;
       for (double angle = -PI / 2; angle <= PI / 2; angle += step / FIELD_LENGTH) {
@@ -56,7 +67,7 @@ namespace rtx {
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
           double realHorisontal = distance * sin(angle);
           double realVertical = distance * cos(angle);
-          std::pair<unsigned int, unsigned int> virtualPoint(realHorisontal, realVertical);
+          std::pair<unsigned int, unsigned int> virtualPoint = realToVirtual(realHorisontal, realVertical);
           if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
             pointsInRay.push_back(virtualPoint);
           }
@@ -68,13 +79,13 @@ namespace rtx {
     }
 
     void process(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {0, 1, 2});
+      blobDetection(frame, filter, {0, 1, 2}, samples);
       lineDetection(frame, filter);
       cornerDetection(frame, filter);
     }
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {6, 7});
+      blobDetection(frame, filter, {6, 7}, samples);
       lineDetection(frame, filter);
       cornerDetection(frame, filter);
     }

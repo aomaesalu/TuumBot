@@ -16,7 +16,6 @@
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
 #include "mathematicalConstants.hpp"
-#include "entityConstants.hpp"
 
 using namespace rtx;
 
