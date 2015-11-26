@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 26 November 2015
  */
 
 #include "Vision.hpp"
@@ -239,7 +239,7 @@ namespace rtx {
       toBeRemoved.clear();
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
+    /*void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
       blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
@@ -295,16 +295,76 @@ namespace rtx {
 
           }
         }
+
       }
 
       joinBlobsInBuffer();
 
       translateBlobsBuffer();
 
-    }
+    }*/ // TODO: Remove temporary commented method
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<Point2D> &samples) {
-      // TODO
+    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+      blobsBuffer.clear();
+
+      std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
+
+      unsigned char *pixels = frame.data;
+      unsigned int channels = 3;
+      unsigned int stride = frame.width * channels;
+
+      for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
+
+        for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+          for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
+
+            if (!visited[*mode][sample->first][sample->second]) {
+
+              std::vector<std::pair<unsigned int, unsigned int>> blobPoints;
+              std::vector<std::pair<unsigned int, unsigned int>> stack;
+              stack.push_back(std::pair<unsigned int, unsigned int>(sample->first, sample->second));
+              visited[*mode][sample->first][sample->second] = true;
+
+              while (!stack.empty()) {
+                std::pair<unsigned int, unsigned int> point = stack.back();
+                stack.pop_back();
+
+                unsigned char *pixel = pixels + point.first * channels + point.second * stride;
+
+                if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
+                  blobPoints.push_back(point);
+                  for (int step = -1; step <= 1; step += 2) {
+                    if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][newPoint.first][newPoint.second] = true;
+                      }
+                    }
+                    if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
+                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
+                      if (!visited[*mode][newPoint.first][newPoint.second]) {
+                        stack.push_back(newPoint);
+                        visited[*mode][newPoint.first][newPoint.second] = true;
+                      }
+                    }
+                  }
+                }
+
+              }
+
+              if (!blobPoints.empty()) {
+                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
+              }
+
+            }
+
+          }
+        }
+
+      }
+
+      joinBlobsInBuffer();
 
       translateBlobsBuffer();
     }

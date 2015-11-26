@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 26 November 2015
  */
 
 #ifndef RTX_VISION_VISION_H
@@ -49,8 +49,8 @@ namespace rtx {
     LineSet getLines();
     CornerSet getCorners();
 
-    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
-    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<Point2D>&);
+    //void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&); // TODO: Remove temporary commented method
+    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&);
 
     void lineDetection(const Frame&, const std::string&);
     void lineDetection(const Frame&, const std::string&, const std::vector<Point2D>&);
