@@ -3,7 +3,7 @@
  *  Computer vision class using YUYV.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.1
+ *  @version 0.2
  *  @date 26 November 2015
  */
 
