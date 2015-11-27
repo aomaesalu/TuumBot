@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 26 November 2015
+ *  @date 27 November 2015
  */
 
 #include "Vision.hpp"
@@ -211,26 +211,33 @@ namespace rtx {
     void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
       std::set<unsigned int> toBeRemoved;
 
+      unsigned int minimumNumberOfPoints = 10; // TODO: Add to constants
+
       // Join blobs
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
 
+        // If the blob with the index i is already supposed to be removed, move to the next one
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
           continue;
 
-        if (blobsBuffer[i]->getNumberOfPoints() < 10) {
+        // If the blob with the index i doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations?
+        if (blobsBuffer[i]->getNumberOfPoints() < minimumNumberOfPoints) {
           toBeRemoved.insert(i);
           continue;
         }
 
         for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
 
+          // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
           if (i == j)
             continue;
 
+          // If the blob with the index j is already supposed to be removed, move to the next one
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
 
-          if (blobsBuffer[j]->getNumberOfPoints() < 6) {
+          // If the blob with the index j doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations?
+          if (blobsBuffer[j]->getNumberOfPoints() < minimumNumberOfPoints) {
             toBeRemoved.insert(j);
             continue;
           }
