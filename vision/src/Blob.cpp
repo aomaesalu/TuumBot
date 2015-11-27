@@ -174,7 +174,8 @@ namespace rtx {
   bool Blob::isClose(const Blob &other, const double &maxError) const {
     //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
-    std::pair<unsigned int, unsigned int> expectedSize = getExpectedSize(); // This only takes into account the current blob's expected size, but not the other blob's expected size; this processing must be done elsewhere, or else this method would bloat.
+    // This only takes into account the current blob's expected size, but not the other blob's expected size; this processing must be done elsewhere, or else this method would bloat.
+    std::pair<unsigned int, unsigned int> expectedSize = getExpectedSize(); // TODO: Add perspective information!
     if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + maxError) * expectedSize.first &&
         std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + maxError) * expectedSize.second)
       return true;
