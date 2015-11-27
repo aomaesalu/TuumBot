@@ -171,13 +171,12 @@ namespace rtx {
     return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
-  bool Blob::isClose(const Blob &other, const double &closeness) const {
-    //if (overlaps(other))
+  bool Blob::isClose(const Blob &other, const double &maxError) const {
+    //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
-    double delta = 0.1; // Max 10% error // TODO: Add to constants
     std::pair<unsigned int, unsigned int> expectedSize = getExpectedSize(); // This only takes into account the current blob's expected size, but not the other blob's expected size; this processing must be done elsewhere, or else this method would bloat.
-    if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + delta) * expectedSize.first &&
-        std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + delta) * expectedSize.second)
+    if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + maxError) * expectedSize.first &&
+        std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + maxError) * expectedSize.second)
       return true;
     return false;
   }

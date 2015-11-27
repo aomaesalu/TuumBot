@@ -50,7 +50,7 @@ namespace rtx {
       bool isBelow(const Blob&) const;
 
       bool overlaps(const Blob&) const;
-      bool isClose(const Blob&, const double &closeness) const;
+      bool isClose(const Blob&, const double &maxError = 0.1) const;
       void join(Blob&);
 
       void setColor(const Color&);
