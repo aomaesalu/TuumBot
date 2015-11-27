@@ -172,8 +172,8 @@ namespace rtx {
   }
 
   bool Blob::isClose(const Blob &other, const double &closeness) const {
-    if (overlaps(other))
-      return true;
+    //if (overlaps(other))
+    //  return true;
     double delta = 0.1; // Max 10% error // TODO: Add to constants
     std::pair<unsigned int, unsigned int> expectedSize = getExpectedSize(); // This only takes into account the current blob's expected size, but not the other blob's expected size; this processing must be done elsewhere, or else this method would bloat.
     if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + delta) * expectedSize.first &&
