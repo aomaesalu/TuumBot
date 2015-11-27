@@ -1,9 +1,9 @@
 /**
- * @file constants.h
- * Entities' constants header.
+ *  @file constants.hpp
+ *  Entities' constants header.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
  */
 
 #ifndef PHYSICAL_CONSTANTS_H
@@ -19,7 +19,7 @@
 #define LINE_WIDTH 50                   // Field line width                             // Unused
 #define GOAL_WIDTH 700                  // Goal width
 #define GOAL_LENGTH 250                 // Goal length
-#define GOAL_HEIGHT 200                 // Goal height                                  // Unused
+#define GOAL_HEIGHT 200                 // Goal height
 #define GOAL_BEACON_HEIGHT 400          // Goal beacon height                           // Unused
 #define BLUE_GOAL_POSITION_X -1         // Blue goal's position x-coordinate            // Wrong
 #define BLUE_GOAL_POSITION_Y -1         // Blue goal's position y-coordinate            // Wrong
@@ -28,7 +28,7 @@
 #define BALL_RADIUS 43                  // Ball radius
 #define ROBOT_MAXIMUM_DIAMETER 350      // Robots' maximum allowed diameter
 #define ROBOT_MAXIMUM_HEIGHT 350        // Robots' maximum allowed height               // Unused
-#define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width         // Unused
+#define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width
 #define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
 
 // Implementation-specific physical constants in millimeters

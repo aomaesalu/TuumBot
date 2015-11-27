@@ -4,10 +4,12 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 20 November 2015
+ * @date 27 November 2015
  */
 
 #include "Color.hpp"
+
+#include "entityConstants.hpp"
 
 
 namespace rtx {
@@ -64,4 +66,31 @@ namespace rtx {
     }
   }
 
-};
+  std::pair<unsigned int, unsigned int> getExpectedSize(const Color &color) { // TODO: Change to mapping structure?
+    switch (color) {
+      case BALL:
+        return std::pair<unsigned int, unsigned int>(BALL_RADIUS * 2, BALL_RADIUS * 2);
+        break;
+      case BLUE_GOAL:
+      case YELLOW_GOAL:
+        return std::pair<unsigned int, unsigned int>(GOAL_WIDTH, GOAL_HEIGHT);
+        break;
+      case FIELD:
+        return std::pair<unsigned int, unsigned int>(10, 10); // TODO: Calibrate
+        break;
+      case ROBOT_YELLOW_BLUE:
+      case ROBOT_BLUE_YELLOW:
+        return std::pair<unsigned int, unsigned int>(ROBOT_MAXIMUM_DIAMETER, ROBOT_MARKER_WIDTH * 2); // TODO: Change when detecting arbitrary robot blobs
+        break;
+      case WHITE_LINE:
+      case BLACK_LINE:
+        return std::pair<unsigned int, unsigned int>(LINE_WIDTH, LINE_WIDTH);
+        break;
+      case CHECKERBOARD_WHITE:
+      case CHECKERBOARD_BLACK:
+        return std::pair<unsigned int, unsigned int>(0, 0);
+        break;
+    }
+  }
+
+}
