@@ -189,7 +189,7 @@ namespace rtx {
       if ((isYellowBlue() || isBlueYellow()) || ((other.isYellowBlue() || other.isBlueYellow()) && (isBlue() || isYellow()))) {
         expectedSize = getExpectedSize(ROBOT_YELLOW_BLUE);
       } else {
-        expectedSize = 0;
+        expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }
     }
     if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + maxError) * expectedSize.first &&

@@ -88,6 +88,7 @@ namespace rtx {
         break;
       case CHECKERBOARD_WHITE:
       case CHECKERBOARD_BLACK:
+      default:
         return std::pair<unsigned int, unsigned int>(0, 0);
         break;
     }

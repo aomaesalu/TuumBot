@@ -44,6 +44,8 @@ namespace rtx {
       bool isOrange() const;
       bool isBlue() const;
       bool isYellow() const;
+      bool isYellowBlue() const;
+      bool isBlueYellow() const;
 
       bool isSameColor(const Blob&) const;
       bool isAbove(const Blob&) const;
