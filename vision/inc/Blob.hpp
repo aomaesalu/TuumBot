@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 21 November 2015
+ *  @date 27 November 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -39,6 +39,7 @@ namespace rtx {
       unsigned int getBoxArea() const;
       double getBoxRatio() const;
       double getDensity() const;
+      std::pair<unsigned int, unsigned int> getExpectedSize() const;
 
       bool isOrange() const;
       bool isBlue() const;

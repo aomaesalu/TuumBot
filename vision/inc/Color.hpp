@@ -4,7 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 20 November 2015
+ * @date 27 November 2015
  */
 
 #ifndef RTX_VISION_COLOR_H
@@ -29,6 +29,8 @@ namespace rtx {
   Color intToColor(const unsigned int&);
 
   void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
+
+  std::pair<unsigned int, unsigned int> getExpectedSize(const Color&);
 
 };
 

@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 21 November 2015
+ *  @date 27 November 2015
  */
 
 #include "cameraConstants.hpp"
@@ -137,6 +137,10 @@ namespace rtx {
 
   double Blob::getDensity() const {
     return 1.0 * numberOfPoints / getBoxArea();
+  }
+
+  std::pair<unsigned int, unsigned int> Blob::getExpectedSize() const {
+    return getExpectedSize(color);
   }
 
   bool Blob::isOrange() const {
