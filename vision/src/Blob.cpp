@@ -155,6 +155,14 @@ namespace rtx {
     return color == YELLOW_GOAL;
   }
 
+  bool Blob::isYellowBlue() const {
+    return color == ROBOT_YELLOW_BLUE;
+  }
+
+  bool Blob::isBlueYellow() const {
+    return color == ROBOT_BLUE_YELLOW;
+  }
+
   bool Blob::isSameColor(const Blob &other) const {
     return color == other.getColor();
   }
@@ -174,8 +182,16 @@ namespace rtx {
   bool Blob::isClose(const Blob &other, const double &maxError) const {
     //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
-    // This only takes into account the current blob's expected size, but not the other blob's expected size; this processing must be done elsewhere, or else this method would bloat.
-    std::pair<unsigned int, unsigned int> expectedSize = getExpectedSize(); // TODO: Add perspective information!
+    std::pair<unsigned int, unsigned int> expectedSize;
+    if (isSameColor(other)) {
+      expectedSize = getExpectedSize(); // TODO: Add perspective information!
+    } else {
+      if ((isYellowBlue() || isBlueYellow()) || ((other.isYellowBlue() || other.isBlueYellow()) && (isBlue() || isYellow()))) {
+        expectedSize = getExpectedSize(ROBOT_YELLOW_BLUE);
+      } else {
+        expectedSize = 0;
+      }
+    }
     if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + maxError) * expectedSize.first &&
         std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + maxError) * expectedSize.second)
       return true;
