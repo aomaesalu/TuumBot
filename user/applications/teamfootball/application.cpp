@@ -8,7 +8,7 @@
 
 #include "application.hpp"
 
-#include "tfb_logic.hpp"
+#include "rtx_tfb.hpp"
 
 #include <iostream> // TODO: Remove
 
@@ -16,9 +16,10 @@ using namespace std;
 using namespace rtx;
 
 int main(int argc, char *argv[]) {
-  printf("main(): Default tuum system application.\n");
+  printf("main(): Tuum team football application.\n");
 
   // Initialize hardware
+  rtx::init(argc, argv);
   rtx::hal::setup();
 
   // Initialize system modules
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]) {
   Motion::setup();
 
   Logic::setup();
-  
+
   bool running = true;
   while(running) {
     rtx::hal::process();
