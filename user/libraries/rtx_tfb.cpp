@@ -60,7 +60,8 @@ namespace rtx { namespace Logic {
 
     switch(gmPhase) {
       case GP_KICKOFF:
-        // logicProcess = X
+        logicProcess = &lg_kickoff;
+
         std::cout << "Transition to ";
         if(to_our_team) std::cout << "our";
         else std::cout << "opposing";
