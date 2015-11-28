@@ -28,7 +28,8 @@ namespace rtx {
 
     void init(std::string);
 
-    int get(std::string);
+    int getInt(std::string);
+    std::string getStr(std::string);
   };
 
 }

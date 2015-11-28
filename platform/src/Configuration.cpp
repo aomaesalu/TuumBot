@@ -25,8 +25,12 @@ namespace rtx {
     boost::property_tree::ini_parser::read_ini(fn, pt);
   }
 
-  int Configuration::get(std::string k) {
+  int Configuration::getInt(std::string k) {
     return pt.get<int>(k);
+  }
+
+  std::string Configuration::getStr(std::string k) {
+    return pt.get<std::string>(k);
   }
 
 }
