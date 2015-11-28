@@ -32,6 +32,11 @@ namespace rtx { namespace ctl {
   };
 
 
+  /**
+   *
+   *  Ball handling logic controllers
+   *
+   */
   class LSBallLocate : public Controller {
   public:
     LSBallLocate(Context _ctx) : ctx(_ctx) {
@@ -67,6 +72,25 @@ namespace rtx { namespace ctl {
   };
 
 
+  class LSBallPrepare : public Controller {
+  public:
+    LSBallPrepare(Context _ctx) : ctx(_ctx) {}
+
+    void init();
+    int run();
+    bool isRunnable();
+
+  private:
+    Context ctx;
+    Ball* targetBall;
+  };
+
+
+  /**
+   *
+   *  Goal handling logic controllers
+   *
+   */
   class LSGoalLocate : public Controller {
   public:
     LSGoalLocate(Context _ctx) : ctx(_ctx) {}
@@ -92,6 +116,49 @@ namespace rtx { namespace ctl {
     Context ctx;
 
     Goal* targetGoal;
+  };
+
+
+  /**
+   *
+   *  Ally interaction logic controllers
+   *
+   */
+  class LSAllyLocate : public Controller {
+  public:
+    LSAllyLocate(Context _ctx) : ctx(_ctx) {}
+
+    void init();
+    int run();
+    bool isRunnable();
+
+  private:
+    Context ctx;
+  };
+
+
+  class LSAllyPass : public Controller {
+  public:
+    LSAllyPass(Context _ctx) : ctx(_ctx) {}
+
+    void init();
+    int run();
+    bool isRunnable();
+
+  private:
+    Context ctx;
+  };
+
+  class LSAllyReceive : public Controller {
+  public:
+    LSAllyReceive(Context _ctx) : ctx(_ctx) {}
+
+    void init();
+    int run();
+    bool isRunnable();
+
+  private:
+    Context ctx;
   };
 
 }}
