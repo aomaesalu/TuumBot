@@ -16,6 +16,7 @@ namespace rtx {
   // Global configuration object
   extern Configuration gC;
 
+  int init(int argc, char *argv[]);
 }
 
 #endif

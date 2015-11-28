@@ -20,20 +20,15 @@
 namespace rtx {
 
   class Configuration {
-  public:
-    enum Key {
-      MAINBOARD_ID,
-      MOTOR_ID_SEQ,
-      MOTOR_COUNT,
-    };
-
   private:
-    std::map<Key, std::string> values;
+    boost::property_tree::ptree pt;
 
   public:
     Configuration();
 
     void init(std::string);
+
+    int get(std::string);
   };
 
 }

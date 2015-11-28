@@ -18,7 +18,7 @@ using namespace rtx;
 
 int main(int argc, char *argv[]) {
   printf("main(): Tuum Robotex 1vs1 application.\n");
-
+  rtx::init(argc, argv);
   rtx::hal::setup();
 
   Visioning::setup();

@@ -21,6 +21,12 @@ namespace rtx {
 
   void Configuration::init(std::string fn) {
     std::cout << "[Configuration::init]Load " << fn << std::endl;
+
+    boost::property_tree::ini_parser::read_ini(fn, pt);
+  }
+
+  int Configuration::get(std::string k) {
+    return pt.get<int>(k);
   }
 
 }
