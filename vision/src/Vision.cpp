@@ -580,12 +580,12 @@ namespace rtx {
       LineSet lineSet = getLines();
 
       for (LineSet::iterator line1 = lineSet.begin(); line1 != lineSet.end(); ++line1) {
-        std::pair<double, double> point1 = line1->getRelativePoint();
+        std::pair<double, double> point1 = (*line1)->getRelativePoint();
         double slope1 = point1.second / point1.first;
         for (LineSet::iterator line2 = lineSet.begin(); line2 != lineSet.end(); ++line2) {
           if (line1 == line2)
             continue;
-          std::pair<double, double> point2 = line2->getRelativePoint();
+          std::pair<double, double> point2 = (*line2)->getRelativePoint();
           double slope2 = point2.second / point1.first;
           double x = (point1.second - point2.second + slope2 * point2.first - slope1 * point1.first) / (slope2 - slope1);
           double y = slope1 * (x - point1.first) + point1.second;
