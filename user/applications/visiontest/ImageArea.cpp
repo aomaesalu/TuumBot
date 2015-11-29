@@ -97,8 +97,11 @@ namespace rtx {
   }
 
   void ImageArea::colorLine(const Vision::Line *line, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
-
-
+    std::pair<double, double> point = line->getRelativePoint();
+    double slope = line->getSlope();
+    for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
+      // TODO: Color pixel
+    }
     // TODO
   }
 
@@ -166,9 +169,7 @@ namespace rtx {
       if (!(*line))
         continue;
 
-      for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
-        // TODO: Color pixel
-      }
+      colorLine(*line, pixels, channels, stride);
     }
 
     return true;
