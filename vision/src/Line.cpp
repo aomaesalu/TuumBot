@@ -37,13 +37,16 @@ namespace rtx {
     averagePoint.first /= points.size();
     averagePoint.second /= points.size();
     // Find average slope
-    double slope = 0;
+    double averageSlope = 0;
     for (unsigned int i = 0; i < points.size() - 1; ++i) {
-      slope += (points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first);
+      averageSlope += (points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first);
     }
-    slope /= points.size() - 1;
-    // Find perpendicular line
-    // TODO
+    averageSlope /= points.size() - 1;
+    // Find perpendicular line point
+    double perpendicularSlope = -1 / averageSlope;
+    double perpendicularX = (averagePoint.second - averageSlope * averagePoint.first) / (perpendicularSlope - averageSlope);
+    double perpendicularY = perpendicularSlope * perpendicularX;
+    std::pair<double, double> perpendicularPoint(perpendicularX, perpendicularY);
     // Find distance and angle
     // TODO
   }
