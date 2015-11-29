@@ -1,27 +1,27 @@
 /**
- *  @file Line.hpp
- *  Line seen in the camera frame.
+ *  @file Corner.hpp
+ *  Corner seen in the camera frame.
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
  *  @date 29 November 2015
  */
 
-#ifndef RTX_VISION_LINE_H
-#define RTX_VISION_LINE_H
+#ifndef RTX_VISION_CORNER_H
+#define RTX_VISION_CORNER_H
 
-#include <vector>
+#include <utility>
 
 
 namespace rtx {
 
-  class Line {
+  class Corner {
 
     public:
-      Line(const Line&);
-      Line(const double&, const double&);
-      Line(const std::vector<std::pair<double, double>>&);
-      ~Line();
+      Corner(const Corner&);
+      Corner(const double&, const double&);
+      Corner(const std::pair<double, double>&);
+      ~Corner();
 
       double getDistance() const;
       double getAngle() const;
@@ -38,4 +38,4 @@ namespace rtx {
 
 }
 
-#endif // RTX_VISION_LINE_H
+#endif // RTX_VISION_CORNER_H
