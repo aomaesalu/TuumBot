@@ -81,7 +81,7 @@ namespace rtx {
         break;
       case ROBOT_YELLOW_BLUE:
       case ROBOT_BLUE_YELLOW:
-        return std::pair<double, double>(ROBOT_MAXIMUM_DIAMETER * 3, ROBOT_MARKER_WIDTH * 2 * 3); // TODO: Change when detecting arbitrary robot blobs
+        return std::pair<double, double>(ROBOT_MAXIMUM_DIAMETER * 4, ROBOT_MARKER_WIDTH * 2 * 4); // TODO: Change when detecting arbitrary robot blobs
         break;
       case WHITE_LINE:
       case BLACK_LINE:
