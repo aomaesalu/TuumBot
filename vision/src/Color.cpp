@@ -10,8 +10,7 @@
 #include "Color.hpp"
 
 #include "entityConstants.hpp"
-
-#include "Perspective.hpp"
+#include "cameraConstants.hpp"
 
 
 namespace rtx {
