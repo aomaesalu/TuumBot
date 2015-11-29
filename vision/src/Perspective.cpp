@@ -26,12 +26,20 @@ namespace rtx { namespace Vision { namespace Perspective {
     return std::pair<double, double>(horisontalCoordinate, verticalCoordinate);
   }
 
+  std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int> &point) {
+    return virtualToReal(point.first, point.second);
+  }
+
   std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
     // PixelVerticalCoord = B / (ActualDistance - A)
     unsigned int verticalCoordinate = B / (y - A);
     // PixelRight = ActualRight * PixelVerticalCoord / C
     unsigned int horisontalCoordinate = x * verticalCoordinate / C + CAMERA_WIDTH / 2.0;
     return std::pair<unsigned int, unsigned int>(horisontalCoordinate, verticalCoordinate);
+  }
+
+  std::pair<unsigned int, unsigned int> realToVirtual(const std::pair<double, double> &point) {
+    return realToVirtual(point.first, point.second);
   }
 
 }}}

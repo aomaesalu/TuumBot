@@ -22,7 +22,9 @@ namespace rtx { namespace Vision { namespace Perspective {
   // TODO: Maybe move samples here?
 
   std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&);
+  std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int>&);
   std::pair<unsigned int, unsigned int> realToVirtual(const double&, const double&);
+  std::pair<unsigned int, unsigned int> realToVirtual(const std::pair<double, double>&);
 
 }}}
 
