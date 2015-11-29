@@ -402,7 +402,7 @@ namespace rtx {
       std::vector<std::vector<std::pair<unsigned int, unsigned int>>> listOfLines;
       std::vector<std::pair<unsigned int, unsigned int>> emptyLine;
       listOfLines.push_back(emptyLine);
-      listOfLines.back().push_back(points[i]);
+      listOfLines.back().push_back(points[0]);
       for (unsigned int i = 0; i < slopes.size() - 1; ++i) {
         if (fabs(slopes[i + 1] / slopes[i]) > maxSlopeDifference) {
           listOfLines.push_back(emptyLine);
