@@ -397,17 +397,47 @@ namespace rtx {
     void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       linesBuffer.clear();
 
-      // 0 is white, 1 is black
-      std::vector<std::vector<std::vector<bool>>> visited(2, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
+      /*// 0 is white, 1 is black
+      std::vector<std::vector<std::vector<bool>>> visited(2, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise*/ // TODO: Readd when relevant
 
       unsigned char *pixels = frame.data;
       unsigned int channels = 3;
       unsigned int stride = frame.width * channels;
 
+      // White-to-black transition points in real coordinates
+      std::vector<std::pair<double, double>> transitionPoints;
+
+      // Find transition points from rays
       for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+
+        /*// White line-segments in current ray
+        std::vector<std::pair<std::pair<double, double>, std::pair<double, double>>> whiteSegments;
+
+        // Black line-segments in current ray
+        std::vector<std::pair<std::pair<double, double>, std::pair<double, double>>> blackSegments;*/ // TODO: Readd when relevant (for example, in field centre or defense area detection)
+
         for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
-          // TODO
+          // TODO: Detect white-black transition points
+
+          // Find the current pixel
+          unsigned char *pixel = pixels + sample->first * channels + sample->second * stride;
+
+          // If the point is white, continue along the ray in the positive
+          // direction until the point is not white anymore
+          if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 4)) {
+
+            // TODO
+
+          // If the point is black, continue along the ray in the negative
+          // direction until the point is not black anymore
+          } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 5)) {
+
+            // TODO
+
+          }
+
         }
+
       }
 
       translateLinesBuffer();
