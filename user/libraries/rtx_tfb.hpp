@@ -11,7 +11,7 @@
 
 #include "application.hpp"
 
-namespace rtx { namespace Logic {
+namespace rtx { namespace TFBLogic {
 
   enum StrategyConstant {
     NONE,

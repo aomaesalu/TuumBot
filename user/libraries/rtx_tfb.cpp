@@ -13,7 +13,7 @@
 
 using namespace rtx::hal;
 
-namespace rtx { namespace Logic {
+namespace rtx { namespace TFBLogic {
 
   enum GameState {
     GS_NONE,
