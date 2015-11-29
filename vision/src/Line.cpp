@@ -15,20 +15,20 @@
 namespace rtx {
 
   Line::Line(const Line &other):
-    distance(other.getDistance()),
-    angle(other.getAngle())
+    Feature(other)
   {
     // Nothing to do here
   }
 
   Line::Line(const double &distance, const double &angle):
-    distance(distance),
-    angle(angle)
+    Feature(distance, angle)
   {
     // Nothing to do here
   }
 
-  Line::Line(const std::vector<std::pair<double, double>> &points) {
+  Line::Line(const std::vector<std::pair<double, double>> &points):
+    Feature(0, 0)
+  {
     // TODO: Use regression instead?
     // Find average point
     std::pair<double, double> averagePoint(0, 0);
@@ -57,24 +57,8 @@ namespace rtx {
     // Nothing to do here
   }
 
-  double Line::getDistance() const {
-    return distance;
-  }
-
-  double Line::getAngle() const {
-    return angle;
-  }
-
   std::pair<double, double> Line::getRelativePoint() const {
     return std::pair<double, double>(distance * sin(angle), distance * cos(angle));
-  }
-
-  void Line::setDistance(const double &distance) {
-    this->distance = distance;
-  }
-
-  void Line::setAngle(const double &angle) {
-    this->angle = angle;
   }
 
 }

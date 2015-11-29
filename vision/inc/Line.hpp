@@ -10,12 +10,14 @@
 #ifndef RTX_VISION_LINE_H
 #define RTX_VISION_LINE_H
 
+#include "Feature.hpp"
+
 #include <vector>
 
 
 namespace rtx {
 
-  class Line {
+  class Line: public Feature {
 
     public:
       Line(const Line&);
@@ -23,16 +25,7 @@ namespace rtx {
       Line(const std::vector<std::pair<double, double>>&);
       ~Line();
 
-      double getDistance() const;
-      double getAngle() const;
       std::pair<double, double> getRelativePoint() const;
-
-      void setDistance(const double&);
-      void setAngle(const double&);
-
-    private:
-      double distance;
-      double angle;
 
   };
 
