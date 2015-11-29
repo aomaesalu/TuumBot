@@ -97,24 +97,24 @@ namespace rtx {
 
   std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const std::pair<unsigned int, unsigned int> &virtualPosition) { // TODO: Refactor
     std::pair<double, double> realSize = getBlobExpectedRealSize(color);
-    std::pair<double, double> realPosition = virtualToReal(virtualPosition);
+    std::pair<double, double> realPosition = Vision::Perspective::virtualToReal(virtualPosition);
     // Calculate virtual width
     std::pair<double, double> realLeft = std::pair<double, double>(realPosition.first - realSize.first / 2, realPosition.second);
     std::pair<double, double> realRight = std::pair<double, double>(realPosition.first + realSize.first / 2, realPosition.second);
-    std::pair<unsigned int, unsigned int> virtualLeft = realToVirtual(realLeft);
+    std::pair<unsigned int, unsigned int> virtualLeft = Vision::Perspective::realToVirtual(realLeft);
     if (virtualLeft.first > CAMERA_WIDTH)
       virtualLeft.first = 0;
-    std::pair<unsigned int, unsigned int> virtualRight = realToVirtual(realRight);
+    std::pair<unsigned int, unsigned int> virtualRight = Vision::Perspective::realToVirtual(realRight);
     if (virtualRight.first > CAMERA_WIDTH)
       virtualLeft.first = CAMERA_WIDTH - 1;
     unsigned int virtualWidth = virtualRight.first - virtualLeft.first;
     // Calculate virtual height (basically the same because the distance is the same; the only difference is that height is used instead of width)
     realLeft = std::pair<double, double>(realPosition.first - realSize.second / 2, realPosition.second);
     realRight = std::pair<double, double>(realPosition.first + realSize.second / 2, realPosition.second);
-    virtualLeft = realToVirtual(realLeft);
+    virtualLeft = Vision::Perspective::realToVirtual(realLeft);
     if (virtualLeft.first > CAMERA_WIDTH)
       virtualLeft.first = 0;
-    virtualRight = realToVirtual(realRight);
+    virtualRight = Vision::Perspective::realToVirtual(realRight);
     if (virtualRight.first > CAMERA_WIDTH)
       virtualLeft.first = CAMERA_WIDTH - 1;
     unsigned int virtualHeight = virtualRight.first - virtualLeft.first;
