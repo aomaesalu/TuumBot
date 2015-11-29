@@ -399,8 +399,8 @@ namespace rtx {
         slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
       }
       // Separate lines
-      std::vector<std::vector<std::pair<unsigned int, unsigned int>>> listOfLines;
-      std::vector<std::pair<unsigned int, unsigned int>> emptyLine;
+      std::vector<std::vector<std::pair<double, double>>> listOfLines;
+      std::vector<std::pair<double, double>> emptyLine;
       listOfLines.push_back(emptyLine);
       listOfLines.back().push_back(points[0]);
       for (unsigned int i = 0; i < slopes.size() - 1; ++i) {
@@ -410,8 +410,10 @@ namespace rtx {
         listOfLines.back().push_back(points[i + 1]);
       }
       listOfLines.back().push_back(points.back());
-      // Normalise lines
-      // TODO
+      // Normalise and create lines
+      for (unsigned int i = 0; i < listOfLines.size(); ++i) {
+        linesBuffer.push_back(new Line(listOfLines[i]));
+      }
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {

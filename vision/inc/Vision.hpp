@@ -22,7 +22,7 @@ namespace rtx {
   namespace Vision {
 
     typedef std::vector<Blob*> BlobSet;
-    typedef std::vector<Feature> LineSet;
+    typedef std::vector<Line*> LineSet;
     typedef std::vector<Feature> CornerSet;
 
     typedef std::vector<std::pair<unsigned int, unsigned int>> SampleRay;
