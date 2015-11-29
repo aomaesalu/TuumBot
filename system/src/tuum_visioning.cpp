@@ -30,21 +30,14 @@ namespace rtx { namespace Visioning {
   FeatureSet features;
 
   EDS<Ball> ballDetect;
-  BallSet balls; // Healthy ball entities vs new/decaying ball entities?
-  BallSet ballsBuffer; // Unused
+  EDS<Robot> robotDetect;
 
   Goal *yellowGoal;
   Goal *yellowGoalBuffer;
   Goal *blueGoal;
   Goal *blueGoalBuffer;
 
-  EDS<Robot> robotDetect;
-  RobotSet robots;
-  RobotSet robotsBuffer; // Unused
-
-  bool editingBalls = false; // Unused
   bool editingGoals = false;
-  bool editingRobots = false; // Unused
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -123,17 +116,6 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
-  // Unused
-  void translateBallsBuffer() {
-    editingBalls = true;
-
-    balls.clear();
-    balls = ballsBuffer;
-    ballsBuffer.clear();
-
-    editingBalls = false;
-  }
-
   void translateGoalsBuffer() {
     editingGoals = true;
 
@@ -173,42 +155,16 @@ namespace rtx { namespace Visioning {
     editingGoals = false;
   }
 
-  // Unused
-  void translateRobotsBuffer() {
-    editingRobots = true;
-
-    robots.clear();
-    robots = robotsBuffer;
-    robotsBuffer.clear();
-
-    editingRobots = false;
-  }
-
   void featureDetection(const Frame &frame) {
     features.clear();
     // TODO
   }
 
-  double stateProbability(Transform* t1, Transform* t2) {
-    double px = gaussian_probability(t1->getX(), 30, t2->getX());
-    double py = gaussian_probability(t1->getY(), 30, t2->getY());
-    return (px + py) / 2;
-  }
-
   void ballDetection(const Frame &frame) {
-
     Vision::BlobSet blobs = Vision::getBlobs();
-
     BallSet n_balls;
 
-    /*
-    std::stringstream dbg;
-    dbg << "Ball detect debug:" << std::endl;
-    bool dbg_available = false;
-    */
-
     for(unsigned int i = 0; i < blobs.size(); ++i) {
-
       Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
@@ -222,88 +178,43 @@ namespace rtx { namespace Visioning {
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
-      //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
-
       // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
-      // Relative position
+
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
-      // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
-      /*
-      dbg << "<Blob d=" << distance << ", a=" << angle
-	        << ", S=" << boxArea << ", ro=" << density
-	        << std::endl;
-      dbg_available = true;
-      */
-
       // STEP 3: Create ball instance with absolute position
-      //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
       n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle)));
     }
 
-    /*
-    if(dbg_available) {
-      dbg << "Ball detect debug end" << std::endl << std::endl;
-      std::cout << dbg.str();
-    }
-    */
-
     // STEP 4: Unite detected balls with balls from last frame or create new balls
-    double p, _p, p_ix;
     Ball* n_ball_ptr;
     BallSet* ball_set_ptr;
     for(int ix = 0; ix < n_balls.size(); ix++) {
-      p = 0.0;
-      n_ball_ptr = n_balls[ix];
-
-      // STEP 4.1: Calculate existing entity probability
-      ball_set_ptr = &(ballDetect.objs);
-      for(int jx = 0; jx < ballDetect.objs.size(); jx++) {
-        _p = stateProbability((*ball_set_ptr)[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-        }
-      }
-
-      for(int jx = 0; jx < ballDetect.tmp_objs.size(); jx++) {
-        _p = stateProbability(ballDetect.tmp_objs[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-	        if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
-        }
-      }
-
-      // STEP 4.2: Create or update entities
-      if(p < 0.01) {
-        ballDetect.tmp_objs.push_back(new Ball(*n_ball_ptr));
-      } else {
-        (*ball_set_ptr)[p_ix]->update(*n_ball_ptr->getTransform());
-      }
+      ballDetect.processProbableEntity(n_balls[ix]);
     }
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     ballDetect.update();
 
+    /*
     if(debugTimer.isTime()) {
-      /*std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
-	        << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
-		<< std::endl;
-      */
+      std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
+          << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
+          << std::endl;
 
-      /*for(auto& b : *(ballDetect.getEntities())) {
-	Transform* t = b->getTransform();
+      for(auto& b : *(ballDetect.getEntities())) {
+        Transform* t = b->getTransform();
         std::cout << "<Ball hp=" << b->getHealth() << ", x=" << t->getX() << ", y=" << t->getY() << ">" << std::endl;
-      }*/
+      }
 
       debugTimer.start();
     }
+    */
   }
 
   void goalDetection(const Frame &frame) {
@@ -368,9 +279,7 @@ namespace rtx { namespace Visioning {
   }
 
   void robotDetection(const Frame &frame) {
-
     Vision::BlobSet blobs = Vision::getBlobs();
-
     RobotSet n_robots;
 
     for(unsigned int i = 0; i < blobs.size(); ++i) {
@@ -379,7 +288,6 @@ namespace rtx { namespace Visioning {
       unsigned int boxArea = blobs[i]->getBoxArea();
       //double ratio = blobs[i]->getBoxRatio();
 
-      // STEP 1: Filter out invalid blobs
       if (color != ROBOT_YELLOW_BLUE && color != ROBOT_BLUE_YELLOW) continue;
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if (density > 1.0) continue;
@@ -387,56 +295,22 @@ namespace rtx { namespace Visioning {
       //if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
-      // STEP 2: Calculate relative position
       Point2D* point = blobs[i]->getPosition();
-      // Relative position
+
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = atan2(position.first, position.second);
-      // std::cout << "Robot: " << distance << " " << angle << std::endl;
+
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
-      // STEP 3: Create robot instance with absolute position
       n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
     }
 
-    // STEP 4: Unite detected robots with robots from last frame or create new robots
-    double p, _p, p_ix;
-    Robot* n_robot_ptr;
-    RobotSet* robot_set_ptr;
     for (int ix = 0; ix < n_robots.size(); ix++) {
-      p = 0.0;
-      n_robot_ptr = n_robots[ix];
-
-      // STEP 4.1: Calculate existing entity probability
-      robot_set_ptr = &(robotDetect.objs);
-      for (int jx = 0; jx < robotDetect.objs.size(); jx++) {
-        _p = stateProbability((*robot_set_ptr)[jx]->getTransform(), n_robot_ptr->getTransform());
-        if (_p > p) {
-          p = _p;
-          p_ix = jx;
-        }
-      }
-
-      for (int jx = 0; jx < robotDetect.tmp_objs.size(); jx++) {
-        _p = stateProbability(robotDetect.tmp_objs[jx]->getTransform(), n_robot_ptr->getTransform());
-        if (_p > p) {
-          p = _p;
-          p_ix = jx;
-          if(robot_set_ptr != &(robotDetect.tmp_objs)) robot_set_ptr = &(robotDetect.tmp_objs);
-        }
-      }
-
-      // STEP 4.2: Create or update entities
-      if (p < 0.01) {
-        robotDetect.tmp_objs.push_back(new Robot(*n_robot_ptr));
-      } else {
-        (*robot_set_ptr)[p_ix]->update(*n_robot_ptr->getTransform());
-      }
+      robotDetect.processProbableEntity(n_robots[ix]);
     }
 
-    // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     robotDetect.update();
   }
 
