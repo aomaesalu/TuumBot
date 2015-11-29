@@ -22,12 +22,16 @@ namespace rtx { namespace hal {
   }
 
   void Hardware::init() {
-    printf("[Hardware::init]Loading hardware...\n");
-    HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
-    m_refereeListener.init(gC.getStr("RefModule.Port").c_str(), gC.getInt("RefModule.Baud"));
+    if(gC.getStr("HW.Active") == "Y") {
+      printf("[Hardware::init]Loading hardware...\n");
+      HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
+      m_refereeListener.init(gC.getStr("RefModule.Port").c_str(), gC.getInt("RefModule.Baud"));
 
-    m_motorControl.init(hw_bus_write);
-    m_mainBoard.init(hw_bus_write, hw_bus_register);
+      m_motorControl.init(hw_bus_write);
+      m_mainBoard.init(hw_bus_write, hw_bus_register);
+    } else {
+      printf("[Hardware::init]Hardware not active.\n");
+    }
   }
 
   void Hardware::run() {
