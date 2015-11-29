@@ -575,8 +575,15 @@ namespace rtx {
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
-      // TODO
-      // Implement based on detected lines
+      LineSet lineSet = getLines();
+
+      for (LineSet::iterator line1 = lineSet.begin(); line1 != lineSet.end(); ++line1) {
+        for (LineSet::iterator line2 = lineSet.begin(); line2 != lineSet.end(); ++line2) {
+          if (line1 == line2)
+            continue;
+          // TODO: Find line crossings
+        }
+      }
 
       translateCornersBuffer();
     }
