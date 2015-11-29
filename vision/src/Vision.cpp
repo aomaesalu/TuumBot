@@ -451,7 +451,7 @@ namespace rtx {
 
             // Iterate through points away from the robot; find the farthest white point
             if (slope > 0) {
-              for (int dx = 1; sample->first + dx < CAMERA_WIDTH; ++dx) {
+              for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                 unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
                 if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
@@ -461,7 +461,7 @@ namespace rtx {
                 }
               }
             } else if (slope < 0) {
-              for (int dx = -1; sample->first + dx < CAMERA_WIDTH; --dx) {
+              for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                 unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
                 if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
@@ -495,7 +495,7 @@ namespace rtx {
 
               // Iterate through points towards the robot; find the closest black point
               if (slope > 0) {
-                for (int dx = -1; sample->first + dx < CAMERA_WIDTH; --dx) {
+                for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
                   std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                   unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
                   if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
@@ -505,7 +505,7 @@ namespace rtx {
                   }
                 }
               } else if (slope < 0) {
-                for (int dx = 1; sample->first + dx < CAMERA_WIDTH; ++dx) {
+                for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
                   std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                   unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
                   if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
