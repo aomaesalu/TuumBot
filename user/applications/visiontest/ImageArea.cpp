@@ -100,9 +100,12 @@ namespace rtx {
     std::pair<double, double> point = line->getRelativePoint();
     double slope = line->getSlope();
     for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
-      // TODO: Color pixel
+      unsigned int y = slope * (x + point.first) + point.second;
+      if (y >= CAMERA_HEIGHT)
+        continue;
+      guint8 *pixel = pixels + x * channels + y * stride;
+      colorPixel(pixel, 102, 0, 51);
     }
-    // TODO
   }
 
   bool ImageArea::applyFilter() {
