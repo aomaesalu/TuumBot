@@ -232,6 +232,10 @@ namespace rtx {
           if (i == j)
             continue;
 
+          // If the blob with the index i is already supposed to be removed, move to the next one
+          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
+            continue;
+
           // If the blob with the index j is already supposed to be removed, move to the next one
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
@@ -322,6 +326,10 @@ namespace rtx {
 
           // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
           if (i == j)
+            continue;
+
+          // If the blob with the index i is already supposed to be removed, move to the next one
+          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
             continue;
 
           // If the blob with the index j is already supposed to be removed, move to the next one
