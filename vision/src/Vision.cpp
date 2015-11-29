@@ -226,14 +226,10 @@ namespace rtx {
           continue;
         }
 
-        for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
+        for (unsigned int j = 0; j < blobsBuffer.size() && std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end(); ++j) {
 
           // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
           if (i == j)
-            continue;
-
-          // If the blob with the index i is already supposed to be removed, move to the next one
-          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
             continue;
 
           // If the blob with the index j is already supposed to be removed, move to the next one
@@ -322,14 +318,10 @@ namespace rtx {
           continue;
         }
 
-        for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
+        for (unsigned int j = 0; j < blobsBuffer.size() && std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end(); ++j) {
 
           // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
           if (i == j)
-            continue;
-
-          // If the blob with the index i is already supposed to be removed, move to the next one
-          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
             continue;
 
           // If the blob with the index j is already supposed to be removed, move to the next one

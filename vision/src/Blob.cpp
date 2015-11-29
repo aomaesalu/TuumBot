@@ -189,7 +189,7 @@ namespace rtx {
     } else {
       if ((isBlue() && other.isYellow()) || (isYellow() && other.isBlue()) || ((isYellowBlue() || isBlueYellow()) && (other.isYellow() || other.isBlue())) || ((isYellow() || isBlue()) && (other.isYellowBlue() || other.isBlueYellow()))) {
         // The expected sizes for both robot color combinations are the same
-        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY()));
+        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT));
       } else {
         expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }
