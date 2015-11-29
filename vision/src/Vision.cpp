@@ -382,6 +382,12 @@ namespace rtx {
       joinBlobsInBuffer();
 
       translateBlobsBuffer();
+
+      // DEBUG:
+      /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
+        std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
+        std::cout << "Blob: " << "(" << (*blob)->getPosition()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
+      }*/
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
