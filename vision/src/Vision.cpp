@@ -450,8 +450,26 @@ namespace rtx {
             }
 
             // Iterate through points away from the robot; find the farthest white point
-            if (slope != 0) {
-              // TODO
+            if (slope > 0) {
+              for (int dx = 1; sample->first + dx < CAMERA_WIDTH; ++dx) {
+                std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
+                unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
+                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample-second + slope * (dx - 1));
+                  whiteExists = true;
+                  break;
+                }
+              }
+            } else if (slope < 0) {
+              for (int dx = -1; sample->first + dx < CAMERA_WIDTH; --dx) {
+                std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
+                unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
+                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample-second + slope * (dx + 1));
+                  whiteExists = true;
+                  break;
+                }
+              }
             }
 
           // If the point is black, continue along the ray in the negative
@@ -476,8 +494,26 @@ namespace rtx {
               }
 
               // Iterate through points towards the robot; find the closest black point
-              if (slope != 0) {
-                // TODO
+              if (slope > 0) {
+                for (int dx = -1; sample->first + dx < CAMERA_WIDTH; --dx) {
+                  std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
+                  unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                  if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
+                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample-second + slope * (dx + 1));
+                    blackExists = true;
+                    break;
+                  }
+                }
+              } else if (slope < 0) {
+                for (int dx = 1; sample->first + dx < CAMERA_WIDTH; ++dx) {
+                  std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
+                  unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                  if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
+                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample-second + slope * (dx - 1));
+                    blackExists = true;
+                    break;
+                  }
+                }
               }
 
               // Do not check any farther points if a black point has been found
