@@ -430,18 +430,40 @@ namespace rtx {
           // direction until the point is not white anymore
           if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
 
-            // Find previous and next points, and compute the ray's angle (maybe a separate ray class should be implemented, so that the information would already be there)
-            // TODO
+            // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
+            double slope = 0;
+            if (sample != ray->begin()) {
+              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
+              slope += ((double) sample->second - (double) previous->second) / ((double) sample->first - (double) previous->first);
+            }
+            if (sample != ray->end()) {
+              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator next = sample + 1;
+              slope += ((double) next->second - (double) sample->second) / ((double) next->first - (double) sample->first);
+              if (sample != ray->begin()) {
+                slope /= 2;
+              }
+            }
 
             // Iterate through points away from the robot; find the farthest white point
-            // TODO
+            // TODO (slope != 0)
 
           // If the point is black, continue along the ray in the negative
           // direction until the point is not black anymore
         } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
 
-            // Find previous and next points, and compute the ray's angle (maybe a separate ray class should be implemented, so that the information would already be there)
-            // TODO
+            // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
+            double slope = 0;
+            if (sample != ray->begin()) {
+              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
+              slope += ((double) sample->second - (double) previous->second) / ((double) sample->first - (double) previous->first);
+            }
+            if (sample != ray->end()) {
+              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator next = sample + 1;
+              slope += ((double) next->second - (double) sample->second) / ((double) next->first - (double) sample->first);
+              if (sample != ray->begin()) {
+                slope /= 2;
+              }
+            }
 
             // Iterate through points towards the robot; find the closest black point
             // TODO
@@ -469,7 +491,7 @@ namespace rtx {
 
     void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       // TODO
-      // Implemented based on detected lines
+      // Implement based on detected lines
 
       translateCornersBuffer();
     }
