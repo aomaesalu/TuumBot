@@ -12,6 +12,7 @@
 #include <iostream> // TODO: Remove
 #include <algorithm>
 #include <set>
+#include <cmath>
 
 #include "Perspective.hpp"
 
@@ -392,14 +393,25 @@ namespace rtx {
 
     void separateLines(const std::vector<std::pair<double, double>> &points) {
       double maxSlopeDifference = 0.3;
+      // Calculate slopes
       std::vector<double> slopes;
       for (unsigned int i = 0; i < points.size() - 1; ++i) {
         slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
       }
-      std::vector<double> slopeDifferences;
-      for (unsigned int i = 0; i < slopes.size(); ++i) {
-        // TODO
+      // Separate lines
+      std::vector<std::vector<std::pair<unsigned int, unsigned int>>> listOfLines;
+      std::vector<std::pair<unsigned int, unsigned int>> emptyLine;
+      listOfLines.append(emptyLine);
+      listOfLines.back().push_back(points[i]);
+      for (unsigned int i = 0; i < slopes.size() - 1; ++i) {
+        if (fabs(slopes[i + 1] / slopes[i]) > maxSlopeDifference) {
+          listOfLines.push_back(emptyLine);
+        }
+        listOfLines.back().push_back(points[i + 1]);
       }
+      listOfLines.back().push_back(points.back());
+      // Normalise lines
+      // TODO
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
