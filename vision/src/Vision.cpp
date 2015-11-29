@@ -415,6 +415,27 @@ namespace rtx {
 
     }
 
+    void filterBlobsInBufferBySize() {
+      std::set<unsigned int> toBeRemoved;
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+        // If the current blob is a goal or ball blob
+        if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow() || blobsBuffer[i]->isOrange()) {
+          // If the blob's height is smaller than half of the expected height at that position, remove the blob from the blob list.
+          if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), std::pair<unsigned int, unsigned int>(blobsBuffer[i]->getPosition()->getX(), blobsBuffer[i]->getMaxY())).second) {
+            toBeRemoved.insert(i);
+          }
+        }
+      }
+
+      // Remove unnecessary blobs from the buffer // TODO: Refactor
+      unsigned int removed = 0;
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
+        removed++;
+      }
+      toBeRemoved.clear();
+    }
+
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
       blobDetection(frame, filter, modeList, flatSamples);
     }
@@ -480,6 +501,8 @@ namespace rtx {
       }
 
       joinBlobsInBuffer();
+
+      filterBlobsInBufferBySize();
 
       translateBlobsBuffer();
 
