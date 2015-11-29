@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <boost/thread/mutex.hpp>
+#include <boost/coroutine/coroutine.hpp>
 
 #include "rtxmath.hpp"
 
@@ -24,6 +25,13 @@ using namespace boost;
 using namespace vis;
 
 namespace rtx { namespace Visioning {
+
+  //TODO: replace this function's usage with an analoguous Entity method
+  inline double stateProbability(Transform* t1, Transform* t2) {
+    double px = gaussian_probability(t1->getX(), 30, t2->getX());
+    double py = gaussian_probability(t1->getY(), 30, t2->getY());
+    return (px + py) / 2;
+  }
 
   typedef std::vector<Feature*> FeatureSet;
   typedef std::vector<Ball*> BallSet;
@@ -49,18 +57,54 @@ namespace rtx { namespace Visioning {
       return &tmp_objs;
     }
 
+    auto getAllEntities() {
+      EDS* that = this;
+
+      typename boost::coroutines::asymmetric_coroutine<T*>::pull_type routine(
+        [that](typename boost::coroutines::asymmetric_coroutine<T*>::push_type& sink){
+          for(auto& o : that->objs) sink(o);
+          for(auto& o : that->tmp_objs) sink(o);
+      });
+
+      return routine;
+    }
+
+    void processProbableEntity(T* obj) {
+      // Calculate entity similarity probabilities
+      T* probable_entity;
+      double p = 0.0, _p;
+
+      // Calculate balls similarity probabilities
+      for(auto& o : getAllEntities()) {
+        // TODO: entity object should implement this probability method
+        _p = stateProbability(o->getTransform(), obj->getTransform());
+
+        if(_p > p) {
+          p = _p;
+          probable_entity = o;
+        }
+      }
+
+      // Create or update balls
+      if(p < 0.009) {
+        tmp_objs.push_back(new T(*obj));
+      } else {
+        probable_entity->update(*obj->getTransform());
+      }
+    }
+
     int size() { return objs.size(); }
     int probableSize() { return tmp_objs.size(); }
 
     void update() {
       {
         for(auto& b : objs) {
-	  b->update();
-	}
+          b->update();
+        }
 
         for(auto& b : tmp_objs) {
-	  b->update();
-	}
+          b->update();
+        }
       }
 
       int health = mn_h;
