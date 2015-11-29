@@ -32,7 +32,7 @@ namespace rtx {
 
   void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
-  std::pair<unsigned int, unsigned int> getExpectedSize(const Color&);
+  std::pair<unsigned int, unsigned int> getExpectedBlobSize(const Color&);
 
 };
 

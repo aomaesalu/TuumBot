@@ -4,7 +4,7 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 27 November 2015
+ * @date 29 November 2015
  */
 
 #include "Color.hpp"
@@ -66,7 +66,7 @@ namespace rtx {
     }
   }
 
-  std::pair<unsigned int, unsigned int> getExpectedSize(const Color &color) { // TODO: Change to mapping structure?
+  std::pair<unsigned int, unsigned int> getExpectedBlobSize(const Color &color) { // TODO: Change to mapping structure?
     switch (color) {
       case BALL:
         return std::pair<unsigned int, unsigned int>(BALL_RADIUS * 2, BALL_RADIUS * 2);

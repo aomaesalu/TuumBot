@@ -141,7 +141,7 @@ namespace rtx {
   }
 
   std::pair<unsigned int, unsigned int> Blob::getExpectedSize() const {
-    return getExpectedSize(color);
+    return getExpectedBlobSize(color);
   }
 
   bool Blob::isOrange() const {
@@ -188,7 +188,7 @@ namespace rtx {
       expectedSize = getExpectedSize(); // TODO: Add perspective information!
     } else {
       if ((isYellowBlue() || isBlueYellow()) || ((other.isYellowBlue() || other.isBlueYellow()) && (isBlue() || isYellow()))) {
-        expectedSize = getExpectedSize(ROBOT_YELLOW_BLUE); // The expected sizes for both robot combinations are the same
+        expectedSize = getExpectedBlobSize(ROBOT_YELLOW_BLUE); // The expected sizes for both robot combinations are the same
       } else {
         expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }
