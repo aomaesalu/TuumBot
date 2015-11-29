@@ -184,6 +184,8 @@ namespace rtx {
   bool Blob::isClose(const Blob &other, const double &maxError) const {
     //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
+    if (!(minX <= other.getMaxX() && maxX >= other.getMinX() || minY <= other.getMaxY() && maxY >= other.getMinY()))
+      return false;
     std::pair<unsigned int, unsigned int> expectedSize;
     if (isSameColor(other)) {
       expectedSize = getExpectedVirtualSize();
