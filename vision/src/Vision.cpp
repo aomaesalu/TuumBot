@@ -390,7 +390,7 @@ namespace rtx {
       }*/
     }
 
-    void separateLinesInBuffer() {
+    void separateLines(const std::vector<std::pair<double, double>> &transitionPoints) {
       // TODO
     }
 
@@ -398,7 +398,7 @@ namespace rtx {
       lineDetection(frame, filter, radialSamples);
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) { // TODO: Refactor
       linesBuffer.clear();
 
       /*// 0 is white, 1 is black
@@ -538,8 +538,8 @@ namespace rtx {
 
       }
 
-      // Separate lines based on the differences in the slopes.
-      // TODO
+      // Separate lines based on the differences in the slopes
+      separateLines(transitionPoints);
 
       translateLinesBuffer();
     }
