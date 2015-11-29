@@ -528,12 +528,14 @@ namespace rtx {
         // Find the point dividing the line between the farthest white point and the closest black point. If one of the points doesn't exist, just use the other one. Add the point found to the transition points list. If neither of the points exists, assume there is no white-to-black transition in the current ray.
         if (whiteExists) {
           if (blackExists) {
-            transitionPoints.push_back(std::pair<unsigned int, unsigned int>((farthestWhite.first + closestBlack.first) / 2, (farthestWhite.second + closestBlack.second) / 2));
+            std::pair<double, double> whitePoint = virtualToReal(farthestWhite);
+            std::pair<double, double> blackPoint = virtualToReal(closestBlack);
+            transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
           } else {
-            transitionPoints.push_back(farthestWhite);
+            transitionPoints.push_back(virtualToReal(farthestWhite));
           }
         } else if (blackExists) {
-          transitionPoints.push_back(closestBlack);
+          transitionPoints.push_back(virtualToReal(closestBlack);
         }
 
       }
