@@ -199,9 +199,9 @@ namespace rtx {
         std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + maxError) * expectedSize.second) {
 
       // DEBUG:
-      std::cout << intToColor(color) << " " << intToColor(other.getColor()) << ":" << std::endl;
+      /*std::cout << intToColor(color) << " " << intToColor(other.getColor()) << ":" << std::endl;
       std::cout << "(" << (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX())) << " <= " << (1 + maxError) * expectedSize.first << ")" << "(" << (std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY())) << " <= " << (1 + maxError) * expectedSize.second << ")" << std::endl;
-      std::cout << std::endl;
+      std::cout << std::endl;*/
 
       return true;
     }
