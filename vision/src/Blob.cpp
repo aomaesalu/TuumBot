@@ -8,6 +8,7 @@
  */
 
 #include "cameraConstants.hpp"
+#include "entityConstants.hpp"
 
 #include "Blob.hpp"
 
