@@ -74,7 +74,7 @@ namespace rtx { namespace Vision {
   std::pair<double, double> getBlobExpectedRealSize(const Color &color) { // TODO: Change to mapping structure?
     switch (color) {
       case BALL:
-        return std::pair<double, double>(BALL_RADIUS * 2, BALL_RADIUS * 2);
+        return std::pair<double, double>(BALL_DIAMETER, BALL_DIAMETER);
         break;
       case BLUE_GOAL:
       case YELLOW_GOAL:
@@ -85,7 +85,7 @@ namespace rtx { namespace Vision {
         break;
       case ROBOT_YELLOW_BLUE:
       case ROBOT_BLUE_YELLOW:
-        return std::pair<double, double>(ROBOT_MAXIMUM_DIAMETER, ROBOT_MARKER_WIDTH * 2); // TODO: Change when detecting arbitrary robot blobs
+        return std::pair<double, double>(ROBOT_MAXIMUM_DIAMETER * 1.25, ROBOT_MARKER_WIDTH * 2 * 3); // TODO: Change when detecting arbitrary robot blobs
         break;
       case WHITE_LINE:
       case BLACK_LINE:

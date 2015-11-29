@@ -4,6 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
+ *  @date 29 November 2015
  */
 
 #ifndef PHYSICAL_CONSTANTS_H
@@ -25,7 +26,7 @@
 #define BLUE_GOAL_POSITION_Y -1         // Blue goal's position y-coordinate            // Wrong
 #define YELLOW_GOAL_POSITION_X -1       // Yellow goal's position x-coordinate          // Wrong
 #define YELLOW_GOAL_POSITION_Y -1       // Yellow goal's position y-coordinate          // Wrong
-#define BALL_RADIUS 43                  // Ball radius
+#define BALL_DIAMETER 43                // Ball diameter
 #define ROBOT_MAXIMUM_DIAMETER 350      // Robots' maximum allowed diameter
 #define ROBOT_MAXIMUM_HEIGHT 350        // Robots' maximum allowed height               // Unused
 #define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width
