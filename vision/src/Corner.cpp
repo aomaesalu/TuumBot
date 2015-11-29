@@ -9,6 +9,8 @@
 
 #include "Corner.hpp"
 
+#include <cmath>
+
 
 namespace rtx {
 

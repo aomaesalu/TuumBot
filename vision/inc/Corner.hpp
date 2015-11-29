@@ -10,6 +10,8 @@
 #ifndef RTX_VISION_CORNER_H
 #define RTX_VISION_CORNER_H
 
+#include <utility>
+
 
 namespace rtx {
 
@@ -19,6 +21,7 @@ namespace rtx {
       Corner(const Corner&);
       Corner(const double&, const double&);
       Corner(const std::pair<double, double>&);
+      ~Corner();
 
       double getDistance() const;
       double getAngle() const;
