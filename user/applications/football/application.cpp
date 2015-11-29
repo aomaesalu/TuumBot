@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   Localization::setup();
   Motion::setup();
 
-  Logic::setup();
+  FBLogic::setup();
 
   bool running = true;
   while(running) {
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     Localization::process();
     Motion::process();
 
-    Logic::process();
+    FBLogic::process();
   }
 
   return 0;

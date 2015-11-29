@@ -11,7 +11,7 @@
 #include "rtx_ctl.hpp"
 #include "rtx_fb.hpp"
 
-namespace rtx { namespace Logic {
+namespace rtx { namespace FBLogic {
 
   STM stm;
 
