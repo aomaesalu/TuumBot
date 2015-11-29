@@ -15,6 +15,8 @@
 #include "rtxhal.hpp"
 #include "Feature.hpp"
 #include "Blob.hpp"
+#include "Line.hpp"
+#include "Corner.hpp"
 
 
 namespace rtx {
@@ -23,7 +25,7 @@ namespace rtx {
 
     typedef std::vector<Blob*> BlobSet;
     typedef std::vector<Line*> LineSet;
-    typedef std::vector<Feature> CornerSet;
+    typedef std::vector<Corner*> CornerSet;
 
     typedef std::vector<std::pair<unsigned int, unsigned int>> SampleRay;
     typedef std::vector<SampleRay> Samples;
