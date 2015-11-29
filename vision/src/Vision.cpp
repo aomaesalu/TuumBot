@@ -453,9 +453,9 @@ namespace rtx {
             if (slope > 0) {
               for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
-                unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
                 if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
-                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample-second + slope * (dx - 1));
+                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample->second + slope * (dx - 1));
                   whiteExists = true;
                   break;
                 }
@@ -463,9 +463,9 @@ namespace rtx {
             } else if (slope < 0) {
               for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
-                unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
                 if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
-                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample-second + slope * (dx + 1));
+                  farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample->second + slope * (dx + 1));
                   whiteExists = true;
                   break;
                 }
@@ -497,9 +497,9 @@ namespace rtx {
               if (slope > 0) {
                 for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
                   std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
-                  unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                  unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
                   if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
-                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample-second + slope * (dx + 1));
+                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample->second + slope * (dx + 1));
                     blackExists = true;
                     break;
                   }
@@ -507,9 +507,9 @@ namespace rtx {
               } else if (slope < 0) {
                 for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
                   std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
-                  unsigned char *currentPixel = pixels + current->first * channels + current->second * stride;
+                  unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
                   if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
-                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample-second + slope * (dx - 1));
+                    closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample->second + slope * (dx - 1));
                     blackExists = true;
                     break;
                   }
