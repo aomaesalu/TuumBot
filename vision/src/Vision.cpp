@@ -420,6 +420,11 @@ namespace rtx {
         // Black line-segments in current ray
         std::vector<std::pair<std::pair<double, double>, std::pair<double, double>>> blackSegments;*/ // TODO: Readd when relevant (for example, in field centre or defense area detection)
 
+        std::pair<unsigned int, unsigned int> farthestWhite;
+        std::pair<unsigned int, unsigned int> closestBlack;
+        bool whiteExists = false;
+        bool blackExists = false;
+
         for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
           // TODO: Detect white-black transition points
 
@@ -445,30 +450,40 @@ namespace rtx {
             }
 
             // Iterate through points away from the robot; find the farthest white point
-            // TODO (slope != 0)
+            if (slope != 0) {
+              // TODO
+            }
 
           // If the point is black, continue along the ray in the negative
           // direction until the point is not black anymore
         } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
 
-            // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
-            double slope = 0;
-            if (sample != ray->begin()) {
-              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
-              slope += ((double) sample->second - (double) previous->second) / ((double) sample->first - (double) previous->first);
-            }
-            if (sample != ray->end()) {
-              std::vector<std::pair<unsigned int, unsigned int>>::const_iterator next = sample + 1;
-              slope += ((double) next->second - (double) sample->second) / ((double) next->first - (double) sample->first);
+            // Only check for black points if a white point has already been found; otherwise, we could accidentally look at points from other robots.
+            if (whiteExists) {
+
+              // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
+              double slope = 0;
               if (sample != ray->begin()) {
-                slope /= 2;
+                std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
+                slope += ((double) sample->second - (double) previous->second) / ((double) sample->first - (double) previous->first);
               }
+              if (sample != ray->end()) {
+                std::vector<std::pair<unsigned int, unsigned int>>::const_iterator next = sample + 1;
+                slope += ((double) next->second - (double) sample->second) / ((double) next->first - (double) sample->first);
+                if (sample != ray->begin()) {
+                  slope /= 2;
+                }
+              }
+
+              // Iterate through points towards the robot; find the closest black point
+              if (slope != 0) {
+                // TODO
+              }
+
+              // Do not check any farther points if a black point has been found
+              break;
+
             }
-
-            // Iterate through points towards the robot; find the closest black point
-            // TODO
-
-            break;
 
           }
 
