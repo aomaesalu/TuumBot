@@ -46,9 +46,9 @@ namespace rtx {
     double perpendicularSlope = -1 / averageSlope;
     double perpendicularX = (averagePoint.second - averageSlope * averagePoint.first) / (perpendicularSlope - averageSlope);
     double perpendicularY = perpendicularSlope * perpendicularX;
-    std::pair<double, double> perpendicularPoint(perpendicularX, perpendicularY);
     // Find distance and angle
-    // TODO
+    double distance = sqrt(perpendicularY * perpendicularY + perpendicularX * perpendicularX);
+    double angle = atan2(perpendicularX, perpendicularY);
   }
 
   Line::~Line() {
