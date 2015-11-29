@@ -30,21 +30,14 @@ namespace rtx { namespace Visioning {
   FeatureSet features;
 
   EDS<Ball> ballDetect;
-  BallSet balls; // Healthy ball entities vs new/decaying ball entities?
-  BallSet ballsBuffer; // Unused
+  EDS<Robot> robotDetect;
 
   Goal *yellowGoal;
   Goal *yellowGoalBuffer;
   Goal *blueGoal;
   Goal *blueGoalBuffer;
 
-  EDS<Robot> robotDetect;
-  RobotSet robots;
-  RobotSet robotsBuffer; // Unused
-
-  bool editingBalls = false; // Unused
   bool editingGoals = false;
-  bool editingRobots = false; // Unused
 
   void setup() {
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -123,17 +116,6 @@ namespace rtx { namespace Visioning {
     inputFile.close();
   }
 
-  // Unused
-  void translateBallsBuffer() {
-    editingBalls = true;
-
-    balls.clear();
-    balls = ballsBuffer;
-    ballsBuffer.clear();
-
-    editingBalls = false;
-  }
-
   void translateGoalsBuffer() {
     editingGoals = true;
 
@@ -171,17 +153,6 @@ namespace rtx { namespace Visioning {
     yellowGoalBuffer = nullptr;
 
     editingGoals = false;
-  }
-
-  // Unused
-  void translateRobotsBuffer() {
-    editingRobots = true;
-
-    robots.clear();
-    robots = robotsBuffer;
-    robotsBuffer.clear();
-
-    editingRobots = false;
   }
 
   void featureDetection(const Frame &frame) {
