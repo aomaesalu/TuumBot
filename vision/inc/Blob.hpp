@@ -39,7 +39,7 @@ namespace rtx {
       unsigned int getBoxArea() const;
       double getBoxRatio() const;
       double getDensity() const;
-      std::pair<unsigned int, unsigned int> getExpectedSize() const;
+      std::pair<unsigned int, unsigned int> getExpectedVirtualSize() const;
 
       bool isOrange() const;
       bool isBlue() const;
