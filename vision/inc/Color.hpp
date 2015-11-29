@@ -4,11 +4,13 @@
  *
  * @authors Ants-Oskar Mäesalu
  * @version 0.1
- * @date 27 November 2015
+ * @date 29 November 2015
  */
 
 #ifndef RTX_VISION_COLOR_H
 #define RTX_VISION_COLOR_H
+
+#include <utility>
 
 
 namespace rtx {

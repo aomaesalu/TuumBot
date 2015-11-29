@@ -208,7 +208,7 @@ namespace rtx {
     }
 
     // Joins same-colored blobs if their box areas are close or overlap; remove too small blobs at the same time
-    void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
+    void joinBlobsInBuffer() {
       std::set<unsigned int> toBeRemoved;
 
       unsigned int minimumNumberOfPoints = 10; // TODO: Add to constants

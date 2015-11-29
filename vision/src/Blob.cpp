@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 27 November 2015
+ *  @date 29 November 2015
  */
 
 #include "cameraConstants.hpp"
@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <iostream> // TODO: Remove
+#include <utility>
 
 
 namespace rtx {
