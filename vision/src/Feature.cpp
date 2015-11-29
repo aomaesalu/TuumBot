@@ -1,9 +1,10 @@
 /**
- * @file Feature.cpp
- * Field feature seen on the camera.
+ *  @file Feature.cpp
+ *  Field feature seen on the camera.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 29 November 2015
  */
 
 #include "Feature.hpp"
@@ -12,28 +13,21 @@
 namespace rtx {
 
   Feature::Feature(const Feature &other):
-    distance{other.getDistance()},
-    angle{other.getAngle()},
-    type{other.getType()}
+    distance(other.getDistance()),
+    angle(other.getAngle())
   {
     // Nothing to do here
   }
 
-  Feature::Feature(const unsigned int &distance, const double &angle,
-                   const FeatureType &type):
-    distance{distance},
-    angle{angle},
-    type{type}
+  Feature::Feature(const unsigned int &distance, const double &angle):
+    distance(distance),
+    angle(angle)
   {
     // Nothing to do here
   }
 
   Feature::~Feature() {
     // Nothing to do here
-  }
-
-  std::pair<unsigned int, double> Feature::getDeltaVector() const {
-    return std::pair<unsigned int, double>(distance, angle);
   }
 
   unsigned int Feature::getDistance() const {
@@ -44,10 +38,6 @@ namespace rtx {
     return angle;
   }
 
-  FeatureType Feature::getType() const {
-    return type;
-  }
-
   void Feature::setDistance(const unsigned int &distance) {
     this->distance = distance;
   }
@@ -56,20 +46,4 @@ namespace rtx {
     this->angle = angle;
   }
 
-  void Feature::setType(const FeatureType &type) {
-    this->type = type;
-  }
-
-  bool Feature::isBlob() const {
-    return type == BLOB;
-  }
-
-  bool Feature::isLine() const {
-    return type == LINE;
-  }
-
-  bool Feature::isCorner() const {
-    return type == CORNER;
-  }
-
-};
+}
