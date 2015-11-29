@@ -390,6 +390,10 @@ namespace rtx {
       }*/
     }
 
+    void separateLinesInBuffer() {
+      // TODO
+    }
+
     void lineDetection(const Frame &frame, const std::string &filter) {
       lineDetection(frame, filter, radialSamples);
     }
@@ -426,19 +430,35 @@ namespace rtx {
           // direction until the point is not white anymore
           if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
 
+            // Find previous and next points, and compute the ray's angle (maybe a separate ray class should be implemented, so that the information would already be there)
+            // TODO
+
+            // Iterate through points away from the robot; find the farthest white point
             // TODO
 
           // If the point is black, continue along the ray in the negative
           // direction until the point is not black anymore
         } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
 
+            // Find previous and next points, and compute the ray's angle (maybe a separate ray class should be implemented, so that the information would already be there)
             // TODO
+
+            // Iterate through points towards the robot; find the closest black point
+            // TODO
+
+            break;
 
           }
 
         }
 
+        // Find the point dividing the line between the farthest white point and the closest black point. If one of the points doesn't exist, just use the other one. Add the point found to the transition points list. If neither of the points exists, assume there is no white-to-black transition in the current ray.
+        // TODO
+
       }
+
+      // Separate lines based on the differences in the slopes.
+      // TODO
 
       translateLinesBuffer();
     }
