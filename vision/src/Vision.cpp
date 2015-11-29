@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 27 November 2015
+ *  @date 29 November 2015
  */
 
 #include "Vision.hpp"
@@ -246,7 +246,7 @@ namespace rtx {
           if (blobsBuffer[i]->isClose(*blobsBuffer[j])) {
 
             // If the blobs are not of the same color, and the first blob is not a robot blob (but could be)
-            if (!blobsBuffer[i]->isSameColor() && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
+            if (!blobsBuffer[i]->isSameColor(*blobsBuffer[j]) && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
 
               // It does not matter which blob we add to which one, as we change the color anyway
               blobsBuffer[i]->join(*blobsBuffer[j]);
