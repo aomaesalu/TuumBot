@@ -33,7 +33,7 @@ namespace rtx {
       double distance;
       double angle;
 
-  }
+  };
 
 }
 
