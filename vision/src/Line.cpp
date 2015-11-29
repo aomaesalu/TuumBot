@@ -9,6 +9,8 @@
 
 #include "Line.hpp"
 
+#include <cmath>
+
 
 namespace rtx {
 
@@ -29,7 +31,7 @@ namespace rtx {
   Line::Line(const std::vector<std::pair<double, double>> &points) {
     // TODO: Use regression instead?
     // Find average point
-    std::pair<double, double> averagePoint(0, 0)
+    std::pair<double, double> averagePoint(0, 0);
     for (std::vector<std::pair<double, double>>::const_iterator point = points.begin(); point != points.end(); ++point) {
       averagePoint.first += point->first;
       averagePoint.second += point->second;
