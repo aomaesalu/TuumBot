@@ -57,7 +57,7 @@ namespace rtx { namespace Visioning {
       return &tmp_objs;
     }
 
-    auto getAllEntities() {
+    typename boost::coroutines::asymmetric_coroutine<T*>::pull_type getAllEntities() {
       EDS* that = this;
 
       typename boost::coroutines::asymmetric_coroutine<T*>::pull_type routine(
@@ -75,7 +75,7 @@ namespace rtx { namespace Visioning {
       double p = 0.0, _p;
 
       // Calculate balls similarity probabilities
-      for(auto& o : getAllEntities()) {
+      for(auto& o : this->getAllEntities()) {
         // TODO: entity object should implement this probability method
         _p = stateProbability(o->getTransform(), obj->getTransform());
 

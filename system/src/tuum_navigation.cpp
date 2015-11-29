@@ -5,6 +5,7 @@
  *  @version 0.1
  */
 
+#include "tuum_platform.hpp"
 #include "tuum_navigation.hpp"
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
@@ -39,13 +40,6 @@ namespace rtx { namespace Navigation {
     return target;*/
   }
 
-
-  Goal* getOpposingGoal() {
-    //TODO: make configurable
-    return Visioning::blueGoal;
-  }
-
-
   Ball* getNearestBall() {
     Ball* ball = nullptr;
     Transform* t = Localization::getTransform();
@@ -56,12 +50,32 @@ namespace rtx { namespace Navigation {
       _d = t->distanceTo(b->getTransform()->getPosition());
 
       if(_d < d) {
-	d = _d;
-	ball = b;
+        d = _d;
+        ball = b;
       }
     }
 
     return ball;
+  }
+
+  Goal* getOpponentGoal() {
+    if(gC.getStr("Pattern.OpponentGoal") == "B")
+      return Visioning::blueGoal;
+    else
+      return Visioning::yellowGoal;
+  }
+
+  Robot* getAlly() {
+    Robot* out = nullptr;
+
+    for(auto& r : *Visioning::robotDetect.getEntities()) {
+      if(r->isAlly()) {
+        out = r;
+        break;
+      }
+    }
+
+    return out;
   }
 
 }}
