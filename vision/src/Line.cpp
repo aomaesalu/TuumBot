@@ -27,7 +27,25 @@ namespace rtx {
   }
 
   Line::Line(const std::vector<std::pair<double, double>> &points) {
-    // TODO: Regression?
+    // TODO: Use regression instead?
+    // Find average point
+    std::pair<double, double> averagePoint(0, 0)
+    for (std::vector<std::pair<double, double>>::const_iterator point = points.begin(); point != points.end(); ++point) {
+      averagePoint.first += point->first;
+      averagePoint.second += point->second;
+    }
+    averagePoint.first /= points.size();
+    averagePoint.second /= points.size();
+    // Find average slope
+    double slope = 0;
+    for (unsigned int i = 0; i < points.size() - 1; ++i) {
+      slope += (points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first);
+    }
+    slope /= points.size() - 1;
+    // Find perpendicular line
+    // TODO
+    // Find distance and angle
+    // TODO
   }
 
   Line::~Line() {
