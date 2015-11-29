@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 29 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_IMAGE_DRAWING_AREA_H
@@ -57,7 +57,7 @@ namespace rtx {
 
       // Blob regression data
       unsigned int totalCount;
-      std::map<Blob*, unsigned int> blobCounts;
+      std::map<Vision::Blob*, unsigned int> blobCounts;
 
       // Constant regression data // TODO: Move regression calculations to separate class
       double bestA, bestB, bestC;

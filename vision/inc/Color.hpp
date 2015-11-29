@@ -15,7 +15,7 @@
 #include "Perspective.hpp"
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   enum Color {
     BALL,
@@ -39,6 +39,6 @@ namespace rtx {
   std::pair<double, double> getBlobExpectedRealSize(const Color&);
   std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&);
 
-}
+}}
 
 #endif // RTX_VISION_COLOR_H

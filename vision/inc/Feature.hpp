@@ -15,7 +15,7 @@
 #include <utility>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   class Feature {
 
@@ -38,6 +38,6 @@ namespace rtx {
 
   };
 
-}
+}}
 
 #endif // RTX_VISION_FEATURE_H

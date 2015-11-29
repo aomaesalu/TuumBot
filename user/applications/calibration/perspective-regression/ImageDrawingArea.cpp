@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 19 November 2015
+ *  @date 29 November 2015
  */
 
 #include "ImageDrawingArea.hpp"
@@ -196,10 +196,10 @@ namespace rtx {
 
     unsigned int maxDifference = 2;
 
-    std::vector<Blob*> additionalBlobs;
+    std::vector<Vision::Blob*> additionalBlobs;
 
     for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
-      for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+      for (std::map<Vision::Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
         unsigned int dx = abs(blobOccurrence->first->getPosition()->getX() - (*blob)->getPosition()->getX());
         unsigned int dy = abs(blobOccurrence->first->getPosition()->getY() - (*blob)->getPosition()->getY());
         if (dx * dx + dy * dy <= maxDifference * maxDifference) {
@@ -211,16 +211,16 @@ namespace rtx {
     }
 
     for (unsigned int i = 0; i < additionalBlobs.size(); ++i) {
-      blobCounts.insert(std::pair<Blob*, unsigned int>(additionalBlobs[i], 1));
+      blobCounts.insert(std::pair<Vision::Blob*, unsigned int>(additionalBlobs[i], 1));
     }
   }
 
   void ImageDrawingArea::colorBlobs(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
-    for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+    for (std::map<Vision::Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
       if (blobOccurrence->second < totalCount / 2) {
         continue;
       }
-      Blob *blob = blobOccurrence->first;
+      Vision::Blob *blob = blobOccurrence->first;
       if (blob) {
         unsigned int x = blob->getPosition()->getX();
         unsigned int y = blob->getPosition()->getY();
@@ -231,7 +231,7 @@ namespace rtx {
         if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT) {
           continue;
         }
-        Color color = blob->getColor();
+        Vision::Color color = blob->getColor();
         double density = blob->getDensity();
         unsigned int boxArea = blob->getBoxArea();
 
@@ -293,7 +293,7 @@ namespace rtx {
   void ImageDrawingArea::regressConstants(guint8 *pixels, const unsigned int &channels, const unsigned int &stride) { // TODO: Optimise
     // Calculate points
     std::vector<std::pair<unsigned int, unsigned int>> verticalPoints, horisontalPoints;
-    for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
+    for (std::map<Vision::Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
       if (blobOccurrence->second < totalCount / 2)
         continue;
       verticalPoints.push_back(std::pair<unsigned int, unsigned int>(blobOccurrence->first->getMinY(), blobOccurrence->first->getMaxY()));

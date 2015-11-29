@@ -12,7 +12,7 @@
 #include <cmath>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   Feature::Feature(const Feature &other):
     distance(other.getDistance()),
@@ -52,4 +52,4 @@ namespace rtx {
     this->angle = angle;
   }
 
-}
+}}

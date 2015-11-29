@@ -32,9 +32,9 @@ namespace rtx {
            const double& = GOAL_LENGTH);
       Goal(const double&, const double&, const double& = GOAL_WIDTH,
            const double& = GOAL_LENGTH);*/
-      Goal(const Transform, const Color&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
+      Goal(const Transform, const Vision::Color&, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
-      Color getColor() const;
+      Vision::Color getColor() const;
 
       bool isBlue() const;
       bool isYellow() const;
@@ -42,7 +42,7 @@ namespace rtx {
       // TODO: isFriendly(), isEnemy() - needs data about the current game
 
     private:
-     Color color;
+     Vision::Color color;
   };
 
 }

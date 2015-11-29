@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 29 November 2015
  */
 
 #include <algorithm>
@@ -209,13 +209,13 @@ namespace rtx { namespace Visioning {
 
     for(unsigned int i = 0; i < blobs.size(); ++i) {
 
-      Color color = blobs[i]->getColor();
+      Vision::Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
       double ratio = blobs[i]->getBoxRatio();
 
       // STEP 1: Filter out invalid blobs
-      if(color != BALL) continue;
+      if(color != Vision::BALL) continue;
       if(boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if(density > 1.0) continue;
       if(boxArea < 4 * 4) continue;
@@ -316,13 +316,13 @@ namespace rtx { namespace Visioning {
     unsigned int largestYellowArea = 0, largestBlueArea = 0;
 
     for (unsigned int i = 0; i < blobs.size(); ++i) {
-      Color color = blobs[i]->getColor();
+      Vision::Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
       //double ratio = blobs[i]->getBoxRatio();
 
       // Filter out invalid blobs
-      if (color != BLUE_GOAL && color != YELLOW_GOAL) continue;
+      if (color != Vision::BLUE_GOAL && color != Vision::YELLOW_GOAL) continue;
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if (density > 1.0) continue;
       if(boxArea < 20 * 20) continue; // TODO: Calibrate with field tests
@@ -338,7 +338,7 @@ namespace rtx { namespace Visioning {
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
       // TODO: Remove duplicate code
-      if (color == BLUE_GOAL) {
+      if (color == Vision::BLUE_GOAL) {
         if (boxArea > largestBlueArea) {
           largestBlueArea = boxArea;
           //if (blueGoalBuffer == nullptr) {
@@ -372,13 +372,13 @@ namespace rtx { namespace Visioning {
     RobotSet n_robots;
 
     for(unsigned int i = 0; i < blobs.size(); ++i) {
-      Color color = blobs[i]->getColor();
+      Vision::Color color = blobs[i]->getColor();
       double density = blobs[i]->getDensity();
       unsigned int boxArea = blobs[i]->getBoxArea();
       //double ratio = blobs[i]->getBoxRatio();
 
       // STEP 1: Filter out invalid blobs
-      if (color != ROBOT_YELLOW_BLUE && color != ROBOT_BLUE_YELLOW) continue;
+      if (color != Vision::ROBOT_YELLOW_BLUE && color != Vision::ROBOT_BLUE_YELLOW) continue;
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if (density > 1.0) continue;
       //if(boxArea < 8 * 3) continue; // TODO: Calibrate with field tests

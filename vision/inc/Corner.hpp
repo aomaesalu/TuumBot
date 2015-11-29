@@ -15,7 +15,7 @@
 #include <utility>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   class Corner: public Feature {
 
@@ -27,6 +27,6 @@ namespace rtx {
 
   };
 
-}
+}}
 
 #endif // RTX_VISION_CORNER_H

@@ -27,12 +27,12 @@ namespace rtx {
 
       Robot(const Transform, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
-      Color getColor() const;
+      Vision::Color getColor() const;
       bool isYellowBlue() const;
       bool isBlueYellow() const;
 
     private:
-      Color color;
+      Vision::Color color;
 
   };
 

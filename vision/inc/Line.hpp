@@ -15,7 +15,7 @@
 #include <vector>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   class Line: public Feature {
 
@@ -27,6 +27,6 @@ namespace rtx {
 
   };
 
-}
+}}
 
 #endif // RTX_VISION_LINE_H

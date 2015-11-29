@@ -36,7 +36,7 @@ namespace rtx {
 
   }*/
 
-  Goal::Goal(const Transform transform, const Color &color, const double &width, const double &length):
+  Goal::Goal(const Transform transform, const Vision::Color &color, const double &width, const double &length):
     Entity(transform),
     Rectangle(width, length),
     color(color)
@@ -44,16 +44,16 @@ namespace rtx {
 
   }
 
-  Color Goal::getColor() const {
+  Vision::Color Goal::getColor() const {
     return color;
   }
 
   bool Goal::isBlue() const {
-    return color == BLUE_GOAL;
+    return color == Vision::BLUE_GOAL;
   }
 
   bool Goal::isYellow() const {
-    return color == YELLOW_GOAL;
+    return color == Vision::YELLOW_GOAL;
   }
 
 }

@@ -25,16 +25,16 @@ namespace rtx {
 
   }
 
-  Color Robot::getColor() const {
+  Vision::Color Robot::getColor() const {
     return color;
   }
 
   bool Robot::isYellowBlue() const {
-    return color == ROBOT_YELLOW_BLUE;
+    return color == Vision::ROBOT_YELLOW_BLUE;
   }
 
   bool Robot::isBlueYellow() const {
-    return color == ROBOT_BLUE_YELLOW;
+    return color == Vision::ROBOT_BLUE_YELLOW;
   }
 
 }

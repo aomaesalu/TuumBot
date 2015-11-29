@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 27 November 2015
+ *  @date 29 November 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -16,7 +16,7 @@
 #include <vector>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   class Blob {
 
@@ -70,6 +70,6 @@ namespace rtx {
 
   };
 
-}
+}}
 
 #endif // RTX_VISION_BLOB_H

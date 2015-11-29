@@ -13,7 +13,7 @@
 #include "cameraConstants.hpp"
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   Color intToColor(const unsigned int &value) {
     return static_cast<Color>(value);
@@ -125,4 +125,4 @@ namespace rtx {
     return std::pair<unsigned int, unsigned int>(virtualWidth, virtualHeight);
   }
 
-}
+}}

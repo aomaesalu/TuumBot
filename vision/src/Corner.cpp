@@ -12,7 +12,7 @@
 #include <cmath>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   Corner::Corner(const Corner &other):
     Feature(other)
@@ -37,4 +37,4 @@ namespace rtx {
     // Nothing to do here
   }
 
-}
+}}

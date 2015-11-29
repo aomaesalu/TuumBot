@@ -16,7 +16,7 @@
 #include <utility>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   Blob::Blob(const Blob &other):
     position{new Point2D(*(other.getPosition()))},
@@ -223,4 +223,4 @@ namespace rtx {
     this->color = color;
   }
 
-}
+}}

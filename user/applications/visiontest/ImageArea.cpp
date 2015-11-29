@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 29 November 2015
  */
 
 #include "ImageArea.hpp"
@@ -43,13 +43,13 @@ namespace rtx {
     pixel[2] = b;
   }
 
-  void colorPixel(guint8 *pixel, const Color &color) {
+  void colorPixel(guint8 *pixel, const Vision::Color &color) {
     unsigned int r = 0, g = 0, b = 0;
     getRGB(color, r, g, b);
     colorPixel(pixel, r, g, b);
   }
 
-  void ImageArea::colorBlob(const Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+  void ImageArea::colorBlob(const Vision::Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     // Get blob parameters
     unsigned int x = blob->getPosition()->getX();
     unsigned int y = blob->getPosition()->getY();
@@ -57,7 +57,7 @@ namespace rtx {
     unsigned int maxX = blob->getMaxX();
     unsigned int minY = blob->getMinY();
     unsigned int maxY = blob->getMaxY();
-    Color color = blob->getColor();
+    Vision::Color color = blob->getColor();
 
     // Get color parameters
     unsigned int r = 0, g = 0, b = 0;
@@ -131,25 +131,25 @@ namespace rtx {
         if (density > 1.0 || boxArea > CAMERA_WIDTH * CAMERA_HEIGHT)
           continue;
 
-        Color color = (*blob)->getColor();
+        Vision::Color color = (*blob)->getColor();
 
-        if (color == BALL/* && density > 0.6*/ && boxArea > 4 * 4) {
+        if (color == Vision::BALL/* && density > 0.6*/ && boxArea > 4 * 4) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == BLUE_GOAL/* && boxArea > 30 * 30*/) {
+        if (color == Vision::BLUE_GOAL/* && boxArea > 30 * 30*/) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == YELLOW_GOAL/* && boxArea > 30 * 30*/) {
+        if (color == Vision::YELLOW_GOAL/* && boxArea > 30 * 30*/) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == ROBOT_YELLOW_BLUE) {
+        if (color == Vision::ROBOT_YELLOW_BLUE) {
           colorBlob(*blob, pixels, channels, stride);
         }
 
-        if (color == ROBOT_BLUE_YELLOW) {
+        if (color == Vision::ROBOT_BLUE_YELLOW) {
           colorBlob(*blob, pixels, channels, stride);
         }
 

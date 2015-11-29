@@ -12,7 +12,7 @@
 #include <cmath>
 
 
-namespace rtx {
+namespace rtx { namespace Vision {
 
   Line::Line(const Line &other):
     Feature(other)
@@ -57,4 +57,4 @@ namespace rtx {
     // Nothing to do here
   }
 
-}
+}}
