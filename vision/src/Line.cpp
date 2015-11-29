@@ -57,7 +57,8 @@ namespace rtx { namespace Vision {
     // Nothing to do here
   }
 
-  double Line::getSlope() {
+  double Line::getSlope() const {
+    std::pair<double, double> point = getRelativePoint();
     return point.second / point.first;
   }
 
