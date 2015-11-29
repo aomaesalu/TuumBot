@@ -210,7 +210,7 @@ namespace rtx { namespace Vision {
   void joinBlobsInBuffer() {
     std::set<unsigned int> toBeRemoved;
 
-    unsigned int minimumNumberOfPoints = 10; // TODO: Add to constants
+      unsigned int minimumNumberOfPoints = 6; // TODO: Add to constants
 
     // Join blobs (robot blobs first) // TODO: Refactor hacky solution
     for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
