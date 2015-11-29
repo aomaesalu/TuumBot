@@ -390,8 +390,16 @@ namespace rtx {
       }*/
     }
 
-    void separateLines(const std::vector<std::pair<double, double>> &transitionPoints) {
-      // TODO
+    void separateLines(const std::vector<std::pair<double, double>> &points) {
+      double maxSlopeDifference = 0.3;
+      std::vector<double> slopes;
+      for (unsigned int i = 0; i < points.size() - 1; ++i) {
+        slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
+      }
+      std::vector<double> slopeDifferences;
+      for (unsigned int i = 0; i < slopes.size(); ++i) {
+        // TODO
+      }
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
