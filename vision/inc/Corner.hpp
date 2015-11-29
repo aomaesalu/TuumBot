@@ -10,12 +10,14 @@
 #ifndef RTX_VISION_CORNER_H
 #define RTX_VISION_CORNER_H
 
+#include "Feature.hpp"
+
 #include <utility>
 
 
 namespace rtx {
 
-  class Corner {
+  class Corner: public Feature {
 
     public:
       Corner(const Corner&);
@@ -23,16 +25,7 @@ namespace rtx {
       Corner(const std::pair<double, double>&);
       ~Corner();
 
-      double getDistance() const;
-      double getAngle() const;
       std::pair<double, double> getRelativePoint() const;
-
-      void setDistance(const double&);
-      void setAngle(const double&);
-
-    private:
-      double distance;
-      double angle;
 
   };
 
