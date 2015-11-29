@@ -4,6 +4,7 @@
 
 #include "Perspective.hpp"
 #include "Blob.hpp"
+#include "Line.hpp"
 #include "Color.hpp"
 #include "Feature.hpp"
 #include "Vision.hpp"
