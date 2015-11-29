@@ -30,6 +30,8 @@ namespace rtx {
       Color getColor() const;
       bool isYellowBlue() const;
       bool isBlueYellow() const;
+      bool isAlly() const;
+      bool isOpponent() const;
 
     private:
       Color color;

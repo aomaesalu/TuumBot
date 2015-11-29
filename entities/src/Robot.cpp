@@ -3,10 +3,12 @@
  *
  *  @authors Ants-Oskar Mäesalu, Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 29 November 2015
  */
 
 #include "Robot.hpp"
+
+#include "tuum_platform.hpp"
 
 
 namespace rtx {
@@ -35,6 +37,24 @@ namespace rtx {
 
   bool Robot::isBlueYellow() const {
     return color == ROBOT_BLUE_YELLOW;
+  }
+
+  bool Robot::isAlly() const {
+    std::string pattern = rtx::gC.getStr("Pattern.Ally");
+    if (pattern == std::string("YB")) {
+      return isYellowBlue();
+    } else {
+      return isBlueYellow();
+    }
+  }
+
+  bool Robot::isOpponent() const {
+    std::string pattern = rtx::gC.getStr("Pattern.Opponent");
+    if (pattern == std::string("YB")) {
+      return isYellowBlue();
+    } else {
+      return isBlueYellow();
+    }
   }
 
 }
