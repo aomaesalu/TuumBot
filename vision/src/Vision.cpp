@@ -406,7 +406,7 @@ namespace rtx {
       }
 
       // Remove unnecessary blobs from the buffer // TODO: Refactor
-      unsigned int removed = 0;
+      removed = 0;
       for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
         blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
         removed++;
