@@ -715,7 +715,7 @@ namespace rtx { namespace Vision {
         if (line1 == line2)
           continue;
         std::pair<double, double> point2 = (*line2)->getRelativePoint();
-        double slope2 = (*line2)->getSlope()
+        double slope2 = (*line2)->getSlope();
         double x = (point1.second - point2.second + slope2 * point2.first - slope1 * point1.first) / (slope2 - slope1);
         double y = slope1 * (x - point1.first) + point1.second;
         cornersBuffer.push_back(new Corner(std::pair<double, double>(x, y)));
