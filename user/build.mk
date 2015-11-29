@@ -44,7 +44,7 @@ INCLUDE_DIRS += $(MODULE_PATH)/libraries
 
 CPPSRC += $(call target_files,libraries/,*.cpp)
 
-CPPFLAGS += -std=gnu++14
+CPPFLAGS += -std=gnu++11
 
 CPPFLAGS += `pkg-config gtkmm-3.0 --cflags` # FIXME: Command added due to gtkmm usage
 
