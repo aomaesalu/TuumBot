@@ -25,8 +25,6 @@ namespace rtx {
       Line(const std::vector<std::pair<double, double>>&);
       ~Line();
 
-      std::pair<double, double> getRelativePoint() const;
-
   };
 
 }

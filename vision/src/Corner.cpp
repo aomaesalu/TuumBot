@@ -37,8 +37,4 @@ namespace rtx {
     // Nothing to do here
   }
 
-  std::pair<double, double> Corner::getRelativePoint() const {
-    return std::pair<double, double>(distance * sin(angle), distance * cos(angle));
-  }
-
 }

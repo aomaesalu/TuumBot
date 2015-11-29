@@ -25,8 +25,6 @@ namespace rtx {
       Corner(const std::pair<double, double>&);
       ~Corner();
 
-      std::pair<double, double> getRelativePoint() const;
-
   };
 
 }

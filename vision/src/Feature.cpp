@@ -9,6 +9,8 @@
 
 #include "Feature.hpp"
 
+#include <cmath>
+
 
 namespace rtx {
 
@@ -36,6 +38,10 @@ namespace rtx {
 
   double Feature::getAngle() const {
     return angle;
+  }
+
+  std::pair<double, double> Feature::getRelativePoint() const {
+    return std::pair<double, double>(distance * sin(angle), distance * cos(angle));
   }
 
   void Feature::setDistance(const unsigned int &distance) {

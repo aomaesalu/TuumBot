@@ -27,6 +27,8 @@ namespace rtx {
       unsigned int getDistance() const;
       double getAngle() const;
 
+      std::pair<double, double> getRelativePoint() const;
+
       void setDistance(const unsigned int&);
       void setAngle(const double&);
 
