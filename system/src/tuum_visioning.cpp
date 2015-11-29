@@ -307,7 +307,9 @@ namespace rtx { namespace Visioning {
       n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
     }
 
+    std::cout << "Prob:" << std::endl;
     for (int ix = 0; ix < n_robots.size(); ix++) {
+      std::cout << n_robots[ix]->toString() << std::endl;
       robotDetect.processProbableEntity(n_robots[ix]);
     }
 
