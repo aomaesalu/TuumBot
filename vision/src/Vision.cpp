@@ -392,10 +392,12 @@ namespace rtx {
     }
 
     void separateLines(const std::vector<std::pair<double, double>> &points) {
+      if (points.size() < 2)
+        return;
       double maxSlopeDifference = 0.3;
       // Calculate slopes
       std::vector<double> slopes;
-      for (unsigned int i = 0; i < points.size() - 1; ++i) {
+      for (int i = 0; i < points.size() - 1; ++i) {
         slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
       }
       // Separate lines
@@ -403,7 +405,7 @@ namespace rtx {
       std::vector<std::pair<double, double>> emptyLine;
       listOfLines.push_back(emptyLine);
       listOfLines.back().push_back(points[0]);
-      for (unsigned int i = 0; i < slopes.size() - 1; ++i) {
+      for (int i = 0; i < slopes.size() - 1; ++i) {
         if (fabs(slopes[i + 1] / slopes[i]) > maxSlopeDifference) {
           listOfLines.push_back(emptyLine);
         }
