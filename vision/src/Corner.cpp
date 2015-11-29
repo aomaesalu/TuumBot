@@ -30,7 +30,7 @@ namespace rtx { namespace Vision {
     Feature(0, 0)
   {
     distance = sqrt(point.second * point.second + point.first + point.first);
-    angle = atan2(point.first, point.second);
+    angle = -atan2(point.first, point.second);
   }
 
   Corner::~Corner() {

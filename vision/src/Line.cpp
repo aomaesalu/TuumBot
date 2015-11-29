@@ -50,7 +50,7 @@ namespace rtx { namespace Vision {
     double perpendicularY = perpendicularSlope * perpendicularX;
     // Find distance and angle
     distance = sqrt(perpendicularY * perpendicularY + perpendicularX * perpendicularX);
-    angle = atan2(perpendicularX, perpendicularY);
+    angle = -atan2(perpendicularX, perpendicularY);
   }
 
   Line::~Line() {
