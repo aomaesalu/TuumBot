@@ -201,6 +201,7 @@ namespace rtx { namespace Visioning {
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     ballDetect.update();
 
+    /*
     if(debugTimer.isTime()) {
       std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
           << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
@@ -213,6 +214,7 @@ namespace rtx { namespace Visioning {
 
       debugTimer.start();
     }
+    */
   }
 
   void goalDetection(const Frame &frame) {
