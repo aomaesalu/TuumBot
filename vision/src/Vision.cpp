@@ -386,8 +386,9 @@ namespace rtx {
       // DEBUG:
       /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
         std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
-        std::cout << "Blob: " << "(" << (*blob)->getPosition()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
-      }*/
+        std::cout << "Blob: " << "(" << (*blob)->getPosition()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << ((*blob)->getMaxX() - (*blob)->getMinX()) << ", " << ((*blob)->getMaxY() - (*blob)->getMinY()) << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
+      }
+      std::cout << std::endl << std::endl;*/
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
