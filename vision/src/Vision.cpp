@@ -424,13 +424,13 @@ namespace rtx {
 
           // If the point is white, continue along the ray in the positive
           // direction until the point is not white anymore
-          if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 4)) {
+          if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
 
             // TODO
 
           // If the point is black, continue along the ray in the negative
           // direction until the point is not black anymore
-          } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 5)) {
+        } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
 
             // TODO
 

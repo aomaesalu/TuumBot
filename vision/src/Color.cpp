@@ -19,6 +19,10 @@ namespace rtx {
     return static_cast<Color>(value);
   }
 
+  int colorToInt(const Color &color) {
+    return static_cast<int>(color);
+  }
+
   void getRGB(const Color &color, unsigned int &r, unsigned int &g, unsigned int &b) {
     switch (color) {
       case BALL:

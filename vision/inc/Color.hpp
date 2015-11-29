@@ -32,11 +32,13 @@ namespace rtx {
 
   Color intToColor(const unsigned int&);
 
+  int colorToInt(const Color&);
+
   void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
   std::pair<double, double> getBlobExpectedRealSize(const Color&);
   std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&);
 
-};
+}
 
 #endif // RTX_VISION_COLOR_H
