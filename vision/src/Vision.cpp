@@ -133,9 +133,9 @@ namespace rtx {
 
     void processCheckerboard(const Frame &frame, const std::string &filter) {
       // TODO: Include other kind of samples (full board?)
-      blobDetection(frame, filter, {6, 7});
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      blobDetection(frame, filter, {6, 7}, flatSamples);
+      lineDetection(frame, filter, flatSamples);
+      cornerDetection(frame, filter, flatSamples);
     }
 
     bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
@@ -316,7 +316,7 @@ namespace rtx {
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
-      blobDetection(frame, filter, modeList, flatSamples);
+      blobDetection(frame, filter, modeList, meshSamples);
     }
 
     void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
@@ -391,21 +391,35 @@ namespace rtx {
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {
-      lineDetection(frame, filter, flatSamples);
+      lineDetection(frame, filter, radialSamples);
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
-      // TODO
+    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+      linesBuffer.clear();
+
+      // 0 is white, 1 is black
+      std::vector<std::vector<std::vector<bool>>> visited(2, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
+
+      unsigned char *pixels = frame.data;
+      unsigned int channels = 3;
+      unsigned int stride = frame.width * channels;
+
+      for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+        for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
+          // TODO
+        }
+      }
 
       translateLinesBuffer();
     }
 
     void cornerDetection(const Frame &frame, const std::string &filter) {
-      cornerDetection(frame, filter, flatSamples);
+      cornerDetection(frame, filter, meshSamples);
     }
 
-    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
+    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       // TODO
+      // Implemented based on detected lines
 
       translateCornersBuffer();
     }
