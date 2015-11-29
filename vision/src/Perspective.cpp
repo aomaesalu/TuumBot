@@ -14,9 +14,9 @@
 
 namespace rtx { namespace Vision { namespace Perspective {
 
-  double A = 2//21;
-  double B = 105436//93048;
-  double C = 169//150;
+  double A = 2;//21;
+  double B = 105436;//93048;
+  double C = 169;//150;
 
   std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y) {
     // ActualDistance = A + B / PixelVerticalCoord
