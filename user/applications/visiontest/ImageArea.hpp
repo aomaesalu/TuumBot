@@ -15,6 +15,7 @@
 
 #include "Color.hpp"
 #include "Blob.hpp"
+#include "Line.hpp"
 
 
 namespace rtx {
@@ -38,6 +39,7 @@ namespace rtx {
       Glib::RefPtr<Gdk::Pixbuf> filteredImage;
 
       void colorBlob(const Vision::Blob*, guint8*, const unsigned int&, const unsigned int&);
+      void colorLine(const Vision::Line*, guint8*, const unsigned int&, const unsigned int&);
 
       bool applyFilter();
       bool drawImage(const Cairo::RefPtr<Cairo::Context>&);

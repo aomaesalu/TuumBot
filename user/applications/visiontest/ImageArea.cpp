@@ -96,6 +96,12 @@ namespace rtx {
     }
   }
 
+  void ImageArea::colorLine(const Vision::Line *line, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
+
+
+    // TODO
+  }
+
   bool ImageArea::applyFilter() {
     filteredImage = gui->getImage()->copy(); // TODO: Copy only where is necessary (?)
 
@@ -107,52 +113,61 @@ namespace rtx {
     unsigned int actualChannels = 3;
     unsigned int actualStride = gui->getFrame()->width * actualChannels;
 
-    Vision::BlobSet blobs = Vision::blobs;
-    while (Vision::editingBlobs) {
-      blobs = Vision::blobs;
-    }
+    Vision::BlobSet blobs = Vision::getBlobs();
 
     // Draw rectangles
     // DEBUG: std::cout << "Blobs in GUI: " << Vision::blobs.size() << std::endl;
     for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
-      if (*blob) {
-        unsigned int minX = (*blob)->getMinX();
-        unsigned int maxX = (*blob)->getMaxX();
-        unsigned int minY = (*blob)->getMinY();
-        unsigned int maxY = (*blob)->getMaxY();
-        if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT)
-          continue;
+      if (!(*blob))
+        continue;
 
-        //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+      unsigned int minX = (*blob)->getMinX();
+      unsigned int maxX = (*blob)->getMaxX();
+      unsigned int minY = (*blob)->getMinY();
+      unsigned int maxY = (*blob)->getMaxY();
+      if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT)
+        continue;
 
-        double density = (*blob)->getDensity();
-        unsigned int boxArea = (*blob)->getBoxArea();
+      //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
 
-        if (density > 1.0 || boxArea > CAMERA_WIDTH * CAMERA_HEIGHT)
-          continue;
+      double density = (*blob)->getDensity();
+      unsigned int boxArea = (*blob)->getBoxArea();
 
-        Vision::Color color = (*blob)->getColor();
+      if (density > 1.0 || boxArea > CAMERA_WIDTH * CAMERA_HEIGHT)
+        continue;
 
-        if (color == Vision::BALL/* && density > 0.6*/ && boxArea > 4 * 4) {
-          colorBlob(*blob, pixels, channels, stride);
-        }
+      Vision::Color color = (*blob)->getColor();
 
-        if (color == Vision::BLUE_GOAL/* && boxArea > 30 * 30*/) {
-          colorBlob(*blob, pixels, channels, stride);
-        }
+      if (color == Vision::BALL/* && density > 0.6*/ && boxArea > 4 * 4) {
+        colorBlob(*blob, pixels, channels, stride);
+      }
 
-        if (color == Vision::YELLOW_GOAL/* && boxArea > 30 * 30*/) {
-          colorBlob(*blob, pixels, channels, stride);
-        }
+      if (color == Vision::BLUE_GOAL/* && boxArea > 30 * 30*/) {
+        colorBlob(*blob, pixels, channels, stride);
+      }
 
-        if (color == Vision::ROBOT_YELLOW_BLUE) {
-          colorBlob(*blob, pixels, channels, stride);
-        }
+      if (color == Vision::YELLOW_GOAL/* && boxArea > 30 * 30*/) {
+        colorBlob(*blob, pixels, channels, stride);
+      }
 
-        if (color == Vision::ROBOT_BLUE_YELLOW) {
-          colorBlob(*blob, pixels, channels, stride);
-        }
+      if (color == Vision::ROBOT_YELLOW_BLUE) {
+        colorBlob(*blob, pixels, channels, stride);
+      }
 
+      if (color == Vision::ROBOT_BLUE_YELLOW) {
+        colorBlob(*blob, pixels, channels, stride);
+      }
+
+    }
+
+    Vision::LineSet lines = Vision::getLines();
+
+    for (Vision::LineSet::iterator line = lines.begin(); line != lines.end(); ++line) {
+      if (!(*line))
+        continue;
+
+      for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
+        // TODO: Color pixel
       }
     }
 
