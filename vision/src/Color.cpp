@@ -11,6 +11,8 @@
 
 #include "entityConstants.hpp"
 
+#include "Perspective.hpp"
+
 
 namespace rtx {
 
@@ -66,7 +68,7 @@ namespace rtx {
     }
   }
 
-  std::pair<unsigned int, unsigned int> getExpectedBlobSize(const Color &color) { // TODO: Change to mapping structure?
+  std::pair<unsigned int, unsigned int> getBlobExpectedRealSize(const Color &color) { // TODO: Change to mapping structure?
     switch (color) {
       case BALL:
         return std::pair<unsigned int, unsigned int>(BALL_RADIUS * 2, BALL_RADIUS * 2);
@@ -92,6 +94,12 @@ namespace rtx {
         return std::pair<unsigned int, unsigned int>(0, 0);
         break;
     }
+  }
+
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const std::pair<unsigned int, unsigned int> &position) {
+    std::pair<unsigned int, unsigned int> realSize = getBlobExpectedRealSize(color);
+    // TODO
+    return realSize;
   }
 
 }

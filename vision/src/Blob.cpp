@@ -140,8 +140,8 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
-  std::pair<unsigned int, unsigned int> Blob::getExpectedSize() const {
-    return getExpectedBlobSize(color);
+  std::pair<unsigned int, unsigned int> Blob::getExpectedVirtualSize() const {
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY()));
   }
 
   bool Blob::isOrange() const {
@@ -185,10 +185,11 @@ namespace rtx {
     //  return true;
     std::pair<unsigned int, unsigned int> expectedSize;
     if (isSameColor(other)) {
-      expectedSize = getExpectedSize(); // TODO: Add perspective information!
+      expectedSize = getExpectedVirtualSize();
     } else {
       if ((isYellowBlue() || isBlueYellow()) || ((other.isYellowBlue() || other.isBlueYellow()) && (isBlue() || isYellow()))) {
-        expectedSize = getExpectedBlobSize(ROBOT_YELLOW_BLUE); // The expected sizes for both robot combinations are the same
+        // The expected sizes for both robot color combinations are the same
+        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY()));
       } else {
         expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }
