@@ -49,12 +49,16 @@ namespace rtx { namespace Vision {
     double perpendicularX = (averagePoint.second - averageSlope * averagePoint.first) / (perpendicularSlope - averageSlope);
     double perpendicularY = perpendicularSlope * perpendicularX;
     // Find distance and angle
-    double distance = sqrt(perpendicularY * perpendicularY + perpendicularX * perpendicularX);
-    double angle = atan2(perpendicularX, perpendicularY);
+    distance = sqrt(perpendicularY * perpendicularY + perpendicularX * perpendicularX);
+    angle = atan2(perpendicularX, perpendicularY);
   }
 
   Line::~Line() {
     // Nothing to do here
+  }
+
+  double Line::getSlope() {
+    return point.second / point.first;
   }
 
 }}

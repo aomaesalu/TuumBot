@@ -25,6 +25,8 @@ namespace rtx { namespace Vision {
       Line(const std::vector<std::pair<double, double>>&);
       ~Line();
 
+      double getSlope() const;
+
   };
 
 }}
