@@ -248,14 +248,14 @@ namespace rtx {
             // If the blobs are not of the same color, and the first blob is not a robot blob (but could be)
             if (!blobsBuffer[i]->isSameColor(*blobsBuffer[j]) && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
 
-              // It does not matter which blob we add to which one, as we change the color anyway
-              blobsBuffer[i]->join(*blobsBuffer[j]);
-              toBeRemoved.insert(j);
-
-              // We now need to change the first blobs color type to the appropriate robot blob color type
-
               // If the second blob is not a robot blob
               if (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) {
+
+                // It does not matter which blob we add to which one, as we change the color anyway
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+
+                // We now need to change the first blobs color type to the appropriate robot blob color type
 
                 // We can assume that the blobs are not of the same color, but both of them are either yellow or blue; therefore, we need to join them based on which one is above the other
 
@@ -290,7 +290,7 @@ namespace rtx {
 
               }
 
-            // If the blobs are of the same color, and the first blob is a robot blob
+            // If the blobs are of the same color, or the first blob is a robot blob
             } else if (blobsBuffer[i]->isYellowBlue() || blobsBuffer[i]->isBlueYellow()) {
 
               // We can assume that the blobs are the exact same color, or that the first blob is already a robot blob and the second blob is either yellow or blue, therefore, we can simply join the second blob with the first one, and delete the other one.
@@ -340,14 +340,14 @@ namespace rtx {
             // If the blobs are not of the same color, and the first blob is not a robot blob (but could be)
             if (!blobsBuffer[i]->isSameColor(*blobsBuffer[j]) && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
 
-              // It does not matter which blob we add to which one, as we change the color anyway
-              blobsBuffer[i]->join(*blobsBuffer[j]);
-              toBeRemoved.insert(j);
-
-              // We now need to change the first blobs color type to the appropriate robot blob color type
-
               // If the second blob is not a robot blob
               if (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) {
+
+                // It does not matter which blob we add to which one, as we change the color anyway
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+
+                // We now need to change the first blobs color type to the appropriate robot blob color type
 
                 // We can assume that the blobs are not of the same color, but both of them are either yellow or blue; therefore, we need to join them based on which one is above the other
 
