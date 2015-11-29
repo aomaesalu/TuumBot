@@ -70,7 +70,7 @@ namespace rtx {
   std::pair<double, double> getBlobExpectedRealSize(const Color &color) { // TODO: Change to mapping structure?
     switch (color) {
       case BALL:
-        return std::pair<double, double>(BALL_RADIUS * 2, BALL_RADIUS * 2);
+        return std::pair<double, double>(BALL_DIAMETER, BALL_DIAMETER);
         break;
       case BLUE_GOAL:
       case YELLOW_GOAL:
