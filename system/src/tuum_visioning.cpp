@@ -201,6 +201,7 @@ namespace rtx { namespace Visioning {
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     ballDetect.update();
 
+    /*
     if(debugTimer.isTime()) {
       std::cout << "[Visioning]Balls: " << ballDetect.getEntities()->size()
           << ". Unconfirmed balls: " << ballDetect.getTmpEntities()->size()
@@ -213,6 +214,7 @@ namespace rtx { namespace Visioning {
 
       debugTimer.start();
     }
+    */
   }
 
   void goalDetection(const Frame &frame) {
@@ -305,7 +307,9 @@ namespace rtx { namespace Visioning {
       n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
     }
 
+    std::cout << "Prob:" << std::endl;
     for (int ix = 0; ix < n_robots.size(); ix++) {
+      std::cout << n_robots[ix]->toString() << std::endl;
       robotDetect.processProbableEntity(n_robots[ix]);
     }
 

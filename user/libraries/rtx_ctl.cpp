@@ -128,7 +128,7 @@ namespace rtx { namespace ctl {
 
   int LSGoalLocate::run() {
     if(!mb->getBallSensorState()) return -1;
-    if(Navigation::getOpposingGoal() != nullptr) return 1;
+    if(Navigation::getOpponentGoal() != nullptr) return 1;
 
     Motion::setAimTarget(Vec2i({1, -1}));
     if(!Motion::isRunning()) Motion::start();
@@ -144,7 +144,7 @@ namespace rtx { namespace ctl {
   int LSGoalShoot::run() {
     if(!mb->getBallSensorState()) return -1;
 
-    Goal* g = Navigation::getOpposingGoal();
+    Goal* g = Navigation::getOpponentGoal();
     if(g == nullptr) return -1;
 
     //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
@@ -161,7 +161,7 @@ namespace rtx { namespace ctl {
   }
 
   bool LSGoalShoot::isRunnable() {
-    return mb->getBallSensorState() && Navigation::getOpposingGoal() != nullptr;
+    return mb->getBallSensorState() && Navigation::getOpponentGoal() != nullptr;
   }
 
 }}
