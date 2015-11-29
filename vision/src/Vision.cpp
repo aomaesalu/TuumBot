@@ -581,9 +581,9 @@ namespace rtx { namespace Vision {
         // If the point is white, continue along the ray in the positive
         // direction until the point is not white anymore
         if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
-          currentPixel[0] = 102;
-          currentPixel[1] = 0;
-          currentPixel[2] = 51;
+          pixel[0] = 102;
+          pixel[1] = 0;
+          pixel[2] = 51;
 
           // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
           double slope = 0;
@@ -631,9 +631,9 @@ namespace rtx { namespace Vision {
         // If the point is black, continue along the ray in the negative
         // direction until the point is not black anymore
       } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
-        currentPixel[0] = 102;
-        currentPixel[1] = 51;
-        currentPixel[2] = 0;
+        pixel[0] = 102;
+        pixel[1] = 51;
+        pixel[2] = 0;
 
           // Only check for black points if a white point has already been found; otherwise, we could accidentally look at points from other robots.
           if (whiteExists) {
