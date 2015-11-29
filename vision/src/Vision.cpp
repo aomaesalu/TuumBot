@@ -412,7 +412,9 @@ namespace rtx {
       listOfLines.back().push_back(points.back());
       // Normalise and create lines
       for (unsigned int i = 0; i < listOfLines.size(); ++i) {
-        linesBuffer.push_back(new Line(listOfLines[i]));
+        if (listOfLines[i].size() > 1) {
+          linesBuffer.push_back(new Line(listOfLines[i]));
+        }
       }
     }
 
