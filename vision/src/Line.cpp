@@ -63,6 +63,10 @@ namespace rtx {
     return angle;
   }
 
+  std::pair<double, double> Line::getRelativePoint() const {
+    return std::pair<double, double>(distance * sin(angle), distance * cos(angle));
+  }
+
   void Line::setDistance(const double &distance) {
     this->distance = distance;
   }
