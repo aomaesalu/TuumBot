@@ -711,10 +711,10 @@ namespace rtx { namespace Vision {
     // DEBUG
     //std::cout << std::endl << std::endl;
 
-    for (std::vector<std::pair<double, double>>::iterator point = transitionPoints.begin(); point != transitionPoints.end(); ++point) {
+    /*for (std::vector<std::pair<double, double>>::iterator point = transitionPoints.begin(); point != transitionPoints.end(); ++point) {
       std::cout << "(" << point->first << ", " << point->second << ")" << std::endl;
     }
-    std::cout << std::endl << std::endl << std::endl;
+    std::cout << std::endl << std::endl << std::endl;*/
 
     // Separate lines based on the differences in the slopes
     separateLines(transitionPoints);
