@@ -114,7 +114,11 @@ namespace rtx {
       if (vPoint.first >= CAMERA_WIDTH || vPoint.second >= CAMERA_HEIGHT)
         continue;
       for (int dx = -2; dx <= 2; ++dx) {
+        if (vPoint.first + dx >= CAMERA_WIDTH)
+          continue;
         for (int dy = -2; dy <= 2; ++dy) {
+          if (vPoint.second >= CAMERA_HEIGHT)
+            continue;
           guint8 *pixel = pixels + (vPoint.first + dx) * channels + (vPoint.second + dy) * stride;
           colorPixel(pixel, 102, 51, 0);
         }
