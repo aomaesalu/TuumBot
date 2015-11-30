@@ -10,6 +10,7 @@
 #include "Line.hpp"
 
 #include <cmath>
+#include <iostream> // TODO: Remove
 
 
 namespace rtx { namespace Vision {
@@ -29,10 +30,12 @@ namespace rtx { namespace Vision {
   Line::Line(const std::vector<std::pair<double, double>> &points):
     Feature(0, 0)
   {
+    std::cout << "Line:" << std::endl;
     // TODO: Use regression instead?
     // Find average point
     std::pair<double, double> averagePoint(0, 0);
     for (std::vector<std::pair<double, double>>::const_iterator point = points.begin(); point != points.end(); ++point) {
+      std::cout << "(" << point->first << ", " << point->second << ")" << std::endl;
       averagePoint.first += point->first;
       averagePoint.second += point->second;
     }
@@ -51,6 +54,7 @@ namespace rtx { namespace Vision {
     // Find distance and angle
     distance = sqrt(perpendicularY * perpendicularY + perpendicularX * perpendicularX);
     angle = -atan2(perpendicularX, perpendicularY);
+    std::cout << std::endl << std::endl;
   }
 
   Line::~Line() {
