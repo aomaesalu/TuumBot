@@ -582,7 +582,7 @@ namespace rtx { namespace Vision {
         // direction until the point is not white anymore
         if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
 
-          /*// Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
+          // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
           double slope = 0;
           if (sample != ray->begin()) {
             std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
@@ -617,7 +617,7 @@ namespace rtx { namespace Vision {
                 break;
               }
             }
-          }*/
+          }
 
           farthestWhite = std::pair<unsigned int, unsigned int>(sample->first, sample->second);
           whiteExists = true;
@@ -629,7 +629,7 @@ namespace rtx { namespace Vision {
           // Only check for black points if a white point has already been found; otherwise, we could accidentally look at points from other robots.
           if (whiteExists) {
 
-            /*// Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
+            // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
             double slope = 0;
             if (sample != ray->begin()) {
               std::vector<std::pair<unsigned int, unsigned int>>::const_iterator previous = sample - 1;
@@ -664,7 +664,7 @@ namespace rtx { namespace Vision {
                   break;
                 }
               }
-            }*/
+            }
 
             // DEBUG:
             //std::cout << "B:" << "(" << sample->first << ", " << sample->second << ")" << std::endl;
