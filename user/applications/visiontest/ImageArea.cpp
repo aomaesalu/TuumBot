@@ -12,6 +12,8 @@
 #include "cameraConstants.hpp"
 #include "GUI.hpp"
 
+#include "Perspective.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>
@@ -108,9 +110,10 @@ namespace rtx {
     }
     std::vector<std::pair<double, double>> linePoints = line->getPoints();
     for (std::vector<std::pair<double, double>>::iterator point = linePoints.begin(); point != linePoints.end(); ++point) {
-      if (point->first >= CAMERA_WIDTH || point->second >= CAMERA_HEIGHT)
+      std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point);
+      if (vPoint.first >= CAMERA_WIDTH || vPoint.second >= CAMERA_HEIGHT)
         continue;
-      guint8 *pixel = pixels + ((int) point->first) * channels + ((int) point->second) * stride;
+      guint8 *pixel = pixels + vPoint.first * channels + vPoint.second * stride;
       colorPixel(pixel, 102, 0, 51);
     }
   }
