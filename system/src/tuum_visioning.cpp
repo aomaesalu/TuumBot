@@ -74,13 +74,13 @@ namespace rtx { namespace Visioning {
     Frame frontFrame, backFrame;
     if (frontCamera)
       frontFrame = frontCamera->getFrame();
-    if (backCamera)
-      backFrame = backCamera->getFrame();
+    //if (backCamera)
+    //  backFrame = backCamera->getFrame();
 
     if (frontCamera)
       Vision::process(frontFrame, filter);
-    if (backCamera)
-      Vision::process(backFrame, filter);
+    //if (backCamera)
+    //  Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -190,9 +190,10 @@ namespace rtx { namespace Visioning {
   }
 
   double stateProbability(Transform* t1, Transform* t2) {
-    double px = gaussian_probability(t1->getX(), 30, t2->getX());
-    double py = gaussian_probability(t1->getY(), 30, t2->getY());
-    return (px + py) / 2;
+    const double A = 125.0;
+    double px = A*gauss_prob2(t1->getX(), 120, t2->getX());
+    double py = A*gauss_prob2(t1->getY(), 120, t2->getY());
+    return 2*px*py / (px+py);
   }
 
   void ballDetection(const Frame &frame) {
@@ -243,7 +244,7 @@ namespace rtx { namespace Visioning {
 
       // STEP 3: Create ball instance with absolute position
       //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
-      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle)));
+      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), false));
     }
 
     /*
@@ -258,34 +259,7 @@ namespace rtx { namespace Visioning {
     Ball* n_ball_ptr;
     BallSet* ball_set_ptr;
     for(int ix = 0; ix < n_balls.size(); ix++) {
-      p = 0.0;
-      n_ball_ptr = n_balls[ix];
-
-      // STEP 4.1: Calculate existing entity probability
-      ball_set_ptr = &(ballDetect.objs);
-      for(int jx = 0; jx < ballDetect.objs.size(); jx++) {
-        _p = stateProbability((*ball_set_ptr)[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-        }
-      }
-
-      for(int jx = 0; jx < ballDetect.tmp_objs.size(); jx++) {
-        _p = stateProbability(ballDetect.tmp_objs[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-	        if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
-        }
-      }
-
-      // STEP 4.2: Create or update entities
-      if(p < 0.01) {
-        ballDetect.tmp_objs.push_back(new Ball(*n_ball_ptr));
-      } else {
-        (*ball_set_ptr)[p_ix]->update(*n_ball_ptr->getTransform());
-      }
+      ballDetect.processProbableEntity(n_balls[ix]);
     }
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable

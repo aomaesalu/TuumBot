@@ -27,6 +27,8 @@ int main(int argc, char* argv[]) {
   Visioning::setup();
   Motion::setup();
 
+  std::cout << Visioning::stateProbability(new Transform({{100, 100}, 0.0}), new Transform({{150, 150}, 0.0})) << std::endl;
+
   bool running = true;
   while(running) {
     hal::process();

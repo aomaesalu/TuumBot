@@ -37,7 +37,7 @@ namespace rtx { namespace Visioning {
   template<class T>
   struct EDS {
     int mn_h = -5; // Entity removal health condition
-    int mx_h = 2;  // Entity detection health condition
+    int mx_h = 3;  // Entity detection health condition
 
     std::vector<T*> objs;
     std::vector<T*> tmp_objs;
@@ -67,7 +67,7 @@ namespace rtx { namespace Visioning {
 
     void processProbableEntity(T* obj) {
       // Calculate entity similarity probabilities
-      T* probable_entity;
+      T* probable_entity = nullptr;
       double p = 0.0, _p;
 
       // Calculate balls similarity probabilities
@@ -80,11 +80,11 @@ namespace rtx { namespace Visioning {
           probable_entity = o;
         }
       }
-
+      
       // Create or update balls
-      if(p < 0.009) {
+      if(p < 0.4) {
         tmp_objs.push_back(new T(*obj));
-      } else {
+      } else if(probable_entity != nullptr) {
         probable_entity->update(*obj->getTransform());
       }
     }

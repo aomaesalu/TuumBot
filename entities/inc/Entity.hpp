@@ -52,6 +52,7 @@ namespace rtx {
 
     // By position & orientation
     Entity(Transform);
+    Entity(Transform, bool);
     Entity(const int, const int, const double);
 
     unsigned int getID();

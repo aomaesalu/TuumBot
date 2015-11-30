@@ -45,6 +45,12 @@ namespace rtx {
     m_transform = transform;
   }
 
+  Entity::Entity(Transform transform, bool recv_id) {
+    if(recv_id) id = Entity::newID();
+    else id = 0;
+    m_transform = transform;
+  }
+
   Entity::Entity(const int x, const int y, const double o):
     m_transform(x, y, o)
   {
