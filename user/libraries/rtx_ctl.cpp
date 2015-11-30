@@ -164,4 +164,37 @@ namespace rtx { namespace ctl {
     return mb->getBallSensorState() && Navigation::getOpponentGoal() != nullptr;
   }
 
+  // Defend goal
+  void LSGoalee::init() {
+    Motion::stop();
+    Motion::setBehaviour(Motion::MOT_COMPLEX);
+    Motion::setSpeed(50);
+  }
+
+  int LSGoalee::run() {
+    if(Visioning::ballDetect.size() <= 0) return -1;
+
+    Ball* b = Navigation::getNearestBall();
+
+    if(b != nullptr) {
+      Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
+
+      Motion::setPositionTarget(pos);
+      Motion::setAimTarget(b->getTransform()->getPosition());
+
+      Transform* t = Localization::getTransform();
+      double d = t->distanceTo(b->getTransform()->getPosition());
+
+      //std::cout << d << std::endl;
+      //if(d < 250) mb->startDribbler();
+      //else mb->stopDribbler();
+
+      if(!Motion::isTargetAchieved()) {
+        if(!Motion::isRunning()) Motion::start();
+      }
+    }
+
+    return 0;
+  }
+
 }}

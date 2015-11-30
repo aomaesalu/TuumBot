@@ -118,6 +118,17 @@ namespace rtx { namespace ctl {
     Goal* targetGoal;
   };
 
+  class LSGoalee : public Controller {
+  public:
+    LSGoalee(Context _ctx) : ctx(_ctx) {}
+
+    void init();
+    int run();
+
+  private:
+    Context ctx;
+  };
+
 
   /**
    *

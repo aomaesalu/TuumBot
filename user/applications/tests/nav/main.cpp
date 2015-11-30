@@ -29,7 +29,9 @@ int main(int argc, char* argv[]) {
   Visioning::setup();
   Motion::setup();
 
-  std::cout << Visioning::stateProbability(new Transform({{100, 100}, 0.0}), new Transform({{150, 150}, 0.0})) << std::endl;
+  Context ctx;
+  Controller* goaleeCtrl = new ctl::LSGoalee(ctx);
+  goaleeCtrl->init();
 
   bool running = true;
   while(running) {
@@ -38,22 +40,24 @@ int main(int argc, char* argv[]) {
     Visioning::process();
     Motion::process();
 
+    goaleeCtrl->run();
+
     if(debugTimer.isTime()) {
 
       Goal* g = Navigation::getOpponentGoal();
       if(g != nullptr) {
-        std::cout << "Goal: " << g->toString() << std::endl;
+        //std::cout << "Goal: " << g->toString() << std::endl;
       }
 
       Robot* ally = Navigation::getAlly();
       if(ally != nullptr) {
-        std::cout << "Ally: " << ally->toString() << std::endl;
+        //std::cout << "Ally: " << ally->toString() << std::endl;
       }
 
       if(Visioning::ballDetect.size() > 0) {
-	std::cout << "Balls: " << std::endl;
+	//std::cout << "Balls: " << std::endl;
 	for(auto& b : *Visioning::ballDetect.getEntities()) {
-          std::cout << b->toString() << std::endl;
+          //std::cout << b->toString() << std::endl;
 	}
       }
 
