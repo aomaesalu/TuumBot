@@ -113,8 +113,12 @@ namespace rtx {
       std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point);
       if (vPoint.first >= CAMERA_WIDTH || vPoint.second >= CAMERA_HEIGHT)
         continue;
-      guint8 *pixel = pixels + vPoint.first * channels + vPoint.second * stride;
-      colorPixel(pixel, 102, 0, 51);
+      for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+          guint8 *pixel = pixels + (vPoint.first + dx) * channels + (vPoint.second + dy) * stride;
+          colorPixel(pixel, 102, 0, 51);
+        }
+      }
     }
   }
 
