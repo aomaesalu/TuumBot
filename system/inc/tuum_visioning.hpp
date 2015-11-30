@@ -27,11 +27,7 @@ using namespace vis;
 namespace rtx { namespace Visioning {
 
   //TODO: replace this function's usage with an analoguous Entity method
-  inline double stateProbability(Transform* t1, Transform* t2) {
-    double px = gaussian_probability(t1->getX(), 30, t2->getX());
-    double py = gaussian_probability(t1->getY(), 30, t2->getY());
-    return (px + py) / 2;
-  }
+  double stateProbability(Transform* t1, Transform* t2);
 
   typedef std::vector<Feature*> FeatureSet;
   typedef std::vector<Ball*> BallSet;

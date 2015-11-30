@@ -49,25 +49,25 @@ namespace rtx { namespace ctl {
   // Ball search
   void LSBallLocate::init() {
     Motion::stop();
-    Motion::setBehaviour(Motion::MOT_COMPLEX);
-    Motion::setSpeed(30);
-    mb->stopDribbler();
-  }
+	    Motion::setBehaviour(Motion::MOT_COMPLEX);
+	    Motion::setSpeed(30);
+	    mb->stopDribbler();
+	  }
 
-  int LSBallLocate::run() {
-    if(Visioning::ballDetect.probableSize() > 0) {
-      Motion::stop();
-      return 0;
-    } else {
-      Motion::setAimTarget(Vec2i({1, 1}));
-      if(!Motion::isRunning()) Motion::start();
-    }
+	  int LSBallLocate::run() {
+	    if(Visioning::ballDetect.probableSize() > 0) {
+	      Motion::stop();
+	      return 0;
+	    } else {
+	      Motion::setAimTarget(Vec2i({1, 1}));
+	      if(!Motion::isRunning()) Motion::start();
+	    }
 
-    return 0;
-  }
+	    return 0;
+	  }
 
-  bool LSBallLocate::isRunnable() {
-    return true;
+	  bool LSBallLocate::isRunnable() {
+	    return true;
   }
 
 

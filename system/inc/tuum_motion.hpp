@@ -7,10 +7,11 @@
 
 namespace rtx { namespace Motion {
 
-  const int LONG_RANGE = 600;
-  const int MID_RANGE = 300;
-  const int CLOSE_RANGE = 150;
-  const int PROXIMITY = 40;
+  const int MAX_RANGE = 5000;
+  const int LONG_RANGE = 2000;
+  const int MID_RANGE = 14000;
+  const int CLOSE_RANGE = 800;
+  const int PROXIMITY = 300;
 
   const int MIN_SPEED = 5;
   const int MIN_ROT_SPEED = 5;

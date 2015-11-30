@@ -46,6 +46,13 @@ int main(int argc, char* argv[]) {
         std::cout << "Ally: " << ally->toString() << std::endl;
       }
 
+      if(Visioning::ballDetect.size() > 0) {
+	std::cout << "Balls: " << std::endl;
+	for(auto& b : *Visioning::ballDetect.getEntities()) {
+          std::cout << b->toString() << std::endl;
+	}
+      }
+
       debugTimer.start();
     }
   }
