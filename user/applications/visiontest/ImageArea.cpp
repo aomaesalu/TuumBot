@@ -107,7 +107,7 @@ namespace rtx {
         continue;
       guint8 *pixel = pixels + x * channels + y * stride;
       colorPixel(pixel, 102, 0, 51);
-    }*/ TODO: Readd
+    }*/ // TODO: Readd
     std::vector<std::pair<double, double>> linePoints = line->getPoints();
     for (std::vector<std::pair<double, double>>::iterator point = linePoints.begin(); point != linePoints.end(); ++point) {
       std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point);
