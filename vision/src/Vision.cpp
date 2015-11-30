@@ -619,6 +619,8 @@ namespace rtx { namespace Vision {
             }
           }*/
 
+          std::cout << "W:" << "(" << sample->first << ", " << sample->second << ")" << std::endl;
+
           farthestWhite = std::pair<unsigned int, unsigned int>(sample->first, sample->second);
           whiteExists = true;
 
@@ -666,6 +668,8 @@ namespace rtx { namespace Vision {
               }
             }*/
 
+            std::cout << "B:" << "(" << sample->first << ", " << sample->second << ")" << std::endl;
+
             closestBlack = std::pair<unsigned int, unsigned int>(sample->first, sample->second);
             blackExists = true;
 
@@ -698,6 +702,8 @@ namespace rtx { namespace Vision {
       }
       std::cout << std::endl << std::endl;*/
     }
+
+    std::cout << std::endl << std::endl;
 
     // Separate lines based on the differences in the slopes
     separateLines(transitionPoints);
