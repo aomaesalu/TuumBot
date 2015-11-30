@@ -1,23 +1,14 @@
 
-#ifndef RTX_MOTION_H
-#define RTX_MOTION_H
+#ifndef RTX_MOTIONING_H
+#define RTX_MOTIONING_H
 
 #include "rtxmath.hpp"
-#include "__future__.hpp"
+
+#include "syscore/MotionData.hpp"
+
+#include "tuum_platform.hpp"
 
 namespace rtx { namespace Motion {
-
-  const int MAX_RANGE = 5000;
-  const int LONG_RANGE = 2000;
-  const int MID_RANGE = 14000;
-  const int CLOSE_RANGE = 800;
-  const int PROXIMITY = 300;
-
-  const int MIN_SPEED = 5;
-  const int MIN_ROT_SPEED = 5;
-
-  const int MN_DIST_STEP = 15;
-  const double MN_ROT_STEP = 0.05;
 
   enum MotionType {
     MOT_SCAN,   // In-place rotation
@@ -33,9 +24,22 @@ namespace rtx { namespace Motion {
     MOT_AIM,
   };
 
+  enum MotionPhase {
+    MOP_STANDBY,
+    MOP_INIT,
+    MOP_RUN,
+    MOP_DONE
+  };
+
+  struct MotionContext {
+    MotionPhase phase;
+  };
+
+  const double targetDistanceCondition = GRS_MOV.low.step;
+  const double targetOrientationCondition = GRS_ROT.low.step;
+
   void setup();
   void process();
-
 
   // Motion target API
   void setPositionTarget(Vec2i);
@@ -73,4 +77,4 @@ namespace rtx { namespace Motion {
 
 }}
 
-#endif // RTX_MOTION_H
+#endif // RTX_MOTIONING_H

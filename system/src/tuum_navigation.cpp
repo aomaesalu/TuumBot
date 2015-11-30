@@ -5,22 +5,23 @@
  *  @version 0.1
  */
 
+#include "syscore/MotionData.hpp"
+
 #include "tuum_platform.hpp"
 #include "tuum_navigation.hpp"
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
+#include "tuum_motion.hpp"
 
+// TODO: Obstacle avoidance
+// TODO: Pathfinding
+// TODO: No out of bounds transform target
 namespace rtx { namespace Navigation {
-
-  const int NAV_BALL_PICKUP_RANGE = 30;
-
 
   //TODO: position to relative position
   Transform calcBallPickupPos(Transform* bt) {
-    Transform target((*bt) - NAV_BALL_PICKUP_RANGE);
-
-    double o = bt->getPosition().getOrientation();
-    target.setOrientation(o);
+    Transform target((*bt) - Motion::VLS_DIST.mn);
+    target.setOrientation(0.0);
     return target;
   }
 

@@ -11,6 +11,8 @@
 
 #include "Configuration.hpp"
 
+#include "motion.hpp"
+
 namespace rtx {
 
   // Global configuration object

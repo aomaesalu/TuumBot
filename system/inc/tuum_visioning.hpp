@@ -82,7 +82,11 @@ namespace rtx { namespace Visioning {
       }
       
       // Create or update balls
-      if(p < 0.4) {
+      if(p < 0.01) {
+	if(probable_entity != nullptr) {
+	  //std::cout << probable_entity->toString() << std::endl;
+	  //std::cout << "Create new entity, ^p=" << p << std::endl;
+	}
         tmp_objs.push_back(new T(*obj));
       } else if(probable_entity != nullptr) {
         probable_entity->update(*obj->getTransform());

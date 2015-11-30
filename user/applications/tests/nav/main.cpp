@@ -4,6 +4,8 @@
 
 #include "application.hpp"
 
+#include "rtx_ctl.hpp"
+
 #include "rtxhal.hpp"
 
 #include "tuum_motion.hpp"
