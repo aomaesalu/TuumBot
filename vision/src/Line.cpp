@@ -30,6 +30,7 @@ namespace rtx { namespace Vision {
   Line::Line(const std::vector<std::pair<double, double>> &points):
     Feature(0, 0)
   {
+    this->points = points;
     // DEBUG:
     //std::cout << "Line:" << std::endl;
     // TODO: Use regression instead?
@@ -67,6 +68,10 @@ namespace rtx { namespace Vision {
   double Line::getSlope() const {
     std::pair<double, double> point = getRelativePoint();
     return point.second / point.first;
+  }
+
+  std::vector<std::pair<double, double>> Line::getPoints() const {
+    return points;
   }
 
 }}

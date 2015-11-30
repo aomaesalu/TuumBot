@@ -27,6 +27,11 @@ namespace rtx { namespace Vision {
 
       double getSlope() const;
 
+      std::vector<std::pair<double, double>> getPoints() const; // TODO: Remove
+
+    private:
+      std::vector<std::pair<double, double>> points; // TODO: Remove
+
   };
 
 }}

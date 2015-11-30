@@ -666,7 +666,8 @@ namespace rtx { namespace Vision {
               }
             }*/
 
-            std::cout << "B:" << "(" << sample->first << ", " << sample->second << ")" << std::endl;
+            // DEBUG:
+            //std::cout << "B:" << "(" << sample->first << ", " << sample->second << ")" << std::endl;
 
             closestBlack = std::pair<unsigned int, unsigned int>(sample->first, sample->second);
             blackExists = true;

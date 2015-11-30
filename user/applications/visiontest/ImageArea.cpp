@@ -106,6 +106,13 @@ namespace rtx {
       guint8 *pixel = pixels + x * channels + y * stride;
       colorPixel(pixel, 102, 0, 51);
     }
+    std::vector<std::pair<double, double>> linePoints = line->getPoints();
+    for (std::vector<std::pair<double, double>>::iterator point = linePoints.begin(); point != linePoints.end(); ++point) {
+      if (point->first >= CAMERA_WIDTH || point->second >= CAMERA_HEIGHT)
+        continue;
+      guint8 *pixel = pixels + ((int) point->first) * channels + ((int) point->second) * stride;
+      colorPixel(pixel, 102, 0, 51);
+    }
   }
 
   bool ImageArea::applyFilter() {
