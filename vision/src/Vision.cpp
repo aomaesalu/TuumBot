@@ -600,38 +600,7 @@ namespace rtx { namespace Vision {
       expectedLines.clear();
 
     }
-
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Old algorithm
-
-    if (points.size() < 2)
-      return;
-    double maxSlopeDifference = 0.3;
-    // Calculate slopes
-    std::vector<double> slopes;
-    for (int i = 0; i < points.size() - 1; ++i) {
-      slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
-    }
-    // Separate lines
-    std::vector<std::vector<std::pair<double, double>>> listOfLines;
-    std::vector<std::pair<double, double>> emptyLine;
-    listOfLines.push_back(emptyLine);
-    listOfLines.back().push_back(points[0]);
-    for (int i = 0; i < slopes.size() - 1; ++i) {
-      if (fabs(slopes[i + 1] / slopes[i]) > maxSlopeDifference) {
-        listOfLines.push_back(emptyLine);
-      }
-      listOfLines.back().push_back(points[i + 1]);
-    }
-    listOfLines.back().push_back(points.back());
-    // Normalise and create lines
-    for (unsigned int i = 0; i < listOfLines.size(); ++i) {
-      if (listOfLines[i].size() > 1) {
-        linesBuffer.push_back(new Line(listOfLines[i]));
-      }
-    }
+    
   }
 
   void lineDetection(const Frame &frame, const std::string &filter) {
