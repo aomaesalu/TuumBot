@@ -520,46 +520,54 @@ namespace rtx { namespace Vision {
     if (points.size() < 2)
       return;
 
-    // Repeat the following until there are no more points, or up to 3 different
-    // lines found. The constant 3 should be removed in the future (TODO) but is
-    // sufficient for this year's competition.
-    // TODO
-
-    // Initialise unused point indexes
+    // Initialise unused point index set
     std::set<unsigned int> unused;
     for (unsigned int i = 0; i < points.size(); ++i) {
       unused.insert(i);
     }
 
-    // Initialise expected lines
-    // TODO
+    // Initialise the list of expected lines. Each line consists of (1) the pair
+    // of point indexes whose corresponding points form the line, and (2) the
+    // list of points belonging to the line. Each element in the latter is a
+    // pair consisting of (1) the point's index, and (2) the point's distance
+    // from the specified line.
+    std::vector<std::pair<std::pair<unsigned int, unsigned int>,
+                        std::vector<std::pair<unsigned int, double>>
+                        >> expectedLines;
 
-    // Form expected lines for every point pair
-    for (unsigned int i = 0; i < points.size(); ++i) {
-      for (unsigned int j = i + 1; j < points.size(); ++j) {
+    // Repeat the following until there are no more points, or up to 3 different
+    // lines found. The constant 3 should be removed in the future (TODO) but is
+    // sufficient for this year's competition.
+    while (!unused.empty() && expectedLines.size() < 3) {
 
-        // Form the line
-        double slope = (points[j].second - points[i].second) /
-                       (points[j].first - points[i].first);
+      // Form expected lines for every point pair
+      for (unsigned int i = 0; i < points.size(); ++i) {
+        for (unsigned int j = i + 1; j < points.size(); ++j) {
 
-        // Calculate deviations from the line for each point that falls into the
-        // line, based on the expected line width
-        for (std::vector<std::pair<double, double>>::const_iterator point =
-             points.begin(); point != points.end(); ++point) {
+          // Form the line
+          double slope = (points[j].second - points[i].second) /
+                         (points[j].first - points[i].first);
+
+          // Calculate deviations from the line for each point that falls into the
+          // line, based on the expected line width
+          for (std::vector<std::pair<double, double>>::const_iterator point =
+               points.begin(); point != points.end(); ++point) {
+            // TODO
+          }
+
+          // Find expected line with most points in it, and add it to the lines
+          // buffer
           // TODO
+
+          // Regress over the line to make it even more exact
+          // TODO
+
+          // Remove the points used in the line found
+          // TODO
+
         }
-
-        // Find expected line with most points in it, and add it to the lines
-        // buffer
-        // TODO
-
-        // Regress over the line to make it even more exact
-        // TODO
-
-        // Remove the points used in the line found
-        // TODO
-
       }
+
     }
 
 
