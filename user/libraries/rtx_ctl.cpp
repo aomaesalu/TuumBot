@@ -90,8 +90,6 @@ namespace rtx { namespace ctl {
     if(b != nullptr) {
       Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
 
-      std::cout << "Nav select ball: " << b->toString();
-      std::cout << "Nav motion target: " << pos.toString() << std::endl;
       Motion::setPositionTarget(pos);
       Motion::setAimTarget(b->getTransform()->getPosition());
       mb->startDribbler();
@@ -144,9 +142,7 @@ ERR:
       Motion::setPositionTarget(t->getPosition() + (avf*dD).toInt());
       Motion::setAimTarget(t->getPosition() + (avf*1.1*dD).toInt());
 
-      std::cout << Motion::getTargetRange() << std::endl;
       if(me->getPosition().distanceTo(t->getPosition()) > dD) return -1;
-      std::cout << "MOVE" << std::endl;
 
       mb->startDribbler();
       if(!Motion::isRunning()) Motion::start();
@@ -176,9 +172,6 @@ ERR:
 
     return true;
   }
-
-
-
 
 
   // Opposing goal search
@@ -227,18 +220,21 @@ ERR:
     //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
     Motion::setAimTarget(g->getTransform()->getPosition());
     //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
+;
+    if(Motion::getDeltaOrientation() < 0.2) mb->doCoilKick();
 
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();
     } else {
-      mb->doCoilKick();
+      Motion::stop();
     }
 
     return 0;
   }
 
   bool LSGoalShoot::isRunnable() {
-    return mb->getBallSensorState() && Navigation::getOpponentGoal() != nullptr;
+     
+    return Navigation::getOpponentGoal() != nullptr && mb->getBallSensorState();
   }
 
   // Defend goal
