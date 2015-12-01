@@ -571,28 +571,30 @@ namespace rtx { namespace Vision {
             expectedLines.back().second.push_back(std::pair<unsigned int, double>(*p, pointDistance));
           }
 
-          // Find expected line with most points in it, and add it to the lines
-          // buffer
-          unsigned int mostPoints = 0;
-          unsigned int bestLine = 0;
-          for (unsigned int k = 0; k < expectedLines.size(); ++k) {
-            if (expectedLines[k].second.size() > mostPoints) {
-              mostPoints = expectedLines[k].second.size();
-              bestLine = k;
-            }
-          }
-
-          // Regress over the line to make it even more exact
-          // TODO
-
-          // Remove the points used in the line found from the unused point set
-          // TODO
-
-          // Clear the expected lines
-          expectedLines.clear();
-
         }
       }
+
+      // Find expected line with most points in it
+      unsigned int mostPoints = 0;
+      unsigned int bestLine = 0;
+      for (unsigned int k = 0; k < expectedLines.size(); ++k) {
+        if (expectedLines[k].second.size() > mostPoints) {
+          mostPoints = expectedLines[k].second.size();
+          bestLine = k;
+        }
+      }
+
+      // Add the best line to the lines buffer
+      linesBuffer.push_back(new Line({points[expectedLines[bestLine].first.first], points[expectedLines[bestLine].first.second]}));
+
+      // Regress over the line to make it even more exact
+      // TODO
+
+      // Remove the points used in the line found from the unused point set
+      // TODO
+
+      // Clear the expected lines
+      expectedLines.clear();
 
     }
 
