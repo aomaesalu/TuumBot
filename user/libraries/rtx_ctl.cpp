@@ -15,9 +15,58 @@
 
 #include "rtx_ctl.hpp"
 
+namespace rtx {
+
+
+  namespace Motion {
+
+    void TwitchScan::_init() {
+      wait_for_vision = true;
+
+      motionTimer.setPeriod(160);
+      visionTimer.setPeriod(400);
+    }
+
+    void TwitchScan::init() {
+      _init();
+    }
+
+    void TwitchScan::init(int sp_vision, int sp_scan) {
+      m_spv = sp_vision;
+      m_sps = sp_scan;
+      _init();
+    }
+
+    void TwitchScan::run() {
+      if(!wait_for_vision) {
+	if(motionTimer.isTime()) {
+          Motion::setAimTarget(Vec2i({0, 1}));
+	  motionData.manualRotGear = {m_spv, 3.14};
+	  Motion::start();
+	  wait_for_vision = true;
+	  visionTimer.start();
+	}
+      } else {
+	if(visionTimer.isTime()) {
+	  Motion::setAimTarget(Vec2i({0, 1}));
+	  motionData.manualRotGear = {m_sps, 3.14};
+	  Motion::start();
+	  std::cout << "vis" << std::endl;
+
+	  wait_for_vision = false;
+	  motionTimer.start();
+	}
+      }
+    }
+
+  }
+
+}
+
 namespace rtx { namespace ctl {
 
   hal::MainBoard* mb = hal::hw.getMainBoard();
+
 
   // Warmup
   bool LSInit::isRunnable() {
@@ -50,6 +99,7 @@ namespace rtx { namespace ctl {
   void LSBallLocate::init() {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
+    twitchScanner.init();
     mb->stopDribbler();
   }
 
@@ -59,8 +109,7 @@ namespace rtx { namespace ctl {
       Motion::stop();
       return 0;
     } else {
-      Motion::setAimTarget(Vec2i({1, 1}));
-      if(!Motion::isRunning()) Motion::start();
+      twitchScanner.run();
     }
 
     return 0;
@@ -186,6 +235,7 @@ ERR:
   void LSGoalLocate::init() {
     Motion::stop();
     ctx.phase = CP_INIT;
+    twitchScanner.init(5, 10);
     mb->startDribbler();
   }
 
@@ -193,8 +243,7 @@ ERR:
     if(!mb->getBallSensorState()) goto ERR;
     if(Navigation::getOpponentGoal() != nullptr) goto OK;
 
-    Motion::setAimTarget(Vec2i({1, -1}));
-    if(!Motion::isRunning()) Motion::start();
+    twitchScanner.run();
 
     return 0;
 OK:
@@ -221,12 +270,13 @@ ERR:
     Motion::setAimTarget(g->getTransform()->getPosition());
     //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
 ;
-    if(Motion::getDeltaOrientation() < 0.2) mb->doCoilKick();
+    if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
 
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();
     } else {
       Motion::stop();
+      mb->doCoilKick();
     }
 
     return 0;

@@ -17,6 +17,32 @@
 #include "Ball.hpp"
 #include "Goal.hpp"
 
+
+namespace rtx {
+
+  namespace Motion {
+    class TwitchScan {
+    private:
+      Timer motionTimer;
+      Timer visionTimer;
+      bool wait_for_vision;
+
+      int m_spv = 5;
+      int m_sps = 40;
+
+      void _init();
+    public:
+      void init();
+      void init(int, int);
+
+      void run();
+    };
+
+
+  }
+
+}
+
 namespace rtx { namespace ctl {
 
   class LSInit : public Controller {
@@ -49,6 +75,7 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
+      Motion::TwitchScan twitchScanner;
   };
 
 
@@ -106,6 +133,7 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
+      Motion::TwitchScan twitchScanner;
   };
 
 
