@@ -37,7 +37,7 @@ namespace rtx { namespace Visioning {
   template<class T>
   struct EDS {
     int mn_h = -5; // Entity removal health condition
-    int mx_h = 8;  // Entity detection health condition
+    int mx_h = 6;  // Entity detection health condition
 
     std::vector<T*> objs;
     std::vector<T*> tmp_objs;

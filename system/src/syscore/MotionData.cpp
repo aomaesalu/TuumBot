@@ -122,6 +122,7 @@ namespace rtx { namespace Motion {
       if(d < VLS_ANGLE.low) m_rotGear = &(GRS_ROT.low);
       else if(d < VLS_ANGLE.med) m_rotGear = &(GRS_ROT.med);
       else if(d < VLS_ANGLE.high) m_rotGear = &(GRS_ROT.high);
+      else m_rotGear = &(GRS_ROT.mn);
     }
   }
 

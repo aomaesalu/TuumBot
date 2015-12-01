@@ -49,39 +49,39 @@ namespace rtx { namespace ctl {
   // Ball search
   void LSBallLocate::init() {
     Motion::stop();
-	    Motion::setBehaviour(Motion::MOT_COMPLEX);
-	    Motion::setSpeed(30);
-	    mb->stopDribbler();
-	  }
+    Motion::setBehaviour(Motion::MOT_COMPLEX);
+    mb->stopDribbler();
+  }
 
-	  int LSBallLocate::run() {
-	    if(Visioning::ballDetect.probableSize() > 0) {
-	      Motion::stop();
-	      return 0;
-	    } else {
-	      Motion::setAimTarget(Vec2i({1, 1}));
-	      if(!Motion::isRunning()) Motion::start();
-	    }
+  int LSBallLocate::run() {
+    if(Visioning::ballDetect.size() > 0) {
+      mb->startDribbler();
+      Motion::stop();
+      return 0;
+    } else {
+      Motion::setAimTarget(Vec2i({1, 1}));
+      if(!Motion::isRunning()) Motion::start();
+    }
 
-	    return 0;
-	  }
+    return 0;
+  }
 
-	  bool LSBallLocate::isRunnable() {
-	    return true;
+  bool LSBallLocate::isRunnable() {
+    return true;
   }
 
 
   // Ball retrieval
   void LSBallRetrieve::init() {
     Motion::stop();
-    Motion::setSpeed(80);
   }
 
   int LSBallRetrieve::run() {
-    if(mb->getBallSensorState()) return 1;
-    if(Visioning::ballDetect.size() <= 0) return -1;
+    Ball* b = nullptr; 
+    if(mb->getBallSensorState()) goto OK;
+    if(Visioning::ballDetect.size() <= 0) goto ERR;
 
-    Ball* b = Navigation::getNearestBall();
+    b = Navigation::getNearestBall();
 
     if(b != nullptr) {
       Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
@@ -100,9 +100,17 @@ namespace rtx { namespace ctl {
       if(!Motion::isTargetAchieved()) {
         if(!Motion::isRunning()) Motion::start();
       }
+    } else {
+      Motion::stop();
     }
 
     return 0;
+OK:
+    Motion::stop();
+    return 1;
+ERR:
+    Motion::stop();
+    return -1;
   }
 
   bool LSBallRetrieve::isRunnable() {
@@ -121,18 +129,24 @@ namespace rtx { namespace ctl {
 
   void LSGoalLocate::init() {
     Motion::stop();
-    Motion::setSpeed(50);
     ctx.phase = CP_INIT;
     mb->startDribbler();
   }
 
   int LSGoalLocate::run() {
-    if(!mb->getBallSensorState()) return -1;
-    if(Navigation::getOpponentGoal() != nullptr) return 1;
+    if(!mb->getBallSensorState()) goto ERR;
+    if(Navigation::getOpponentGoal() != nullptr) goto OK;
 
     Motion::setAimTarget(Vec2i({1, -1}));
     if(!Motion::isRunning()) Motion::start();
+
     return 0;
+OK:
+    Motion::stop();
+    return 1;
+ERR:
+    Motion::stop();
+    return -1;
   }
 
 
@@ -168,7 +182,6 @@ namespace rtx { namespace ctl {
   void LSGoalee::init() {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
-    Motion::setSpeed(50);
   }
 
   int LSGoalee::run() {
