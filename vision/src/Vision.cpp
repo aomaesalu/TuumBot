@@ -549,13 +549,26 @@ namespace rtx { namespace Vision {
           // its slope.
           double slope = (points[j].second - points[i].second) /
                          (points[j].first - points[i].first);
+          double perpendicularSlope = -1 / slope;
           expectedLines.push_back(std::pair<std::pair<unsigned int, unsigned int>, std::vector<std::pair<unsigned int, double>>>(std::pair<unsigned int, unsigned int>(i, j), noPoints));
 
           // Calculate deviations from the line for each unused point that falls
           // into the line, based on the expected line width
           for (std::set<unsigned int>::iterator p = unused.begin(); p !=
                unused.end(); ++p) {
-            // TODO
+            // Calculate the intersection point of the line and its
+            // perpendicular line intersecting the point in question
+            double perpendicularX = (points[*p].second - points[i].first - perpendicularSlope * points[*p].first + slope * points[i].first) / (slope - perpendicularSlope);
+            double perpendicularY = slope * (perpendicularX - points[*p].first) + points[*p].second;
+            // Calculate the distance between the line and the point
+            double pointDistance = sqrt(perpendicularX * perpendicularX + perpendicularY * perpendicularY);
+            // If the point is farther away from the line than expected,
+            // continue checking the next point
+            if (pointDistance > LINE_WIDTH)
+              continue;
+            // If the point does belong to the line based on its distance, add
+            // its index and its distance from the line to the line's point list
+            expectedLines.back().second.push_back(std::pair<unsigned int, double>(*p, pointDistance));
           }
 
           // Find expected line with most points in it, and add it to the lines
