@@ -573,7 +573,14 @@ namespace rtx { namespace Vision {
 
           // Find expected line with most points in it, and add it to the lines
           // buffer
-          // TODO
+          unsigned int mostPoints = 0;
+          unsigned int bestLine = 0;
+          for (unsigned int k = 0; k < expectedLines.size(); ++k) {
+            if (expectedLines[k].second.size() > mostPoints) {
+              mostPoints = expectedLines[k].second.size();
+              bestLine = k;
+            }
+          }
 
           // Regress over the line to make it even more exact
           // TODO
