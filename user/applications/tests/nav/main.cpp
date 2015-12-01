@@ -30,8 +30,20 @@ int main(int argc, char* argv[]) {
   Motion::setup();
 
   Context ctx;
+
+  /*
   Controller* goaleeCtrl = new ctl::LSGoalee(ctx);
   goaleeCtrl->init();
+*/
+  /*
+  Controller* goalLocateCtrl = new ctl::LSGoalLocate(ctx);
+  goalLocateCtrl->init();
+  Controller* goalShootCtrl = new ctl::LSGoalShoot(ctx);
+  goalShootCtrl->init();
+  */
+
+  Motion::TwitchScan scanner;
+  scanner.init();
 
   bool running = true;
   while(running) {
@@ -40,13 +52,17 @@ int main(int argc, char* argv[]) {
     Visioning::process();
     Motion::process();
 
-    goaleeCtrl->run();
+    scanner.run();
+    //goaleeCtrl->run();
+
+    //if(goalLocateCtrl->run())
+    //goalShootCtrl->run();
 
     if(debugTimer.isTime()) {
 
       Goal* g = Navigation::getOpponentGoal();
       if(g != nullptr) {
-        //std::cout << "Goal: " << g->toString() << std::endl;
+        std::cout << "Goal: " << g->toString() << std::endl;
       }
 
       Robot* ally = Navigation::getAlly();
@@ -55,10 +71,10 @@ int main(int argc, char* argv[]) {
       }
 
       if(Visioning::ballDetect.size() > 0) {
-	std::cout << "Balls: " << std::endl;
-	for(auto& b : *Visioning::ballDetect.getEntities()) {
-          std::cout << b->toString() << std::endl;
-	}
+	//std::cout << "Balls: " << std::endl;
+	//for(auto& b : *Visioning::ballDetect.getEntities()) {
+        //  std::cout << b->toString() << std::endl;
+	//}
       }
 
       debugTimer.start();
