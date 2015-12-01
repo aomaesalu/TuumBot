@@ -552,6 +552,12 @@ namespace rtx { namespace Vision {
           double perpendicularSlope = -1 / slope;
           expectedLines.push_back(std::pair<std::pair<unsigned int, unsigned int>, std::vector<std::pair<unsigned int, double>>>(std::pair<unsigned int, unsigned int>(i, j), noPoints));
 
+          // DEBUG
+          /*std::cout << "Expected line:" << std::endl;
+          std::cout << "Points: (" << points[i].first << ", " << points[i].second << ")" << ", (" << points[j].first << ", " << points[j].second << ")" << std::endl;
+          std::cout << "Slope: " << slope << "; " << perpendicularSlope << std::endl;
+          std::cout << std::endl << std::endl;*/
+
           // Calculate deviations from the line for each unused point that falls
           // into the line, based on the expected line width
           for (std::set<unsigned int>::iterator p = unused.begin(); p !=
@@ -635,7 +641,7 @@ namespace rtx { namespace Vision {
       bool blackExists = false;
 
       for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
-        // TODO: Detect white-black transition points
+        // Detect white-black transition points
 
         // Find the current pixel
         unsigned char *pixel = pixels + sample->first * channels + sample->second * stride;

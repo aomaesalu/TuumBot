@@ -103,13 +103,25 @@ namespace rtx {
     double slope = line->getSlope();
 
     // Color the line
-    for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
-      unsigned int y = slope * (x + point.first) + point.second;
-      if (y >= CAMERA_HEIGHT)
+    for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
+      double realY = Vision::Perspective::virtualToReal(0, y).second;
+      double realX = (realY - point.second) / slope + point.first;
+      unsigned int x = Vision::Perspective::realToVirtual(realX, realY).first;
+      if (x >= CAMERA_WIDTH)
         continue;
       guint8 *pixel = pixels + x * channels + y * stride;
       colorPixel(pixel, 102, 0, 51);
     }
+
+    /*for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
+      double realX = Vision::Perspective::virtualToReal(x, 0).first;
+      double realY = slope * (realX + point.first) + point.second;
+      unsigned int y = Vision::Perspective::realToVirtual(realX, realY).second;
+      if (y >= CAMERA_HEIGHT)
+        continue;
+      guint8 *pixel = pixels + x * channels + y * stride;
+      colorPixel(pixel, 102, 0, 51);
+    }*/
 
     // Color the transition points // TODO: Remove (from the Line class, too)
     std::vector<std::pair<double, double>> linePoints = line->getPoints();
