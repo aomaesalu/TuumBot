@@ -55,7 +55,7 @@ namespace rtx { namespace Navigation {
         ball = b;
       }
     }
-
+    if(ball!= nullptr) std::cout << ball->toString() << std::endl;
     return ball;
   }
 

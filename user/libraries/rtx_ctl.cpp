@@ -172,8 +172,6 @@ namespace rtx { namespace ctl {
   }
 
   int LSGoalee::run() {
-    if(Visioning::ballDetect.size() <= 0) return -1;
-
     Ball* b = Navigation::getNearestBall();
 
     if(b != nullptr) {
@@ -192,6 +190,8 @@ namespace rtx { namespace ctl {
       if(!Motion::isTargetAchieved()) {
         if(!Motion::isRunning()) Motion::start();
       }
+    } else {
+      Motion::stop();
     }
 
     return 0;

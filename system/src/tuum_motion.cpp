@@ -230,7 +230,7 @@ namespace rtx { namespace Motion {
     double mag = motionData.getDeltaDist();
     if(mag <= VLS_DIST.mn) return VLS_DIST.mn; // Proximity
     else if(mag <= VLS_DIST.low) return VLS_DIST.low;
-    else if(mag <= VLS_DIST.mid) return VLS_DIST.mid;
+    else if(mag <= VLS_DIST.med) return VLS_DIST.med;
     else if(mag <= VLS_DIST.high) return VLS_DIST.high;
     else return VLS_DIST.mx;
   }

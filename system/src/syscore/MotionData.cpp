@@ -88,7 +88,7 @@ namespace rtx { namespace Motion {
       _speed = 0;
 
     if(aimTargetSet)
-      _r_speed = (int)(baseVelocity*0.35*getOVF());
+      _r_speed = (int)(m_rotGear->v*getOVF());
     else
       _r_speed = 0;
 
@@ -98,7 +98,31 @@ namespace rtx { namespace Motion {
   }
 
   void MotionData::updateGear() {
+    double d;
+    bool gear_unset = true;
 
+    if(posTargetSet) {
+      d = fabs(getDeltaDist());
+
+      if(d < VLS_DIST.mn) m_movGear = &(GRS_MOV.mn);
+      else if(d < VLS_DIST.low) m_movGear = &(GRS_MOV.low);
+      else if(d < VLS_DIST.med) m_movGear = &(GRS_MOV.med);
+      else if(d < VLS_DIST.high) m_movGear = &(GRS_MOV.high);
+      else {
+	m_movGear = &(GRS_MOV.mx);
+	m_rotGear = &(GRS_ROT.mx);
+	gear_unset = false;
+      }
+
+      baseVelocity = m_movGear->v;
+    }
+
+    if(aimTargetSet && gear_unset) {
+      d = fabs(getDeltaOrient());
+      if(d < VLS_ANGLE.low) m_rotGear = &(GRS_ROT.low);
+      else if(d < VLS_ANGLE.med) m_rotGear = &(GRS_ROT.med);
+      else if(d < VLS_ANGLE.high) m_rotGear = &(GRS_ROT.high);
+    }
   }
 
   void MotionData::applyFactors() {
