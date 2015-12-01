@@ -3,8 +3,8 @@
  *  Computer vision class using YUYV.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.2
- *  @date 29 November 2015
+ *  @version 0.3
+ *  @date 1 December 2015
  */
 
 #include "Vision.hpp"
@@ -513,6 +513,50 @@ namespace rtx { namespace Vision {
   }
 
   void separateLines(const std::vector<std::pair<double, double>> &points) {
+    // New algorithm
+
+    // If there are not enough points to form a line, return without creating
+    // any
+    if (points.size() < 2)
+      return;
+
+    // Repeat the following until there are no more points, or up to 3 different
+    // lines found. The constant 3 should be removed in the future (TODO) but is
+    // sufficient for this year's competition.
+    // TODO
+
+    // Initialise expected lines
+    // TODO
+
+    // Form expected lines for every point pair
+    for (unsigned int i = 0; i < points.size(); ++i) {
+      for (unsigned int j = i + 1; j < points.size(); ++j) {
+
+        // Form the line
+        // TODO
+
+        // Calculate deviations from the line for each point that falls into the
+        // line, based on the expected line width
+        // TODO
+
+        // Find expected line with most points in it, and add it to the lines
+        // buffer
+        // TODO
+
+        // Regress over the line to make it even more exact
+        // TODO
+
+        // Remove the points used in the line found
+        // TODO
+
+      }
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Old algorithm
+
     if (points.size() < 2)
       return;
     double maxSlopeDifference = 0.3;
