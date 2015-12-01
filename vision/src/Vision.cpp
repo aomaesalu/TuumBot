@@ -587,11 +587,14 @@ namespace rtx { namespace Vision {
       // Add the best line to the lines buffer
       linesBuffer.push_back(new Line({points[expectedLines[bestLine].first.first], points[expectedLines[bestLine].first.second]}));
 
-      // Regress over the line to make it even more exact
+      // Regress over the line based on the point distances from the line to
+      // make it even more exact
       // TODO
 
       // Remove the points used in the line found from the unused point set
-      // TODO
+      for (std::vector<std::pair<unsigned int, double>>::iterator p = expectedLines[bestLine].second.begin(); p != expectedLines[bestLine].second.end(); ++p) {
+        unused.erase(p->first);
+      }
 
       // Clear the expected lines
       expectedLines.clear();
