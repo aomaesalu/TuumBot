@@ -20,15 +20,15 @@
 namespace rtx { namespace ctl {
 
   class LSInit : public Controller {
-  public:
-    LSInit(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSInit(Context _ctx) : ctx(_ctx) {}
 
-    int run();
-    bool isRunnable();
-    bool isInterruptable();
+      int run();
+      bool isRunnable();
+      bool isInterruptable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 
@@ -38,51 +38,56 @@ namespace rtx { namespace ctl {
    *
    */
   class LSBallLocate : public Controller {
-  public:
-    LSBallLocate(Context _ctx) : ctx(_ctx) {
+    public:
+      LSBallLocate(Context _ctx) : ctx(_ctx) {
 
-    }
+      }
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 
-  class LSBallRetrieve : public Controller {
-  public:
-    LSBallRetrieve(Context _ctx) : ctx(_ctx) {}
+  class LSBallNavigator : public Controller {
+    public:
+      LSBallNavigator(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
+  };
 
-    Ball* targetBall;
+  class LSBallPicker : public Controller {
+    public:
+      LSBallPicker(Context _ctx) : ctx(_ctx) {}
 
-    Timer targetUpdate;
-    Timer ballPickupTimeout;
+      void init();
+      int run();
+      bool isRunnable();
 
-    bool m_catchingBall;
+    private:
+      Context ctx;
   };
 
 
   class LSBallPrepare : public Controller {
-  public:
-    LSBallPrepare(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSBallPrepare(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
-    Ball* targetBall;
+    private:
+      Context ctx;
+      Ball* targetBall;
   };
 
 
@@ -92,41 +97,41 @@ namespace rtx { namespace ctl {
    *
    */
   class LSGoalLocate : public Controller {
-  public:
-    LSGoalLocate(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSGoalLocate(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 
   class LSGoalShoot : public Controller {
-  public:
-    LSGoalShoot(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSGoalShoot(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
 
-    Goal* targetGoal;
+      Goal* targetGoal;
   };
 
   class LSGoalee : public Controller {
-  public:
-    LSGoalee(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSGoalee(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
+      void init();
+      int run();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 
@@ -136,40 +141,40 @@ namespace rtx { namespace ctl {
    *
    */
   class LSAllyLocate : public Controller {
-  public:
-    LSAllyLocate(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSAllyLocate(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 
   class LSAllyPass : public Controller {
-  public:
-    LSAllyPass(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSAllyPass(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
   class LSAllyReceive : public Controller {
-  public:
-    LSAllyReceive(Context _ctx) : ctx(_ctx) {}
+    public:
+      LSAllyReceive(Context _ctx) : ctx(_ctx) {}
 
-    void init();
-    int run();
-    bool isRunnable();
+      void init();
+      int run();
+      bool isRunnable();
 
-  private:
-    Context ctx;
+    private:
+      Context ctx;
   };
 
 }}

@@ -71,12 +71,16 @@ namespace rtx { namespace ctl {
   }
 
 
-  // Ball retrieval
-  void LSBallRetrieve::init() {
+  // Navigate to ball
+  void LSBallNavigator::init() {
     Motion::stop();
+
+    Ball* b = Navigation::getNearestBall(); 
+    if(b != nullptr)
+      std::cout << "Navigate to " << b->toString() << std::endl;
   }
 
-  int LSBallRetrieve::run() {
+  int LSBallNavigator::run() {
     Ball* b = nullptr; 
     if(mb->getBallSensorState()) goto OK;
     if(Visioning::ballDetect.size() <= 0) goto ERR;
@@ -86,12 +90,11 @@ namespace rtx { namespace ctl {
     if(b != nullptr) {
       Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
 
+      std::cout << "Nav select ball: " << b->toString();
+      std::cout << "Nav motion target: " << pos.toString() << std::endl;
       Motion::setPositionTarget(pos);
       Motion::setAimTarget(b->getTransform()->getPosition());
       mb->startDribbler();
-
-      Transform* t = Localization::getTransform();
-      double d = t->distanceTo(b->getTransform()->getPosition());
 
       //std::cout << d << std::endl;
       //if(d < 250) mb->startDribbler();
@@ -99,6 +102,8 @@ namespace rtx { namespace ctl {
 
       if(!Motion::isTargetAchieved()) {
         if(!Motion::isRunning()) Motion::start();
+      } else {
+        goto OK;
       }
     } else {
       Motion::stop();
@@ -113,9 +118,67 @@ ERR:
     return -1;
   }
 
-  bool LSBallRetrieve::isRunnable() {
+  bool LSBallNavigator::isRunnable() {
     return Visioning::ballDetect.size() > 0 || mb->getBallSensorState();
   }
+
+
+  // Ball pickup
+  void LSBallPicker::init() {
+    Motion::stop();
+    mb->startDribbler();
+  }
+
+  int LSBallPicker::run() {
+    Ball* b = nullptr; 
+    if(mb->getBallSensorState()) goto OK;
+    if(Visioning::ballDetect.size() <= 0) goto ERR;
+
+    b = Navigation::getNearestBall();
+
+    if(b != nullptr) {
+      double dD = Motion::VLS_DIST.low;
+      Transform* t = b->getTransform();
+      Transform* me = Localization::getTransform();
+      Vec2f avf = (t->getPosition() - me->getPosition()).getNormalized();
+      Motion::setPositionTarget(t->getPosition() + (avf*dD).toInt());
+      Motion::setAimTarget(t->getPosition() + (avf*1.1*dD).toInt());
+
+      std::cout << Motion::getTargetRange() << std::endl;
+      if(me->getPosition().distanceTo(t->getPosition()) > dD) return -1;
+      std::cout << "MOVE" << std::endl;
+
+      mb->startDribbler();
+      if(!Motion::isRunning()) Motion::start();
+    } else {
+      Motion::stop();
+      mb->stopDribbler();
+    }
+
+    return 0;
+OK:
+    Motion::stop();
+    mb->stopDribbler();
+    return 1;
+ERR:
+    Motion::stop();
+    mb->stopDribbler();
+    return -1;
+  }
+
+  bool LSBallPicker::isRunnable() {
+    Ball* b = Navigation::getNearestBall();
+    if(b == nullptr) return false;
+
+    Transform* t = Localization::getTransform();
+    double d = t->distanceTo(b->getTransform()->getPosition());
+    if(d > (Motion::VLS_DIST.mn + Motion::GRS_MOV.mn.step) ) return false;
+
+    return true;
+  }
+
+
+
 
 
   // Opposing goal search
