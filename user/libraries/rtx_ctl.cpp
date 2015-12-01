@@ -51,8 +51,6 @@ namespace rtx {
 	  Motion::setAimTarget(Vec2i({0, 1}));
 	  motionData.manualRotGear = {m_sps, 3.14};
 	  Motion::start();
-	  std::cout << "vis" << std::endl;
-
 	  wait_for_vision = false;
 	  motionTimer.start();
 	}
