@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 1 December 2015
  */
 
 #ifndef PHYSICAL_CONSTANTS_H
@@ -17,7 +17,7 @@
 #define DEFENSE_AREA_LARGER_WIDTH 1250  // Goal defense area larger width               // Unused
 #define DEFENSE_AREA_SMALLER_WIDTH 350  // Goal defense area smaller width              // Unused
 #define DEFENSE_AREA_RADIUS 500         // Goal defense area corner curve radius        // Unused
-#define LINE_WIDTH 50                   // Field line width                             // Unused
+#define LINE_WIDTH 50                   // Field line width
 #define GOAL_WIDTH 700                  // Goal width
 #define GOAL_LENGTH 250                 // Goal length
 #define GOAL_HEIGHT 200                 // Goal height
@@ -30,7 +30,7 @@
 #define ROBOT_MAXIMUM_DIAMETER 350      // Robots' maximum allowed diameter
 #define ROBOT_MAXIMUM_HEIGHT 350        // Robots' maximum allowed height               // Unused
 #define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width
-#define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
+#define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from
 
 // Implementation-specific physical constants in millimeters
 #define ROBOT_DIAMETER 350              // Our robot's diameter

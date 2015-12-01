@@ -525,6 +525,12 @@ namespace rtx { namespace Vision {
     // sufficient for this year's competition.
     // TODO
 
+    // Initialise unused point indexes
+    std::set<unsigned int> unused;
+    for (unsigned int i = 0; i < points.size(); ++i) {
+      unused.insert(i);
+    }
+
     // Initialise expected lines
     // TODO
 
@@ -533,11 +539,15 @@ namespace rtx { namespace Vision {
       for (unsigned int j = i + 1; j < points.size(); ++j) {
 
         // Form the line
-        // TODO
+        double slope = (points[j].second - points[i].second) /
+                       (points[j].first - points[i].first);
 
         // Calculate deviations from the line for each point that falls into the
         // line, based on the expected line width
-        // TODO
+        for (std::vector<std::pair<double, double>>::const_iterator point =
+             points.begin(); point != points.end(); ++point) {
+          // TODO
+        }
 
         // Find expected line with most points in it, and add it to the lines
         // buffer
