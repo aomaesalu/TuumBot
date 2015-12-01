@@ -137,34 +137,41 @@ namespace rtx { namespace Visioning {
   void translateGoalsBuffer() {
     editingGoals = true;
 
-    // TODO: Refactor buffer management
+    const int mn_h = -5;
+    const int mx_h = 5;
 
-    /*if (blueGoal) {
-      if (blueGoal != blueGoalBuffer) {
-        delete(blueGoal);
-        blueGoal = blueGoalBuffer;
+    Goal* g = blueGoal;
+    Goal* new_g = blueGoalBuffer;
+
+    if(blueGoal != nullptr) {
+
+      if(blueGoalBuffer != nullptr)
+        blueGoal->update(*blueGoalBuffer->getTransform());
+      else
+	blueGoal->update();
+
+      if(blueGoal->getHealth() <= mn_h) {
+        delete blueGoal;
+	blueGoal = nullptr;
       }
-    } else {
-      blueGoal = blueGoalBuffer;
+    } else if(blueGoalBuffer != nullptr) {
+      blueGoal = new Goal(*blueGoalBuffer);
     }
 
-    if (yellowGoal) {
-      if (yellowGoal != yellowGoalBuffer) {
-        delete(yellowGoal);
-        yellowGoal = yellowGoalBuffer;
-      }
-    } else {
-      yellowGoal = yellowGoalBuffer;
-    }*/
+    if(yellowGoal != nullptr) {
+      if(yellowGoalBuffer != nullptr)
+        yellowGoal->update(*yellowGoalBuffer->getTransform());
+      else
+	yellowGoal->update();
 
-    if (blueGoalBuffer)
-      blueGoal = new Goal(*blueGoalBuffer);
-    else
-      blueGoal = nullptr;
-    if (yellowGoalBuffer)
+
+      if(yellowGoal->getHealth() <= mn_h) {
+        delete yellowGoal;
+	yellowGoal = nullptr;
+      }
+    } else if(yellowGoalBuffer != nullptr) {
       yellowGoal = new Goal(*yellowGoalBuffer);
-    else
-      yellowGoal = nullptr;
+    }
 
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;
