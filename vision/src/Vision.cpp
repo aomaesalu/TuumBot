@@ -534,7 +534,7 @@ namespace rtx { namespace Vision {
     std::vector<std::pair<std::pair<unsigned int, unsigned int>,
                         std::vector<std::pair<unsigned int, double>>
                         >> expectedLines;
-    std::vector<std::pair<unsigned, int, double>> noPoints;
+    std::vector<std::pair<unsigned int, double>> noPoints;
 
     // Repeat the following until there are no more points, or up to 3 different
     // lines found. The constant 3 should be removed in the future (TODO) but is
@@ -600,7 +600,7 @@ namespace rtx { namespace Vision {
       expectedLines.clear();
 
     }
-    
+
   }
 
   void lineDetection(const Frame &frame, const std::string &filter) {
