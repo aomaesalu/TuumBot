@@ -172,8 +172,11 @@ namespace rtx { namespace Motion {
 	<< std::endl;
     */
 
-    const int d = 65;
+    //FIXME: These should be taken from gear step
+    const int d = 50;
+    const double d_o = 0.08;
 
+    //TODO: Get relative target vectors
     Vec2i v = data->getTargetPos();
     double O = data->getTargetOrient();
 
@@ -183,7 +186,7 @@ namespace rtx { namespace Motion {
     }
 
     if(data->aimTargetSet) {
-      if(fabs(t->o - O) > 0.08) return 0.0;
+      if(fabs(t->o - O) > d_o) return 0.0;
     }
 
     return 1.0;

@@ -75,6 +75,10 @@ namespace rtx { namespace Motion {
     return Transform({getTargetPos(), getTargetOrient()});
   }
 
+  Vec2i MotionData::getAimVector() {
+    return aimTarget - positionTarget;
+  }
+
 
   /**
    *  Omni drive parameter calculation members

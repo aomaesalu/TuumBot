@@ -24,7 +24,9 @@ namespace rtx { namespace Motion {
 
     Vec2i getTargetPos();
     double getTargetOrient();
+
     Transform getTargetTransform();
+    Vec2i getAimVector();
 
     double getDeltaDist();
     double getDeltaOrient();

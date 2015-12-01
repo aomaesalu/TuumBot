@@ -20,9 +20,9 @@ namespace rtx { namespace Navigation {
 
   //TODO: position to relative position
   Transform calcBallPickupPos(Transform* bt) {
-    Transform target((*bt) - Motion::VLS_DIST.mn);
-    target.setOrientation(0.0);
-    return target;
+    Vec2f avf = (bt->getPosition() - Localization::getTransform()->getPosition()).getNormalized();
+    Transform t((*bt) - (avf*Motion::VLS_DIST.mn).toInt());
+    return t;
   }
 
   Vec2i calcGoalShootPos(Transform* t) {
@@ -55,7 +55,6 @@ namespace rtx { namespace Navigation {
         ball = b;
       }
     }
-    if(ball!= nullptr) std::cout << ball->toString() << std::endl;
     return ball;
   }
 
