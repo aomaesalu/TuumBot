@@ -37,7 +37,8 @@ namespace rtx { namespace Visioning {
   template<class T>
   struct EDS {
     int mn_h = -5; // Entity removal health condition
-    int mx_h = 6;  // Entity detection health condition
+    int lo_h = 2;  // Entity detection health condition
+    int med_h = 5;
 
     std::vector<T*> objs;
     std::vector<T*> tmp_objs;
@@ -118,7 +119,7 @@ namespace rtx { namespace Visioning {
       {
         auto it = tmp_objs.begin();
         while(it != tmp_objs.end()) {
-          if((*it)->getHealth() > mx_h) {
+          if((*it)->getHealth() > med_h) {
             objs.push_back(*it);
             it = tmp_objs.erase(it);
           } else it++;
@@ -128,7 +129,7 @@ namespace rtx { namespace Visioning {
       {
         auto it = objs.begin();
         while(it != objs.end()) {
-          if((*it)->getHealth() < mx_h) {
+          if((*it)->getHealth() < lo_h) {
             tmp_objs.push_back(*it);
             it = objs.erase(it);
           } else it++;
