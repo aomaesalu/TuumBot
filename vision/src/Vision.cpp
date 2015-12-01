@@ -3,8 +3,8 @@
  *  Computer vision class using YUYV.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.2
- *  @date 29 November 2015
+ *  @version 0.3
+ *  @date 1 December 2015
  */
 
 #include "Vision.hpp"
@@ -513,32 +513,100 @@ namespace rtx { namespace Vision {
   }
 
   void separateLines(const std::vector<std::pair<double, double>> &points) {
+    // New algorithm
+
+    // If there are not enough points to form a line, return without creating
+    // any
     if (points.size() < 2)
       return;
-    double maxSlopeDifference = 0.3;
-    // Calculate slopes
-    std::vector<double> slopes;
-    for (int i = 0; i < points.size() - 1; ++i) {
-      slopes.push_back((points[i + 1].second - points[i].second) / (points[i + 1].first - points[i].first));
+
+    // Initialise unused point index set
+    std::set<unsigned int> unused;
+    for (unsigned int i = 0; i < points.size(); ++i) {
+      unused.insert(i);
     }
-    // Separate lines
-    std::vector<std::vector<std::pair<double, double>>> listOfLines;
-    std::vector<std::pair<double, double>> emptyLine;
-    listOfLines.push_back(emptyLine);
-    listOfLines.back().push_back(points[0]);
-    for (int i = 0; i < slopes.size() - 1; ++i) {
-      if (fabs(slopes[i + 1] / slopes[i]) > maxSlopeDifference) {
-        listOfLines.push_back(emptyLine);
+
+    // Initialise the list of expected lines. Each line consists of (1) the pair
+    // of point indexes whose corresponding points form the line, and (2) the
+    // list of points belonging to the line. Each element in the latter is a
+    // pair consisting of (1) the point's index, and (2) the point's distance
+    // from the specified line.
+    std::vector<std::pair<std::pair<unsigned int, unsigned int>,
+                        std::vector<std::pair<unsigned int, double>>
+                        >> expectedLines;
+    std::vector<std::pair<unsigned int, double>> noPoints;
+
+    // Repeat the following until there are no more points, or up to 3 different
+    // lines found. The constant 3 should be removed in the future (TODO) but is
+    // sufficient for this year's competition.
+    while (!unused.empty() && linesBuffer.size() < 3) {
+
+      // Form expected lines for every point pair
+      for (unsigned int i = 0; i < points.size(); ++i) {
+        for (unsigned int j = i + 1; j < points.size(); ++j) {
+
+          // Form the line. A line can be identified by one of its points and
+          // its slope.
+          double slope = (points[j].second - points[i].second) /
+                         (points[j].first - points[i].first);
+          double perpendicularSlope = -1 / slope;
+          expectedLines.push_back(std::pair<std::pair<unsigned int, unsigned int>, std::vector<std::pair<unsigned int, double>>>(std::pair<unsigned int, unsigned int>(i, j), noPoints));
+
+          // DEBUG
+          /*std::cout << "Expected line:" << std::endl;
+          std::cout << "Points: (" << points[i].first << ", " << points[i].second << ")" << ", (" << points[j].first << ", " << points[j].second << ")" << std::endl;
+          std::cout << "Slope: " << slope << "; " << perpendicularSlope << std::endl;
+          std::cout << std::endl << std::endl;*/
+
+          // Calculate deviations from the line for each unused point that falls
+          // into the line, based on the expected line width
+          for (std::set<unsigned int>::iterator p = unused.begin(); p !=
+               unused.end(); ++p) {
+            // Calculate the intersection point of the line and its
+            // perpendicular line intersecting the point in question
+            double perpendicularX = (points[*p].second - points[i].first - perpendicularSlope * points[*p].first + slope * points[i].first) / (slope - perpendicularSlope);
+            double perpendicularY = slope * (perpendicularX - points[*p].first) + points[*p].second;
+            // Calculate the distance between the line and the point
+            double pointDistance = sqrt(perpendicularX * perpendicularX + perpendicularY * perpendicularY);
+            // If the point is farther away from the line than expected,
+            // continue checking the next point
+            if (pointDistance > LINE_WIDTH)
+              continue;
+            // If the point does belong to the line based on its distance, add
+            // its index and its distance from the line to the line's point list
+            expectedLines.back().second.push_back(std::pair<unsigned int, double>(*p, pointDistance));
+          }
+
+        }
       }
-      listOfLines.back().push_back(points[i + 1]);
-    }
-    listOfLines.back().push_back(points.back());
-    // Normalise and create lines
-    for (unsigned int i = 0; i < listOfLines.size(); ++i) {
-      if (listOfLines[i].size() > 1) {
-        linesBuffer.push_back(new Line(listOfLines[i]));
+
+      // Find expected line with most points in it
+      unsigned int mostPoints = 0;
+      unsigned int bestLine = 0;
+      for (unsigned int k = 0; k < expectedLines.size(); ++k) {
+        if (expectedLines[k].second.size() > mostPoints) {
+          mostPoints = expectedLines[k].second.size();
+          bestLine = k;
+        }
       }
+
+      // Add the best line to the lines buffer
+      linesBuffer.push_back(new Line({points[expectedLines[bestLine].first.first], points[expectedLines[bestLine].first.second]}));
+
+      // Regress over the line based on the point distances from the line to
+      // make it even more exact
+      // TODO
+
+      // Remove the points used in the line found from the unused point set
+      for (std::vector<std::pair<unsigned int, double>>::iterator p = expectedLines[bestLine].second.begin(); p != expectedLines[bestLine].second.end(); ++p) {
+        unused.erase(p->first);
+      }
+
+      // Clear the expected lines
+      expectedLines.clear();
+
     }
+
   }
 
   void lineDetection(const Frame &frame, const std::string &filter) {
@@ -573,7 +641,7 @@ namespace rtx { namespace Vision {
       bool blackExists = false;
 
       for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
-        // TODO: Detect white-black transition points
+        // Detect white-black transition points
 
         // Find the current pixel
         unsigned char *pixel = pixels + sample->first * channels + sample->second * stride;
@@ -681,23 +749,17 @@ namespace rtx { namespace Vision {
 
       }
 
-      // Find the point dividing the line between the farthest white point and the closest black point. If one of the points doesn't exist, just use the other one. Add the point found to the transition points list. If neither of the points exists, assume there is no white-to-black transition in the current ray.
-      if (whiteExists) {
+      // Find the point dividing the line between the farthest white point and
+      // the closest black point. Both of these points have to exist, or the
+      // expected transition point can not be trusted.
+      if (whiteExists and blackExists) {
         // DEBUG:
         //std::cout << "W:" << "(" << farthestWhite.first << ", " << farthestWhite.second << ")" << std::endl;
-        if (blackExists) {
-          // DEBUG:
-          //std::cout << "B:" << "(" << closestBlack.first << ", " << closestBlack.second << ")" << std::endl;
-          std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite);
-          std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack);
-          transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
-        } else {
-          transitionPoints.push_back(Perspective::virtualToReal(farthestWhite));
-        }
-      } else if (blackExists) {
         // DEBUG:
         //std::cout << "B:" << "(" << closestBlack.first << ", " << closestBlack.second << ")" << std::endl;
-        transitionPoints.push_back(Perspective::virtualToReal(closestBlack));
+        std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite);
+        std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack);
+        transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
       }
 
       // DEBUG:

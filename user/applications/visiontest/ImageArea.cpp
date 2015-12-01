@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 1 December 2015
  */
 
 #include "ImageArea.hpp"
@@ -101,13 +101,29 @@ namespace rtx {
   void ImageArea::colorLine(const Vision::Line *line, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     std::pair<double, double> point = line->getRelativePoint();
     double slope = line->getSlope();
+
+    // Color the line
+    for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
+      double realY = Vision::Perspective::virtualToReal(0, y).second;
+      double realX = (realY - point.second) / slope + point.first;
+      unsigned int x = Vision::Perspective::realToVirtual(realX, realY).first;
+      if (x >= CAMERA_WIDTH)
+        continue;
+      guint8 *pixel = pixels + x * channels + y * stride;
+      colorPixel(pixel, 102, 0, 51);
+    }
+
     /*for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
-      unsigned int y = slope * (x + point.first) + point.second;
+      double realX = Vision::Perspective::virtualToReal(x, 0).first;
+      double realY = slope * (realX + point.first) + point.second;
+      unsigned int y = Vision::Perspective::realToVirtual(realX, realY).second;
       if (y >= CAMERA_HEIGHT)
         continue;
       guint8 *pixel = pixels + x * channels + y * stride;
       colorPixel(pixel, 102, 0, 51);
     }*/
+
+    // Color the transition points // TODO: Remove (from the Line class, too)
     std::vector<std::pair<double, double>> linePoints = line->getPoints();
     for (std::vector<std::pair<double, double>>::iterator point = linePoints.begin(); point != linePoints.end(); ++point) {
       std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point);
@@ -124,6 +140,7 @@ namespace rtx {
         }
       }
     }
+
   }
 
   bool ImageArea::applyFilter() {
