@@ -22,9 +22,15 @@ namespace rtx { namespace Motion {
     posTargetSet = true;
   }
 
-  void MotionData::setAimTarget(Vec2i vec) {
+  int MotionData::setAimTarget(Vec2i vec) {
+    /*double mag = fabs((vec - _pt).getMagnitude());
+    if(mag < GRS_ROT.mn.step + mag*434/5000) return -1;
+    _pt = vec;
+    */
+
     aimTarget = vec;
     aimTargetSet = true;
+    return 0;
   }
 
   void MotionData::setTransformTarget(Transform t) {
@@ -87,18 +93,19 @@ namespace rtx { namespace Motion {
     updateGear();
 
     if(posTargetSet)
-      _speed = (int)(baseVelocity);
+      _speed = baseVelocity;
     else
       _speed = 0;
 
     if(aimTargetSet)
-      _r_speed = (int)(m_rotGear->v*getOVF());
+      _r_speed = m_rotGear->v * getOVF();
     else
       _r_speed = 0;
 
     //Vec2f _dV = dV;
     //_dV.rotate(-orientDelta);
     _heading = (positionTarget - Localization::getTransform()->getPosition()).getOrientation();
+
   }
 
   void MotionData::updateGear() {
@@ -136,8 +143,8 @@ namespace rtx { namespace Motion {
   }
 
   void MotionData::clamp() {
-    if(fabs(_r_speed) < m_rotGear->v && _r_speed != 0) {
-      _r_speed = m_rotGear->v * (_r_speed < 0 ? -1 : 1);
+    if(fabs(_r_speed) < 5 && _r_speed != 0) {
+      _r_speed = 5 * (_r_speed < 0 ? -1 : 1);
     }
   }
 

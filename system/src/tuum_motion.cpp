@@ -97,8 +97,8 @@ namespace rtx { namespace Motion {
   }
 
   void setAimTarget(Vec2i pos) {
-    double orientDelta = pos.getOrientation();
-    motionData.setAimTarget(pos);
+    //double orientDelta = pos.getOrientation();
+    if(motionData.setAimTarget(pos) < 0) return;
     _setTarget();
   }
 
@@ -194,12 +194,9 @@ namespace rtx { namespace Motion {
 
   bool isTargetAchieved() {
     if(!targetAchieved) {
-      // (transform - target) <= uncertainty
 
       Transform* t = Localization::getTransform();
       double p = stateProbability(t, &motionData);
-
-      //std::cout << "P = " << p << std::endl;
 
       if(p > 0.3) targetAchieved = true;
     }

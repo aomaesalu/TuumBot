@@ -11,15 +11,16 @@ namespace rtx { namespace Motion {
   struct MotionData {
     Vec2i positionTarget;
     Vec2i aimTarget;
+    Vec2i _pt;
+    Vec2i _at;
 
     bool posTargetSet = false;
     bool aimTargetSet = false;
 
     void clear();
 
-
     void setPosTarget(Vec2i vec);
-    void setAimTarget(Vec2i vec);
+    int setAimTarget(Vec2i vec);
     void setTransformTarget(Transform t);
 
     Vec2i getTargetPos();
