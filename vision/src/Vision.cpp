@@ -743,23 +743,17 @@ namespace rtx { namespace Vision {
 
       }
 
-      // Find the point dividing the line between the farthest white point and the closest black point. If one of the points doesn't exist, just use the other one. Add the point found to the transition points list. If neither of the points exists, assume there is no white-to-black transition in the current ray.
-      if (whiteExists) {
+      // Find the point dividing the line between the farthest white point and
+      // the closest black point. Both of these points have to exist, or the
+      // expected transition point can not be trusted.
+      if (whiteExists and blackExists) {
         // DEBUG:
         //std::cout << "W:" << "(" << farthestWhite.first << ", " << farthestWhite.second << ")" << std::endl;
-        if (blackExists) {
-          // DEBUG:
-          //std::cout << "B:" << "(" << closestBlack.first << ", " << closestBlack.second << ")" << std::endl;
-          std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite);
-          std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack);
-          transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
-        } else {
-          transitionPoints.push_back(Perspective::virtualToReal(farthestWhite));
-        }
-      } else if (blackExists) {
         // DEBUG:
         //std::cout << "B:" << "(" << closestBlack.first << ", " << closestBlack.second << ")" << std::endl;
-        transitionPoints.push_back(Perspective::virtualToReal(closestBlack));
+        std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite);
+        std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack);
+        transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
       }
 
       // DEBUG:
