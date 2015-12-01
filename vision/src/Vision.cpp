@@ -534,24 +534,27 @@ namespace rtx { namespace Vision {
     std::vector<std::pair<std::pair<unsigned int, unsigned int>,
                         std::vector<std::pair<unsigned int, double>>
                         >> expectedLines;
+    std::vector<std::pair<unsigned, int, double>> noPoints;
 
     // Repeat the following until there are no more points, or up to 3 different
     // lines found. The constant 3 should be removed in the future (TODO) but is
     // sufficient for this year's competition.
-    while (!unused.empty() && expectedLines.size() < 3) {
+    while (!unused.empty() && linesBuffer.size() < 3) {
 
       // Form expected lines for every point pair
       for (unsigned int i = 0; i < points.size(); ++i) {
         for (unsigned int j = i + 1; j < points.size(); ++j) {
 
-          // Form the line
+          // Form the line. A line can be identified by one of its points and
+          // its slope.
           double slope = (points[j].second - points[i].second) /
                          (points[j].first - points[i].first);
+          expectedLines.push_back(std::pair<std::pair<unsigned int, unsigned int>, std::vector<std::pair<unsigned int, double>>>(std::pair<unsigned int, unsigned int>(i, j), noPoints));
 
-          // Calculate deviations from the line for each point that falls into the
-          // line, based on the expected line width
-          for (std::vector<std::pair<double, double>>::const_iterator point =
-               points.begin(); point != points.end(); ++point) {
+          // Calculate deviations from the line for each unused point that falls
+          // into the line, based on the expected line width
+          for (std::set<unsigned int>::iterator p = unused.begin(); p !=
+               unused.end(); ++p) {
             // TODO
           }
 
@@ -562,8 +565,11 @@ namespace rtx { namespace Vision {
           // Regress over the line to make it even more exact
           // TODO
 
-          // Remove the points used in the line found
+          // Remove the points used in the line found from the unused point set
           // TODO
+
+          // Clear the expected lines
+          expectedLines.clear();
 
         }
       }
