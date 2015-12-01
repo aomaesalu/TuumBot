@@ -46,6 +46,7 @@ namespace rtx { namespace Motion {
 
     const Gear* m_movGear = &(GRS_MOV.low);
     const Gear* m_rotGear = &(GRS_ROT.low);
+    Gear manualRotGear = {0, 0};
 
     double getHeading() { return _heading; }
     int getSpeed() { return _speed; }

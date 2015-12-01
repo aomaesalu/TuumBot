@@ -35,6 +35,8 @@ namespace rtx { namespace Motion {
     MotionPhase phase;
   };
 
+  extern MotionData motionData;
+
   const double targetDistanceCondition = GRS_MOV.low.step;
   const double targetOrientationCondition = GRS_ROT.low.step;
 

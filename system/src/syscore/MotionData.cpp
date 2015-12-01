@@ -9,6 +9,7 @@ namespace rtx { namespace Motion {
     baseVelocity = 30;
     posTargetSet = false;
     aimTargetSet = false;
+    manualRotGear = {0, 0};
     positionTarget = {0, 0};
     aimTarget = {0, 0};
   }
@@ -98,19 +99,18 @@ namespace rtx { namespace Motion {
       _speed = 0;
 
     if(aimTargetSet)
-      _r_speed = m_rotGear->v * getOVF();
+      _r_speed = m_rotGear->v;
     else
       _r_speed = 0;
 
     //Vec2f _dV = dV;
     //_dV.rotate(-orientDelta);
     _heading = (positionTarget - Localization::getTransform()->getPosition()).getOrientation();
-
   }
 
   void MotionData::updateGear() {
     double d;
-    bool gear_unset = true;
+    bool rot_gear_unset = true,  mov_gear_unset = true;
 
     if(posTargetSet) {
       d = fabs(getDeltaDist());
@@ -122,24 +122,29 @@ namespace rtx { namespace Motion {
       else {
 	m_movGear = &(GRS_MOV.mx);
 	m_rotGear = &(GRS_ROT.mx);
-	gear_unset = false;
+	rot_gear_unset = false;
       }
 
       baseVelocity = m_movGear->v;
+      mov_gear_unset = false;
     }
 
-    if(aimTargetSet && gear_unset) {
-      d = fabs(getDeltaOrient());
-      if(d < VLS_ANGLE.low) m_rotGear = &(GRS_ROT.low);
-      else if(d < VLS_ANGLE.med) m_rotGear = &(GRS_ROT.med);
-      else if(d < VLS_ANGLE.high) m_rotGear = &(GRS_ROT.high);
-      else m_rotGear = &(GRS_ROT.mn);
+    if(rot_gear_unset && manualRotGear.v != 0) {
+      m_rotGear = &(manualRotGear);
+    } else {
+      if(aimTargetSet && rot_gear_unset) {
+	d = fabs(getDeltaOrient());
+	if(d < VLS_ANGLE.low) m_rotGear = &(GRS_ROT.low);
+	else if(d < VLS_ANGLE.med) m_rotGear = &(GRS_ROT.med);
+	else if(d < VLS_ANGLE.high) m_rotGear = &(GRS_ROT.high);
+	else m_rotGear = &(GRS_ROT.mn);
+      }
     }
   }
 
   void MotionData::applyFactors() {
     _speed *= getVF();
-    //_r_speed *= getOVF();
+    if(m_rotGear != &(manualRotGear)) _r_speed *= getOVF();
   }
 
   void MotionData::clamp() {
@@ -152,7 +157,7 @@ namespace rtx { namespace Motion {
     double mag = (positionTarget - Localization::getTransform()->getPosition()).getMagnitude();
 
     if(mag >= VLS_DIST.low) return 1;
-    return mag / VLS_DIST.low;
+    return mag / VLS_DIST.mn;
   }
 
   double MotionData::getOVF() {
