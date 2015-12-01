@@ -102,7 +102,7 @@ namespace rtx { namespace hal {
 
   void MainBoard::startDribbler() {
     m_dribblerState = 1;
-    write({id, getDribblerCmd(90)});
+    write({id, getDribblerCmd(140)});
   }
 
   void MainBoard::stopDribbler() {
