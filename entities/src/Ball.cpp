@@ -13,14 +13,14 @@
 namespace rtx {
 
   Ball::Ball(Ball &other):
-    Entity(*other.getTransform()),
+    Entity(*other.getTransform(), *other.getBlob()),
     Circle(other.getRadius())
   {
     initialiseAttributes();
   }
 
-  Ball::Ball(const Transform transform, const double &radius):
-    Entity(transform),
+  Ball::Ball(const Transform transform, Blob *blob, const double &radius):
+    Entity(transform, blob),
     Circle(radius)
   {
     initialiseAttributes();
