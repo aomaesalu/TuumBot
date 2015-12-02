@@ -178,13 +178,12 @@ namespace rtx {
   }
 
   bool Blob::isIn(const Blob &other) const {
-    // TODO
-    return false;
+    // Based on the box areas
+    return minX >= other.getMinX() && maxX <= other.getMaxX() && minY >= other.getMinY() && maxY <= other.getMaxY();
   }
 
   bool Blob::contains(const Blob &other) const {
-    // TODO
-    return false;
+    return other.isIn(*this);
   }
 
   bool Blob::overlaps(const Blob &other) const {
