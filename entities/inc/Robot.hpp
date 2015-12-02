@@ -2,7 +2,8 @@
  *  @file Robot.hpp
  *  Robot class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
  *  @date 26 November 2015
  */
@@ -20,21 +21,17 @@
 
 namespace rtx {
 
-  class Robot : public Entity, public Circle {
+  class Robot: public Entity, public Circle {
     public:
       Robot();
       Robot(const Robot&);
 
-      Robot(const Transform, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
+      Robot(const Transform, const Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
-      Color getColor() const;
       bool isYellowBlue() const;
       bool isBlueYellow() const;
       bool isAlly() const;
       bool isOpponent() const;
-
-    private:
-      Color color;
 
   };
 

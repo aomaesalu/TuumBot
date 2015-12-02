@@ -1,7 +1,8 @@
 /** @file Robot.cpp
  *  Robot class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
  *  @date 29 November 2015
  */
@@ -21,8 +22,9 @@ namespace rtx {
     (*this) = robot;
   }
 
-  Robot::Robot(const Transform transform, const double &radius):
-    Entity(transform), Circle(radius)
+  Robot::Robot(const Transform transform, const Blob*, const double &radius):
+    Entity(transform, blob),
+    Circle(radius)
   {
 
   }
