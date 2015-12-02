@@ -16,7 +16,6 @@
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
-#include "Color.hpp"
 
 
 namespace rtx {
@@ -26,7 +25,7 @@ namespace rtx {
       Robot();
       Robot(const Robot&);
 
-      Robot(const Transform, const Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
+      Robot(const Transform, Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
       bool isAlly() const;
       bool isOpponent() const;
