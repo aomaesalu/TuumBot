@@ -1,8 +1,10 @@
 /** @file Entity.cpp
  *  Entity class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
- *  @version 0.2
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
+ *  @version 0.3
+ *  @date 2 December 2015
  */
 
 #include <iostream>
@@ -93,4 +95,12 @@ namespace rtx {
     return output.str();
   }
 
-};
+  Blob* Entity::getBlob() const {
+    return blob;
+  }
+
+  Color Entity::getColor() const {
+    return blob->getColor();
+  }
+
+}

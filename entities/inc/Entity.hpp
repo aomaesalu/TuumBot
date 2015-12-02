@@ -1,8 +1,10 @@
 /** @file Entity.hpp
  *  Entity class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
- *  @version 0.2
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
+ *  @version 0.3
+ *  @date 2 December 2015
  */
 
 #ifndef RTX_ENTITY_H
@@ -28,44 +30,51 @@ namespace rtx {
    *    update(Transform transform):
    *      transform = this->kalmanProcess(Transform)
    *      ...
-   *    
+   *
    */
 
   class Entity {
-  private:
-    static unsigned int id_seq;
 
-    Transform m_transform;
+    public:
+      static unsigned int newID();
 
-    unsigned int id;
-    int m_health = 0;
+      Entity();
+      Entity(const Entity&);
 
-  public:
-    static unsigned int newID();
+      // By position
+      Entity(const Vec2i);
+      Entity(const int, const int);
 
-    Entity();
-    Entity(const Entity&);
+      // By position & orientation
+      Entity(Transform);
+      Entity(Transform, bool);
+      Entity(const int, const int, const double);
 
-    // By position
-    Entity(const Vec2i);
-    Entity(const int, const int);
+      unsigned int getID();
+      int getHealth();
 
-    // By position & orientation
-    Entity(Transform);
-    Entity(Transform, bool);
-    Entity(const int, const int, const double);
+      Transform* getTransform();
 
-    unsigned int getID();
-    int getHealth();
+      void update(Transform); // Heal
+      void update(); // Decay
 
-    Transform* getTransform();
+      Blob* getBlob() const;
+      Color getColor() const;
 
-    void update(Transform); // Heal
-    void update(); // Decay
+      std::string toString();
 
-    std::string toString();
+    private:
+      static unsigned int id_seq;
+
+      Transform m_transform;
+
+      unsigned int id;
+      int m_health = 0;
+
+      Blob *blob;
+
   };
 
-};
+}
 
 #endif // RTX_ENTITY_H
