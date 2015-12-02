@@ -3,8 +3,8 @@
  *  Blob seen in the camera frame.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.2
- *  @date 29 November 2015
+ *  @version 0.3
+ *  @date 2 December 2015
  */
 
 #include "cameraConstants.hpp"
@@ -175,6 +175,16 @@ namespace rtx {
 
   bool Blob::isBelow(const Blob &other) const {
     return !isAbove(other);
+  }
+
+  bool Blob::isIn(const Blob &other) const {
+    // TODO
+    return false;
+  }
+
+  bool Blob::contains(const Blob &other) const {
+    // TODO
+    return false;
   }
 
   bool Blob::overlaps(const Blob &other) const {
