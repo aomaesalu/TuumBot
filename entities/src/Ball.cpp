@@ -16,14 +16,20 @@ namespace rtx {
     Entity(*other.getTransform()),
     Circle(other.getRadius())
   {
-    // Nothing to do here
+    initialiseAttributes();
   }
 
   Ball::Ball(const Transform transform, const double &radius):
     Entity(transform),
     Circle(radius)
   {
-    // Nothing to do here
+    initialiseAttributes();
+  }
+
+  void Ball::initialiseAttributes() {
+    kicked = false;
+    inGoal = false;
+    inBounds = true;
   }
 
   bool Ball::isInGoal() {
