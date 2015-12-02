@@ -3,11 +3,13 @@
  *  Goal class.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.1
- *  @date 20 November 2015
+ *  @version 0.2
+ *  @date 2 December 2015
  */
 
 #include "Goal.hpp"
+
+#include "Color.hpp"
 
 
 namespace rtx {
@@ -15,45 +17,29 @@ namespace rtx {
   Goal::Goal(Goal &other):
     Entity(*other.getTransform()),
     Rectangle(other.getWidth(), other.getLength()),
-    color(other.getColor())
+    blob(other.getBlob())
   {
 
   }
 
-  /*Goal::Goal(const Point2D *position, const double &width,
-             const double &length):
-    Entity(position),
-    Rectangle(width, length)
-  {
-
-  }
-
-  Goal::Goal(const double &x, const double &y, const double &width,
-             const double &length):
-    Entity(new Point2D(x, y)),
-    Rectangle(width, length)
-  {
-
-  }*/
-
-  Goal::Goal(const Transform transform, const Color &color, const double &width, const double &length):
+  Goal::Goal(const Transform transform, const Blob &blob, const double &width, const double &length):
     Entity(transform),
     Rectangle(width, length),
-    color(color)
+    blob(blob)
   {
 
   }
 
   Color Goal::getColor() const {
-    return color;
+    return blob->getColor();
   }
 
   bool Goal::isBlue() const {
-    return color == BLUE_GOAL;
+    return blob->isBlue();
   }
 
   bool Goal::isYellow() const {
-    return color == YELLOW_GOAL;
+    return blob->isYellow();
   }
 
 }
