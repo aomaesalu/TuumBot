@@ -36,11 +36,21 @@ namespace rtx {
   }
 
   bool Goal::isAlly() const {
-    // TODO
+    std::string pattern = rtx::gC.getStr("Pattern.AllyGoal");
+    if (pattern == std::string("Y")) {
+      return blob->isYellow();
+    } else {
+      return blob->isBlue();
+    }
   }
 
   bool Goal::isOpponent() const {
-    // TODO
+    std::string pattern = rtx::gC.getStr("Pattern.OpponentGoal");
+    if (pattern == std::string("Y")) {
+      return blob->isYellow();
+    } else {
+      return blob->isBlue();
+    }
   }
 
 }
