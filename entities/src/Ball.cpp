@@ -36,8 +36,7 @@ namespace rtx {
   }
 
   bool Ball::isInBounds() {
-    // TODO
-    return true;
+    return inBounds;
   }
 
   bool Ball::isOutOfBounds() {
