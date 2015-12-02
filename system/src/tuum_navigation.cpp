@@ -2,7 +2,8 @@
  *  Navigation system implementation.
  *
  *  @authors Meelik Kiik
- *  @version 0.1
+ *  @authros Ants-Oskar Mäesalu
+ *  @version 0.2
  */
 
 #include "syscore/MotionData.hpp"
@@ -17,6 +18,10 @@
 // TODO: Pathfinding
 // TODO: No out of bounds transform target
 namespace rtx { namespace Navigation {
+
+  void preProcess() {
+    // TODO
+  }
 
   //TODO: position to relative position
   Transform calcBallPickupPos(Transform* bt) {
