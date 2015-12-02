@@ -27,8 +27,7 @@ namespace rtx {
   }
 
   bool Ball::isInGoal() {
-    // TODO
-    return false;
+    return inGoal;
   }
 
   bool Ball::isOutOfGoal() {
