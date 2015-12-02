@@ -51,6 +51,12 @@ namespace rtx {
     this->blob = blob;
   }
 
+  Entity::Entity(Transform transform, const Blob &blob) {
+    id = Entity::newID();
+    m_transform = transform;
+    this->blob = &blob;
+  }
+
   Entity::Entity(Transform transform, bool recv_id, const Blob *blob) {
     if(recv_id) id = Entity::newID();
     else id = 0;

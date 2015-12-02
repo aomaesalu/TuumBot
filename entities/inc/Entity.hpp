@@ -50,6 +50,7 @@ namespace rtx {
 
       // By position & orientation
       Entity(Transform, const Blob*);
+      Entity(Transform, const Blob&);
       Entity(Transform, bool, const Blob*);
       Entity(const int, const int, const double, const Blob*);
 
