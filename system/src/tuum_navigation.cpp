@@ -22,9 +22,9 @@ namespace rtx { namespace Navigation {
   void preProcess() {
 
     // Validate balls
-    BallSet balls = Visioning::balls;
-    LineSet lines = Vision::getLines()
-    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+    Visioning::BallSet balls = *(Visioning::ballDetect.getEntities());
+    Vision::LineSet lines = Vision::getLines();
+    for (Visioning::BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
 
       // Check whether the current ball is in a goal
 
@@ -57,7 +57,7 @@ namespace rtx { namespace Navigation {
       }
 
       // TODO: Check that the ball is not outside of a line
-      for (LineSet::iterator line = lines.begin(); line != lines.end(); ++line) {
+      for (Vision::LineSet::iterator line = lines.begin(); line != lines.end(); ++line) {
 
         // TODO: Check if the ball is on the other side of the current line
 
