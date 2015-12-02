@@ -251,7 +251,7 @@ namespace rtx { namespace Visioning {
 
       // STEP 3: Create ball instance with absolute position
       //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
-      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), false));
+      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), blobs[i], false));
     }
 
     /*
