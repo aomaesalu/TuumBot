@@ -141,8 +141,6 @@ namespace rtx { namespace Visioning {
 
   extern std::string filter;
 
-  extern FeatureSet features;
-
   extern EDS<Ball> ballDetect;
   extern EDS<Robot> robotDetect;
 
