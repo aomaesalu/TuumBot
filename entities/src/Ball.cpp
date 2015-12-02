@@ -1,9 +1,10 @@
 /**
- * @file Ball.cpp
- * Ball class.
+ *  @file Ball.cpp
+ *  Ball class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.2
+ *  @date 2 December 2015
  */
 
 #include "Ball.hpp"
@@ -25,4 +26,40 @@ namespace rtx {
 
   }
 
-};
+  bool Ball::isInGoal() {
+    // TODO
+    return false;
+  }
+
+  bool Ball::isOutOfGoal() {
+    return !isInGoal();
+  }
+
+  bool Ball::isInBounds() {
+    // TODO
+    return true;
+  }
+
+  bool Ball::isOutOfBounds() {
+    return !isInBounds();
+  }
+
+  bool Ball::isKicked() {
+    // TODO
+    return false;
+  }
+
+  bool Ball::isNotKicked() {
+    return !isKicked();
+  }
+
+  bool Ball::isValid() {
+    // TODO
+    return true;
+  }
+
+  bool Ball::isNotValid() {
+    return !isValid();
+  }
+
+}
