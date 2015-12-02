@@ -20,7 +20,26 @@
 namespace rtx { namespace Navigation {
 
   void preProcess() {
-    // TODO
+
+    // Validate balls
+    BallSet balls = Visioning::getballs;
+    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+
+      // Check that the ball is not in a goal
+
+      // Check that the ball is not in the blue goal
+      if (Visioning::blueGoal != nullptr) {
+        // TODO
+      }
+
+      // Check that the ball is not in the yellow goal
+      if (Visioning::yellowGoal != nullptr) {
+        // TODO
+      }
+
+      // TODO: Check that the ball is not outside of a line
+    }
+
   }
 
   //TODO: position to relative position
