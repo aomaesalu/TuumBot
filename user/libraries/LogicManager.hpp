@@ -18,6 +18,7 @@ namespace rtx {
     static STM loadKickoffPrepare();
     static STM loadKickoff();
 
+    static STM loadOffensivePlay();
   };
 
 }
