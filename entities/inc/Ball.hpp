@@ -25,14 +25,16 @@ namespace rtx {
       Ball(Ball&);
       Ball(const Transform, const Blob*, const double& = BALL_DIAMETER / 2.0);
 
-      bool isInGoal();
-      bool isOutOfGoal();
-      bool isInBounds();
-      bool isOutOfBounds();
-      bool isKicked();
-      bool isNotKicked();
-      bool isValid();
-      bool isNotValid();
+      void initialiseAttributes();
+
+      bool isInGoal() const;
+      bool isOutOfGoal() const;
+      bool isInBounds() const;
+      bool isOutOfBounds() const;
+      bool isKicked() const;
+      bool isNotKicked() const;
+      bool isValid() const;
+      bool isNotValid() const;
 
       void setKicked(const bool& = true);
       void setInGoal(const bool& = true);

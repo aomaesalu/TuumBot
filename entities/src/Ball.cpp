@@ -19,7 +19,7 @@ namespace rtx {
     initialiseAttributes();
   }
 
-  Ball::Ball(const Transform transform, Blob *blob, const double &radius):
+  Ball::Ball(const Transform transform, const Blob *blob, const double &radius):
     Entity(transform, blob),
     Circle(radius)
   {
@@ -32,47 +32,47 @@ namespace rtx {
     inBounds = true;
   }
 
-  bool Ball::isInGoal() {
+  bool Ball::isInGoal() const {
     return inGoal;
   }
 
-  bool Ball::isOutOfGoal() {
+  bool Ball::isOutOfGoal() const {
     return !isInGoal();
   }
 
-  bool Ball::isInBounds() {
+  bool Ball::isInBounds() const {
     return inBounds;
   }
 
-  bool Ball::isOutOfBounds() {
+  bool Ball::isOutOfBounds() const {
     return !isInBounds();
   }
 
-  bool Ball::isKicked() {
+  bool Ball::isKicked() const {
     return kicked;
   }
 
-  bool Ball::isNotKicked() {
+  bool Ball::isNotKicked() const {
     return !isKicked();
   }
 
-  bool Ball::isValid() {
+  bool Ball::isValid() const {
     return isInBounds() && isOutOfGoal() && isNotKicked();
   }
 
-  bool Ball::isNotValid() {
+  bool Ball::isNotValid() const {
     return !isValid();
   }
 
-  bool Ball::setKicked(const bool &value) {
+  void Ball::setKicked(const bool &value) {
     kicked = value;
   }
 
-  bool Ball::setInGoal(const bool &value) {
+  void Ball::setInGoal(const bool &value) {
     inGoal = value;
   }
 
-  bool Ball::setInBounds(const bool &value) {
+  void Ball::setInBounds(const bool &value) {
     inBounds = value;
   }
 
