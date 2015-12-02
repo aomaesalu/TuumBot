@@ -28,8 +28,6 @@ namespace rtx {
 
       Robot(const Transform, const Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
-      bool isYellowBlue() const;
-      bool isBlueYellow() const;
       bool isAlly() const;
       bool isOpponent() const;
 

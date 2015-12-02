@@ -29,29 +29,21 @@ namespace rtx {
     // Nothing to do here
   }
 
-  bool Robot::isYellowBlue() const {
-    return getColor() == ROBOT_YELLOW_BLUE;
-  }
-
-  bool Robot::isBlueYellow() const {
-    return getColor() == ROBOT_BLUE_YELLOW;
-  }
-
   bool Robot::isAlly() const {
     std::string pattern = rtx::gC.getStr("Pattern.Ally");
     if (pattern == std::string("YB")) {
-      return isYellowBlue();
+      return getColor() == ROBOT_YELLOW_BLUE;
     } else {
-      return isBlueYellow();
+      return getColor() == ROBOT_BLUE_YELLOW;
     }
   }
 
   bool Robot::isOpponent() const {
     std::string pattern = rtx::gC.getStr("Pattern.Opponent");
     if (pattern == std::string("YB")) {
-      return isYellowBlue();
+      return getColor() == ROBOT_YELLOW_BLUE;
     } else {
-      return isBlueYellow();
+      return getColor() == ROBOT_BLUE_YELLOW;
     }
   }
 
