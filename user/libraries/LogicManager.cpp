@@ -26,12 +26,12 @@ namespace rtx {
     ctx.st = st;
     st->addController(new ctl::LSBallLocate(ctx));
 
-    st2 = stm.createState("STBallPrepare");
+    st2 = stm.createState("STBallNavigator");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
-    st->addController(new ctl::LSBallPrepare(ctx));
+    st->addController(new ctl::LSBallNavigator(ctx));
 
     return stm;
   }
@@ -46,13 +46,6 @@ namespace rtx {
     State *st2, *st; //FIXME: = stm.getLastState();
     Context ctx;
 
-    st2 = stm.createState("STBallNavigator");
-    st2->setLastState(st);
-    st->setNextState(st2);
-    st = st2;
-    ctx.st = st;
-    st->addController(new ctl::LSBallNavigator(ctx));
-
     st2 = stm.createState("STBallPicker");
     st2->setLastState(st);
     st->setNextState(st2);
@@ -60,6 +53,7 @@ namespace rtx {
     ctx.st = st;
     st->addController(new ctl::LSBallPicker(ctx));
 
+    /*
     st2 = stm.createState("STAllyLocate");
     st2->setLastState(st);
     st->setNextState(st2);
@@ -73,6 +67,66 @@ namespace rtx {
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSAllyPass(ctx));
+    */
+
+    return stm;
+  }
+
+
+  /**
+   *  Controllers:
+   *    LSBallLocate: Find ball
+   *    LSBallNavigator: Move in front of ball
+   *    LSBallPicker: Pickup ball
+   *    LSGoalLocate (+rootstate): Find opposing goal
+   *    LSGoalShoot: Aim & kick at goal
+   */
+  STM LogicManager::loadOffensivePlay() {
+    STM stm;
+    State* st, *st2;
+    Context ctx;
+
+    st = stm.createState("STInit");
+    stm.setState(st);
+    ctx.st = st;
+    st->addController(new ctl::LSInit(ctx));
+
+    st2 = stm.createState("STBallLocate");
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSBallLocate(ctx));
+
+    st2 = stm.createState("STBallNavigator");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSBallNavigator(ctx));
+
+
+    st2 = stm.createState("STBallPicker");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSBallPicker(ctx));
+
+    st2 = stm.createState("STGoalLocate");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSGoalLocate(ctx));
+    stm.addRootState(st);
+
+
+    st2 = stm.createState("STGoalShoot");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSGoalShoot(ctx));
 
     return stm;
   }
