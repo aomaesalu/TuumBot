@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 2 December 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -81,15 +81,15 @@ namespace rtx { namespace Visioning {
           probable_entity = o;
         }
       }
-      
+
       // Create or update balls
-      if(p < 0.01) {
-	if(probable_entity != nullptr) {
-	  //std::cout << probable_entity->toString() << std::endl;
-	  //std::cout << "Create new entity, ^p=" << p << std::endl;
-	}
+      if (p < 0.01) {
+        if (probable_entity != nullptr) {
+          //std::cout << probable_entity->toString() << std::endl;
+          //std::cout << "Create new entity, ^p=" << p << std::endl;
+        }
         tmp_objs.push_back(new T(*obj));
-      } else if(probable_entity != nullptr) {
+      } else if (probable_entity != nullptr) {
         probable_entity->update(*obj->getTransform());
       }
     }
@@ -141,8 +141,6 @@ namespace rtx { namespace Visioning {
 
   extern std::string filter;
 
-  extern FeatureSet features;
-
   extern EDS<Ball> ballDetect;
   extern EDS<Robot> robotDetect;
 
@@ -159,7 +157,6 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string&);
 
-  void featureDetection(const Frame&);
   void ballDetection(const Frame&);
   void goalDetection(const Frame&);
   void robotDetection(const Frame&);

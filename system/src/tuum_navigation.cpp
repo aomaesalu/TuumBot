@@ -2,7 +2,8 @@
  *  Navigation system implementation.
  *
  *  @authors Meelik Kiik
- *  @version 0.1
+ *  @authros Ants-Oskar Mäesalu
+ *  @version 0.2
  */
 
 #include "syscore/MotionData.hpp"
@@ -17,6 +18,54 @@
 // TODO: Pathfinding
 // TODO: No out of bounds transform target
 namespace rtx { namespace Navigation {
+
+  void preProcess() {
+
+    // Validate balls
+    Visioning::BallSet balls = *(Visioning::ballDetect.getEntities());
+    Vision::LineSet lines = Vision::getLines();
+    for (Visioning::BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+
+      // Check whether the current ball is in a goal
+
+      // Check whether the ball is in the blue goal
+      if (Visioning::blueGoal != nullptr) {
+
+        // Check whether the ball blob is in the blue goal blob, and set the
+        // ball object's parameter correspondingly
+        if ((*ball)->getBlob()->isIn(*(Visioning::blueGoal->getBlob()))) {
+          (*ball)->setInGoal(true);
+        }/* else {
+          (*ball)->setInGoal(false);
+        }*/ // TODO: Check if we need to do this in some situations, or if it
+        // would cause problems
+
+      }
+
+      // Check whether the ball is in the yellow goal
+      if (Visioning::yellowGoal != nullptr) {
+
+        // Check whether the ball blob is in the yellow goal blob, and set the
+        // ball object's parameter correspondingly
+        if ((*ball)->getBlob()->isIn(*(Visioning::yellowGoal->getBlob()))) {
+          (*ball)->setInGoal(true);
+        }/* else {
+          (*ball)->setInGoal(false);
+        }*/ // TODO: Check if we need to do this in some situations, or if it
+        // would cause problems
+
+      }
+
+      // TODO: Check that the ball is not outside of a line
+      for (Vision::LineSet::iterator line = lines.begin(); line != lines.end(); ++line) {
+
+        // TODO: Check if the ball is on the other side of the current line
+
+      }
+
+    }
+
+  }
 
   //TODO: position to relative position
   Transform calcBallPickupPos(Transform* bt) {

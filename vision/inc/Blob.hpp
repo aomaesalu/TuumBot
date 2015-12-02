@@ -3,8 +3,8 @@
  *  Blob seen in the camera frame.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.2
- *  @date 27 November 2015
+ *  @version 0.3
+ *  @date 2 December 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -51,6 +51,8 @@ namespace rtx {
       bool isAbove(const Blob&) const;
       bool isBelow(const Blob&) const;
 
+      bool isIn(const Blob&) const;
+      bool contains(const Blob&) const;
       bool overlaps(const Blob&) const;
       bool isClose(const Blob&, const double &maxError = 0.05) const;
       void join(Blob&);

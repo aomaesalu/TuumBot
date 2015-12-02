@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 2 December 2015
  */
 
 #include <algorithm>
@@ -83,7 +83,6 @@ namespace rtx { namespace Visioning {
     //  Vision::process(backFrame, filter);
 
     if (frontCamera) {
-      featureDetection(frontFrame);
       ballDetection(frontFrame);
       goalDetection(frontFrame);
       robotDetection(frontFrame);
@@ -143,31 +142,30 @@ namespace rtx { namespace Visioning {
     Goal* g = blueGoal;
     Goal* new_g = blueGoalBuffer;
 
-    if(blueGoal != nullptr) {
+    if (blueGoal != nullptr) {
 
-      if(blueGoalBuffer != nullptr)
+      if (blueGoalBuffer != nullptr)
         blueGoal->update(*blueGoalBuffer->getTransform());
       else
-	blueGoal->update();
+        blueGoal->update();
 
-      if(blueGoal->getHealth() <= mn_h) {
+      if (blueGoal->getHealth() <= mn_h) {
         delete blueGoal;
-	blueGoal = nullptr;
+      blueGoal = nullptr;
       }
-    } else if(blueGoalBuffer != nullptr) {
+    } else if (blueGoalBuffer != nullptr) {
       blueGoal = new Goal(*blueGoalBuffer);
     }
 
-    if(yellowGoal != nullptr) {
-      if(yellowGoalBuffer != nullptr)
+    if (yellowGoal != nullptr) {
+      if (yellowGoalBuffer != nullptr)
         yellowGoal->update(*yellowGoalBuffer->getTransform());
       else
-	yellowGoal->update();
-
+      yellowGoal->update();
 
       if(yellowGoal->getHealth() <= mn_h) {
         delete yellowGoal;
-	yellowGoal = nullptr;
+        yellowGoal = nullptr;
       }
     } else if(yellowGoalBuffer != nullptr) {
       yellowGoal = new Goal(*yellowGoalBuffer);
@@ -189,11 +187,6 @@ namespace rtx { namespace Visioning {
     robotsBuffer.clear();
 
     editingRobots = false;
-  }
-
-  void featureDetection(const Frame &frame) {
-    features.clear();
-    // TODO
   }
 
   double stateProbability(Transform* t1, Transform* t2) {
@@ -251,7 +244,7 @@ namespace rtx { namespace Visioning {
 
       // STEP 3: Create ball instance with absolute position
       //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
-      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), false));
+      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), blobs[i], false));
     }
 
     /*
@@ -323,7 +316,7 @@ namespace rtx { namespace Visioning {
         if (boxArea > largestBlueArea) {
           largestBlueArea = boxArea;
           //if (blueGoalBuffer == nullptr) {
-          blueGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color);
+          blueGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), blobs[i]);
           /*} else {
             blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
             blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
@@ -333,7 +326,7 @@ namespace rtx { namespace Visioning {
         if (boxArea > largestYellowArea) {
           largestYellowArea = boxArea;
           //if (yellowGoalBuffer == nullptr) {
-          yellowGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color);
+          yellowGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), blobs[i]);
           /*} else {
             yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
             yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
@@ -377,7 +370,7 @@ namespace rtx { namespace Visioning {
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
       // STEP 3: Create robot instance with absolute position
-      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
+      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle), blobs[i]));
     }
 
     // STEP 4: Unite detected robots with robots from last frame or create new robots
