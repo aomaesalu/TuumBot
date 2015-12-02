@@ -17,7 +17,10 @@
 
 namespace rtx { namespace Physics {
 
-  void rayCast(const double &angle) {
+  // Returns a pair of the color enumerator of the object (currently the way to
+  // represent the object by name - will be changed in the future) and the
+  // distance to the object.
+  std::pair<Color, double> rayCast(const double &angle) {
 
     // Check for blobs cutting into the ray
     BallSet balls = *(Visioning::ballDetect().getEntities());
@@ -72,7 +75,7 @@ namespace rtx { namespace Physics {
 
   }
 
-  void rayCast(const double &angle, const double &width) {
+  std::pair<Color, double> rayCast(const double &angle, const double &width) {
     // TODO
   }
 

@@ -10,11 +10,13 @@
 #ifndef RTX_SYSTEM_PHYSICS_H
 #define RTX_SYSTEM_PHYSICS_H
 
+#include "Color.hpp"
+
 
 namespace rtx { namespace Physics {
 
-  void rayCast(const double&);
-  //void rayCast(const double&, const double&)
+  std::pair<Color, double> rayCast(const double&);
+  //std::pair<Color, double> rayCast(const double&, const double&)
 
 }}
 
