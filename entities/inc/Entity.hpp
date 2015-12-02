@@ -45,14 +45,14 @@ namespace rtx {
       Entity(const Entity&);
 
       // By position
-      Entity(const Vec2i, const Blob*);
-      Entity(const int, const int, const Blob*);
+      Entity(const Vec2i, Blob*);
+      Entity(const int, const int, Blob*);
 
       // By position & orientation
-      Entity(Transform, const Blob*);
-      Entity(Transform, const Blob&);
-      Entity(Transform, bool, const Blob*);
-      Entity(const int, const int, const double, const Blob*);
+      Entity(Transform, Blob*);
+      Entity(Transform, Blob&);
+      Entity(Transform, bool, Blob*);
+      Entity(const int, const int, const double, Blob*);
 
       unsigned int getID();
       int getHealth();

@@ -31,40 +31,40 @@ namespace rtx {
     id = Entity::newID();
   }
 
-  Entity::Entity(const Vec2i pos, const Blob *blob):
+  Entity::Entity(const Vec2i pos, Blob *blob):
     m_transform(pos)
   {
     id = Entity::newID();
     this->blob = blob;
   }
 
-  Entity::Entity(const int x, const int y, const Blob *blob):
+  Entity::Entity(const int x, const int y, Blob *blob):
     m_transform(x, y)
   {
     id = Entity::newID();
     this->blob = blob;
   }
 
-  Entity::Entity(Transform transform, const Blob *blob) {
+  Entity::Entity(Transform transform, Blob *blob) {
     id = Entity::newID();
     m_transform = transform;
     this->blob = blob;
   }
 
-  Entity::Entity(Transform transform, const Blob &blob) {
+  Entity::Entity(Transform transform, Blob &blob) {
     id = Entity::newID();
     m_transform = transform;
     this->blob = &blob;
   }
 
-  Entity::Entity(Transform transform, bool recv_id, const Blob *blob) {
+  Entity::Entity(Transform transform, bool recv_id, Blob *blob) {
     if(recv_id) id = Entity::newID();
     else id = 0;
     m_transform = transform;
     this->blob = blob;
   }
 
-  Entity::Entity(const int x, const int y, const double o, const Blob *blob):
+  Entity::Entity(const int x, const int y, const double o, Blob *blob):
     m_transform(x, y, o)
   {
     id = Entity::newID();

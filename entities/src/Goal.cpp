@@ -19,7 +19,7 @@ namespace rtx {
     // Nothing to do here
   }
 
-  Goal::Goal(const Transform transform, const Blob *blob, const double &width, const double &length):
+  Goal::Goal(const Transform transform, Blob *blob, const double &width, const double &length):
     Entity(transform, blob),
     Rectangle(width, length)
   {

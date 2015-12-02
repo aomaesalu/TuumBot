@@ -27,7 +27,7 @@ namespace rtx {
   class Goal: public Entity, public Rectangle {
     public:
       Goal(Goal&);
-      Goal(const Transform, const Blob*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
+      Goal(const Transform, Blob*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
       bool isAlly() const;
       bool isOpponent() const;
