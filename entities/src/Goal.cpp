@@ -17,22 +17,14 @@ namespace rtx {
     Rectangle(other.getWidth(), other.getLength()),
     blob(other.getBlob())
   {
-
+    // Nothing to do here
   }
 
   Goal::Goal(const Transform transform, const Blob *blob, const double &width, const double &length):
     Entity(transform, blob),
     Rectangle(width, length)
   {
-
-  }
-
-  bool Goal::isBlue() const {
-    return blob->isBlue();
-  }
-
-  bool Goal::isYellow() const {
-    return blob->isYellow();
+    // Nothing to do here
   }
 
   bool Goal::isAlly() const {

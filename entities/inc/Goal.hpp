@@ -30,11 +30,6 @@ namespace rtx {
       Goal(Goal&);
       Goal(const Transform, const Blob*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
-      bool isBlue() const;
-      bool isYellow() const;
-
-      // TODO: isFriendly(), isEnemy() - needs data about the current game
-
       bool isAlly() const;
       bool isOpponent() const;
 
