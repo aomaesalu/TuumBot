@@ -35,6 +35,9 @@ namespace rtx {
 
       // TODO: isFriendly(), isEnemy() - needs data about the current game
 
+      bool isAlly() const;
+      bool isOpponent() const;
+
     private:
       Blob *blob;
   };

@@ -35,4 +35,12 @@ namespace rtx {
     return blob->isYellow();
   }
 
+  bool Goal::isAlly() const {
+    // TODO
+  }
+
+  bool Goal::isOpponent() const {
+    // TODO
+  }
+
 }
