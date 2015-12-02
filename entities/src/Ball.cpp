@@ -51,8 +51,7 @@ namespace rtx {
   }
 
   bool Ball::isValid() {
-    // TODO
-    return true;
+    return isInBounds() && isOutOfGoal() && isNotKicked();
   }
 
   bool Ball::isNotValid() {
