@@ -17,7 +17,6 @@
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
-#include "RelativePosition.hpp"
 
 #include "Blob.hpp"
 
