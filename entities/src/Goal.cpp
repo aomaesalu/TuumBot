@@ -9,8 +9,6 @@
 
 #include "Goal.hpp"
 
-#include "Color.hpp"
-
 
 namespace rtx {
 
@@ -28,6 +26,10 @@ namespace rtx {
     blob(blob)
   {
 
+  }
+
+  Blob* Goal::getBlob() const {
+    return blob;
   }
 
   Color Goal::getColor() const {

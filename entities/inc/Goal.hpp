@@ -20,6 +20,7 @@
 #include "RelativePosition.hpp"
 
 #include "Blob.hpp"
+#include "Color.hpp"
 
 
 namespace rtx {
@@ -29,6 +30,7 @@ namespace rtx {
       Goal(Goal&);
       Goal(const Transform, const Blob*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
+      Blob* getBlob() const;
       Color getColor() const;
 
       bool isBlue() const;
