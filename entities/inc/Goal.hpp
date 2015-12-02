@@ -20,7 +20,6 @@
 #include "RelativePosition.hpp"
 
 #include "Blob.hpp"
-#include "Color.hpp"
 
 
 namespace rtx {
@@ -32,9 +31,6 @@ namespace rtx {
 
       bool isAlly() const;
       bool isOpponent() const;
-
-    private:
-      Blob *blob;
   };
 
 }

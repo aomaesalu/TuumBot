@@ -14,8 +14,7 @@ namespace rtx {
 
   Goal::Goal(Goal &other):
     Entity(*other.getTransform(), other.getBlob()),
-    Rectangle(other.getWidth(), other.getLength()),
-    blob(other.getBlob())
+    Rectangle(other.getWidth(), other.getLength())
   {
     // Nothing to do here
   }
