@@ -25,16 +25,34 @@ namespace rtx { namespace Navigation {
     BallSet balls = Visioning::getballs;
     for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
 
-      // Check that the ball is not in a goal
+      // Check whether the current ball is in a goal
 
-      // Check that the ball is not in the blue goal
+      // Check whether the ball is in the blue goal
       if (Visioning::blueGoal != nullptr) {
-        // TODO
+
+        // Check whether the ball blob is in the blue goal blob, and set the
+        // ball object's parameter correspondingly
+        if ((*ball)->getBlob()->isIn(*(Visioning::blueGoal->getBlob()))) {
+          (*ball)->setInGoal(true);
+        }/* else {
+          (*ball)->setInGoal(false);
+        }*/ // TODO: Check if we need to do this in some situations, or if it
+        // would cause problems
+
       }
 
-      // Check that the ball is not in the yellow goal
+      // Check whether the ball is in the yellow goal
       if (Visioning::yellowGoal != nullptr) {
-        // TODO
+
+        // Check whether the ball blob is in the yellow goal blob, and set the
+        // ball object's parameter correspondingly
+        if ((*ball)->getBlob()->isIn(*(Visioning::yellowGoal->getBlob()))) {
+          (*ball)->setInGoal(true);
+        }/* else {
+          (*ball)->setInGoal(false);
+        }*/ // TODO: Check if we need to do this in some situations, or if it
+        // would cause problems
+
       }
 
       // TODO: Check that the ball is not outside of a line
