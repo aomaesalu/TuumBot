@@ -14,6 +14,9 @@
 
 #include "rtxmath.hpp"
 
+#include "Blob.hpp"
+#include "Color.hpp"
+
 namespace rtx {
 
   /**
