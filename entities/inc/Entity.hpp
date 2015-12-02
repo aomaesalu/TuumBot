@@ -42,13 +42,13 @@ namespace rtx {
       Entity(const Entity&);
 
       // By position
-      Entity(const Vec2i);
-      Entity(const int, const int);
+      Entity(const Vec2i, const Blob*);
+      Entity(const int, const int, const Blob*);
 
       // By position & orientation
-      Entity(Transform);
-      Entity(Transform, bool);
-      Entity(const int, const int, const double);
+      Entity(Transform, const Blob*);
+      Entity(Transform, bool, const Blob*);
+      Entity(const int, const int, const double, const Blob*);
 
       unsigned int getID();
       int getHealth();
@@ -63,6 +63,9 @@ namespace rtx {
 
       std::string toString();
 
+    protected:
+      Blob *blob;
+
     private:
       static unsigned int id_seq;
 
@@ -70,8 +73,6 @@ namespace rtx {
 
       unsigned int id;
       int m_health = 0;
-
-      Blob *blob;
 
   };
 
