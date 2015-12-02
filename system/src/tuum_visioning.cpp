@@ -87,7 +87,6 @@ namespace rtx { namespace Visioning {
       ballDetection(frontFrame);
       goalDetection(frontFrame);
       robotDetection(frontFrame);
-      featureValidation();
     }
 
     // TODO: Add back camera frame processing
@@ -417,25 +416,6 @@ namespace rtx { namespace Visioning {
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     robotDetect.update();
-  }
-
-  void featureValidation() {
-
-    // For each ball, check that it isn't in a goal
-    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
-
-      // Check that the ball isn't in the blue goal
-      if (blueGoal != nullptr) {
-        // TODO
-      }
-
-      // Check that the ball isn't in the yellow goal
-      if (yellowGoal != nullptr) {
-        // TODO
-      }
-
-    }
-
   }
 
 }}

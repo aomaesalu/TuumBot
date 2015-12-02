@@ -163,7 +163,6 @@ namespace rtx { namespace Visioning {
   void ballDetection(const Frame&);
   void goalDetection(const Frame&);
   void robotDetection(const Frame&);
-  void featureValidation();
 
 }}
 
