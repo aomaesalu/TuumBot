@@ -74,13 +74,13 @@ namespace rtx { namespace Visioning {
     Frame frontFrame, backFrame;
     if (frontCamera)
       frontFrame = frontCamera->getFrame();
-    if (backCamera)
-      backFrame = backCamera->getFrame();
+    //if (backCamera)
+    //  backFrame = backCamera->getFrame();
 
     if (frontCamera)
       Vision::process(frontFrame, filter);
-    if (backCamera)
-      Vision::process(backFrame, filter);
+    //if (backCamera)
+    //  Vision::process(backFrame, filter);
 
     if (frontCamera) {
       featureDetection(frontFrame);
@@ -137,34 +137,41 @@ namespace rtx { namespace Visioning {
   void translateGoalsBuffer() {
     editingGoals = true;
 
-    // TODO: Refactor buffer management
+    const int mn_h = -5;
+    const int mx_h = 5;
 
-    /*if (blueGoal) {
-      if (blueGoal != blueGoalBuffer) {
-        delete(blueGoal);
-        blueGoal = blueGoalBuffer;
+    Goal* g = blueGoal;
+    Goal* new_g = blueGoalBuffer;
+
+    if(blueGoal != nullptr) {
+
+      if(blueGoalBuffer != nullptr)
+        blueGoal->update(*blueGoalBuffer->getTransform());
+      else
+	blueGoal->update();
+
+      if(blueGoal->getHealth() <= mn_h) {
+        delete blueGoal;
+	blueGoal = nullptr;
       }
-    } else {
-      blueGoal = blueGoalBuffer;
+    } else if(blueGoalBuffer != nullptr) {
+      blueGoal = new Goal(*blueGoalBuffer);
     }
 
-    if (yellowGoal) {
-      if (yellowGoal != yellowGoalBuffer) {
-        delete(yellowGoal);
-        yellowGoal = yellowGoalBuffer;
-      }
-    } else {
-      yellowGoal = yellowGoalBuffer;
-    }*/
+    if(yellowGoal != nullptr) {
+      if(yellowGoalBuffer != nullptr)
+        yellowGoal->update(*yellowGoalBuffer->getTransform());
+      else
+	yellowGoal->update();
 
-    if (blueGoalBuffer)
-      blueGoal = new Goal(*blueGoalBuffer);
-    else
-      blueGoal = nullptr;
-    if (yellowGoalBuffer)
+
+      if(yellowGoal->getHealth() <= mn_h) {
+        delete yellowGoal;
+	yellowGoal = nullptr;
+      }
+    } else if(yellowGoalBuffer != nullptr) {
       yellowGoal = new Goal(*yellowGoalBuffer);
-    else
-      yellowGoal = nullptr;
+    }
 
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;
@@ -190,9 +197,10 @@ namespace rtx { namespace Visioning {
   }
 
   double stateProbability(Transform* t1, Transform* t2) {
-    double px = gaussian_probability(t1->getX(), 30, t2->getX());
-    double py = gaussian_probability(t1->getY(), 30, t2->getY());
-    return (px + py) / 2;
+    const double A = 125.0;
+    double px = A*gauss_prob2(t1->getX(), 120, t2->getX());
+    double py = A*gauss_prob2(t1->getY(), 120, t2->getY());
+    return 2*px*py / (px+py);
   }
 
   void ballDetection(const Frame &frame) {
@@ -229,7 +237,7 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = atan2(position.first, position.second);
+      double angle = -atan2(position.first, position.second);
       // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
@@ -243,7 +251,7 @@ namespace rtx { namespace Visioning {
 
       // STEP 3: Create ball instance with absolute position
       //std::cout << "New ball: d=" << distance << ", a=" << angle << ", r=" << fabs(1.0 - ratio) << std::endl;
-      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle)));
+      n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), false));
     }
 
     /*
@@ -258,34 +266,7 @@ namespace rtx { namespace Visioning {
     Ball* n_ball_ptr;
     BallSet* ball_set_ptr;
     for(int ix = 0; ix < n_balls.size(); ix++) {
-      p = 0.0;
-      n_ball_ptr = n_balls[ix];
-
-      // STEP 4.1: Calculate existing entity probability
-      ball_set_ptr = &(ballDetect.objs);
-      for(int jx = 0; jx < ballDetect.objs.size(); jx++) {
-        _p = stateProbability((*ball_set_ptr)[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-        }
-      }
-
-      for(int jx = 0; jx < ballDetect.tmp_objs.size(); jx++) {
-        _p = stateProbability(ballDetect.tmp_objs[jx]->getTransform(), n_ball_ptr->getTransform());
-        if(_p > p) {
-          p = _p;
-          p_ix = jx;
-	        if(ball_set_ptr != &(ballDetect.tmp_objs)) ball_set_ptr = &(ballDetect.tmp_objs);
-        }
-      }
-
-      // STEP 4.2: Create or update entities
-      if(p < 0.01) {
-        ballDetect.tmp_objs.push_back(new Ball(*n_ball_ptr));
-      } else {
-        (*ball_set_ptr)[p_ix]->update(*n_ball_ptr->getTransform());
-      }
+      ballDetect.processProbableEntity(n_balls[ix]);
     }
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
@@ -333,7 +314,7 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = atan2(position.first, position.second);
+      double angle = -atan2(position.first, position.second);
       // std::cout << "Goal: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
@@ -390,7 +371,7 @@ namespace rtx { namespace Visioning {
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = atan2(position.first, position.second);
+      double angle = -atan2(position.first, position.second);
       // std::cout << "Robot: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;

@@ -41,7 +41,7 @@ namespace rtx {
 
   class Controller {
   public:
-    virtual void run() {}
+    virtual int run() {}
     virtual void init() {}
     virtual bool isRunnable() { return true; }
     virtual bool isInterruptable() { return true; }
@@ -49,7 +49,10 @@ namespace rtx {
 
   class State {
   private:
+    static int priority_seq;
+
     std::string m_name;
+    int m_priority;
 
     CtrlSet m_controllers;
 
@@ -65,6 +68,8 @@ namespace rtx {
     void addController(Controller* ctrl) {
       m_controllers.push_back(ctrl);
     }
+
+    int getPriority() { return m_priority; }
 
     void setLastState(State* st) { m_last = st; }
     void setNextState(State* st) { m_next = st; }

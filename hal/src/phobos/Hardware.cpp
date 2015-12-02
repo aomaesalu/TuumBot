@@ -18,23 +18,20 @@ namespace rtx { namespace hal {
     m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT)//,
     //m_backCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT) // TODO: Detect correct camera device for back camera; currently the cameras are the same.
   {
-    //referee = new SerialPort();
-    //referee2 = new SerialPort();
+
   }
 
   void Hardware::init() {
-    printf("[Hardware::init]Loading hardware...\n");
-    HWBus.init("/dev/ttyUSB0", 19200);
+    if(gC.getStr("HW.Active") == "Y") {
+      printf("[Hardware::init]Loading hardware...\n");
+      HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
+      m_refereeListener.init(gC.getStr("RefModule.Port").c_str(), gC.getInt("RefModule.Baud"));
 
-    m_motorControl.init(hw_bus_write);
-    m_mainBoard.init(hw_bus_write, hw_bus_register);
-
-    //refereeListener.init("/dev/ttyACM0");
-    //refereeListener2.init("/dev/ttyACM1");
-    //refereeListener.write_some("aAXASTART----");
-    //referee->init("/dev/ttyACM0", 9600);
-    //referee2->init("/dev/ttyACM1", 9600);
-    //referee->write_some("aABKICKOFF----");
+      m_motorControl.init(hw_bus_write);
+      m_mainBoard.init(hw_bus_write, hw_bus_register);
+    } else {
+      printf("[Hardware::init]Hardware not active.\n");
+    }
   }
 
   void Hardware::run() {
@@ -55,6 +52,10 @@ namespace rtx { namespace hal {
 
   MotorControl* Hardware::getMotorControl() {
     return &m_motorControl;
+  }
+
+  RefereeListener* Hardware::getRefListener() {
+    return &m_refereeListener;
   }
 
 }}

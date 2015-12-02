@@ -1,6 +1,8 @@
 
 #include <iostream>
 
+#include "tuum_platform.hpp"
+
 #include "RefereeListener.hpp"
 
 using namespace rtx;
@@ -11,12 +13,21 @@ namespace rtx { namespace hal {
 
   }
 
-  void RefereeListener::init(std::string portname) {
-    std::cout << "[RefereeListener]Init..." << std::endl;
-    SerialPort::init(portname.c_str(), 9600);
+  void RefereeListener::init(std::string portname, int baud) {
+    std::cout << "[RefereeListener::init]Port " << portname
+              << ", " << baud
+              << std::endl;
+    SerialPort::init(portname.c_str(), baud);
+    write_some("+++");
 
-
-    std::cout << "[RefereeListener]Ready." << std::endl;
+    m_field = gC.getStr("Game.Field")[0];
+    m_team  = gC.getStr("Game.Team")[0];
+    m_robot = gC.getStr("Game.Robot")[0];
+    std::cout << "[RefereeListener]Ready. "
+              << "Field " << m_field
+              << ", Team " << m_team
+              << ", Robot " << m_robot
+              << std::endl;
   }
 
   void RefereeListener::registerCallback(const RefereeSignal sig, VoidFn callback) {
@@ -35,47 +46,57 @@ namespace rtx { namespace hal {
     }
   }
 
-  RefCommand RefereeListener::parseCommand(std::string cmd) {
-    // Parse RefTarget
-    std::string newcmd;
-    if((cmd.at(3)=='A') || (cmd.at(3) == 'B')){
-      newcmd = cmd.substr(4);
+  /**
+   *  Command syntax:
+   *    Byte 0 - 'a'
+   *    Byte 1,2 - Target robots selector: field+teams (AX, BD, ...)
+   *    Bytes 3, ... - Command
+   *    Byte 3 (Optional) - Target team
+   */
+  RefCommand RefereeListener::parseCommand(std::string msg) {
+    std::string cmd;
+    char team = msg.at(3);
+    if((team == 'A') || (team == 'B')){
+      cmd = msg.substr(4);
+    } else {
+      team = 0;
+      cmd = msg.substr(3);
     }
-    else{
-      newcmd = cmd.substr(3);
-    }
-    std::cout << newcmd << std::endl;
 
-    auto it = refSigMap.find(newcmd);
-    if(it != refSigMap.end()){
-      if((cmd.at(3)=='A') || (cmd.at(3) == 'B')){
-        return RefCommand({it->second, {cmd.at(1), cmd.at(2), cmd.at(3)}});
-      }
-      else {
-        return RefCommand({it->second, {cmd.at(1), cmd.at(2), '0'}});
+    std::cout << cmd << std::endl;
+
+    auto it = refSigMap.find(cmd);
+
+    if(it != refSigMap.end()) {
+      if( team != 0 ) {
+        // Specific command
+        return RefCommand({it->second, {msg.at(1), msg.at(2), team}});
+      } else {
+        // General command
+        return RefCommand({it->second, {msg.at(1), msg.at(2), '0'}});
       }
     }
+
+    std::cout << "[RefereeListener::parseCommand]Warning: Unknown signal "
+              << cmd << std::endl;
 
     return RefCommand({REF_VOID, {'0', '0', '0'}});
   }
 
 
   void RefereeListener::on_receive_(const std::string &data) {
-  	std::string message = data.substr(0, 12);
-  	std::cout << "RefereeListener::on_receive_() : " << data << std::endl;
+    std::string message = data.substr(0, 12);
 
-		if ((message[0] == 'a') && (message[1] == FIELD)) {
-      //TODO
-      std::cout << "RefereeListener::on_receive_() : " << message << std::endl;
+    if ((message[0] == 'a') && (message[1] == m_field)) {
+      std::cout << data << std::endl;
       this->signal(this->parseCommand(message));
-      if (message[2] == ID) this->sendAck();
-		}
+    }
   }
 
-  void RefereeListener::sendAck(){
-  	const std::string ack = "a"+std::string(1,FIELD)+std::string(1,ID)+"ACK------";
-  	std::cout << ack;
-  	this->write_some(ack.c_str(), ack.size());
+  void RefereeListener::sendAck() {
+    const std::string ack = "a"+std::string(1,m_field)+std::string(1,m_robot)+"ACK------";
+    std::cout << ack;
+    this->write_some(ack.c_str(), ack.size());
   }
 
 }}

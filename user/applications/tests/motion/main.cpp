@@ -4,41 +4,250 @@
 
 #include "application.hpp"
 
+#include "rtxhal.hpp"
+
 #include "tuum_motion.hpp"
 #include "tuum_visioning.hpp"
+#include "tuum_navigation.hpp"
 
 using namespace std;
 using namespace rtx;
+using namespace hal;
 
 Timer debugTimer;
 
+Vec2i p_vec, a_vec;
+
+
+enum LST {
+  BALL_SCAN,
+  BALL_RETRIEVE,
+  GOAL_SCAN,
+  GOAL_SHOOT,
+  HALT,
+};
+
+LST state = BALL_SCAN;
+
+void test1() {
+  Motion::stop();
+  p_vec = Vec2i({100, 100});
+  Motion::setPositionTarget(p_vec);
+  a_vec = Vec2i({150, 175});
+
+  std::cout << "Position target test..." << std::endl;
+  std::cout << "Expected position: " << p_vec.toString() << std::endl;
+  std::cout << "Expected motion angle: " << p_vec.getOrientation() << std::endl;
+  std::cout << "Expected orientation: " << (a_vec - p_vec).getOrientation() << std::endl;
+
+  std::cout << "Set target: " << p_vec.toString() << std::endl;
+  std::cout << "Got target position: " << Motion::getTargetPosition().toString() << std::endl;
+  std::cout << "Got target transform: " << Motion::getTargetTransform().toString() << std::endl;
+
+  Motion::start();
+  Motion::process();
+
+  Motion::setAimTarget(a_vec);
+  std::cout << "Set aim target: " << a_vec.toString() << std::endl;
+  std::cout << "Got target orientation: " << Motion::getTargetOrientation() << std::endl;
+  std::cout << "Got target transform: " << Motion::getTargetTransform().toString() << std::endl;
+
+  Motion::start();
+  Motion::process();
+}
+
+void test2() {
+  Motion::stop();
+  std::cout << std::endl << "Second test..." << std::endl;
+  p_vec = Vec2i({100, 50});
+  a_vec = Vec2i({150, 50});
+
+  std::cout << "Expected position: " << p_vec.toString() << std::endl;
+  std::cout << "Expected motion angle: " << p_vec.getOrientation() << std::endl;
+  std::cout << "Expected orientation: " << (a_vec - p_vec).getOrientation() << std::endl;
+
+
+  Motion::setPositionTarget(p_vec);
+  std::cout << "Set target: " << p_vec.toString() << std::endl;
+  std::cout << "Got target position: " << Motion::getTargetPosition().toString() << std::endl;
+  std::cout << "Got target transform: " << Motion::getTargetTransform().toString() << std::endl;
+
+  Motion::start();
+  Motion::process();
+
+  Motion::setAimTarget(a_vec);
+  std::cout << "Set aim target: " << a_vec.toString() << std::endl;
+  std::cout << "Got target orientation: " << Motion::getTargetOrientation() << std::endl;
+  std::cout << "Got target transform: " << Motion::getTargetTransform().toString() << std::endl;
+
+  Motion::start();
+  Motion::process();
+}
+
+
+Goal* getGoal() {
+  return Visioning::blueGoal;
+}
+
+bool ballInDribbler() {
+  if(hal::hw.getMainBoard()->getBallSensorState()) {
+    hal::hw.getMainBoard()->startDribbler();
+    return true;
+  } else {
+    hal::hw.getMainBoard()->stopDribbler();
+    return false;
+  }
+}
+
+int ball_scan_ctrl() {
+  if(ballInDribbler()) return 1;
+
+  if(Visioning::ballDetect.size() > 0) {
+    Motion::stop();
+    return 1;
+  }
+
+  Motion::setSpeed(30);
+  Motion::setAimTarget(Vec2i({1, 1}));
+  if(!Motion::isRunning()) Motion::start();
+  return 0;
+}
+
+int goal_scan_ctrl() {
+  if(!ballInDribbler()) return -1;
+  if(getGoal() != nullptr) return 1;
+
+  Motion::setAimTarget(Vec2i({1, -1}));
+  if(!Motion::isRunning()) Motion::start();
+  return 0;
+}
+
+int ball_locate_ctrl() {
+  if(ballInDribbler()) return 1;
+  if(Visioning::ballDetect.size() <= 0) return -1;
+
+  Ball* b = Navigation::getNearestBall();
+  if(b == nullptr) return -1;
+
+
+  Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
+  Motion::setSpeed(60);
+  Motion::setPositionTarget(pos);
+  Motion::setAimTarget(b->getTransform()->getPosition());
+  
+  Transform* t = Localization::getTransform();
+  double d = t->distanceTo(b->getTransform()->getPosition());
+
+  MainBoard* mb = hal::hw.getMainBoard();
+  //std::cout << d << std::endl;
+  if(d < 250) {
+    mb->startDribbler();
+  } else {
+    mb->stopDribbler();
+  }
+
+  if(!Motion::isTargetAchieved()) {
+    if(!Motion::isRunning()) Motion::start();
+  }
+
+  if(mb->getBallSensorState()) return 1;
+
+  return 0;
+}
+
+
+int goal_shoot_ctrl() {
+  if(getGoal() == nullptr) return -1;
+  if(!ballInDribbler()) return -1;
+
+  Goal* g = getGoal();
+
+  //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
+  Motion::setAimTarget(g->getTransform()->getPosition());
+  std::cout << g->getTransform()->getPosition().toString() << std::endl;;
+
+  if(!Motion::isTargetAchieved()) {
+    if(!Motion::isRunning()) Motion::start();
+  } else {
+    hal::hw.getMainBoard()->doCoilKick();
+  }
+
+  return 0;
+}
+
+
 int main(int argc, char* argv[]) {
   printf("Running motion tests...\n");
-  debugTimer.setPeriod(2000);
+  //debugTimer.setPeriod(2000);
 
   hal::setup();
 
+  Visioning::setup();
   Motion::setup();
+  Motion::setBehaviour(Motion::MOT_COMPLEX);
 
+  //test1();
+  //test2();
 
   bool running = true;
-  hal::hw.getMainBoard()->senseBall();
+  //hal::hw.getMainBoard()->senseBall();
   while(running) {
     hal::process();
 
+    Visioning::process();
     Motion::process();
 
-    if(Visioning::blueGoal != nullptr) {
-      Motion::setBehaviour(Motion::MOT_AIM);
-      Motion::setTarget(*(Visioning::blueGoal->getTransform()));
-      if(!Motion::isRunning()) Motion::start();
+    //goal_locate_ctrl();
+    int res;
+    switch(state) {
+      case BALL_SCAN:
+	res = ball_scan_ctrl();
+	if(res == 0) break;
+	else if(res > 0) {
+	  state = BALL_RETRIEVE;
+	  Motion::stop();
+	}
+	break;
+      case BALL_RETRIEVE:
+	res = ball_locate_ctrl();
+	if(res == 0) break;
+	else if(res > 0) {
+	  state = GOAL_SCAN;
+	  Motion::stop();
+	}
+	else if(res < 0) {
+	  state = BALL_SCAN;
+	  Motion::stop();
+	}
+	break;
+      case GOAL_SCAN:
+	res = goal_scan_ctrl();
+	if(res == 0) break;
+	else if(res > 0) {
+          Motion::stop();
+	  state = GOAL_SHOOT;
+	}
+	else if(res < 0) {
+	  Motion::stop();
+          state = BALL_RETRIEVE;
+	}
+	break;
+      case GOAL_SHOOT:
+	res = goal_shoot_ctrl();
+	if(res == 0) break;
+	else if(res > 0) {
+	  Motion::stop();
+          state = BALL_RETRIEVE;
+	}
+	else if(res < 0) {
+          Motion::stop();
+	  state = GOAL_SCAN;
+	}
+	break;
+      case HALT:
+	break;
     }
 
-    if(debugTimer.isTime()) {
-      std::cout << "DEBUG" << std::endl;
-      std::cout << "BlueGoal: " << (Visioning::blueGoal != nullptr) << std::endl;
-      debugTimer.start();
-    }
   };
 
   printf("Motion tests done.\n");

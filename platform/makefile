@@ -1,10 +1,9 @@
+
 MODULE=platform
 PLATFORM_MODULE_PATH=.
+BUILD_PATH_EXT = $(BUILD_TARGET_PLATFORM)
 
-# Target this makefile is building.
+DEPENDENCIES =
 TARGET_TYPE = a
-BUILD_PATH_EXT = $(PLATFORM_BUILD_PATH_EXT)
-
-DEPENDENCIES = hal
 
 include ../build/tlm.mk

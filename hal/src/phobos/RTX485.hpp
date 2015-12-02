@@ -29,7 +29,7 @@ namespace rtx { namespace hal {
     class Device;
 
     typedef boost::function<void (Message)> DeviceCallback;
-    typedef std::map<DeviceID, DeviceCallback> SignalMap; 
+    typedef std::map<DeviceID, DeviceCallback> SignalMap;
 
     struct SignalParams {
       DeviceID id;
@@ -46,34 +46,34 @@ namespace rtx { namespace hal {
       WriteHandle write;
     public:
       Device() {
-	id = 255;
+        id = 255;
         write = nullptr;
       }
 
       void init(WriteHandle wHandle) {
-	if(wHandle != nullptr)
-	  write = wHandle;
+        if(wHandle != nullptr)
+          write = wHandle;
       }
 
       void init(WriteHandle wHandle, SignalService sigRegister) {
-	DeviceCallback f;
-	f = std::bind1st(std::mem_fun(&Device::signal), this);
-	this->init(wHandle, sigRegister, f);
+        DeviceCallback f;
+        f = std::bind1st(std::mem_fun(&Device::signal), this);
+        this->init(wHandle, sigRegister, f);
       }
 
       void init(WriteHandle wHandle, SignalService sigRegister, DeviceCallback dcb) {
-	this->init(wHandle);
+        this->init(wHandle);
 
-	if(sigRegister != nullptr) {
-	  SignalParams sp;
-	  sp.id = this->id;
-          sp.cb = dcb;
-	  sigRegister(sp);
-	}
+        if(sigRegister != nullptr) {
+          SignalParams sp;
+          sp.id = this->id;
+                sp.cb = dcb;
+          sigRegister(sp);
+        }
       }
 
       virtual void signal(Message m) {
-	std::cout << "UNHANDLED DEVICE SIGNAL CAPTURE" << std::endl;
+        std::cout << "UNHANDLED DEVICE SIGNAL CAPTURE" << std::endl;
       };
 
       DeviceID getID() { return id; }
@@ -98,5 +98,5 @@ namespace rtx { namespace hal {
   };
 
 }}
- 
+
 #endif // RTX_RS485_H

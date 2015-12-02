@@ -4,15 +4,17 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 21 November 2015
+ *  @date 29 November 2015
  */
 
 #include "cameraConstants.hpp"
+#include "entityConstants.hpp"
 
 #include "Blob.hpp"
 
 #include <algorithm>
 #include <iostream> // TODO: Remove
+#include <utility>
 
 
 namespace rtx {
@@ -139,6 +141,10 @@ namespace rtx {
     return 1.0 * numberOfPoints / getBoxArea();
   }
 
+  std::pair<unsigned int, unsigned int> Blob::getExpectedVirtualSize() const {
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY()));
+  }
+
   bool Blob::isOrange() const {
     return color == BALL;
   }
@@ -149,6 +155,14 @@ namespace rtx {
 
   bool Blob::isYellow() const {
     return color == YELLOW_GOAL;
+  }
+
+  bool Blob::isYellowBlue() const {
+    return color == ROBOT_YELLOW_BLUE;
+  }
+
+  bool Blob::isBlueYellow() const {
+    return color == ROBOT_BLUE_YELLOW;
   }
 
   bool Blob::isSameColor(const Blob &other) const {
@@ -167,39 +181,31 @@ namespace rtx {
     return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
-  bool Blob::isClose(const Blob &other, const double &closeness) const {
-    if (overlaps(other))
+  bool Blob::isClose(const Blob &other, const double &maxError) const {
+    //if (overlaps(other)) // DEBUG! TODO: Check if is needed
+    //  return true;
+    if (!(minX <= other.getMaxX() && maxX >= other.getMinX() || minY <= other.getMaxY() && maxY >= other.getMinY()))
+      return false;
+    std::pair<unsigned int, unsigned int> expectedSize;
+    if (isSameColor(other)) {
+      expectedSize = getExpectedVirtualSize();
+    } else {
+      if ((isBlue() && other.isYellow()) || (isYellow() && other.isBlue()) || ((isYellowBlue() || isBlueYellow()) && (other.isYellow() || other.isBlue())) || ((isYellow() || isBlue()) && (other.isYellowBlue() || other.isBlueYellow()))) {
+        // The expected sizes for both robot color combinations are the same
+        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT));
+      } else {
+        expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
+      }
+    }
+    if (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX()) <= (1 + maxError) * expectedSize.first &&
+        std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY()) <= (1 + maxError) * expectedSize.second) {
+
+      // DEBUG:
+      /*std::cout << intToColor(color) << " " << intToColor(other.getColor()) << ":" << std::endl;
+      std::cout << "(" << (std::max(maxX, other.getMaxX()) - std::min(minX, other.getMinX())) << " <= " << (1 + maxError) * expectedSize.first << ")" << "(" << (std::max(maxY, other.getMaxY()) - std::min(minY, other.getMinY())) << " <= " << (1 + maxError) * expectedSize.second << ")" << std::endl;
+      std::cout << std::endl;*/
+
       return true;
-    if (minY <= other.getMinY() && maxY >= other.getMaxY() || minY >= other.getMinY() && maxY <= other.getMaxY()) { // One of the rectangles would fit inside the other by the Y coordinate
-    //if (minY <= other.getMaxY() && maxY >= other.getMinY()) { // The rectangles overlap by the Y coordinate
-      if ((std::min(maxY, other.getMaxY()) - std::max(minY, other.getMinY())) >= std::max(getHeight(), other.getHeight()) / 2) { // The Y coordinate overlapping is over half of the height of the smaller blob
-        if (maxX <= other.getMinX()) { // Current is to the left of other
-          unsigned int intermediateWidth = other.getMinX() - maxX;
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
-            return true;
-          }
-        } else if (minX >= other.getMaxX()) { // Current is to the right of other
-          unsigned int intermediateWidth = minX - other.getMaxX();
-          if (intermediateWidth <= std::max(getWidth(), other.getWidth()) * closeness) {
-            return true;
-          }
-        }
-      }
-    } else if (minX <= other.getMinX() && maxX >= other.getMaxX() || minX >= other.getMinX() && maxX <= other.getMaxX()) { // One of the rectangles would fit inside the other by the X coordinate
-    //} else if (minX <= other.getMaxX() && maxX >= other.getMinX()) { // The rectangles overlap by the X coordinate
-      if ((std::min(maxX, other.getMaxX()) - std::max(minX, other.getMinX())) >= std::max(getWidth(), other.getWidth()) / 2) { // The X coordinate overlapping is over half of the width of the smaller blob
-        if (maxY <= other.getMinY()) { // Current is above the other
-          unsigned int intermediateHeight = other.getMinY() - maxY;
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
-            return true;
-          }
-        } else if (minY >= other.getMaxY()) { // Current is below the other
-          unsigned int intermediateHeight = minY - other.getMaxY();
-          if (intermediateHeight <= std::max(getHeight(), other.getHeight()) * closeness) {
-            return true;
-          }
-        }
-      }
     }
     return false;
   }

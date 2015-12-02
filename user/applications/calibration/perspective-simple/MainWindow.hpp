@@ -67,6 +67,8 @@ namespace rtx {
       void constructScalesBox();
       void constructScale(Gtk::Container&, Gtk::Scale&, Gtk::Label&, const std::string&);
 
+      void on_scale_value_changed();
+
   };
 
 }

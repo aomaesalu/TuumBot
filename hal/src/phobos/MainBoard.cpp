@@ -47,13 +47,11 @@ namespace rtx { namespace hal {
       if(m_dribblerState) {
         startDribbler();
       }
-
       m_updateTimer.start();
     }
 
     if(m_coilKickActive && m_coilKickCharge.isTime()) {
       if(m_coilChargeLevel >= 3) {
-        releaseCoil();
         m_coilKickActive = false;
       } else {
         m_coilChargeLevel++;
@@ -61,7 +59,6 @@ namespace rtx { namespace hal {
       }
 
     }
-
   }
 
   bool MainBoard::getBallSensorState() {
@@ -87,7 +84,8 @@ namespace rtx { namespace hal {
 
   void MainBoard::doCoilKick() {
     if(!m_coilKickActive) {
-      chargeCoil();
+      stopDribbler();
+      releaseCoil();
       m_coilKickActive = true;
       m_coilChargeLevel = 0;
       m_coilKickCharge.start();
@@ -103,7 +101,7 @@ namespace rtx { namespace hal {
 
   void MainBoard::startDribbler() {
     m_dribblerState = 1;
-    write({id, getDribblerCmd(90)});
+    write({id, getDribblerCmd(140)});
   }
 
   void MainBoard::stopDribbler() {

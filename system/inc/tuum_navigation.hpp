@@ -11,13 +11,19 @@
 #include "rtxmath.hpp"
 
 #include "Ball.hpp"
+#include "Goal.hpp"
+#include "Robot.hpp"
 
 namespace rtx { namespace Navigation {
 
   Transform calcBallPickupPos(Transform*);
-  Transform calcGoalShootPos(Transform*);
+  Vec2i calcGoalShootPos(Transform*);
 
   Ball* getNearestBall();
+
+  Goal* getOpponentGoal();
+
+  Robot* getAlly();
 
 }}
 

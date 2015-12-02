@@ -1,9 +1,10 @@
 /**
- * @file Ball.hpp
- * Ball class.
+ *  @file Ball.hpp
+ *  Ball class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 29 November 2015
  */
 
 #ifndef RTX_ENTITIES_BALL_H
@@ -22,7 +23,7 @@ namespace rtx {
   class Ball: public Entity, public Circle {
   public:
     Ball(Ball&);
-    Ball(const Transform, const double& = BALL_RADIUS);
+    Ball(const Transform, const double& = BALL_DIAMETER / 2.0);
   };
 
 };

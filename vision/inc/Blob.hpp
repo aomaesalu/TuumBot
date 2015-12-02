@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 21 November 2015
+ *  @date 27 November 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -39,17 +39,20 @@ namespace rtx {
       unsigned int getBoxArea() const;
       double getBoxRatio() const;
       double getDensity() const;
+      std::pair<unsigned int, unsigned int> getExpectedVirtualSize() const;
 
       bool isOrange() const;
       bool isBlue() const;
       bool isYellow() const;
+      bool isYellowBlue() const;
+      bool isBlueYellow() const;
 
       bool isSameColor(const Blob&) const;
       bool isAbove(const Blob&) const;
       bool isBelow(const Blob&) const;
 
       bool overlaps(const Blob&) const;
-      bool isClose(const Blob&, const double &closeness) const;
+      bool isClose(const Blob&, const double &maxError = 0.05) const;
       void join(Blob&);
 
       void setColor(const Color&);

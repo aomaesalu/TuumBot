@@ -12,7 +12,7 @@
 #include "application.hpp"
 #include "STM.hpp"
 
-namespace rtx { namespace Logic {
+namespace rtx { namespace FBLogic {
 
   extern STM stm;
 

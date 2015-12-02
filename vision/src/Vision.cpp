@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 26 November 2015
+ *  @date 29 November 2015
  */
 
 #include "Vision.hpp"
@@ -208,89 +208,71 @@ namespace rtx {
     }
 
     // Joins same-colored blobs if their box areas are close or overlap; remove too small blobs at the same time
-    void joinBlobsInBuffer() { // TODO: Refactor to remove duplicate code
+    void joinBlobsInBuffer() {
       std::set<unsigned int> toBeRemoved;
 
-      // Join blobs
+      unsigned int minimumNumberOfPoints = 6; // TODO: Add to constants
+
+      // Join blobs (robot blobs first) // TODO: Refactor hacky solution
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
 
+        // If the blob with the index i is already supposed to be removed, move to the next one
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
           continue;
 
-        if (blobsBuffer[i]->getNumberOfPoints() < 10) {
+        // If the blob with the index i doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
+        if (blobsBuffer[i]->getNumberOfPoints() < minimumNumberOfPoints) {
           toBeRemoved.insert(i);
           continue;
         }
 
-        for (unsigned int j = 0; j < blobsBuffer.size(); ++j) {
+        for (unsigned int j = 0; j < blobsBuffer.size() && std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end(); ++j) {
 
+          // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
           if (i == j)
             continue;
 
+          // If the blob with the index j is already supposed to be removed, move to the next one
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
 
-          if (blobsBuffer[j]->getNumberOfPoints() < 6) {
+          // If the blob with the index j doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
+          if (blobsBuffer[j]->getNumberOfPoints() < minimumNumberOfPoints) {
             toBeRemoved.insert(j);
             continue;
           }
 
-          if (blobsBuffer[i]->isSameColor(*blobsBuffer[j])) {
+          // If the blobs are close to each other (and of the same color type), join them
+          if (blobsBuffer[i]->isClose(*blobsBuffer[j])) {
 
-            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
+            // If the blobs are not of the same color, and the first blob is not a robot blob (but could be)
+            if (!blobsBuffer[i]->isSameColor(*blobsBuffer[j]) && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
 
-              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
+              // If the second blob is not a robot blob
+              if (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) {
+
+                // It does not matter which blob we add to which one, as we change the color anyway
                 blobsBuffer[i]->join(*blobsBuffer[j]);
                 toBeRemoved.insert(j);
-              }
 
-            } else {
+                // We now need to change the first blobs color type to the appropriate robot blob color type
 
-              if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.25)) { // Checks overlapping, too // TODO: Calibrate closeness indicator
-                blobsBuffer[i]->join(*blobsBuffer[j]);
-                toBeRemoved.insert(j);
-              }
+                // We can assume that the blobs are not of the same color, but both of them are either yellow or blue; therefore, we need to join them based on which one is above the other
 
-            }
+                // If the first blob is yellow and the second blob is blue
+                if (blobsBuffer[i]->isYellow()) {
 
-          } else {
-
-            if (blobsBuffer[i]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[i]->getColor() == ROBOT_BLUE_YELLOW) {
-              if ((blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) && blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
-                // (yellow-blue, blue) OR (yellow-blue, yellow) OR (blue-yellow, blue) OR (blue-yellow, yellow)
-                blobsBuffer[i]->join(*blobsBuffer[j]);
-                toBeRemoved.insert(j);
-              }
-
-            } else if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow()) {
-
-              if (blobsBuffer[j]->getColor() == ROBOT_YELLOW_BLUE || blobsBuffer[j]->getColor() == ROBOT_BLUE_YELLOW) {
-                // (blue, yellow-blue) OR (yellow, yellow-blue) OR (blue, blue-yellow) OR (yellow, blue-yellow)
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 2) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
-                  blobsBuffer[j]->join(*blobsBuffer[i]);
-                  toBeRemoved.insert(i);
-                }
-
-              } else if (blobsBuffer[j]->isBlue()) {
-                // (yellow, blue)
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
-                  blobsBuffer[i]->join(*blobsBuffer[j]);
-                  toBeRemoved.insert(j);
-
+                  // As the first blob is yellow, if the first blob is above the other one, the robot is of the yellow-blue marking; otherwise, it is of the blue-yellow marking
                   if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
                     blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
                   } else {
                     blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
                   }
 
-                }
+                // If the first blob is blue and the second blob is yellow
+                } else {
 
-              } else if (blobsBuffer[j]->isYellow()) {
-                // (blue, yellow)
-                if (blobsBuffer[i]->isClose(*blobsBuffer[j], 0.5) && blobsBuffer[i]->getHeight() / (double) blobsBuffer[j]->getHeight() < 3 && blobsBuffer[j]->getHeight() / (double) blobsBuffer[i]->getHeight() < 3) { // Checks overlapping, too // TODO: Calibrate closeness indicator, calibrate height relation indicator
-                  blobsBuffer[i]->join(*blobsBuffer[j]);
-                  toBeRemoved.insert(j);
-
+                  // As the first blob is yellow, if the first blob is above the other one, the robot is of the blue-yellow marking; otherwise, it is of the yellow-blue marking
                   if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
                     blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
                   } else {
@@ -299,7 +281,21 @@ namespace rtx {
 
                 }
 
+              // If the second blob is a robot blob
+              } else {
+
+                // We can assume that the second blob is a robot blob and the first one is either yellow or blue, therefore, we can simply join the first blob with the second one, and delete the first one.
+                blobsBuffer[j]->join(*blobsBuffer[i]);
+                toBeRemoved.insert(i);
+
               }
+
+            // If the blobs are of the same color, or the first blob is a robot blob
+            } else if (blobsBuffer[i]->isYellowBlue() || blobsBuffer[i]->isBlueYellow()) {
+
+              // We can assume that the blobs are the exact same color, or that the first blob is already a robot blob and the second blob is either yellow or blue, therefore, we can simply join the second blob with the first one, and delete the other one.
+              blobsBuffer[i]->join(*blobsBuffer[j]);
+              toBeRemoved.insert(j);
 
             }
 
@@ -309,14 +305,134 @@ namespace rtx {
 
       }
 
-      unsigned int removed = 0; // TODO: Refactor
-
-      // Remove unnecessary blobs from the buffer
+      // Remove unnecessary blobs from the buffer // TODO: Refactor
+      unsigned int removed = 0;
       for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
         blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
         removed++;
       }
+      toBeRemoved.clear();
 
+      // Join blobs
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+
+        // If the blob with the index i is already supposed to be removed, move to the next one
+        if (std::find(toBeRemoved.begin(), toBeRemoved.end(), i) != toBeRemoved.end())
+          continue;
+
+        // If the blob with the index i doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
+        if (blobsBuffer[i]->getNumberOfPoints() < minimumNumberOfPoints) {
+          toBeRemoved.insert(i);
+          continue;
+        }
+
+        for (unsigned int j = 0; j < blobsBuffer.size() && std::find(toBeRemoved.begin(), toBeRemoved.end(), i) == toBeRemoved.end(); ++j) {
+
+          // If the blob indexes match, continue to the next one with j - we do not want to join a blob with itself and then delete itself
+          if (i == j)
+            continue;
+
+          // If the blob with the index j is already supposed to be removed, move to the next one
+          if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
+            continue;
+
+          // If the blob with the index j doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
+          if (blobsBuffer[j]->getNumberOfPoints() < minimumNumberOfPoints) {
+            toBeRemoved.insert(j);
+            continue;
+          }
+
+          // If the blobs are close to each other (and of the same color type), join them
+          if (blobsBuffer[i]->isClose(*blobsBuffer[j])) {
+
+            // If the blobs are not of the same color, and the first blob is not a robot blob (but could be)
+            if (!blobsBuffer[i]->isSameColor(*blobsBuffer[j]) && (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow())) {
+
+              // If the second blob is not a robot blob
+              if (blobsBuffer[j]->isBlue() || blobsBuffer[j]->isYellow()) {
+
+                // It does not matter which blob we add to which one, as we change the color anyway
+                blobsBuffer[i]->join(*blobsBuffer[j]);
+                toBeRemoved.insert(j);
+
+                // We now need to change the first blobs color type to the appropriate robot blob color type
+
+                // We can assume that the blobs are not of the same color, but both of them are either yellow or blue; therefore, we need to join them based on which one is above the other
+
+                // If the first blob is yellow and the second blob is blue
+                if (blobsBuffer[i]->isYellow()) {
+
+                  // As the first blob is yellow, if the first blob is above the other one, the robot is of the yellow-blue marking; otherwise, it is of the blue-yellow marking
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  }
+
+                // If the first blob is blue and the second blob is yellow
+                } else {
+
+                  // As the first blob is yellow, if the first blob is above the other one, the robot is of the blue-yellow marking; otherwise, it is of the yellow-blue marking
+                  if (blobsBuffer[i]->isAbove(*blobsBuffer[j])) {
+                    blobsBuffer[i]->setColor(ROBOT_BLUE_YELLOW);
+                  } else {
+                    blobsBuffer[i]->setColor(ROBOT_YELLOW_BLUE);
+                  }
+
+                }
+
+              // If the second blob is a robot blob
+              } else {
+
+                // We can assume that the second blob is a robot blob and the first one is either yellow or blue, therefore, we can simply join the first blob with the second one, and delete the first one.
+                blobsBuffer[j]->join(*blobsBuffer[i]);
+                toBeRemoved.insert(i);
+
+              }
+
+            // If the blobs are of the same color, or the first blob is a robot blob
+            } else {
+
+              // We can assume that the blobs are the exact same color, or that the first blob is already a robot blob and the second blob is either yellow or blue, therefore, we can simply join the second blob with the first one, and delete the other one.
+              blobsBuffer[i]->join(*blobsBuffer[j]);
+              toBeRemoved.insert(j);
+
+            }
+
+          }
+
+        }
+
+      }
+
+      // Remove unnecessary blobs from the buffer // TODO: Refactor
+      removed = 0;
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
+        removed++;
+      }
+      toBeRemoved.clear();
+
+    }
+
+    void filterBlobsInBufferBySize() {
+      std::set<unsigned int> toBeRemoved;
+      for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
+        // If the current blob is a goal or ball blob
+        if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow() || blobsBuffer[i]->isOrange()) {
+          // If the blob's height is smaller than half of the expected height at that position, remove the blob from the blob list.
+          if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), std::pair<unsigned int, unsigned int>(blobsBuffer[i]->getPosition()->getX(), blobsBuffer[i]->getMaxY())).second) {
+            toBeRemoved.insert(i);
+          }
+        }
+      }
+
+      // Remove unnecessary blobs from the buffer // TODO: Refactor
+      unsigned int removed = 0;
+      for (std::set<unsigned int>::iterator i = toBeRemoved.begin(); i != toBeRemoved.end(); ++i) {
+        blobsBuffer.erase(blobsBuffer.begin() + *i - removed);
+        removed++;
+      }
       toBeRemoved.clear();
     }
 
@@ -386,7 +502,16 @@ namespace rtx {
 
       joinBlobsInBuffer();
 
+      filterBlobsInBufferBySize();
+
       translateBlobsBuffer();
+
+      // DEBUG:
+      /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
+        std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
+        std::cout << "Blob: " << "(" << (*blob)->getPosition()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << ((*blob)->getMaxX() - (*blob)->getMinX()) << ", " << ((*blob)->getMaxY() - (*blob)->getMinY()) << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
+      }
+      std::cout << std::endl << std::endl;*/
     }
 
     void lineDetection(const Frame &frame, const std::string &filter) {

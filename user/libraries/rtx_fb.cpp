@@ -11,7 +11,7 @@
 #include "rtx_ctl.hpp"
 #include "rtx_fb.hpp"
 
-namespace rtx { namespace Logic {
+namespace rtx { namespace FBLogic {
 
   STM stm;
 
@@ -24,27 +24,35 @@ namespace rtx { namespace Logic {
     ctx.st = st;
     st->addController(new ctl::LSInit(ctx));
 
-    /*
     st2 = stm.createState("STBallLocate");
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSBallLocate(ctx));
 
-    st2 = stm.createState("STBallRetrieve");
+    st2 = stm.createState("STBallNavigator");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
-    st->addController(new ctl::LSBallRetrieve(ctx));
-    */
+    st->addController(new ctl::LSBallNavigator(ctx));
+
+
+    st2 = stm.createState("STBallPicker");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSBallPicker(ctx));
 
     st2 = stm.createState("STGoalLocate");
-    //st2->setLastState(st);
+    st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSGoalLocate(ctx));
+    stm.addRootState(st);
+
 
     st2 = stm.createState("STGoalShoot");
     st2->setLastState(st);
@@ -53,7 +61,6 @@ namespace rtx { namespace Logic {
     ctx.st = st;
     st->addController(new ctl::LSGoalShoot(ctx));
 
-    //stm.addRootState(st);
   }
 
   void process() {
