@@ -83,7 +83,6 @@ namespace rtx { namespace Visioning {
     //  Vision::process(backFrame, filter);
 
     if (frontCamera) {
-      featureDetection(frontFrame);
       ballDetection(frontFrame);
       goalDetection(frontFrame);
       robotDetection(frontFrame);
@@ -188,11 +187,6 @@ namespace rtx { namespace Visioning {
     robotsBuffer.clear();
 
     editingRobots = false;
-  }
-
-  void featureDetection(const Frame &frame) {
-    features.clear();
-    // TODO
   }
 
   double stateProbability(Transform* t1, Transform* t2) {

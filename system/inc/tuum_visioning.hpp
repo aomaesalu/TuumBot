@@ -159,7 +159,6 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string&);
 
-  void featureDetection(const Frame&);
   void ballDetection(const Frame&);
   void goalDetection(const Frame&);
   void robotDetection(const Frame&);
