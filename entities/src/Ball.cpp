@@ -16,14 +16,14 @@ namespace rtx {
     Entity(*other.getTransform()),
     Circle(other.getRadius())
   {
-
+    // Nothing to do here
   }
 
   Ball::Ball(const Transform transform, const double &radius):
     Entity(transform),
     Circle(radius)
   {
-
+    // Nothing to do here
   }
 
   bool Ball::isInGoal() {
@@ -60,6 +60,18 @@ namespace rtx {
 
   bool Ball::isNotValid() {
     return !isValid();
+  }
+
+  bool Ball::setKicked(const bool &value) {
+    kicked = value;
+  }
+
+  bool Ball::setInGoal(const bool &value) {
+    inGoal = value;
+  }
+
+  bool Ball::setInBounds(const bool &value) {
+    inBounds = value;
   }
 
 }

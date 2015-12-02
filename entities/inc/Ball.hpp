@@ -34,6 +34,15 @@ namespace rtx {
       bool isValid();
       bool isNotValid();
 
+      void setKicked(const bool& = true);
+      void setInGoal(const bool& = true);
+      void setInBounds(const bool& = true);
+
+    private:
+      bool kicked;
+      bool inGoal;
+      bool inBounds;
+
   };
 
 }
