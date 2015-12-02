@@ -9,8 +9,8 @@
 
 #include "tuum_physics.hpp"
 
-#include "tuum_vision.hpp"
 #include "tuum_visioning.hpp"
+#include "Vision.hpp"
 
 namespace rtx { namespace Physics {
 
