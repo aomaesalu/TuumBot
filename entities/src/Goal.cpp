@@ -9,6 +9,8 @@
 
 #include "Goal.hpp"
 
+#include "tuum_platform.hpp"
+
 
 namespace rtx {
 
