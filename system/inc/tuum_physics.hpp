@@ -10,9 +10,11 @@
 #ifndef RTX_SYSTEM_PHYSICS_H
 #define RTX_SYSTEM_PHYSICS_H
 
+
 namespace rtx { namespace Physics {
 
-  void rayCast();
+  void rayCast(const double&);
+  //void rayCast(const double&, const double&)
 
 }}
 

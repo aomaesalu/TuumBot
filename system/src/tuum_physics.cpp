@@ -14,7 +14,25 @@
 
 namespace rtx { namespace Physics {
 
-  void rayCast() {
+  void rayCast(const double &angle) {
+
+    // Check for blobs cutting into the ray
+    BallSet balls = *(Visioning::ballDetect().getEntities());
+    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+
+      unsigned int minX = (*ball)->getBlob()->getMinX();
+      unsigned int maxX = (*ball)->getBlob()->getMaxX();
+      unsigned int minY = (*ball)->getBlob()->getMinY();
+      unsigned int maxY = (*ball)->getBlob()->getMaxY();
+
+    }
+
+    // Check for field lines
+    // TODO
+
+  }
+
+  void rayCast(const double &angle, const double &width) {
     // TODO
   }
 
