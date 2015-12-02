@@ -13,27 +13,18 @@
 namespace rtx {
 
   Goal::Goal(Goal &other):
-    Entity(*other.getTransform()),
+    Entity(*other.getTransform(), other.getBlob()),
     Rectangle(other.getWidth(), other.getLength()),
     blob(other.getBlob())
   {
 
   }
 
-  Goal::Goal(const Transform transform, const Blob &blob, const double &width, const double &length):
-    Entity(transform),
-    Rectangle(width, length),
-    blob(blob)
+  Goal::Goal(const Transform transform, const Blob *blob, const double &width, const double &length):
+    Entity(transform, blob),
+    Rectangle(width, length)
   {
 
-  }
-
-  Blob* Goal::getBlob() const {
-    return blob;
-  }
-
-  Color Goal::getColor() const {
-    return blob->getColor();
   }
 
   bool Goal::isBlue() const {

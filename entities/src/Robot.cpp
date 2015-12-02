@@ -26,19 +26,15 @@ namespace rtx {
     Entity(transform, blob),
     Circle(radius)
   {
-
-  }
-
-  Color Robot::getColor() const {
-    return color;
+    // Nothing to do here
   }
 
   bool Robot::isYellowBlue() const {
-    return color == ROBOT_YELLOW_BLUE;
+    return getColor() == ROBOT_YELLOW_BLUE;
   }
 
   bool Robot::isBlueYellow() const {
-    return color == ROBOT_BLUE_YELLOW;
+    return getColor() == ROBOT_BLUE_YELLOW;
   }
 
   bool Robot::isAlly() const {

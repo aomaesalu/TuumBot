@@ -30,9 +30,6 @@ namespace rtx {
       Goal(Goal&);
       Goal(const Transform, const Blob*, const double& = GOAL_WIDTH, const double& = GOAL_LENGTH);
 
-      Blob* getBlob() const;
-      Color getColor() const;
-
       bool isBlue() const;
       bool isYellow() const;
 
