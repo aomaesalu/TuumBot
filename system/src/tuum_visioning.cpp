@@ -323,7 +323,7 @@ namespace rtx { namespace Visioning {
         if (boxArea > largestBlueArea) {
           largestBlueArea = boxArea;
           //if (blueGoalBuffer == nullptr) {
-          blueGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color, blobs[i]);
+          blueGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), blobs[i]);
           /*} else {
             blueGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
             blueGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
@@ -333,7 +333,7 @@ namespace rtx { namespace Visioning {
         if (boxArea > largestYellowArea) {
           largestYellowArea = boxArea;
           //if (yellowGoalBuffer == nullptr) {
-          yellowGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), color, blobs[i]);
+          yellowGoalBuffer = new Goal(Localization::toAbsoluteTransform(distance, angle), blobs[i]);
           /*} else {
             yellowGoalBuffer->setDistance(distance); // TODO: Compare with previous values as in ball detection
             yellowGoalBuffer->setAngle(angle); // TODO: Compare with previous values as in ball detection
