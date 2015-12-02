@@ -45,8 +45,7 @@ namespace rtx {
   }
 
   bool Ball::isKicked() {
-    // TODO
-    return false;
+    return kicked;
   }
 
   bool Ball::isNotKicked() {
