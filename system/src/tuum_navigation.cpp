@@ -4,6 +4,7 @@
  *  @authors Meelik Kiik
  *  @authros Ants-Oskar Mäesalu
  *  @version 0.2
+ *  @date 2 December 2015
  */
 
 #include "syscore/MotionData.hpp"
