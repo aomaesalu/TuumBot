@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 2 December 2015
  */
 
 #include <algorithm>
@@ -87,6 +87,7 @@ namespace rtx { namespace Visioning {
       ballDetection(frontFrame);
       goalDetection(frontFrame);
       robotDetection(frontFrame);
+      featureValidation();
     }
 
     // TODO: Add back camera frame processing
@@ -143,31 +144,30 @@ namespace rtx { namespace Visioning {
     Goal* g = blueGoal;
     Goal* new_g = blueGoalBuffer;
 
-    if(blueGoal != nullptr) {
+    if (blueGoal != nullptr) {
 
-      if(blueGoalBuffer != nullptr)
+      if (blueGoalBuffer != nullptr)
         blueGoal->update(*blueGoalBuffer->getTransform());
       else
-	blueGoal->update();
+        blueGoal->update();
 
-      if(blueGoal->getHealth() <= mn_h) {
+      if (blueGoal->getHealth() <= mn_h) {
         delete blueGoal;
-	blueGoal = nullptr;
+      blueGoal = nullptr;
       }
-    } else if(blueGoalBuffer != nullptr) {
+    } else if (blueGoalBuffer != nullptr) {
       blueGoal = new Goal(*blueGoalBuffer);
     }
 
-    if(yellowGoal != nullptr) {
-      if(yellowGoalBuffer != nullptr)
+    if (yellowGoal != nullptr) {
+      if (yellowGoalBuffer != nullptr)
         yellowGoal->update(*yellowGoalBuffer->getTransform());
       else
-	yellowGoal->update();
-
+      yellowGoal->update();
 
       if(yellowGoal->getHealth() <= mn_h) {
         delete yellowGoal;
-	yellowGoal = nullptr;
+        yellowGoal = nullptr;
       }
     } else if(yellowGoalBuffer != nullptr) {
       yellowGoal = new Goal(*yellowGoalBuffer);
@@ -417,6 +417,25 @@ namespace rtx { namespace Visioning {
 
     // STEP 5: Entity vectors updates - remove decayed balls and make healthy detectable
     robotDetect.update();
+  }
+
+  void featureValidation() {
+
+    // For each ball, check that it isn't in a goal
+    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+
+      // Check that the ball isn't in the blue goal
+      if (blueGoal != nullptr) {
+        // TODO
+      }
+
+      // Check that the ball isn't in the yellow goal
+      if (yellowGoal != nullptr) {
+        // TODO
+      }
+
+    }
+
   }
 
 }}
