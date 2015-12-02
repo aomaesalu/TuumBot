@@ -377,7 +377,7 @@ namespace rtx { namespace Visioning {
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
 
       // STEP 3: Create robot instance with absolute position
-      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle)));
+      n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle), blobs[i]));
     }
 
     // STEP 4: Unite detected robots with robots from last frame or create new robots
