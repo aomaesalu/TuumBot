@@ -32,18 +32,18 @@ namespace rtx {
   bool Robot::isAlly() const {
     std::string pattern = rtx::gC.getStr("Pattern.Ally");
     if (pattern == std::string("YB")) {
-      return getColor() == ROBOT_YELLOW_BLUE;
+      return blob->isYellowBlue();
     } else {
-      return getColor() == ROBOT_BLUE_YELLOW;
+      return blob->isBlueYellow();
     }
   }
 
   bool Robot::isOpponent() const {
     std::string pattern = rtx::gC.getStr("Pattern.Opponent");
     if (pattern == std::string("YB")) {
-      return getColor() == ROBOT_YELLOW_BLUE;
+      return blob->isYellowBlue();
     } else {
-      return getColor() == ROBOT_BLUE_YELLOW;
+      return blob->isBlueYellow();
     }
   }
 
