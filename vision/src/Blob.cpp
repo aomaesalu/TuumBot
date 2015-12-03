@@ -101,6 +101,10 @@ namespace rtx {
     return new Point2D((minX + maxX) / 2, (minY + maxY) / 2);
   }
 
+  Point2D* Blob::getPosition() const {
+    return new Point2D((minX + maxX) / 2, maxY);
+  }
+
   unsigned int Blob::getWidth() const {
     return maxX - minX + 1;
   }
