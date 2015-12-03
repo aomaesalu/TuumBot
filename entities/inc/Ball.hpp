@@ -15,7 +15,6 @@
 
 #include "entityConstants.hpp"
 #include "Entity.hpp"
-#include "RelativePosition.hpp"
 
 
 namespace rtx {
