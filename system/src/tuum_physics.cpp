@@ -120,7 +120,6 @@ namespace rtx { namespace Physics {
     // blob containment checking points.
     double radiusVectorX = sqrt(radius * radius / (perpendicularSlope * perpendicularSlope + 1));
     double radiusVectorY = perpendicularSlope * radiusVectorX;
-    std::pair<unsigned int, unsigned int> radiusVector(radiusVectorX, radiusVectorY);
 
     // Initialise a list of entities to check
     std::vector<Entity*> entities;
@@ -154,12 +153,8 @@ namespace rtx { namespace Physics {
       if (angle >= 0) {
 
         // Calculate corresponding blob corner angles
-        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
-                                       (*entity)->getBlob()->getMaxY());
-        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
-                                     (*entity)->getBlob()->getMinY());
-
-        // TODO: Calculate the angles in respect to the ray radius vector
+        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
 
         // If the angle is smaller than the bottom left corner's angle and
         // larger than the top right corner's angle, the blob is in the way of
@@ -176,12 +171,8 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
-                                    (*entity)->getBlob()->getMinY());
-        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
-                                        (*entity)->getBlob()->getMaxY());
-
-        // TODO: Calculate the angles in respect to the ray radius vector
+        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
+        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
 
         // If the angle is smaller than the top left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
