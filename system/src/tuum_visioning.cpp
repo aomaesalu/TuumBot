@@ -23,7 +23,7 @@ using namespace rtx;
 
 namespace rtx { namespace Visioning {
 
-  std::vector<std::string> filter;
+  std::vector<std::string> filters;
 
   Timer debugTimer;
 
@@ -70,7 +70,7 @@ namespace rtx { namespace Visioning {
     } else {
       for (std::vector<std::string>::iterator filter = filters.begin(); filter != filters.end(); ++filter) {
         if (filter->size() == 0) {
-          std::cout << "Process: Filter is empty" << std::endl;
+          std::cout << "Process: A filter is empty" << std::endl;
         }
       }
     }
@@ -85,9 +85,9 @@ namespace rtx { namespace Visioning {
     //  backFrame = backCamera->getFrame();
 
     if (frontCamera)
-      Vision::process(frontFrame, filter);
-    //if (backCamera)
-    //  Vision::process(backFrame, filter);
+      Vision::process(frontFrame, filters, 0);
+    if (backCamera)
+      Vision::process(frontFrame, filters, 1);
 
     if (frontCamera) {
       ballDetection(frontFrame);
@@ -99,9 +99,15 @@ namespace rtx { namespace Visioning {
   }
 
   void processCheckerboard() {
-    if (filter.size() == 0) {
-      std::cout << "Process: Filter is empty" << std::endl;
+    if (filters.size() == 0) {
+      std::cout << "Process: Filters are empty" << std::endl;
       return;
+    } else {
+      for (std::vector<std::string>::iterator filter = filters.begin(); filter != filters.end(); ++filter) {
+        if (filter->size() == 0) {
+          std::cout << "Process: A filter is empty" << std::endl;
+        }
+      }
     }
 
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -114,9 +120,9 @@ namespace rtx { namespace Visioning {
       backFrame = backCamera->getFrame();
 
     if (frontCamera)
-      Vision::processCheckerboard(frontFrame, filter);
+      Vision::processCheckerboard(frontFrame, filters, 0);
     if (backCamera)
-      Vision::processCheckerboard(backFrame, filter);
+      Vision::processCheckerboard(backFrame, filters, 1);
 
     // TODO: Add back camera frame processing
   }
@@ -125,7 +131,7 @@ namespace rtx { namespace Visioning {
     std::ifstream inputFile(fileName);
     std::stringstream buffer;
     buffer << inputFile.rdbuf();
-    filter = buffer.str();
+    filters.push_back(buffer.str());
     inputFile.close();
   }
 
