@@ -2,8 +2,9 @@
  *  Robotex Teamfootball application.
  *
  *  @authors Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 2. November 2015
+ *  @date 3 December 2015
  */
 
 #include "application.hpp"
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
     rtx::hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
     Localization::process();
     Motion::process();
 

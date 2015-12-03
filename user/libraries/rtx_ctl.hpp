@@ -104,20 +104,6 @@ namespace rtx { namespace ctl {
   };
 
 
-  class LSBallPrepare : public Controller {
-    public:
-      LSBallPrepare(Context _ctx) : ctx(_ctx) {}
-
-      void init();
-      int run();
-      bool isRunnable();
-
-    private:
-      Context ctx;
-      Ball* targetBall;
-  };
-
-
   /**
    *
    *  Goal handling logic controllers
@@ -168,6 +154,8 @@ namespace rtx { namespace ctl {
    *  Ally interaction logic controllers
    *
    */
+
+  /*
   class LSAllyLocate : public Controller {
     public:
       LSAllyLocate(Context _ctx) : ctx(_ctx) {}
@@ -204,6 +192,7 @@ namespace rtx { namespace ctl {
     private:
       Context ctx;
   };
+  */
 
 }}
 
