@@ -10,13 +10,14 @@
 #ifndef RTX_SYSTEM_PHYSICS_H
 #define RTX_SYSTEM_PHYSICS_H
 
-#include "Color.hpp"
+#include "tuum_visioning.hpp"
+#include "Vision.hpp"
 
 
 namespace rtx { namespace Physics {
 
-  std::pair<Color, double> rayCast(const double&);
-  //std::pair<Color, double> rayCast(const double&, const double&)
+  Entity* rayCast(const double&);
+  //Entity* rayCast(const double&, const double&)
 
 }}
 

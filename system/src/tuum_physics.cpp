@@ -9,18 +9,19 @@
 
 #include "tuum_physics.hpp"
 
-#include "tuum_visioning.hpp"
-#include "Vision.hpp"
-
 #include <cmath>
 
 
 namespace rtx { namespace Physics {
 
-  // Returns a pair of the color enumerator of the object (currently the way to
-  // represent the object by name - will be changed in the future) and the
-  // distance to the object.
-  std::pair<Color, double> rayCast(const double &angle) {
+  // Returns a pointer to the closest entity that is in the way of the ray. If
+  // there seems to be no entity in the way of the ray, a null pointer is
+  // returned.
+  Entity* rayCast(const double &angle) {
+
+    // Initialise the result to nothing being in the way of the ray
+    Entity *result = nullptr;
+    double minDistance = 999999;
 
     // Check for blobs cutting into the ray
     BallSet balls = *(Visioning::ballDetect().getEntities());
@@ -43,6 +44,7 @@ namespace rtx { namespace Physics {
 
           // TODO: If the blob is closer than the closest object, add it to the
           // result
+          //if ((*ball)->)
 
         }
 
@@ -75,7 +77,7 @@ namespace rtx { namespace Physics {
 
   }
 
-  std::pair<Color, double> rayCast(const double &angle, const double &width) {
+  Entity* rayCast(const double &angle, const double &width) {
     // TODO
   }
 
