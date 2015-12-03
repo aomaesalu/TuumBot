@@ -108,8 +108,10 @@ namespace rtx { namespace Physics {
       if (angle >= 0) {
 
         // Calculate corresponding blob corner angles
-        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
-        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
+        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        double bottomLeftAngle = -atan2(bottomLeftCorner.first, bottomLeftCorner.second);
+        std::pair<double, double> topRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
+        double topRightAngle = -atan2(topRightCorner.first, topRightCorner.second);
 
         // DEBUG:
         std::cout << (*entity)->getBlob()->getPosition()->getX() << " " << (*entity)->getBlob()->getPosition()->getY() << " " << -atan2((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getPosition()->getY()) << std::endl;
@@ -132,8 +134,10 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
-        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
+        std::pair<double, double> topLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
+        double topLeftAngle = -atan2(topLeftCorner.first, topLeftCorner.second);
+        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
+        double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
 
         // DEBUG:
         std::cout << "(" << topLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
