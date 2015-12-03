@@ -115,4 +115,16 @@ namespace rtx {
     return blob->getColor();
   }
 
+  bool Entity::isBall() const {
+    return blob->isOrange();
+  }
+
+  bool Entity::isGoal() const {
+    return blob->isYellow() || blob->isBlue();
+  }
+
+  bool Entity::isRobot() const {
+    return blob->isYellowBlue() || blob->isBlueYellow();
+  }
+
 }

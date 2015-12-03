@@ -65,6 +65,10 @@ namespace rtx {
       Blob* getBlob() const;
       Color getColor() const;
 
+      bool isBall() const;
+      bool isGoal() const;
+      bool isRobot() const;
+
       std::string toString();
 
     protected:
