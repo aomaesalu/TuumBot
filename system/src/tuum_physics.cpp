@@ -104,7 +104,39 @@ namespace rtx { namespace Physics {
   }
 
   Entity* rayCast(const double &angle, const double &width) {
+
+    // Initialise the result to nothing being in the way of the ray
+    Entity *closestEntity = nullptr;
+    double minDistance = 999999;
+
+    // Initialise a list of entities to check
+    std::vector<Entity*> entities;
+
+    // Add balls to the entities list
+    Visioning::BallSet balls = *(Visioning::ballDetect.getEntities());
+    entities.insert(entities.end(), balls.begin(), balls.end());
+
+    // Add goals to the entities list
+    entities.push_back(Visioning::yellowGoal);
+    entities.push_back(Visioning::blueGoal);
+
+    // Add robots to the entities list
+    Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
+    entities.insert(entities.end(), robots.begin(), robots.end());
+
+    // Check for entity blobs overlapping the ray area
+    for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
+
+      // TODO
+
+    }
+
+    // Check for field lines in the way of the ray. What to do with the result
+    // value in this case?
     // TODO
+
+    return closestEntity;
+
   }
 
 }}
