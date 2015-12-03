@@ -23,12 +23,13 @@ namespace rtx {
   }
 
   int init(int argc, char *argv[]) {
-    options_description desc{"Options"};
+    /*options_description desc{"Options"};
     desc.add_options()
       ("help,h", "Help screen")
       ("config", value<std::string>()->notifier(load_config), "Configuration file");
     variables_map vm;
     store(parse_command_line(argc, argv, desc), vm);
-    notify(vm);
+    notify(vm);*/
+    load_config("rtex.ini");
   }
 }
