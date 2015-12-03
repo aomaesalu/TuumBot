@@ -27,6 +27,15 @@ namespace rtx { namespace Physics {
     BallSet balls = *(Visioning::ballDetect().getEntities());
     for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
 
+      // Calculate blob relative position
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*ball)->getBlob()->getPosition()->getX(), (*ball)->getBlob()->getMaxY());
+      double distance = sqrt(position.second * position.second + position.first * position.first);
+
+      // If the blob is farther away than the closest object, continue with the
+      // next blob
+      if (distance >= minDistance)
+        continue;
+
       // If the angle is positive, the ray is located to the left from the
       // center of the camera frame
       if (angle >= 0) {
@@ -42,9 +51,8 @@ namespace rtx { namespace Physics {
         // the ray.
         if (angle <= bottomLeftAngle && angle >= topRightAngle) {
 
-          // TODO: If the blob is closer than the closest object, add it to the
-          // result
-          //if ((*ball)->)
+          // Change the result to the ball entity
+          // TODO
 
         }
 
@@ -63,8 +71,8 @@ namespace rtx { namespace Physics {
         // ray.
         if (angle <= topLeftAngle && angle >= bottomRightAngle) {
 
-          // TODO: If the blob is closer than the closest object, add it to the
-          // result
+          // Change the result to the ball entity
+          // TODO
 
         }
 
@@ -72,7 +80,10 @@ namespace rtx { namespace Physics {
 
     }
 
-    // Check for field lines
+    // Check for goals cutting into the ray
+    // TODO
+
+    // Check for field lines in the way of the ray
     // TODO
 
   }
