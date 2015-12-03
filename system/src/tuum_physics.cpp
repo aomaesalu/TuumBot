@@ -87,7 +87,14 @@ namespace rtx { namespace Physics {
 
       // DEBUG:
       std::cout << "Entity: " << std::endl;
-      std::cout << (*entity)->getBlob()->getColor() << " " << distance << " " << position.first << " " << position.second << std::endl;
+      std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << distance << " " << position.first << " " << position.second << std::endl;
+      if ((*entity)->isBall()) {
+        if (((Ball*) *entity)->isValid()) {
+          std::cout << "  The ball is valid." << std::endl;
+        } else {
+          std::cout << "  The ball is not valid." << std::endl;
+        }
+      }
       std::cout << std::endl;
 
       // If the blob is farther away than the closest object, continue with the
