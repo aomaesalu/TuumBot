@@ -97,6 +97,10 @@ namespace rtx {
     return centroid;
   }
 
+  Point2D* Blob::getMidPoint() const {
+    return new Point2D((minX + maxX) / 2, (minY + maxY) / 2);
+  }
+
   unsigned int Blob::getWidth() const {
     return maxX - minX + 1;
   }

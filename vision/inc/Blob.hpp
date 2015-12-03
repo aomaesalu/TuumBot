@@ -28,6 +28,7 @@ namespace rtx {
 
       const std::vector<std::pair<unsigned int, unsigned int>>& getPoints() const;
       Point2D* getCentroid() const;
+      Point2D* getMidPoint() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
       unsigned int getMinX() const;
