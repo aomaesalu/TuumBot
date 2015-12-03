@@ -28,15 +28,15 @@ namespace rtx { namespace Physics {
     std::vector<Entity*> entities;
 
     // Add balls to the entities list
-    BallSet balls = *(Visioning::ballDetect().getEntities());
+    Visioning::BallSet balls = *(Visioning::ballDetect.getEntities());
     entities.insert(entities.end(), balls.begin(), balls.end());
 
     // Add goals to the entities list
-    entities.push_back(yellowGoal);
-    entities.push_back(blueGoal);
+    entities.push_back(Visioning::yellowGoal);
+    entities.push_back(Visioning::blueGoal);
 
     // Add robots to the entities list
-    RobotSet robots = *(Visioning::robotDetect().getEntities());
+    Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
     entities.insert(entities.end(), robots.begin(), robots.end());
 
     // Check for entity blobs cutting into the ray
