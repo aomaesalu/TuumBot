@@ -140,7 +140,7 @@ namespace rtx { namespace Visioning {
 
   };
 
-  extern std::string filter;
+  extern std::vector<std::string> filters;
 
   extern EDS<Ball> ballDetect;
   extern EDS<Robot> robotDetect;

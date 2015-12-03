@@ -23,7 +23,7 @@ using namespace rtx;
 
 namespace rtx { namespace Visioning {
 
-  std::string filter;
+  std::vector<std::string> filter;
 
   Timer debugTimer;
 
@@ -51,6 +51,7 @@ namespace rtx { namespace Visioning {
     Camera *backCamera = hal::hw.getBackCamera();
 
     readFilterFromFile("../data/colors/1.txt");
+    readFilterFromFile("../data/colors/2.txt");
 
     Vision::setup();
 
@@ -63,9 +64,15 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
-    if (filter.size() == 0) {
-      std::cout << "Process: Filter is empty" << std::endl;
+    if (filters.size() == 0) {
+      std::cout << "Process: Filters are empty" << std::endl;
       return;
+    } else {
+      for (std::vector<std::string>::iterator filter = filters.begin(); filter != filters.end(); ++filter) {
+        if (filter->size() == 0) {
+          std::cout << "Process: Filter is empty" << std::endl;
+        }
+      }
     }
 
     Camera *frontCamera = hal::hw.getFrontCamera();
