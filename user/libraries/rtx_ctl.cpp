@@ -195,13 +195,11 @@ ERR:
       if(!Motion::isRunning()) Motion::start();
     } else {
       Motion::stop();
-      mb->stopDribbler();
     }
 
     return 0;
 OK:
     Motion::stop();
-    mb->stopDribbler();
     return 1;
 ERR:
     Motion::stop();
@@ -268,13 +266,13 @@ ERR:
     Motion::setAimTarget(g->getTransform()->getPosition());
     //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
 ;
-    if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
+    //if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
 
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();
     } else {
       Motion::stop();
-      mb->doCoilKick();
+      if(mb->getBallSensorState()) mb->doCoilKick();
     }
 
     return 0;

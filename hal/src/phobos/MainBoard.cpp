@@ -58,10 +58,9 @@ namespace rtx { namespace hal {
       } else {
       	chargeCoil();
         m_coilChargeLevel++;
-        if(m_coilChargeLevel == 1) {
-          releaseCoil();
-        }
-        m_coilKickCharge.start();
+	if(m_coilChargeLevel == 3) releaseCoil();
+	else chargeCoil();
+	m_coilKickCharge.start();
       }
 
     }
@@ -85,12 +84,12 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::releaseCoil() {
+	std::cout << "KICK" << std::endl;
     write({id, CMD_KICK});
   }
 
   void MainBoard::doCoilKick() {
     if(!m_coilKickActive && m_coilKickCooldown.isTime()) {
-      std::cout << "DO COIL KICK" << std::endl;
       stopDribbler();
       chargeCoil();
       m_coilKickActive = true;
