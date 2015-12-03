@@ -17,6 +17,8 @@ namespace rtx { namespace hal {
     unsigned short m_coilChargeLevel;
 
     Timer m_coilKickCharge;
+    Timer m_coilKickCooldown;
+
     Timer m_updateTimer;
   public:
     MainBoard();

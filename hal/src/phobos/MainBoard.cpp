@@ -20,6 +20,7 @@ namespace rtx { namespace hal {
     m_coilKickActive = 0;
 
     m_coilKickCharge.setPeriod(200);
+    m_coilKickCooldown.setPeriod(1000);
 
     m_updateTimer.setPeriod(300);
     m_updateTimer.start();
@@ -51,8 +52,9 @@ namespace rtx { namespace hal {
     }
 
     if(m_coilKickActive && m_coilKickCharge.isTime()) {
-      if(m_coilChargeLevel >= 3) {
+      if(m_coilChargeLevel >= 4) {
         m_coilKickActive = false;
+	m_coilKickCooldown.start();
       } else {
       	chargeCoil();
         m_coilChargeLevel++;
@@ -87,7 +89,8 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::doCoilKick() {
-    if(!m_coilKickActive) {
+    if(!m_coilKickActive && m_coilKickCooldown.isTime()) {
+      std::cout << "DO COIL KICK" << std::endl;
       stopDribbler();
       chargeCoil();
       m_coilKickActive = true;
