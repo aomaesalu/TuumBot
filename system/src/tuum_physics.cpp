@@ -73,18 +73,6 @@ namespace rtx { namespace Physics {
       else
         std::cout << "Entity blob is not null" << std::endl;*/
 
-      // If the entity is a ball, ensure that it is valid. Otherwise, continue
-      // with the next entity.
-      if ((*entity)->isBall()) {
-        if (((Ball*) *entity)->isNotValid()) {
-          continue;
-        }
-      }
-
-      // Calculate blob relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-
       // DEBUG:
       std::cout << "Entity: " << std::endl;
       std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << distance << " " << position.first << " " << position.second << std::endl;
@@ -96,6 +84,18 @@ namespace rtx { namespace Physics {
         }
       }
       std::cout << std::endl;
+
+      // If the entity is a ball, ensure that it is valid. Otherwise, continue
+      // with the next entity.
+      if ((*entity)->isBall()) {
+        if (((Ball*) *entity)->isNotValid()) {
+          continue;
+        }
+      }
+
+      // Calculate blob relative position
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
+      double distance = sqrt(position.second * position.second + position.first * position.first);
 
       // If the blob is farther away than the closest object, continue with the
       // next blob
