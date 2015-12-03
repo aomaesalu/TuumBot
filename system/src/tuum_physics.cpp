@@ -112,8 +112,13 @@ namespace rtx { namespace Physics {
     // Calculate ray radius
     double radius = width / 2;
 
-    // Calculate ray width vector. This can be used to find checking points.
+    // Calculate the ray slope
+    double slope = tan(angle + M_PI);
+
+    // Calculate the ray radius vector based on the ray slope. This can be used
+    // to find blob containment checking points.
     // TODO
+    std::pair<unsigned int, unsigned int> = /* TODO */;
 
     // Initialise a list of entities to check
     std::vector<Entity*> entities;
