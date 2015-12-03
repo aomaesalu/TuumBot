@@ -22,6 +22,7 @@ static void run(GUI *gui) {
     rtx::hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
     Localization::process();
 
     gui->updateFrame();
