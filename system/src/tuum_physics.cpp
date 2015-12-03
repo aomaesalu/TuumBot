@@ -87,6 +87,7 @@ namespace rtx { namespace Physics {
       } else if ((*entity)->isGoal()) {
         std::cout << "  Blob height: " << ((*entity)->getBlob()->getHeight()) << std::endl;
         std::cout << "  Blob width: " << ((*entity)->getBlob()->getWidth()) << std::endl;
+        std::cout << "  " << (double) ((*entity)->getBlob()->getWidth()) / (double) ((*entity)->getBlob()->getHeight()) << std::endl;
       }
 
       // If the entity is a ball, ensure that it is valid. Otherwise, continue
