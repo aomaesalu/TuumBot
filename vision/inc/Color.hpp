@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "Perspective.hpp"
+#include "Point2D.hpp"
 
 
 namespace rtx {
@@ -36,6 +37,7 @@ namespace rtx {
 
   std::pair<double, double> getBlobExpectedRealSize(const Color&);
   std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&);
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const Point2D*);
 
 };
 

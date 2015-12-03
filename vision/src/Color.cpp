@@ -121,4 +121,8 @@ namespace rtx {
     return std::pair<unsigned int, unsigned int>(virtualWidth, virtualHeight);
   }
 
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const Point2D *virtualPosition) {
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(virtualPosition->getX(), virtualPosition->getY()));
+  }
+
 }
