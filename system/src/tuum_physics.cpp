@@ -43,9 +43,11 @@ namespace rtx { namespace Physics {
     Visioning::BallSet balls = *(Visioning::ballDetect.getEntities());
     entities.insert(entities.end(), balls.begin(), balls.end());
 
-    // Add goals to the entities list
-    entities.push_back(Visioning::yellowGoal);
-    entities.push_back(Visioning::blueGoal);
+    // Add goals to the entities list if they exist
+    if (Visioning::yellowGoal != nullptr)
+      entities.push_back(Visioning::yellowGoal);
+    if (Visioning::blueGoal != nullptr)
+      entities.push_back(Visioning::blueGoal);
 
     // Add robots to the entities list
     Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
@@ -53,6 +55,18 @@ namespace rtx { namespace Physics {
 
     // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
+
+      /*// DEBUG:
+      if (*entity == nullptr)
+        std::cout << "Entity is null" << std::endl;
+      else
+        std::cout << "Entity is not null" << std::endl;
+
+      // DEBUG:
+      if ((*entity)->getBlob() == nullptr)
+        std::cout << "Entity blob is null" << std::endl;
+      else
+        std::cout << "Entity blob is not null" << std::endl;*/
 
       // If the entity is a ball, ensure that it is valid. Otherwise, continue
       // with the next entity.
