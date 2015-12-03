@@ -144,10 +144,12 @@ namespace rtx { namespace Visioning {
 
     if (blueGoal != nullptr) {
 
-      if (blueGoalBuffer != nullptr)
+      if (blueGoalBuffer != nullptr) {
         blueGoal->update(*blueGoalBuffer->getTransform());
-      else
+        blueGoal->update(*blueGoalBuffer->getBlob());
+      } else {
         blueGoal->update();
+      }
 
       if (blueGoal->getHealth() <= mn_h) {
         delete blueGoal;
@@ -158,10 +160,12 @@ namespace rtx { namespace Visioning {
     }
 
     if (yellowGoal != nullptr) {
-      if (yellowGoalBuffer != nullptr)
+      if (yellowGoalBuffer != nullptr) {
         yellowGoal->update(*yellowGoalBuffer->getTransform());
-      else
-      yellowGoal->update();
+        yellowGoal->update(*yellowGoalBuffer->getBlob());
+      } else {
+        yellowGoal->update();
+      }
 
       if(yellowGoal->getHealth() <= mn_h) {
         delete yellowGoal;
@@ -400,6 +404,7 @@ namespace rtx { namespace Visioning {
         robotDetect.tmp_objs.push_back(new Robot(*n_robot_ptr));
       } else {
         (*robot_set_ptr)[p_ix]->update(*n_robot_ptr->getTransform());
+        (*robot_set_ptr)[p_ix]->update(*n_robot_ptr->getBlob());
       }
     }
 

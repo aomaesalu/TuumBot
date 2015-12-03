@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.3
- *  @date 2 December 2015
+ *  @date 3 December 2015
  */
 
 #ifndef RTX_ENTITY_H
@@ -60,6 +60,8 @@ namespace rtx {
       Transform* getTransform();
 
       void update(Transform); // Heal
+      void update(Blob*);
+      void update(Blob&);
       void update(); // Decay
 
       Blob* getBlob() const;
