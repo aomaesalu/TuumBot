@@ -75,7 +75,9 @@ namespace rtx { namespace Physics {
 
       // DEBUG:
       std::cout << "Entity: " << std::endl;
-      std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << distance << " " << position.first << " " << position.second << std::endl;
+      std::pair<double, double> pos = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
+      double dis = sqrt(pos.second * pos.second + pos.first * pos.first);
+      std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << dis << " " << pos.first << " " << pos.second << std::endl;
       if ((*entity)->isBall()) {
         if (((Ball*) *entity)->isValid()) {
           std::cout << "  The ball is valid." << std::endl;
