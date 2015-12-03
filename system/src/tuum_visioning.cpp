@@ -226,9 +226,7 @@ namespace rtx { namespace Visioning {
       //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
 
       // STEP 2: Calculate relative position
-      Point2D* point = blobs[i]->getCentroid();
-      // Relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
@@ -303,9 +301,8 @@ namespace rtx { namespace Visioning {
       //if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
-      Point2D* point = blobs[i]->getCentroid();
       // Relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // std::cout << "Goal: " << distance << " " << angle << std::endl;
@@ -360,9 +357,7 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // STEP 2: Calculate relative position
-      Point2D* point = blobs[i]->getCentroid();
-      // Relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // std::cout << "Robot: " << distance << " " << angle << std::endl;
