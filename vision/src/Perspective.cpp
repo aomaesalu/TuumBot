@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 3 December 2015
  */
 
 #include "Perspective.hpp"
@@ -28,6 +28,10 @@ namespace rtx { namespace Vision { namespace Perspective {
 
   std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int> &point) {
     return virtualToReal(point.first, point.second);
+  }
+
+  std::pair<double, double> virtualToReal(const Point2D *point) {
+    return virtualToReal(point->getX(), point->getY());
   }
 
   std::pair<unsigned int, unsigned int> realToVirtual(const double &x, const double &y) {
