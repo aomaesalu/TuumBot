@@ -85,6 +85,11 @@ namespace rtx { namespace Physics {
       std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
       double distance = sqrt(position.second * position.second + position.first * position.first);
 
+      // DEBUG:
+      std::cout << "Entity: " << std::endl;
+      std::cout << (*entity)->getBlob()->getColor() << " " << distance << " " << position.first << " " << position.second << std::endl;
+      std::cout << std::endl;
+
       // If the blob is farther away than the closest object, continue with the
       // next blob
       if (distance >= minDistance)
