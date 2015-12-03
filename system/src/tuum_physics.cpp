@@ -52,7 +52,7 @@ namespace rtx { namespace Physics {
         if (angle <= bottomLeftAngle && angle >= topRightAngle) {
 
           // Change the result to the ball entity
-          // TODO
+          result = *ball;
 
         }
 
@@ -72,7 +72,7 @@ namespace rtx { namespace Physics {
         if (angle <= topLeftAngle && angle >= bottomRightAngle) {
 
           // Change the result to the ball entity
-          // TODO
+          result = *ball;
 
         }
 
@@ -81,6 +81,9 @@ namespace rtx { namespace Physics {
     }
 
     // Check for goals cutting into the ray
+    // TODO
+
+    // Check for robots cutting into the ray
     // TODO
 
     // Check for field lines in the way of the ray
