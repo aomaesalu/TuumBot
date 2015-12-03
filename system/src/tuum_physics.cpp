@@ -10,6 +10,7 @@
 #include "tuum_physics.hpp"
 
 #include <cmath>
+#include <vector>
 
 
 namespace rtx { namespace Physics {
@@ -22,6 +23,26 @@ namespace rtx { namespace Physics {
     // Initialise the result to nothing being in the way of the ray
     Entity *result = nullptr;
     double minDistance = 999999;
+
+    // Initialise a list of entities to check
+    std::vector<Entity*> entities;
+
+    // Add balls to the entities list
+    BallSet balls = *(Visioning::ballDetect().getEntities());
+    entities.insert(entities.end(), balls.begin(), balls.end());
+
+    // Add goals to the entities list
+    entities.push_back(yellowGoal);
+    entities.push_back(blueGoal);
+
+    // Add robots to the entities list
+    RobotSet robots = *(Visioning::robotDetect().getEntities());
+    entities.insert(entities.end(), robots.begin(), robots.end());
+
+
+
+
+
 
     // Check for blobs cutting into the ray
     BallSet balls = *(Visioning::ballDetect().getEntities());
