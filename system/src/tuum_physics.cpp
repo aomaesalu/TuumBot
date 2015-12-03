@@ -18,11 +18,23 @@ namespace rtx { namespace Physics {
   // Returns a pointer to the closest entity that is in the way of the ray. If
   // there seems to be no entity in the way of the ray, a null pointer is
   // returned.
-  Entity* rayCast(const double &angle) {
+  Entity* rayCast(const double &angle, const double &width) {
 
     // Initialise the result to nothing being in the way of the ray
     Entity *closestEntity = nullptr;
     double minDistance = 999999;
+
+    // Calculate ray radius
+    double radius = width / 2;
+
+    // Calculate the ray slope
+    double slope = tan(angle + M_PI);
+    double perpendicularSlope = -1 / slope;
+
+    // Initialise the ray radius vector (to the right). This can be used to find
+    // blob containment checking points.
+    double radiusVectorX = sqrt(radius * radius / (perpendicularSlope * perpendicularSlope + 1));
+    double radiusVectorY = perpendicularSlope * radiusVectorX;
 
     // Initialise a list of entities to check
     std::vector<Entity*> entities;
@@ -39,7 +51,7 @@ namespace rtx { namespace Physics {
     Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
     entities.insert(entities.end(), robots.begin(), robots.end());
 
-    // Check for entity blobs cutting into the ray
+    // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 
       // Calculate blob relative position
@@ -56,10 +68,8 @@ namespace rtx { namespace Physics {
       if (angle >= 0) {
 
         // Calculate corresponding blob corner angles
-        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
-                                       (*entity)->getBlob()->getMaxY());
-        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
-                                     (*entity)->getBlob()->getMinY());
+        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
 
         // If the angle is smaller than the bottom left corner's angle and
         // larger than the top right corner's angle, the blob is in the way of
@@ -76,10 +86,8 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
-                                    (*entity)->getBlob()->getMinY());
-        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
-                                        (*entity)->getBlob()->getMaxY());
+        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
+        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
 
         // If the angle is smaller than the top left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
@@ -101,10 +109,6 @@ namespace rtx { namespace Physics {
 
     return closestEntity;
 
-  }
-
-  Entity* rayCast(const double &angle, const double &width) {
-    // TODO
   }
 
 }}
