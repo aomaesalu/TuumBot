@@ -21,7 +21,7 @@ namespace rtx { namespace Physics {
   Entity* rayCast(const double &angle) {
 
     // Initialise the result to nothing being in the way of the ray
-    Entity *result = nullptr;
+    Entity *closestEntity = nullptr;
     double minDistance = 999999;
 
     // Initialise a list of entities to check
@@ -39,17 +39,11 @@ namespace rtx { namespace Physics {
     RobotSet robots = *(Visioning::robotDetect().getEntities());
     entities.insert(entities.end(), robots.begin(), robots.end());
 
-
-
-
-
-
-    // Check for blobs cutting into the ray
-    BallSet balls = *(Visioning::ballDetect().getEntities());
-    for (BallSet::iterator ball = balls.begin(); ball != balls.end(); ++ball) {
+    // Check for entity blobs cutting into the ray
+    for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 
       // Calculate blob relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal((*ball)->getBlob()->getPosition()->getX(), (*ball)->getBlob()->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
 
       // If the blob is farther away than the closest object, continue with the
@@ -62,18 +56,18 @@ namespace rtx { namespace Physics {
       if (angle >= 0) {
 
         // Calculate corresponding blob corner angles
-        double bottomLeftAngle = atan2((*ball)->getBlob()->getMinX(),
-                                       (*ball)->getBlob()->getMaxY());
-        double topRightAngle = atan2((*ball)->getBlob()->getMaxX(),
-                                     (*ball)->getBlob()->getMinY());
+        double bottomLeftAngle = atan2((*entity)->getBlob()->getMinX(),
+                                       (*entity)->getBlob()->getMaxY());
+        double topRightAngle = atan2((*entity)->getBlob()->getMaxX(),
+                                     (*entity)->getBlob()->getMinY());
 
         // If the angle is smaller than the bottom left corner's angle and
         // larger than the top right corner's angle, the blob is in the way of
         // the ray.
         if (angle <= bottomLeftAngle && angle >= topRightAngle) {
 
-          // Change the result to the ball entity
-          result = *ball;
+          // Change the result to the entity
+          closestEntity = *entity;
 
         }
 
@@ -82,18 +76,18 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        double topLeftAngle = atan2((*ball)->getBlob()->getMinX(),
-                                    (*ball)->getBlob()->getMinY());
-        double bottomRightAngle = atan2((*ball)->getBlob()->getMaxX(),
-                                        (*ball)->getBlob()->getMaxY());
+        double topLeftAngle = atan2((*entity)->getBlob()->getMinX(),
+                                    (*entity)->getBlob()->getMinY());
+        double bottomRightAngle = atan2((*entity)->getBlob()->getMaxX(),
+                                        (*entity)->getBlob()->getMaxY());
 
         // If the angle is smaller than the top left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
         // ray.
         if (angle <= topLeftAngle && angle >= bottomRightAngle) {
 
-          // Change the result to the ball entity
-          result = *ball;
+          // Change the result to the entity
+          closestEntity = *entity;
 
         }
 
@@ -101,14 +95,11 @@ namespace rtx { namespace Physics {
 
     }
 
-    // Check for goals cutting into the ray
+    // Check for field lines in the way of the ray. What to do with the result
+    // value in this case?
     // TODO
 
-    // Check for robots cutting into the ray
-    // TODO
-
-    // Check for field lines in the way of the ray
-    // TODO
+    return closestEntity;
 
   }
 
