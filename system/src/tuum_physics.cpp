@@ -109,6 +109,9 @@ namespace rtx { namespace Physics {
     Entity *closestEntity = nullptr;
     double minDistance = 999999;
 
+    // Calculate ray radius
+    double radius = width / 2;
+
     // Initialise a list of entities to check
     std::vector<Entity*> entities;
 
@@ -126,6 +129,15 @@ namespace rtx { namespace Physics {
 
     // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
+
+      // Calculate blob relative position
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getMaxY());
+      double distance = sqrt(position.second * position.second + position.first * position.first);
+
+      // If the blob is farther away than the closest object, continue with the
+      // next blob
+      if (distance >= minDistance)
+        continue;
 
       // TODO
 
