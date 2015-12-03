@@ -162,7 +162,7 @@ namespace rtx {
     // Analyse ray casting
     Entity *entity = Physics::rayCast(0, BALL_DIAMETER);
     if (entity != nullptr) {
-      std::cout << "Found " << entity->getColor() << " at (" << entity->getTransform()->getX() << ", " << entity->getTransform()->getY() << ")" << std::endl;
+      std::cout << "Found " << intToColor(entity->getColor()) << " at (" << entity->getTransform()->getX() << ", " << entity->getTransform()->getY() << ")" << std::endl;
     } else {
       std::cout << "No entity found in the way" << std::endl;
     }

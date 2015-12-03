@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 2 December 2015
+ *  @date 3 December 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -91,6 +91,7 @@ namespace rtx { namespace Visioning {
         tmp_objs.push_back(new T(*obj));
       } else if (probable_entity != nullptr) {
         probable_entity->update(*obj->getTransform());
+        probable_entity->update(*obj->getBlob());
       }
     }
 

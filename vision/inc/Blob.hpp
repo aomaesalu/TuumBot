@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.3
- *  @date 2 December 2015
+ *  @date 4 December 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -48,6 +48,8 @@ namespace rtx {
       bool isYellow() const;
       bool isYellowBlue() const;
       bool isBlueYellow() const;
+
+      bool isFullyVisible() const;
 
       bool isSameColor(const Blob&) const;
       bool isAbove(const Blob&) const;
