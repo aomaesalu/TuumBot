@@ -105,9 +105,9 @@ namespace rtx { namespace Physics {
 
       // If the angle is positive, the ray is located to the left from the
       // center of the camera frame
-      if (angle >= 0) {
+      if (angle > 0) {
 
-        // Calculate corresponding blob corner angles
+        // Calculate corresponding blob corner angles // TODO: Correct this method - it is not exact for top corners
         std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
         double bottomLeftAngle = -atan2(bottomLeftCorner.first, bottomLeftCorner.second);
         std::pair<double, double> topRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
@@ -131,9 +131,9 @@ namespace rtx { namespace Physics {
 
       // If the angle is negative, the ray is located to the right from the
       // center of the camera frame
-      } else {
+      } else if (angle < 0) {
 
-        // Calculate corresponding blob corner angles
+        // Calculate corresponding blob corner angles // TODO: Correct this method - it is not exact for top corners
         std::pair<double, double> topLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
         double topLeftAngle = -atan2(topLeftCorner.first, topLeftCorner.second);
         std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
@@ -146,6 +146,28 @@ namespace rtx { namespace Physics {
         // than the bottom right corner's angle, the blob is in the way of the
         // ray.
         if (angle <= topLeftAngle && angle >= bottomRightAngle) {
+
+          // Change the result to the entity
+          closestEntity = *entity;
+
+        }
+
+      // If the angle is equal to zero
+      } else {
+
+        // Calculate corresponding blob corner angles
+        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        double bottomLeftAngle = -atan2(bottomLeftCorner.first, bottomLeftCorner.second);
+        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
+        double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
+
+        // DEBUG:
+        std::cout << "(" << bottomLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
+
+        // If the angle is smaller than the bottom left corner's angle and larger
+        // than the bottom right corner's angle, the blob is in the way of the
+        // ray.
+        if (angle <= bottomLeftAngle && angle >= bottomRightAngle) {
 
           // Change the result to the entity
           closestEntity = *entity;
