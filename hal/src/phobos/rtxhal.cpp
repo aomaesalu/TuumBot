@@ -24,11 +24,11 @@ namespace rtx { namespace hal {
 
 
   void process() {
-    if(senseTimer.isTime()) {
+    /*if(senseTimer.isTime()) {
       MainBoard* mb = hw.getMainBoard();
       mb->senseBall();
       senseTimer.start();
-    }
+    }*/
 
     hw.run();
   }
