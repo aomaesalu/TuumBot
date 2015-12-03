@@ -53,8 +53,8 @@ namespace rtx {
 
   void ImageArea::colorBlob(const Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     // Get blob parameters
-    unsigned int x = blob->getPosition()->getX();
-    unsigned int y = blob->getPosition()->getY();
+    unsigned int x = blob->getCentroid()->getX();
+    unsigned int y = blob->getCentroid()->getY();
     unsigned int minX = blob->getMinX();
     unsigned int maxX = blob->getMaxX();
     unsigned int minY = blob->getMinY();
@@ -125,7 +125,7 @@ namespace rtx {
         if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT)
           continue;
 
-        //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+        //std::cout << (*blob)->getCentroid()->getX() << " " << (*blob)->getCentroid()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
 
         double density = (*blob)->getDensity();
         unsigned int boxArea = (*blob)->getBoxArea();

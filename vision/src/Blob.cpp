@@ -20,7 +20,7 @@
 namespace rtx {
 
   Blob::Blob(const Blob &other):
-    position{new Point2D(*(other.getPosition()))},
+    centroid{new Point2D(*(other.getCentroid()))},
     minX{other.getMinX()},
     maxX{other.getMaxX()},
     minY{other.getMinY()},
@@ -55,7 +55,7 @@ namespace rtx {
         maxY = (*i)->getY();
       }
     }
-    position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
+    centroid = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
   Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
@@ -82,7 +82,7 @@ namespace rtx {
         maxY = i->second;
       }
     }
-    position = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
+    centroid = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
   Blob::~Blob() {
@@ -93,8 +93,8 @@ namespace rtx {
     return points;
   }
 
-  Point2D* Blob::getPosition() const {
-    return position;
+  Point2D* Blob::getCentroid() const {
+    return centroid;
   }
 
   unsigned int Blob::getWidth() const {
@@ -142,7 +142,7 @@ namespace rtx {
   }
 
   std::pair<unsigned int, unsigned int> Blob::getExpectedVirtualSize() const {
-    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY()));
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY()));
   }
 
   bool Blob::isOrange() const {
@@ -170,7 +170,7 @@ namespace rtx {
   }
 
   bool Blob::isAbove(const Blob &other) const {
-    return position->getY() < other.getPosition()->getY();
+    return centroid->getY() < other.getCentroid()->getY();
   }
 
   bool Blob::isBelow(const Blob &other) const {
@@ -201,7 +201,7 @@ namespace rtx {
     } else {
       if ((isBlue() && other.isYellow()) || (isYellow() && other.isBlue()) || ((isYellowBlue() || isBlueYellow()) && (other.isYellow() || other.isBlue())) || ((isYellow() || isBlue()) && (other.isYellowBlue() || other.isBlueYellow()))) {
         // The expected sizes for both robot color combinations are the same
-        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(position->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT));
+        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT));
       } else {
         expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }
@@ -228,14 +228,14 @@ namespace rtx {
     // Add points
     numberOfPoints += other.getNumberOfPoints();
     points.insert(points.end(), other.getPoints().begin(), other.getPoints().end());
-    // Calculate new position // TODO: Calculate based on points
+    // Calculate new centroid // TODO: Calculate based on points
     unsigned int xSum = 0, ySum = 0;
     for (std::vector<std::pair<unsigned int, unsigned int>>::iterator point = points.begin(); point != points.end(); ++point) {
       xSum += point->first;
       ySum += point->second;
     }
-    position->setX(xSum / numberOfPoints);
-    position->setY(ySum / numberOfPoints);
+    centroid->setX(xSum / numberOfPoints);
+    centroid->setY(ySum / numberOfPoints);
   }
 
   void Blob::setColor(const Color &color) {

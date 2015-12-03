@@ -27,7 +27,7 @@ namespace rtx {
       ~Blob();
 
       const std::vector<std::pair<unsigned int, unsigned int>>& getPoints() const;
-      Point2D* getPosition() const;
+      Point2D* getCentroid() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
       unsigned int getMinX() const;
@@ -62,7 +62,7 @@ namespace rtx {
     private:
       // Further analysis could take into account different densities in different areas of the blob, different line angles, shape, ...
       std::vector<std::pair<unsigned int, unsigned int>> points;
-      Point2D *position;
+      Point2D *centroid;
       unsigned int minX;
       unsigned int maxX;
       unsigned int minY;

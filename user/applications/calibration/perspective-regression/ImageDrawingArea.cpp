@@ -200,8 +200,8 @@ namespace rtx {
 
     for (Vision::BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
       for (std::map<Blob*, unsigned int>::iterator blobOccurrence = blobCounts.begin(); blobOccurrence != blobCounts.end(); ++blobOccurrence) {
-        unsigned int dx = abs(blobOccurrence->first->getPosition()->getX() - (*blob)->getPosition()->getX());
-        unsigned int dy = abs(blobOccurrence->first->getPosition()->getY() - (*blob)->getPosition()->getY());
+        unsigned int dx = abs(blobOccurrence->first->getCentroid()->getX() - (*blob)->getCentroid()->getX());
+        unsigned int dy = abs(blobOccurrence->first->getCentroid()->getY() - (*blob)->getCentroid()->getY());
         if (dx * dx + dy * dy <= maxDifference * maxDifference) {
           blobOccurrence->second++;
           continue;
@@ -222,8 +222,8 @@ namespace rtx {
       }
       Blob *blob = blobOccurrence->first;
       if (blob) {
-        unsigned int x = blob->getPosition()->getX();
-        unsigned int y = blob->getPosition()->getY();
+        unsigned int x = blob->getCentroid()->getX();
+        unsigned int y = blob->getCentroid()->getY();
         unsigned int minX = blob->getMinX();
         unsigned int maxX = blob->getMaxX();
         unsigned int minY = blob->getMinY();
