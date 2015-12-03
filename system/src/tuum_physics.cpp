@@ -60,7 +60,7 @@ namespace rtx { namespace Physics {
         continue;
 
       // Calculate blob relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getCentroid()->getX(), (*entity)->getBlob()->getMaxY());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
       double distance = sqrt(position.second * position.second + position.first * position.first);
 
       // If the blob is farther away than the closest object, continue with the

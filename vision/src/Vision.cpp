@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 29 November 2015
+ *  @date 3 December 2015
  */
 
 #include "Vision.hpp"
@@ -421,7 +421,7 @@ namespace rtx {
         // If the current blob is a goal or ball blob
         if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow() || blobsBuffer[i]->isOrange()) {
           // If the blob's height is smaller than half of the expected height at that position, remove the blob from the blob list.
-          if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), std::pair<unsigned int, unsigned int>(blobsBuffer[i]->getCentroid()->getX(), blobsBuffer[i]->getMaxY())).second) {
+          if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), blobsBuffer[i]->getPosition()).second) {
             toBeRemoved.insert(i);
           }
         }
@@ -509,7 +509,7 @@ namespace rtx {
       // DEBUG:
       /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
         std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
-        std::cout << "Blob: " << "(" << (*blob)->getCentroid()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << ((*blob)->getMaxX() - (*blob)->getMinX()) << ", " << ((*blob)->getMaxY() - (*blob)->getMinY()) << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
+        std::cout << "Blob: " << "(" << (*blob)->getCentroid()->getX() << ", " << (*blob)->getCentroid()->getY() << ") " << "(" << ((*blob)->getMaxX() - (*blob)->getMinX()) << ", " << ((*blob)->getMaxY() - (*blob)->getMinY()) << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
       }
       std::cout << std::endl << std::endl;*/
     }
