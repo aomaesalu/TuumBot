@@ -97,7 +97,7 @@ namespace rtx { namespace ctl {
   void LSBallLocate::init() {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
-    twitchScanner.init();
+    twitchScanner.init(5, 30);
     mb->stopDribbler();
   }
 
@@ -195,13 +195,11 @@ ERR:
       if(!Motion::isRunning()) Motion::start();
     } else {
       Motion::stop();
-      mb->stopDribbler();
     }
 
     return 0;
 OK:
     Motion::stop();
-    mb->stopDribbler();
     return 1;
 ERR:
     Motion::stop();
@@ -233,7 +231,7 @@ ERR:
   void LSGoalLocate::init() {
     Motion::stop();
     ctx.phase = CP_INIT;
-    twitchScanner.init(5, 10);
+    twitchScanner.init(10, 30);
     mb->startDribbler();
   }
 
@@ -268,13 +266,13 @@ ERR:
     Motion::setAimTarget(g->getTransform()->getPosition());
     //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
 ;
-    if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
+    //if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
 
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();
     } else {
       Motion::stop();
-      mb->doCoilKick();
+      if(mb->getBallSensorState()) mb->doCoilKick();
     }
 
     return 0;

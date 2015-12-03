@@ -19,7 +19,8 @@ namespace rtx { namespace hal {
     m_dribblerState = 0;
     m_coilKickActive = 0;
 
-    m_coilKickCharge.setPeriod(300);
+    m_coilKickCharge.setPeriod(200);
+    m_coilKickCooldown.setPeriod(1000);
 
     m_updateTimer.setPeriod(300);
     m_updateTimer.start();
@@ -51,11 +52,15 @@ namespace rtx { namespace hal {
     }
 
     if(m_coilKickActive && m_coilKickCharge.isTime()) {
-      if(m_coilChargeLevel >= 3) {
+      if(m_coilChargeLevel >= 4) {
         m_coilKickActive = false;
+	m_coilKickCooldown.start();
       } else {
+      	chargeCoil();
         m_coilChargeLevel++;
-	chargeCoil();
+	if(m_coilChargeLevel == 3) releaseCoil();
+	else chargeCoil();
+	m_coilKickCharge.start();
       }
 
     }
@@ -79,13 +84,14 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::releaseCoil() {
+	std::cout << "KICK" << std::endl;
     write({id, CMD_KICK});
   }
 
   void MainBoard::doCoilKick() {
-    if(!m_coilKickActive) {
+    if(!m_coilKickActive && m_coilKickCooldown.isTime()) {
       stopDribbler();
-      releaseCoil();
+      chargeCoil();
       m_coilKickActive = true;
       m_coilChargeLevel = 0;
       m_coilKickCharge.start();
@@ -112,4 +118,3 @@ namespace rtx { namespace hal {
 
 
 }}
-
