@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 2 December 2015
+ *  @date 3 December 2015
  */
 
 #include <algorithm>
@@ -226,7 +226,7 @@ namespace rtx { namespace Visioning {
       //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
 
       // STEP 2: Calculate relative position
-      Point2D* point = blobs[i]->getPosition();
+      Point2D* point = blobs[i]->getCentroid();
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
@@ -303,7 +303,7 @@ namespace rtx { namespace Visioning {
       //if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
-      Point2D* point = blobs[i]->getPosition();
+      Point2D* point = blobs[i]->getCentroid();
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
@@ -360,7 +360,7 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // STEP 2: Calculate relative position
-      Point2D* point = blobs[i]->getPosition();
+      Point2D* point = blobs[i]->getCentroid();
       // Relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal(point->getX(), blobs[i]->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
