@@ -12,6 +12,8 @@
 #include "cameraConstants.hpp"
 #include "GUI.hpp"
 
+#include "tuum_physics.hpp"
+
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
 #include <gdkmm/pixbuf.h>
@@ -154,6 +156,15 @@ namespace rtx {
         }
 
       }
+    }
+
+    // DEBUG
+    // Analyse ray casting
+    Entity *entity = Physics::rayCast(0, BALL_DIAMETER);
+    if (entity != nullptr) {
+      std::cout << "Found " << entity->getColor() << " at (" << entity->getTransform()->getX() << ", " << entity->getTransform()->getY() << ")" << std::endl;
+    } else {
+      std::cout << "No entity found in the way" << std::endl;
     }
 
     return true;

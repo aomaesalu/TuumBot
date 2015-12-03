@@ -54,6 +54,11 @@ namespace rtx { namespace Physics {
     // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 
+      // If the entity is a ball, ensure that it is valid. Otherwise, continue
+      // with the next entity.
+      if (!((*entity)->isBall() && ((Ball*) *entity)->isValid()))
+        continue;
+
       // Calculate blob relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getMaxY());
       double distance = sqrt(position.second * position.second + position.first * position.first);
