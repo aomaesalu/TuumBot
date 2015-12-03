@@ -53,6 +53,11 @@ namespace rtx { namespace Physics {
     Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
     entities.insert(entities.end(), robots.begin(), robots.end());
 
+    // DEBUG:
+    std::cout << "Ray: " << std::endl;
+    std::cout << radius << " " << slope << " " << perpendicularSlope << " " << radiusVectorX << " " << radiusVectorY << std::endl;
+    std::cout << std::endl;
+
     // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
 
@@ -70,8 +75,11 @@ namespace rtx { namespace Physics {
 
       // If the entity is a ball, ensure that it is valid. Otherwise, continue
       // with the next entity.
-      if (!((*entity)->isBall() && ((Ball*) *entity)->isValid()))
-        continue;
+      if ((*entity)->isBall()) {
+        if (((Ball*) *entity)->isNotValid()) {
+          continue;
+        }
+      }
 
       // Calculate blob relative position
       std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
