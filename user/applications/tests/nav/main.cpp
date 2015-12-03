@@ -31,32 +31,12 @@ int main(int argc, char* argv[]) {
 
   Context ctx;
 
-  /*
-  Controller* goaleeCtrl = new ctl::LSGoalee(ctx);
-  goaleeCtrl->init();
-*/
-  /*
-  Controller* goalLocateCtrl = new ctl::LSGoalLocate(ctx);
-  goalLocateCtrl->init();
-  Controller* goalShootCtrl = new ctl::LSGoalShoot(ctx);
-  goalShootCtrl->init();
-  */
-
-  Motion::TwitchScan scanner;
-  scanner.init();
-
   bool running = true;
   while(running) {
     hal::process();
 
     Visioning::process();
     Motion::process();
-
-    scanner.run();
-    //goaleeCtrl->run();
-
-    //if(goalLocateCtrl->run())
-    //goalShootCtrl->run();
 
     if(debugTimer.isTime()) {
 
@@ -71,10 +51,10 @@ int main(int argc, char* argv[]) {
       }
 
       if(Visioning::ballDetect.size() > 0) {
-	//std::cout << "Balls: " << std::endl;
-	//for(auto& b : *Visioning::ballDetect.getEntities()) {
-        //  std::cout << b->toString() << std::endl;
-	//}
+	std::cout << "Balls: " << std::endl;
+	for(auto& b : *Visioning::ballDetect.getEntities()) {
+          std::cout << b->toString() << " : isValid() == " << (int)(b->isValid()) << std::endl;
+	}
       }
 
       debugTimer.start();

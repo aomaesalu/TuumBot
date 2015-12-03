@@ -97,7 +97,7 @@ namespace rtx { namespace ctl {
   void LSBallLocate::init() {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
-    twitchScanner.init();
+    twitchScanner.init(5, 30);
     mb->stopDribbler();
   }
 
@@ -231,7 +231,7 @@ ERR:
   void LSGoalLocate::init() {
     Motion::stop();
     ctx.phase = CP_INIT;
-    twitchScanner.init(5, 10);
+    twitchScanner.init(10, 30);
     mb->startDribbler();
   }
 
