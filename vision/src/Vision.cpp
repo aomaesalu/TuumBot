@@ -467,22 +467,40 @@ namespace rtx {
 
                 unsigned char *pixel = pixels + point.first * channels + point.second * stride;
 
-                if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
-                  blobPoints.push_back(point);
-                  for (int step = -1; step <= 1; step += 2) {
-                    if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
-                      if (!visited[*mode][newPoint.first][newPoint.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][newPoint.first][newPoint.second] = true;
-                      }
+                // If the pixel is not of the same colour as the mode, continue with the next point in the stac
+                if (!isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode))
+                  continue;
+
+                if (*mode == 0) { // Ball
+
+                  // Subtract yellow goal color
+                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 2))
+                    continue;
+
+                  // Subtract white line color
+                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 4))
+                    continue;
+
+                  // Subtract black line color
+                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 5))
+                    continue;
+
+                }
+
+                blobPoints.push_back(point);
+                for (int step = -1; step <= 1; step += 2) {
+                  if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
+                    if (!visited[*mode][newPoint.first][newPoint.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][newPoint.first][newPoint.second] = true;
                     }
-                    if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
-                      std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
-                      if (!visited[*mode][newPoint.first][newPoint.second]) {
-                        stack.push_back(newPoint);
-                        visited[*mode][newPoint.first][newPoint.second] = true;
-                      }
+                  }
+                  if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
+                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
+                    if (!visited[*mode][newPoint.first][newPoint.second]) {
+                      stack.push_back(newPoint);
+                      visited[*mode][newPoint.first][newPoint.second] = true;
                     }
                   }
                 }
