@@ -40,6 +40,9 @@ namespace rtx { namespace Navigation {
           (*ball)->setInGoal(false);
         } // TODO: Check if we need to do this in some situations, or if it
         // would cause problems
+        // Currently, it is only implemented because of not enough tests - we do
+        // not want to lose balls because they have appeared to be in a goal
+        // (when they actually weren't).
 
       }
 
@@ -54,6 +57,9 @@ namespace rtx { namespace Navigation {
           (*ball)->setInGoal(false);
         } // TODO: Check if we need to do this in some situations, or if it
         // would cause problems
+        // Currently, it is only implemented because of not enough tests - we do
+        // not want to lose balls because they have appeared to be in a goal
+        // (when they actually weren't).
 
       }
 
@@ -61,6 +67,9 @@ namespace rtx { namespace Navigation {
       for (Vision::LineSet::iterator line = lines.begin(); line != lines.end(); ++line) {
 
         // TODO: Check if the ball is on the other side of the current line
+
+        // TODO: Use goals' lower bounds for checking, too, if outer lines can
+        // not be detected otherwise
 
       }
 
