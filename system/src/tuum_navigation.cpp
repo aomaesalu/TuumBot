@@ -36,9 +36,9 @@ namespace rtx { namespace Navigation {
         // ball object's parameter correspondingly
         if ((*ball)->getBlob()->isIn(*(Visioning::blueGoal->getBlob()))) {
           (*ball)->setInGoal(true);
-        }/* else {
+        } else {
           (*ball)->setInGoal(false);
-        }*/ // TODO: Check if we need to do this in some situations, or if it
+        } // TODO: Check if we need to do this in some situations, or if it
         // would cause problems
 
       }
@@ -50,9 +50,9 @@ namespace rtx { namespace Navigation {
         // ball object's parameter correspondingly
         if ((*ball)->getBlob()->isIn(*(Visioning::yellowGoal->getBlob()))) {
           (*ball)->setInGoal(true);
-        }/* else {
+        } else {
           (*ball)->setInGoal(false);
-        }*/ // TODO: Check if we need to do this in some situations, or if it
+        } // TODO: Check if we need to do this in some situations, or if it
         // would cause problems
 
       }
