@@ -17,7 +17,7 @@
 namespace rtx { namespace Physics {
 
   Entity* rayCast(const double&);
-  //Entity* rayCast(const double&, const double&)
+  Entity* rayCast(const double&, const double&)
 
 }}
 

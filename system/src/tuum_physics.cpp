@@ -112,6 +112,9 @@ namespace rtx { namespace Physics {
     // Calculate ray radius
     double radius = width / 2;
 
+    // Calculate ray width vector. This can be used to find checking points.
+    // TODO
+
     // Initialise a list of entities to check
     std::vector<Entity*> entities;
 
@@ -139,7 +142,51 @@ namespace rtx { namespace Physics {
       if (distance >= minDistance)
         continue;
 
-      // TODO
+      // If the angle is positive, the ray is located to the left from the
+      // center of the camera frame
+      if (angle >= 0) {
+
+        // Calculate corresponding blob corner angles
+        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
+                                       (*entity)->getBlob()->getMaxY());
+        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
+                                     (*entity)->getBlob()->getMinY());
+
+        // TODO: Calculate the angles in respect to the ray radius vector
+
+        // If the angle is smaller than the bottom left corner's angle and
+        // larger than the top right corner's angle, the blob is in the way of
+        // the ray.
+        if (angle <= bottomLeftAngle && angle >= topRightAngle) {
+
+          // Change the result to the entity
+          closestEntity = *entity;
+
+        }
+
+      // If the angle is negative, the ray is located to the right from the
+      // center of the camera frame
+      } else {
+
+        // Calculate corresponding blob corner angles
+        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
+                                    (*entity)->getBlob()->getMinY());
+        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
+                                        (*entity)->getBlob()->getMaxY());
+
+        // TODO: Calculate the angles in respect to the ray radius vector
+
+        // If the angle is smaller than the top left corner's angle and larger
+        // than the bottom right corner's angle, the blob is in the way of the
+        // ray.
+        if (angle <= topLeftAngle && angle >= bottomRightAngle) {
+
+          // Change the result to the entity
+          closestEntity = *entity;
+
+        }
+
+      }
 
     }
 
