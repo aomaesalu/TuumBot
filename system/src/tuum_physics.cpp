@@ -55,7 +55,7 @@ namespace rtx { namespace Physics {
 
     // DEBUG:
     std::cout << "Ray: " << std::endl;
-    std::cout << radius << " " << slope << " " << perpendicularSlope << " " << radiusVectorX << " " << radiusVectorY << std::endl;
+    std::cout << "(" << radius << ", " << angle << "), (" << slope << ", " << perpendicularSlope << "), (" << radiusVectorX << ", " << radiusVectorY << ")" << std::endl;
     std::cout << std::endl;
 
     // Check for entity blobs overlapping the ray area
@@ -85,7 +85,6 @@ namespace rtx { namespace Physics {
           std::cout << "  The ball is not valid." << std::endl;
         }
       }
-      std::cout << std::endl;
 
       // If the entity is a ball, ensure that it is valid. Otherwise, continue
       // with the next entity.
@@ -112,6 +111,9 @@ namespace rtx { namespace Physics {
         double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
         double topRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
 
+        // DEBUG:
+        std::cout << "(" << bottomLeftAngle << ", " << topRightAngle << ")" << std::endl;
+
         // If the angle is smaller than the bottom left corner's angle and
         // larger than the top right corner's angle, the blob is in the way of
         // the ray.
@@ -130,6 +132,9 @@ namespace rtx { namespace Physics {
         double topLeftAngle = -atan2((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
         double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
 
+        // DEBUG:
+        std::cout << "(" << topLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
+
         // If the angle is smaller than the top left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
         // ray.
@@ -141,6 +146,9 @@ namespace rtx { namespace Physics {
         }
 
       }
+
+      // DEBUG:
+      std::cout << std::endl;
 
     }
 
