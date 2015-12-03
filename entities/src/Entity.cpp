@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.3
- *  @date 2 December 2015
+ *  @date 3 December 2015
  */
 
 #include <iostream>
@@ -89,6 +89,14 @@ namespace rtx {
     m_transform.setPosition(x, y);
 
     if(m_health < 35) m_health += 2;
+  }
+
+  void Entity::update(Blob *blob) {
+    this->blob = blob;
+  }
+
+  void Entity::update(Blob &blob) {
+    this->blob = &blob;
   }
 
   void Entity::update() {

@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.3
- *  @date 2 December 2015
+ *  @date 4 December 2015
  */
 
 #include "cameraConstants.hpp"
@@ -102,7 +102,7 @@ namespace rtx {
   }
 
   Point2D* Blob::getPosition() const {
-    return new Point2D((minX + maxX) / 2, maxY);
+    return new Point2D(centroid->getX(), maxY);
   }
 
   unsigned int Blob::getWidth() const {
@@ -171,6 +171,11 @@ namespace rtx {
 
   bool Blob::isBlueYellow() const {
     return color == ROBOT_BLUE_YELLOW;
+  }
+
+  bool Blob::isFullyVisible() const { // TODO: Refactor
+    // Currently only checks the horisontal coordinates of the box area
+    return minX >= 0.03 * CAMERA_WIDTH && maxX <= 0.97 * CAMERA_WIDTH;
   }
 
   bool Blob::isSameColor(const Blob &other) const {
