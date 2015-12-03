@@ -56,9 +56,9 @@ namespace rtx { namespace Physics {
       if (angle >= 0) {
 
         // Calculate corresponding blob corner angles
-        double bottomLeftAngle = atan2((*entity)->getBlob()->getMinX(),
+        double bottomLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
                                        (*entity)->getBlob()->getMaxY());
-        double topRightAngle = atan2((*entity)->getBlob()->getMaxX(),
+        double topRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
                                      (*entity)->getBlob()->getMinY());
 
         // If the angle is smaller than the bottom left corner's angle and
@@ -76,9 +76,9 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        double topLeftAngle = atan2((*entity)->getBlob()->getMinX(),
+        double topLeftAngle = -atan2((*entity)->getBlob()->getMinX(),
                                     (*entity)->getBlob()->getMinY());
-        double bottomRightAngle = atan2((*entity)->getBlob()->getMaxX(),
+        double bottomRightAngle = -atan2((*entity)->getBlob()->getMaxX(),
                                         (*entity)->getBlob()->getMaxY());
 
         // If the angle is smaller than the top left corner's angle and larger
