@@ -18,7 +18,7 @@ namespace rtx { namespace Physics {
   // Returns a pointer to the closest entity that is in the way of the ray. If
   // there seems to be no entity in the way of the ray, a null pointer is
   // returned.
-  Entity* rayCast(const double &angle, const double &width) {
+  Entity* rayCast(const double &angle, const double &width) { // TODO: Refactor
 
     // Initialise the result to nothing being in the way of the ray
     Entity *closestEntity = nullptr;
@@ -126,6 +126,7 @@ namespace rtx { namespace Physics {
 
           // Change the result to the entity
           closestEntity = *entity;
+          minDistance = distance;
 
         }
 
@@ -149,6 +150,7 @@ namespace rtx { namespace Physics {
 
           // Change the result to the entity
           closestEntity = *entity;
+          minDistance = distance;
 
         }
 
@@ -171,6 +173,7 @@ namespace rtx { namespace Physics {
 
           // Change the result to the entity
           closestEntity = *entity;
+          minDistance = distance;
 
         }
 
