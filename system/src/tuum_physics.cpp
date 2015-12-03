@@ -112,9 +112,9 @@ namespace rtx { namespace Physics {
         double topRightAngle = -atan2((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
 
         // DEBUG:
-        std::cout << (*entity)->getBlob()->getPosition()->getX() << " " (*entity)->getBlob()->getPosition()->getY() << " " << -atan2((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getPosition()->getY()) << std::endl;
-        std::cout << (*entity)->getBlob()->getMinX() << " " (*entity)->getBlob()->getMaxY() << " " << -atan2((*entity)->getBlob()->getMinX(), (*entity)->getBlob()->getMaxY()) << std::endl;
-        std::cout << (*entity)->getBlob()->getMaxX() << " " (*entity)->getBlob()->getMinY() << " " << -atan2((*entity)->getBlob()->getMaxX(), (*entity)->getBlob()->getMinY()) << std::endl;
+        std::cout << (*entity)->getBlob()->getPosition()->getX() << " " << (*entity)->getBlob()->getPosition()->getY() << " " << -atan2((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getPosition()->getY()) << std::endl;
+        std::cout << (*entity)->getBlob()->getMinX() << " " << (*entity)->getBlob()->getMaxY() << " " << -atan2((*entity)->getBlob()->getMinX(), (*entity)->getBlob()->getMaxY()) << std::endl;
+        std::cout << (*entity)->getBlob()->getMaxX() << " " << (*entity)->getBlob()->getMinY() << " " << -atan2((*entity)->getBlob()->getMaxX(), (*entity)->getBlob()->getMinY()) << std::endl;
         std::cout << "(" << bottomLeftAngle << ", " << topRightAngle << ")" << std::endl;
 
         // If the angle is smaller than the bottom left corner's angle and
