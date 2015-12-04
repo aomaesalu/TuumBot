@@ -163,12 +163,12 @@ namespace rtx {
 
   double Blob::getDistance() const {
     Point2D *position = getPosition();
-    return sqrt(position.getX(), position.getY());
+    return sqrt(position->getX() * position->getX() + position->getY() * position->getY());
   }
 
   double Blob::getAngle() const {
     Point2D *position = getPosition();
-    return -atan2(position.getX(), position.getY());
+    return -atan2(position->getX(), position->getY());
   }
 
   bool Blob::isOrange() const {
