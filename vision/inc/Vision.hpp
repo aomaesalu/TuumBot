@@ -50,24 +50,24 @@ namespace rtx {
     void initialiseFlatSamples();
     void initialiseMeshSamples();
     void initialiseRadialSamples();
-    void process(const Frame&, const std::string&);
-    void processCheckerboard(const Frame&, const std::string&);
+    void process(const Frame&, const std::vector<std::string>&, const unsigned int&);
+    void processCheckerboard(const Frame&, const std::vector<std::string>&, const unsigned int&);
 
-    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
-    bool isColored(const Frame&, const std::string&, const unsigned int&, const unsigned int&);
+    bool isColored(const Frame&, const std::vector<std::string>&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
+    bool isColored(const Frame&, const std::vector<std::string>&, const unsigned int&, const unsigned int&, const unsigned int&);
 
     BlobSet getBlobs();
     LineSet getLines();
     CornerSet getCorners();
 
-    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&);
-    void blobDetection(const Frame&, const std::string&, const std::vector<unsigned int>&, const Samples&);
+    void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&);
+    void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&, const Samples&);
 
-    void lineDetection(const Frame&, const std::string&);
-    void lineDetection(const Frame&, const std::string&, const Samples&);
+    void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&);
+    void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const Samples&);
 
-    void cornerDetection(const Frame&, const std::string&);
-    void cornerDetection(const Frame&, const std::string&, const Samples&);
+    void cornerDetection(const Frame&, const std::vector<std::string>&, const unsigned int&);
+    void cornerDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const Samples&);
 
   };
 

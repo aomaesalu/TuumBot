@@ -125,32 +125,32 @@ namespace rtx {
       std::cout << "Actual rays: " << rayCount << std::endl;*/
     }
 
-    void process(const Frame &frame, const std::string &filter) {
-      blobDetection(frame, filter, {0, 1, 2}, meshSamples);
-      lineDetection(frame, filter, radialSamples);
-      cornerDetection(frame, filter, meshSamples);
+    void process(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID) {
+      blobDetection(frame, filters, cameraID, {0, 1, 2}, meshSamples);
+      lineDetection(frame, filters, cameraID, radialSamples);
+      cornerDetection(frame, filters, cameraID, meshSamples);
     }
 
-    void processCheckerboard(const Frame &frame, const std::string &filter) {
+    void processCheckerboard(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
       // TODO: Include other kind of samples (full board?)
-      blobDetection(frame, filter, {6, 7});
-      lineDetection(frame, filter);
-      cornerDetection(frame, filter);
+      blobDetection(frame, filters, cameraID, {6, 7});
+      lineDetection(frame, filters, cameraID);
+      cornerDetection(frame, filters, cameraID);
     }
 
-    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
-      if (filter.size() > pixel) {
+    bool isColored(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const unsigned int &pixel, const unsigned int &mode) {
+      if (filters[cameraID].size() > pixel) {
         //std::cout << (7 - mode) << " " << pixel << " " << filter[pixel] << " " << (filter[pixel] >> (7 - mode)) << " " << ((filter[pixel] >> (7 - mode)) & 0x1) << std::endl;
-        return (filter[pixel] >> (7 - mode)) & 0x1;
+        return (filters[cameraID][pixel] >> (7 - mode)) & 0x1;
       } else {
         //std::cout << "Filter is empty" << std::endl;
         return false;
       }
     }
 
-    bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
+    bool isColored(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
       //std::cout << x << " " << y << " " << z << " " << (x << 16 + y << 8 + z) << std::endl;
-      return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
+      return isColored(frame, filters, cameraID, (x << 16) + (y << 8) + z, mode);
     }
 
     BlobSet getBlobs() {
@@ -436,11 +436,11 @@ namespace rtx {
       toBeRemoved.clear();
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
-      blobDetection(frame, filter, modeList, flatSamples);
+    void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList) {
+      blobDetection(frame, filters, cameraID, modeList, flatSamples);
     }
 
-    void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+    void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
       blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
@@ -468,21 +468,21 @@ namespace rtx {
                 unsigned char *pixel = pixels + point.first * channels + point.second * stride;
 
                 // If the pixel is not of the same colour as the mode, continue with the next point in the stac
-                if (!isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode))
+                if (!isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], *mode))
                   continue;
 
                 if (*mode == 0) { // Ball
 
                   // Subtract yellow goal color
-                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 2))
+                  if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 2))
                     continue;
 
                   // Subtract white line color
-                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 4))
+                  if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 4))
                     continue;
 
                   // Subtract black line color
-                  if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], 5))
+                  if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 5))
                     continue;
 
                 }
@@ -532,21 +532,21 @@ namespace rtx {
       std::cout << std::endl << std::endl;*/
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter) {
-      lineDetection(frame, filter, flatSamples);
+    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
+      lineDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
+    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateLinesBuffer();
     }
 
-    void cornerDetection(const Frame &frame, const std::string &filter) {
-      cornerDetection(frame, filter, flatSamples);
+    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
+      cornerDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
+    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
       // TODO
 
       translateCornersBuffer();
