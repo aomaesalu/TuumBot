@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <iostream> // TODO: Remove
 #include <utility>
+#include <cmath>
 
 
 namespace rtx {
@@ -158,6 +159,16 @@ namespace rtx {
 
   unsigned int Blob::getCameraID() const {
     return cameraID;
+  }
+
+  double Blob::getDistance() const {
+    Point2D *position = getPosition();
+    return sqrt(position.getX(), position.getY());
+  }
+
+  double Blob::getAngle() const {
+    Point2D *position = getPosition();
+    return -atan2(position.getX(), position.getY());
   }
 
   bool Blob::isOrange() const {

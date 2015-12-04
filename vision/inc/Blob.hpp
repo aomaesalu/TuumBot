@@ -43,6 +43,8 @@ namespace rtx {
       double getDensity() const;
       std::pair<unsigned int, unsigned int> getExpectedVirtualSize() const;
       unsigned int getCameraID() const;
+      double getDistance() const;
+      double getAngle() const;
 
       bool isOrange() const;
       bool isBlue() const;
