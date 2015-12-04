@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 3 December 2015
+ *  @date 4 December 2015
  */
 
 #include "Perspective.hpp"
