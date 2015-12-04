@@ -94,7 +94,7 @@ namespace rtx {
 
   void STM::setup() {
     EventEmitter::init();
-    //if(m_states.size() > 0) setState(m_states[0]);
+    if(m_states.size() > 0) setState(m_states[0]);
   }
 
   void STM::process() {
