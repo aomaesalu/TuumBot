@@ -13,24 +13,37 @@
 
 namespace rtx { namespace TFBLogic {
 
-  enum StrategyConstant {
-    NONE,
-    MAINSTREAM
+  enum GameState {
+    STOP,
+    PLACEDBALL,
+    START,
   };
 
-  enum LogicState {
-    LS_INIT,
-    LS_PASSIVE,
-    LS_BALL_LOCATE,
-    LS_BALL_RETRIEVE,
-    LS_GOAL_SCAN,
-    LS_GOAL_SHOOT
+  enum GamePhase {
+    NONE,
+    GAME,
+
+    KICKOFF,
+    KICKOFF_GOAL,        // Väravaesine lahtilöök
+
+    FREEKICK_INDIRECT,   // Vabalöök
+    FREEKICK_DIRECT,     // Karistuslöök
+    THROWIN,             // Küljesissevise
+
+    // ...?
   };
 
   void setup();
   void process();
 
-  void printSystemState();
+  void stop();
+  void start();
+
+  void init_referee_signals();
+  void load_logic();
+
+  void updateGameState(GameState);
+  void updateGamePhase(GamePhase, bool = false);
 
 }}
 

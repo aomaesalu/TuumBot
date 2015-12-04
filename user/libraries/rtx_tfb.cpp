@@ -16,76 +16,54 @@ using namespace rtx::hal;
 
 namespace rtx { namespace TFBLogic {
 
-  enum GameState {
-    GS_STOP,
-    GS_PLACEDBALL,
-    GS_START,
-  };
-
-  enum GamePhase {
-    GP_NONE,
-
-    GP_KICKOFF,
-    GP_KICKOFF_GOAL,        // Väravaesine lahtilöök
-
-    GP_FREEKICK_INDIRECT,   // Vabalöök
-    GP_FREEKICK_DIRECT,     // Karistuslöök
-    GP_THROWIN,             // Küljesissevise
-
-    // ...
-  };
-
-
   GameState gmState;
   GamePhase gmPhase;
 
   // Preload logic trees
-  STM lg_kickoff = LogicManager::loadKickoff();
+  STM* lg_preKickoff = nullptr;
+  STM* lg_kickoff = nullptr;
+
+  STM* lg_defKickoff = nullptr;
 
 
   STM* logicProcess;
 
-  void start() {
-    std::cout << "Start game." << std::endl;
-    gmState = GS_START;
+
+  void setup() {
+    stop();
+    updateGameState(GameState::STOP);
+    updateGamePhase(GamePhase::NONE);
+    init_referee_signals();
+    load_logic();
   }
 
-  void stop() {
-    std::cout << "Stop game." << std::endl;
-    gmState = GS_STOP;
-  }
-
-  void updateGamePhase(GamePhase gp, bool to_our_team=false) {
-    gmPhase = gp;
-
-    switch(gmPhase) {
-      case GP_KICKOFF:
-        logicProcess = &lg_kickoff;
-
-        std::cout << "Transition to ";
-        if(to_our_team) std::cout << "our";
-        else std::cout << "opposing";
-        std::cout << " team's kickoff." << std::endl;
+  void process() {
+    switch(gmState) {
+      case GameState::STOP:
         break;
-      case GP_KICKOFF_GOAL:
+      case GameState::PLACEDBALL:
+        //TODO: prepare for game phase?
         break;
-      case GP_FREEKICK_DIRECT:
-        break;
-      case GP_FREEKICK_INDIRECT:
-        break;
-      case GP_THROWIN:
-        break;
-      case GP_NONE:
-      default:
-        logicProcess = nullptr;
+      case GameState::START:
+        if(logicProcess != nullptr) logicProcess->process();
         break;
     }
   }
 
-  void updateGameState(GameState gs) {
-    gmState = gs;
+
+  // Callbacks
+  void start() {
+    std::cout << "Start game." << std::endl;
+    gmState = GameState::START;
   }
 
+  void stop() {
+    std::cout << "Stop game." << std::endl;
+    gmState = GameState::STOP;
+  }
+
+
+  // Initialization methods
   void init_referee_signals() {
     RefereeListener* ref = hw.getRefListener();
 
@@ -99,28 +77,68 @@ namespace rtx { namespace TFBLogic {
 
     ref->registerCallback(REF_KICKOFF, [=](RefCommand rcmd){
       RefereeListener* r = hw.getRefListener();
-      updateGamePhase(GP_KICKOFF, rcmd.target.team == r->m_team);
+      updateGamePhase(GamePhase::KICKOFF, rcmd.target.team == r->m_team);
     });
   }
 
-  void setup() {
-    stop();
-    updateGameState(GS_STOP);
-    updateGamePhase(GP_NONE);
-    init_referee_signals();
+  void load_logic() {
+    std::string v;
+
+    v = gC.getStr("Robot.Role");
+    if(v == "Goalee")
+      lg_preKickoff = LogicManager::loadKickoffReceiverPrepare();
+    else if(v == "Attacker") {
+      lg_preKickoff = LogicManager::loadKickoffPasserPrepare();
+      lg_kickoff = LogicManager::loadKickoffPasser();
+     }
   }
 
-  void process() {
-    switch(gmState) {
-      case GS_STOP:
+
+  // State update methods
+  void updateGamePhase(GamePhase gp, bool to_our_team) {
+    gmPhase = gp;
+
+    switch(gmPhase) {
+      case GamePhase::KICKOFF:
+        std::cout << "Transition to ";
+        if(to_our_team) {
+          std::cout << "our";
+          logicProcess = lg_kickoff;
+          logicProcess->init();
+
+        } else {
+          std::cout << "opposing";
+          //TODO
+        }
+        std::cout << " team's kickoff." << std::endl;
+
+        logicProcess->registerEventListener(logicProcess->getEvent("DONE"), [=](){
+          updateGamePhase(GamePhase::GAME);
+        });
+
         break;
-      case GS_PLACEDBALL:
-        //TODO: prepare for game phase?
+      case GamePhase::GAME:
+        //TODO: switch to defensive/offensive logic.
+        std::cout << "TODO: GamePhase::GAME Transition" << std::endl;
+        logicProcess = nullptr;
         break;
-      case GS_START:
-        if(logicProcess != nullptr) logicProcess->process();
+      case GamePhase::KICKOFF_GOAL:
+        break;
+      case GamePhase::FREEKICK_DIRECT:
+        break;
+      case GamePhase::FREEKICK_INDIRECT:
+        break;
+      case GamePhase::THROWIN:
+        break;
+      case GamePhase::NONE:
+      default:
+        logicProcess = nullptr;
         break;
     }
+  }
+
+  void updateGameState(GameState gs) {
+    gmState = gs;
   }
 
 }}
