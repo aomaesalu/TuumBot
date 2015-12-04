@@ -95,7 +95,7 @@ namespace rtx {
     }
   }
 
-  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const std::pair<unsigned int, unsigned int> &virtualPosition) { // TODO: Refactor
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const std::pair<unsigned int, unsigned int> &virtualPosition, const unsigned int &cameraID) { // TODO: Refactor
     std::pair<double, double> realSize = getBlobExpectedRealSize(color);
     std::pair<double, double> realPosition = Vision::Perspective::virtualToReal(virtualPosition, cameraID);
     // Calculate virtual width
@@ -121,8 +121,8 @@ namespace rtx {
     return std::pair<unsigned int, unsigned int>(virtualWidth, virtualHeight);
   }
 
-  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const Point2D *virtualPosition) {
-    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(virtualPosition->getX(), virtualPosition->getY()));
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color &color, const Point2D *virtualPosition, const unsigned int &cameraID) {
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(virtualPosition->getX(), virtualPosition->getY()), cameraID);
   }
 
 }
