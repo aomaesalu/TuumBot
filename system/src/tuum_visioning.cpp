@@ -90,8 +90,9 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    if (frontCamera) {
-      if (backCamera) {
+    if (frontCamera != nullptr) {
+      if (backCamera != nullptr) {
+        std::cout << "Both cameras available" << std::endl;
         Vision::process({&frontFrame, &backFrame}, filters);
       } else {
         Vision::process({&frontFrame}, filters);
