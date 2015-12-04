@@ -514,7 +514,7 @@ namespace rtx {
               }
 
               if (!blobPoints.empty()) {
-                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
+                blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode), cameraID));
               }
 
             }
