@@ -3,7 +3,7 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 4 December 2015
  */
 
 #include <iostream>
