@@ -11,6 +11,7 @@ namespace rtx { namespace hal {
   const char CMD_DRIBBLER[] = "dm";
   const char CMD_COIL[] = "c";
   const char CMD_KICK[] = "k";
+  const char CMD_WKICK[] = "k3";
 
   MainBoard::MainBoard() {
     id = 255;
@@ -82,10 +83,13 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::releaseCoil() {
-    send({id, CMD_KICK});
+    if(m_coilKickStrong)
+      send({id, CMD_KICK});
+    else
+      send({id, CMD_WKICK});
   }
 
-  void MainBoard::doCoilKick() {
+  void MainBoard::coilKick() {
     if(!m_coilKickActive && m_coilKickCooldown.isTime()) {
       senseBall();
       chargeCoil();
@@ -93,6 +97,16 @@ namespace rtx { namespace hal {
       m_coilChargeLevel = 0;
       m_coilKickCharge.start();
     }
+  }
+
+  void MainBoard::doCoilKick() {
+    m_coilKickStrong = true;
+    coilKick();
+  }
+
+  void MainBoard::doWeakCoilKick() {
+    m_coilKickStrong = false;
+    coilKick();
   }
 
   std::string getDribblerCmd(int v) {

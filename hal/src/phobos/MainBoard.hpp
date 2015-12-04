@@ -18,8 +18,10 @@ namespace rtx { namespace hal {
 
     Timer m_coilKickCharge;
     Timer m_coilKickCooldown;
+    bool m_coilKickStrong;
 
     Timer m_updateTimer;
+
   public:
     MainBoard();
 
@@ -36,7 +38,9 @@ namespace rtx { namespace hal {
     void startDribbler();
     void stopDribbler();
 
+    void coilKick();
     void doCoilKick();
+    void doWeakCoilKick();
 
   };
 
