@@ -62,7 +62,7 @@ namespace rtx {
 
     void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&);
     void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&, const std::vector<Samples>&);
-    void blobDetection(const std::vector<Frame*>&, const std::vector<std::string>&, const std::vector<unsigned int>, const std::vector<Samples>&);
+    void blobDetection(const std::vector<Frame*>&, const std::vector<std::string>&, const std::vector<unsigned int>&, const std::vector<Samples>&);
 
     void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&);
     void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<Samples>&);
