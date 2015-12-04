@@ -30,7 +30,7 @@ namespace rtx { namespace Vision { namespace Perspective {
     return virtualToReal(point.first, point.second, cameraID);
   }
 
-  std::pair<double, double> virtualToReal(const Point2D *point) {
+  std::pair<double, double> virtualToReal(const Point2D *point, const unsigned int &cameraID) {
     return virtualToReal(point->getX(), point->getY(), cameraID);
   }
 
