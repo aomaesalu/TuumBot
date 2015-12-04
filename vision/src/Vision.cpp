@@ -132,11 +132,9 @@ namespace rtx {
     }
 
     void process(const std::vector<Frame*> &frames, const std::vector<std::string> &filters) {
-      for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
-        blobDetection(*(frames[cameraID]), filters, cameraID, {0, 1, 2}, meshSamples);
-        lineDetection(*(frames[cameraID]), filters, cameraID, radialSamples);
-        cornerDetection(*(frames[cameraID]), filters, cameraID, meshSamples);
-      }
+      blobDetection(frames, filters, {0, 1, 2}, meshSamples);
+      lineDetection(frames, filters, radialSamples);
+      cornerDetection(frames, filters, meshSamples);
     }
 
     void processCheckerboard(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
@@ -344,6 +342,10 @@ namespace rtx {
           if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
             continue;
 
+          // If the blobs are not detected on the same camera frame, continue
+          // with the next pair
+          if (blobsBuffer[i]->isOnSameCamera(*blobsBuffer[j]))
+
           // If the blob with the index j doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
           if (blobsBuffer[j]->getNumberOfPoints() < minimumNumberOfPoints) {
             toBeRemoved.insert(j);
@@ -449,7 +451,6 @@ namespace rtx {
     }
 
     void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList, const std::vector<Samples> &samples) {
-      blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
 
@@ -526,12 +527,6 @@ namespace rtx {
 
       }
 
-      joinBlobsInBuffer();
-
-      filterBlobsInBufferBySize();
-
-      translateBlobsBuffer();
-
       // DEBUG:
       /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
         std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
@@ -540,22 +535,68 @@ namespace rtx {
       std::cout << std::endl << std::endl;*/
     }
 
-    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
+    void blobDetection(const std::vector<Frame*> &frames, const std::vector<std::string>&filters, const std::vector<unsigned int> &modeList, const std::vector<Samples> &samples) {
+
+      // Clear the previous blobs buffer
+      blobsBuffer.clear();
+
+      // Detect blobs from all camera frames
+      for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+
+        blobDetection(*frames[i], filters, cameraID, modeList, samples);
+
+      }
+
+      // Join blobs (also takes into account that the blobs are on the same
+      // camera frame)
+      joinBlobsInBuffer();
+
+      // Filters blobs in the buffer by size
+      filterBlobsInBufferBySize();
+
+      // Translates the blobs buffer to the actual blob list
+      translateBlobsBuffer();
+
+    }
+
+    void lineDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID) {
       lineDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<Samples>&) {
+    void lineDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID, const std::vector<Samples> &samples) {
       // TODO
+    }
+
+    void lineDetection(const std::vector<Frame*> &frames, const std::vector<std::string> &filters, const std::vector<Samples> &samples) {
+      // TODO
+
+      // Detect lines from all camera frames
+      for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+
+        lineDetection(*frames[i], filters, cameraID, samples);
+
+      }
 
       translateLinesBuffer();
     }
 
-    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
+    void cornerDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID) {
       cornerDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<Samples>&) {
+    void cornerDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID, const std::vector<Samples>&) {
       // TODO
+    }
+
+    void cornerDetection(const std::vector<Frame*> &frames, const std::vector<std::string> &filters, const std::vector<Samples> &samples) {
+      // TODO
+
+      // Detect corners from all camera frames
+      for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+
+        cornerDetection(*frames[i], filters, cameraID, samples);
+
+      }
 
       translateCornersBuffer();
     }
