@@ -81,26 +81,23 @@ namespace rtx { namespace Visioning {
     }
 
     Camera *frontCamera = hal::hw.getFrontCamera();
-    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
+    Camera *backCamera = hal::hw.getBackCamera();
 
     Frame frontFrame, backFrame;
     if (frontCamera)
       frontFrame = frontCamera->getFrame();
-    //if (backCamera)
-    //  backFrame = backCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
 
     if (frontCamera)
       Vision::process(frontFrame, filters, 0);
     if (backCamera)
-      Vision::process(frontFrame, filters, 1);
+      Vision::process(backFrame, filters, 1);
 
-    if (frontCamera) {
-      ballDetection(frontFrame);
-      goalDetection(frontFrame);
-      robotDetection(frontFrame);
-    }
-
-    // TODO: Add back camera frame processing
+    ballDetection();
+    goalDetection();
+    robotDetection();
+    
   }
 
   void processCheckerboard() {
@@ -218,7 +215,7 @@ namespace rtx { namespace Visioning {
     return 2*px*py / (px+py);
   }
 
-  void ballDetection(const Frame &frame) {
+  void ballDetection() {
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
@@ -300,7 +297,7 @@ namespace rtx { namespace Visioning {
     }
   }
 
-  void goalDetection(const Frame &frame) {
+  void goalDetection() {
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;
     yellowGoalBuffer = nullptr;
@@ -358,7 +355,7 @@ namespace rtx { namespace Visioning {
     translateGoalsBuffer();
   }
 
-  void robotDetection(const Frame &frame) {
+  void robotDetection() {
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
