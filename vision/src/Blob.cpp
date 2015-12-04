@@ -26,7 +26,7 @@ namespace rtx {
     minY{other.getMinY()},
     maxY{other.getMaxY()},
     numberOfPoints{other.getNumberOfPoints()},
-    color{other.getColor()}
+    color{other.getColor()},
     cameraID{other.getCameraID()}
   {
     // Nothing to do here
