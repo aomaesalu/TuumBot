@@ -23,9 +23,9 @@ namespace rtx {
 
   namespace Vision {
 
-    Samples flatSamples;
-    Samples meshSamples;
-    Samples radialSamples;
+    std::vector<Samples> flatSamples;
+    std::vector<Samples> meshSamples;
+    std::vector<Samples> radialSamples;
 
     BlobSet blobs;
     BlobSet blobsBuffer;
@@ -48,17 +48,17 @@ namespace rtx {
       vector.clear();
     }*/
 
-    void setup() {
-      initialiseFlatSamples();
-      initialiseMeshSamples();
-      initialiseRadialSamples();
+    void setup(const unsigned int &cameraID) {
+      initialiseFlatSamples(cameraID);
+      initialiseMeshSamples(cameraID);
+      initialiseRadialSamples(cameraID);
 
       printf("\033[1;32m");
       printf("[Vision::setup()]Ready.");
       printf("\033[0m\n");
     }
 
-    void initialiseFlatSamples() {
+    void initialiseFlatSamples(const unsigned int &cameraID) {
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
         for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
@@ -68,7 +68,7 @@ namespace rtx {
       }
     }
 
-    void initialiseMeshSamples() {
+    void initialiseMeshSamples(const unsigned int &cameraID) {
       double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
       for (double y = 0; y < FIELD_LENGTH; y += step) {
@@ -88,7 +88,7 @@ namespace rtx {
       }
     }
 
-    void initialiseRadialSamples() {
+    void initialiseRadialSamples(const unsigned int &cameraID) {
       double step = 20;
       double count = 200; //FIELD_LENGTH * PI / step; // TODO: Calibrate radial count
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;

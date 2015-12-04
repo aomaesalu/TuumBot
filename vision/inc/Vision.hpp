@@ -29,9 +29,9 @@ namespace rtx {
     typedef std::vector<SampleRay> Samples;
 
     // Vector of rays
-    extern Samples flatSamples;
-    extern Samples meshSamples;
-    extern Samples radialSamples;
+    extern std::vector<Samples> flatSamples;
+    extern std::vector<Samples> meshSamples;
+    extern std::vector<Samples> radialSamples;
 
     extern BlobSet blobs;
     extern BlobSet blobsBuffer;
@@ -46,10 +46,10 @@ namespace rtx {
     extern bool editingLines;
     extern bool editingCorners;
 
-    void setup();
-    void initialiseFlatSamples();
-    void initialiseMeshSamples();
-    void initialiseRadialSamples();
+    void setup(const unsigned int&);
+    void initialiseFlatSamples(const unsigned int&);
+    void initialiseMeshSamples(const unsigned int&);
+    void initialiseRadialSamples(const unsigned int&);
     void process(const Frame&, const std::vector<std::string>&, const unsigned int&);
     void processCheckerboard(const Frame&, const std::vector<std::string>&, const unsigned int&);
 
