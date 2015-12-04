@@ -167,13 +167,13 @@ namespace rtx {
   }
 
   double Blob::getDistance() const {
-    Point2D *position = getPosition();
-    return sqrt(position->getX() * position->getX() + position->getY() * position->getY());
+    std::pair<double, double> position = getRealPosition();
+    return sqrt(position.first * position.first + position.second * position.second);
   }
 
   double Blob::getAngle() const {
-    std::pair<double, double> realPosition = getRealPosition();
-    return -atan2(realPosition->getX(), realPosition->getY()) + cameraID * M_PI; // TODO: Test
+    std::pair<double, double> position = getRealPosition();
+    return -atan2(position.first, position.second) + cameraID * M_PI; // TODO: Test
   }
 
   bool Blob::isOrange() const {
