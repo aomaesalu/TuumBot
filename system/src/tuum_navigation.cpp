@@ -134,16 +134,10 @@ namespace rtx { namespace Navigation {
   }
 
   Robot* getAlly() {
-    Robot* out = nullptr;
+    for(auto& r : *Visioning::robotDetect.getEntities())
+      if(r->isAlly()) return r;
 
-    for(auto& r : *Visioning::robotDetect.getEntities()) {
-      if(r->isAlly()) {
-        out = r;
-        break;
-      }
-    }
-
-    return out;
+    return nullptr;
   }
 
 }}
