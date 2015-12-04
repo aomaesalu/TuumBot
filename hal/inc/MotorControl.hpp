@@ -27,30 +27,16 @@
 
 namespace rtx { namespace hal {
 
-  class MotorControl {
+  class MotorControl : public RTX485::Device {
   private:
     RTX485::DeviceID m_motorIDs[MOTOR_COUNT];
-    RTX485::WriteHandle write;
 
   public:
     MotorControl();
-    ~MotorControl();
 
     void init(RTX485::WriteHandle);
 
-    //void forward(int newSpeed);
-    //void turn(int degrees);
-    //void turnsimple(int speed);
     void OmniDrive(double speed, double angle, double rot);
-
-    //void Move(double, double, double);
-
-    //void testSequence();
-
-    //void runDribbler(int speed);
-    //void stopDribbler();
-    //void kick(int ms);
-    //void charge();
 
   };
 
