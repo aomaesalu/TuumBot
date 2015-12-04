@@ -50,10 +50,15 @@ namespace rtx { namespace Visioning {
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera();
 
-    readFilterFromFile("../data/colors/1.txt");
-    readFilterFromFile("../data/colors/2.txt");
+    if (frontCamera)
+      readFilterFromFile("../data/colors/1.txt");
+    if (backCamera)
+      readFilterFromFile("../data/colors/2.txt");
 
-    Vision::setup();
+    if (frontCamera)
+      Vision::setup(0);
+    if (backCamera)
+      Vision::setup(1);
 
     debugTimer.setPeriod(1000);
     debugTimer.start();
