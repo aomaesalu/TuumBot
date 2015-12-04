@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 3 December 2015
+ *  @date 4 December 2015
 */
 
 #include "tuum_physics.hpp"
@@ -75,7 +75,7 @@ namespace rtx { namespace Physics {
 
       // DEBUG:
       std::cout << "Entity: " << std::endl;
-      std::pair<double, double> pos = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
+      std::pair<double, double> pos = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition(), cameraID);
       double dis = sqrt(pos.second * pos.second + pos.first * pos.first);
       std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << dis << " " << pos.first << " " << pos.second << std::endl;
       if ((*entity)->isBall()) {
@@ -99,7 +99,7 @@ namespace rtx { namespace Physics {
       }
 
       // Calculate blob relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition());
+      std::pair<double, double> position = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition(), cameraID);
       double distance = sqrt(position.second * position.second + position.first * position.first);
 
       // If the blob is farther away than the closest object, continue with the
@@ -112,9 +112,9 @@ namespace rtx { namespace Physics {
       if (angle > 0) {
 
         // Calculate corresponding blob corner angles // TODO: Correct this method - it is not exact for top corners
-        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY, cameraID);
         double bottomLeftAngle = -atan2(bottomLeftCorner.first, bottomLeftCorner.second);
-        std::pair<double, double> topRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY);
+        std::pair<double, double> topRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMinY() + radiusVectorY, cameraID);
         double topRightAngle = -atan2(topRightCorner.first, topRightCorner.second);
 
         // DEBUG:
@@ -139,9 +139,9 @@ namespace rtx { namespace Physics {
       } else if (angle < 0) {
 
         // Calculate corresponding blob corner angles // TODO: Correct this method - it is not exact for top corners
-        std::pair<double, double> topLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY);
+        std::pair<double, double> topLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMinY() - radiusVectorY, cameraID);
         double topLeftAngle = -atan2(topLeftCorner.first, topLeftCorner.second);
-        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
+        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY, cameraID);
         double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
 
         // DEBUG:
@@ -162,9 +162,9 @@ namespace rtx { namespace Physics {
       } else {
 
         // Calculate corresponding blob corner angles
-        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY);
+        std::pair<double, double> bottomLeftCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMinX() - radiusVectorX, (*entity)->getBlob()->getMaxY() - radiusVectorY, cameraID);
         double bottomLeftAngle = -atan2(bottomLeftCorner.first, bottomLeftCorner.second);
-        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY);
+        std::pair<double, double> bottomRightCorner = Vision::Perspective::virtualToReal((*entity)->getBlob()->getMaxX() + radiusVectorX, (*entity)->getBlob()->getMaxY() + radiusVectorY, cameraID);
         double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
 
         // DEBUG:

@@ -74,7 +74,7 @@ namespace rtx {
       for (double y = 0; y < FIELD_LENGTH; y += step) {
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
         for (double x = -FIELD_LENGTH; x <= FIELD_LENGTH; x += step) {
-          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y);
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y, cameraID);
           if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
             if (seenPoints.find(virtualPoint) == seenPoints.end()) {
               pointsInRow.push_back(virtualPoint);
@@ -97,7 +97,7 @@ namespace rtx {
         for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
           double realHorisontal = distance * sin(angle);
           double realVertical = distance * cos(angle);
-          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical);
+          std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical, cameraID);
           if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
             if (seenPoints.find(virtualPoint) == seenPoints.end()) {
               pointsInRay.push_back(virtualPoint);
