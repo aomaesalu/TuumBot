@@ -44,15 +44,19 @@ namespace rtx { namespace hal {
       DeviceID id;
 
       WriteHandle write;
+      bool m_busReady;
     public:
       Device() {
         id = 255;
         write = nullptr;
+        m_busReady = false;
       }
 
       void init(WriteHandle wHandle) {
         if(wHandle != nullptr)
           write = wHandle;
+
+        m_busReady = true;
       }
 
       void init(WriteHandle wHandle, SignalService sigRegister) {
@@ -74,7 +78,16 @@ namespace rtx { namespace hal {
 
       virtual void signal(Message m) {
         std::cout << "UNHANDLED DEVICE SIGNAL CAPTURE" << std::endl;
-      };
+      }
+
+      virtual int send(Message m) {
+        if(m_busReady) {
+          write(m);
+          return 0;
+        }
+
+        return -1;
+      }
 
       DeviceID getID() { return id; }
     };

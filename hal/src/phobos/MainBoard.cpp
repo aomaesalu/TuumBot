@@ -73,20 +73,16 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::senseBall() {
-    if(write == nullptr) {
-      std::cout << "[MainBoard::senseBall]Error: No communication bus." << std::endl;
-      return;
-    }
-    write({id, CMD_BALL_SENSE});
+    send({id, CMD_BALL_SENSE});
   }
 
 
   void MainBoard::chargeCoil() {
-    write({id, CMD_COIL});
+    send({id, CMD_COIL});
   }
 
   void MainBoard::releaseCoil() {
-    write({id, CMD_KICK});
+    send({id, CMD_KICK});
   }
 
   void MainBoard::doCoilKick() {
@@ -108,12 +104,12 @@ namespace rtx { namespace hal {
 
   void MainBoard::startDribbler() {
     m_dribblerState = 1;
-    write({id, getDribblerCmd(140)});
+    send({id, getDribblerCmd(140)});
   }
 
   void MainBoard::stopDribbler() {
     m_dribblerState = 0;
-    write({id, getDribblerCmd(0)});
+    send({id, getDribblerCmd(0)});
   }
 
 
