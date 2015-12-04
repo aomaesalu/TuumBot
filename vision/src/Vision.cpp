@@ -446,7 +446,7 @@ namespace rtx {
       blobDetection(frame, filters, cameraID, modeList, flatSamples);
     }
 
-    void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+    void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList, const std::vector<Samples> &samples) {
       blobsBuffer.clear();
 
       std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
@@ -542,7 +542,7 @@ namespace rtx {
       lineDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
+    void lineDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<Samples>&) {
       // TODO
 
       translateLinesBuffer();
@@ -552,7 +552,7 @@ namespace rtx {
       cornerDetection(frame, filters, cameraID, flatSamples);
     }
 
-    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>&) {
+    void cornerDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<Samples>&) {
       // TODO
 
       translateCornersBuffer();
