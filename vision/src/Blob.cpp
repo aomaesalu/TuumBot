@@ -168,7 +168,7 @@ namespace rtx {
 
   double Blob::getAngle() const {
     Point2D *position = getPosition();
-    return -atan2(position->getX(), position->getY());
+    return -atan2(position->getX(), position->getY()) + cameraID * M_PI; // TODO: Test
   }
 
   bool Blob::isOrange() const {
