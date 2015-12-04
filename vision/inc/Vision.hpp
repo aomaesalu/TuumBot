@@ -61,13 +61,13 @@ namespace rtx {
     CornerSet getCorners();
 
     void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&);
-    void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&, const Samples&);
+    void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&, const std::vector<Samples>&);
 
     void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&);
-    void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const Samples&);
+    void lineDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<Samples>&);
 
     void cornerDetection(const Frame&, const std::vector<std::string>&, const unsigned int&);
-    void cornerDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const Samples&);
+    void cornerDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<Samples>&);
 
   };
 
