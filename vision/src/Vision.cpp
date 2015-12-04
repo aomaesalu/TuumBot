@@ -543,7 +543,7 @@ namespace rtx {
       // Detect blobs from all camera frames
       for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
 
-        blobDetection(*frames[i], filters, cameraID, modeList, samples);
+        blobDetection(*frames[cameraID], filters, cameraID, modeList, samples);
 
       }
 
@@ -573,7 +573,7 @@ namespace rtx {
       // Detect lines from all camera frames
       for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
 
-        lineDetection(*frames[i], filters, cameraID, samples);
+        lineDetection(*frames[cameraID], filters, cameraID, samples);
 
       }
 
@@ -594,7 +594,7 @@ namespace rtx {
       // Detect corners from all camera frames
       for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
 
-        cornerDetection(*frames[i], filters, cameraID, samples);
+        cornerDetection(*frames[cameraID], filters, cameraID, samples);
 
       }
 
