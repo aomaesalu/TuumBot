@@ -47,17 +47,18 @@ namespace rtx { namespace Visioning {
   bool editingRobots = false; // Unused
 
   void setup() {
+
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera();
 
-    if (frontCamera)
+    if (frontCamera != nullptr)
       readFilterFromFile("../data/colors/1.txt");
-    if (backCamera)
+    if (backCamera != nullptr)
       readFilterFromFile("../data/colors/2.txt");
 
-    if (frontCamera)
+    if (frontCamera != nullptr)
       Vision::setup(0);
-    if (backCamera)
+    if (backCamera != nullptr)
       Vision::setup(1);
 
     debugTimer.setPeriod(1000);
@@ -89,7 +90,13 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    Vision::process({&frontFrame, &backFrame}, filters);
+    if (frontCamera) {
+      if (backCamera) {
+        Vision::process({&frontFrame, &backFrame}, filters);
+      } else {
+        Vision::process({&frontFrame}, filters);
+      }
+    }
 
     ballDetection();
     goalDetection();
@@ -127,6 +134,7 @@ namespace rtx { namespace Visioning {
   }
 
   void readFilterFromFile(const std::string &fileName) {
+    std::cout << "Reading filter from " << fileName << std::endl;
     std::ifstream inputFile(fileName);
     std::stringstream buffer;
     buffer << inputFile.rdbuf();
