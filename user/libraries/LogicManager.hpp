@@ -15,10 +15,12 @@ namespace rtx {
 
   class LogicManager {
   public:
-    static STM loadKickoffPrepare();
-    static STM loadKickoff();
+    static STM* loadKickoffReceiverPrepare();
 
-    static STM loadOffensivePlay();
+    static STM* loadKickoffPasserPrepare();
+    static STM* loadKickoffPasser();
+
+    static STM* loadOffensivePlay();
   };
 
 }

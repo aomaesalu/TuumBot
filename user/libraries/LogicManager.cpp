@@ -17,16 +17,16 @@ namespace rtx {
    *    LSBallScan: Find ball
    *    LSBallKickPrepare: Move in front of ball
    */
-  STM LogicManager::loadKickoffPrepare() {
-    STM stm;
+  STM* LogicManager::loadKickoffPasserPrepare() {
+    STM* stm = new STM();
     State *st, *st2;
     Context ctx;
 
-    st = stm.createState("STBallLocate");
+    st = stm->createState("STBallLocate");
     ctx.st = st;
     st->addController(new ctl::LSBallLocate(ctx));
 
-    st2 = stm.createState("STBallNavigator");
+    st2 = stm->createState("STBallNavigator");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
@@ -36,38 +36,48 @@ namespace rtx {
     return stm;
   }
 
+  STM* LogicManager::loadKickoffReceiverPrepare() {
+    STM* stm = new STM();
+    State *st, *st2;
+    Context ctx;
+
+    st = stm->createState("STAllyLocate");
+    ctx.st = st;
+    st->addController(new ctl::LSBallLocate(ctx));
+
+    return stm;
+  }
+
   /**
    *  Controllers:
    *    LSAllyLocate: Find ally robot
    *    LSAllyPass: Pass to ally robot
    */
-  STM LogicManager::loadKickoff() {
-    STM stm = LogicManager::loadKickoffPrepare();
-    State *st2, *st; //FIXME: = stm.getLastState();
+  STM* LogicManager::loadKickoffPasser() {
+    STM* stm = LogicManager::loadKickoffPasserPrepare();
+    State *st2, *st; //FIXME: = stm->getLastState();
     Context ctx;
 
-    st2 = stm.createState("STBallPicker");
+    st2 = stm->createState("STBallPicker");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSBallPicker(ctx));
 
-    /*
-    st2 = stm.createState("STAllyLocate");
+    st2 = stm->createState("STAllyLocate");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSAllyLocate(ctx));
 
-    st2 = stm.createState("STAllyPass");
+    st2 = stm->createState("STAllyPass");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSAllyPass(ctx));
-    */
 
     return stm;
   }
@@ -81,23 +91,23 @@ namespace rtx {
    *    LSGoalLocate (+rootstate): Find opposing goal
    *    LSGoalShoot: Aim & kick at goal
    */
-  STM LogicManager::loadOffensivePlay() {
-    STM stm;
+  STM* LogicManager::loadOffensivePlay() {
+    STM* stm = new STM();
     State* st, *st2;
     Context ctx;
 
-    st = stm.createState("STInit");
-    stm.setState(st);
+    st = stm->createState("STInit");
+    stm->setState(st);
     ctx.st = st;
     st->addController(new ctl::LSInit(ctx));
 
-    st2 = stm.createState("STBallLocate");
+    st2 = stm->createState("STBallLocate");
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSBallLocate(ctx));
 
-    st2 = stm.createState("STBallNavigator");
+    st2 = stm->createState("STBallNavigator");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
@@ -105,23 +115,23 @@ namespace rtx {
     st->addController(new ctl::LSBallNavigator(ctx));
 
 
-    st2 = stm.createState("STBallPicker");
+    st2 = stm->createState("STBallPicker");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSBallPicker(ctx));
 
-    st2 = stm.createState("STGoalLocate");
+    st2 = stm->createState("STGoalLocate");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSGoalLocate(ctx));
-    stm.addRootState(st);
+    stm->addRootState(st);
 
 
-    st2 = stm.createState("STGoalShoot");
+    st2 = stm->createState("STGoalShoot");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
