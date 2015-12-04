@@ -77,6 +77,14 @@ namespace rtx { namespace Navigation {
 
   }
 
+  int countValidBalls() {
+    int i = 0;
+    for(auto& b : *Visioning::ballDetect.getEntities()) {
+      if(b->isValid()) i++;
+    }
+    return i;
+  }
+
   //TODO: position to relative position
   Transform calcBallPickupPos(Transform* bt) {
     Vec2f avf = (bt->getPosition() - Localization::getTransform()->getPosition()).getNormalized();

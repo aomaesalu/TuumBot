@@ -20,6 +20,8 @@ namespace rtx { namespace Navigation {
 
   void preProcess();
 
+  int countValidBalls();
+
   Transform calcBallPickupPos(Transform*);
   Vec2i calcGoalShootPos(Transform*);
 

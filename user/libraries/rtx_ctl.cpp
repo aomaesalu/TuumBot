@@ -102,7 +102,7 @@ namespace rtx { namespace ctl {
   }
 
   int LSBallLocate::run() {
-    if(Visioning::ballDetect.size() > 0) {
+    if(Navigation::countValidBalls() > 0) {
       mb->startDribbler();
       Motion::stop();
       return 0;
@@ -130,7 +130,7 @@ namespace rtx { namespace ctl {
   int LSBallNavigator::run() {
     Ball* b = nullptr; 
     if(mb->getBallSensorState()) goto OK;
-    if(Visioning::ballDetect.size() <= 0) goto ERR;
+    if(Navigation::countValidBalls() <= 0) goto ERR;
 
     b = Navigation::getNearestBall();
 
@@ -164,7 +164,7 @@ ERR:
   }
 
   bool LSBallNavigator::isRunnable() {
-    return Visioning::ballDetect.size() > 0 || mb->getBallSensorState();
+    return Navigation::countValidBalls() > 0 || mb->getBallSensorState();
   }
 
 
@@ -177,7 +177,7 @@ ERR:
   int LSBallPicker::run() {
     Ball* b = nullptr; 
     if(mb->getBallSensorState()) goto OK;
-    if(Visioning::ballDetect.size() <= 0) goto ERR;
+    if(Navigation::countValidBalls() <= 0) goto ERR;
 
     b = Navigation::getNearestBall();
 

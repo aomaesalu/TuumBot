@@ -36,6 +36,7 @@ int main(int argc, char* argv[]) {
     hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
     Motion::process();
 
     if(debugTimer.isTime()) {
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
       if(Visioning::ballDetect.size() > 0) {
 	std::cout << "Balls: " << std::endl;
 	for(auto& b : *Visioning::ballDetect.getEntities()) {
-          std::cout << b->toString() << " : isValid() == " << (int)(b->isValid()) << std::endl;
+          std::cout << b->toString() << " : isValid() == " << (b->isValid()) << std::endl;
 	}
       }
 
