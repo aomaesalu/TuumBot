@@ -131,10 +131,12 @@ namespace rtx {
       std::cout << "Actual rays: " << rayCount << std::endl;*/
     }
 
-    void process(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID) {
-      blobDetection(frame, filters, cameraID, {0, 1, 2}, meshSamples);
-      lineDetection(frame, filters, cameraID, radialSamples);
-      cornerDetection(frame, filters, cameraID, meshSamples);
+    void process(const std::vector<Frame*> &frames, const std::vector<std::string> &filters) {
+      for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+        blobDetection(*(frames[cameraID]), filters, cameraID, {0, 1, 2}, meshSamples);
+        lineDetection(*(frames[cameraID]), filters, cameraID, radialSamples);
+        cornerDetection(*(frames[cameraID]), filters, cameraID, meshSamples);
+      }
     }
 
     void processCheckerboard(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {

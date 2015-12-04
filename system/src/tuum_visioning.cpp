@@ -89,15 +89,12 @@ namespace rtx { namespace Visioning {
     if (backCamera)
       backFrame = backCamera->getFrame();
 
-    if (frontCamera)
-      Vision::process(frontFrame, filters, 0);
-    if (backCamera)
-      Vision::process(backFrame, filters, 1);
+    Vision::process({&frontFrame, &backFrame}, filters);
 
     ballDetection();
     goalDetection();
     robotDetection();
-    
+
   }
 
   void processCheckerboard() {

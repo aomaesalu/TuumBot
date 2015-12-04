@@ -50,7 +50,7 @@ namespace rtx {
     void initialiseFlatSamples(const unsigned int&);
     void initialiseMeshSamples(const unsigned int&);
     void initialiseRadialSamples(const unsigned int&);
-    void process(const Frame&, const std::vector<std::string>&, const unsigned int&);
+    void process(const std::vector<Frame*>&, const std::vector<std::string>&);
     void processCheckerboard(const Frame&, const std::vector<std::string>&, const unsigned int&);
 
     bool isColored(const Frame&, const std::vector<std::string>&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
