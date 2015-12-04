@@ -72,7 +72,7 @@ namespace rtx {
 
     void initialiseMeshSamples(const unsigned int &cameraID) {
       Samples samples;
-      meshSamples.push_back(samples)
+      meshSamples.push_back(samples);
       double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
       for (double y = 0; y < FIELD_LENGTH; y += step) {
