@@ -59,16 +59,20 @@ namespace rtx {
     }
 
     void initialiseFlatSamples(const unsigned int &cameraID) {
+      Samples samples;
+      flatSamples.push_back(samples);
       for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
         std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
         for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
           pointsInRow.push_back(std::pair<unsigned int, unsigned int>(x, y));
         }
-        flatSamples.push_back(pointsInRow);
+        flatSamples[cameraID].push_back(pointsInRow);
       }
     }
 
     void initialiseMeshSamples(const unsigned int &cameraID) {
+      Samples samples;
+      meshSamples.push_back(samples)
       double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
       for (double y = 0; y < FIELD_LENGTH; y += step) {
@@ -83,12 +87,14 @@ namespace rtx {
           }
         }
         if (!pointsInRow.empty()) {
-          meshSamples.push_back(pointsInRow);
+          meshSamples[cameraID].push_back(pointsInRow);
         }
       }
     }
 
     void initialiseRadialSamples(const unsigned int &cameraID) {
+      Samples samples;
+      radialSamples.push_back(samples);
       double step = 20;
       double count = 200; //FIELD_LENGTH * PI / step; // TODO: Calibrate radial count
       std::set<std::pair<unsigned int, unsigned int>> seenPoints;
@@ -106,7 +112,7 @@ namespace rtx {
           }
         }
         if (!pointsInRay.empty()) {
-          radialSamples.push_back(pointsInRay);
+          radialSamples[cameraID].push_back(pointsInRay);
         }
       }
 
@@ -451,7 +457,7 @@ namespace rtx {
 
       for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
 
-        for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+        for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples[cameraID].begin(); ray != samples[cameraID].end(); ++ray) {
           for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
 
             if (!visited[*mode][sample->first][sample->second]) {
