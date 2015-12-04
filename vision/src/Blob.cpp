@@ -11,6 +11,7 @@
 #include "entityConstants.hpp"
 
 #include "Blob.hpp"
+#include "Perspective.hpp"
 
 #include <algorithm>
 #include <iostream> // TODO: Remove
@@ -111,7 +112,7 @@ namespace rtx {
 
   std::pair<double, double> Blob::getRealPosition() const {
     Point2D *position = getPosition();
-    return Perspective::virtualToReal(position, cameraID);
+    return Vision::Perspective::virtualToReal(position, cameraID);
   }
 
   unsigned int Blob::getWidth() const {
