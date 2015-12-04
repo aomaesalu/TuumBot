@@ -83,14 +83,24 @@ namespace rtx { namespace hal {
     return RefCommand({REF_VOID, {'0', '0', '0'}});
   }
 
-
   void RefereeListener::on_receive_(const std::string &data) {
     std::string message = data.substr(0, 12);
-
-    if ((message[0] == 'a') && (message[1] == m_field)) {
-      std::cout << data << std::endl;
-      this->signal(this->parseCommand(message));
+    std::cout << "Received " << data << std::endl;
+    if(message[0] == 'a') {
+      if(message[1] == m_field) {
+        std::cout << data << std::endl;
+        this->signal(this->parseCommand(message));
+      }
+    } else if(data[0] == comm::TMS_PREFIX) {
+      comm::handleTuumMessage(data);
     }
+  }
+
+  void RefereeListener::sendTuumMessage(comm::TuumMessage tms) {
+    try { comm::popResponse(tms.id); } catch (int) {}
+    std::string data = tms.str();
+    std::cout << "Sending " << data << std::endl;
+    this->write_some(data.c_str(), data.size());
   }
 
   void RefereeListener::sendAck() {

@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "tuum_communication.hpp"
+
 #include "SerialPort.hpp"
 
 namespace rtx { namespace hal {
@@ -62,10 +64,6 @@ namespace rtx { namespace hal {
   typedef void (*VoidFn)(RefCommand);
   typedef std::pair<RefereeSignal, VoidFn> SignalCallback;
 
-  inline void test(RefereeSignal s) {
-
-  }
-
   //FIXME: This is not regularly working over different threads.
   static std::map<RefereeSignal, VoidFn> callbacks;
 
@@ -88,6 +86,9 @@ namespace rtx { namespace hal {
     void signal(RefCommand);
 
     RefCommand parseCommand(std::string);
+
+    void sendTuumMessage(comm::TuumMessage);
+    void handleTuumMessage(std::string);
 
     void sendAck();
   };
