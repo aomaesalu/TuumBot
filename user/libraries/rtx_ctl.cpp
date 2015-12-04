@@ -122,13 +122,13 @@ namespace rtx { namespace ctl {
   void LSBallNavigator::init() {
     Motion::stop();
 
-    Ball* b = Navigation::getNearestBall(); 
+    Ball* b = Navigation::getNearestBall();
     if(b != nullptr)
       std::cout << "Navigate to " << b->toString() << std::endl;
   }
 
   int LSBallNavigator::run() {
-    Ball* b = nullptr; 
+    Ball* b = nullptr;
     if(mb->getBallSensorState()) goto OK;
     if(Navigation::countValidBalls() <= 0) goto ERR;
 
@@ -175,7 +175,7 @@ ERR:
   }
 
   int LSBallPicker::run() {
-    Ball* b = nullptr; 
+    Ball* b = nullptr;
     if(mb->getBallSensorState()) goto OK;
     if(Navigation::countValidBalls() <= 0) goto ERR;
 
@@ -279,7 +279,6 @@ ERR:
   }
 
   bool LSGoalShoot::isRunnable() {
-     
     return Navigation::getOpponentGoal() != nullptr && mb->getBallSensorState();
   }
 
@@ -313,6 +312,49 @@ ERR:
     }
 
     return 0;
+  }
+
+  /**
+   *
+   *  Team interaction logic controllers
+   *
+   */
+  bool LSAllyLocate::isRunnable() {
+    //if(mb->getBallSensorState()) {
+    return true;
+  }
+
+  void LSAllyLocate::init() {
+    Motion::stop();
+    twitchScanner.init(10, 30);
+  }
+
+  int LSAllyLocate::run() {
+    if(Navigation::getAlly() != nullptr) goto OK;
+
+    twitchScanner.run();
+
+    return 0;
+OK:
+    Motion::stop();
+    return 1;
+ERR:
+    Motion::stop();
+    return -1;
+  }
+
+
+  // Shoot to opposing goal
+  void LSAllyPass::init() {
+    Motion::stop();
+  }
+
+  int LSAllyPass::run() {
+    return 0;
+  }
+
+  bool LSAllyPass::isRunnable() {
+    return false;
   }
 
 }}
