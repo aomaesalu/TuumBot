@@ -12,25 +12,25 @@
 
 #include "Point2D.hpp"
 
-#include <utility>
+#include <vector>
 
 
 namespace rtx { namespace Vision { namespace Perspective {
 
-  extern double A;
-  extern double B;
-  extern double C;
+  extern std::vector<double> A;
+  extern std::vector<double> B;
+  extern std::vector<double> C;
 
   // TODO: Maybe move samples here?
 
   // TODO: Use point class
 
-  std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&);
-  std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int>&);
-  std::pair<double, double> virtualToReal(const Point2D*);
+  std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&, const unsigned int&);
+  std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int>&, const unsigned int&);
+  std::pair<double, double> virtualToReal(const Point2D*, const unsigned int&);
 
-  std::pair<unsigned int, unsigned int> realToVirtual(const double&, const double&);
-  std::pair<unsigned int, unsigned int> realToVirtual(const std::pair<double, double>&);
+  std::pair<unsigned int, unsigned int> realToVirtual(const double&, const double&, const unsigned int&);
+  std::pair<unsigned int, unsigned int> realToVirtual(const std::pair<double, double>&, const unsigned int&);
 
 }}}
 
