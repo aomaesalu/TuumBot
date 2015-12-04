@@ -39,8 +39,6 @@ namespace rtx { namespace TFBLogic {
   }
 
   void process() {
-    if(logicProcess != nullptr) logicProcess->process();
-
     switch(gmState) {
       case GameState::STOP:
         break;
@@ -48,6 +46,7 @@ namespace rtx { namespace TFBLogic {
         //TODO: prepare for game phase?
         break;
       case GameState::START:
+        if(logicProcess != nullptr) logicProcess->process();
         break;
     }
   }

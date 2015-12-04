@@ -107,6 +107,8 @@ namespace rtx {
     void addRootState(State* st);
 
     State* getState() { return m_state; }
+    State* getLastState();
+    State* stateStackPeek();
 
     State* createState(std::string);
 

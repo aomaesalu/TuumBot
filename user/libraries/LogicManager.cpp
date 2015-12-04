@@ -55,7 +55,7 @@ namespace rtx {
    */
   STM* LogicManager::loadKickoffPasser() {
     STM* stm = LogicManager::loadKickoffPasserPrepare();
-    State *st2, *st; //FIXME: = stm->getLastState();
+    State *st2, *st = stm->stateStackPeek();
     Context ctx;
 
     st2 = stm->createState("STBallPicker");

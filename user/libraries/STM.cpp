@@ -82,6 +82,15 @@ namespace rtx {
     st->setup();
   }
 
+  State* STM::getLastState() {
+    if(m_state == nullptr) return nullptr;
+    return m_state->getLastState();
+  }
+
+  State* STM::stateStackPeek() {
+    return m_states.back();
+  }
+
   void STM::addRootState(State* st) {
     m_rootStates.push_back(st);
   }
