@@ -27,13 +27,15 @@ namespace rtx {
     maxY{other.getMaxY()},
     numberOfPoints{other.getNumberOfPoints()},
     color{other.getColor()}
+    cameraID{other.getCameraID()}
   {
     // Nothing to do here
   }
 
-  Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
+  Blob::Blob(const std::vector<Point2D*> &points, const Color &color, const unsigned int &cameraID) {
     // TODO: Add points
     this->color = color;
+    this->cameraID = cameraID;
     minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
@@ -58,9 +60,10 @@ namespace rtx {
     centroid = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
-  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
+  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color, const unsigned int &cameraID) {
     this->points = points;
     this->color = color;
+    this->cameraID = cameraID;
     minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
@@ -153,6 +156,10 @@ namespace rtx {
     return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY()));
   }
 
+  unsigned int Blob::getCameraID() const {
+    return cameraID;
+  }
+
   bool Blob::isOrange() const {
     return color == BALL;
   }
@@ -182,30 +189,36 @@ namespace rtx {
     return color == other.getColor();
   }
 
+  bool Blob::isOnSameCamera(const Blob &other) const {
+    return cameraID == other.getCameraID();
+  }
+
   bool Blob::isAbove(const Blob &other) const {
-    return centroid->getY() < other.getCentroid()->getY();
+    return isOnSameCamera(other) && centroid->getY() < other.getCentroid()->getY();
   }
 
   bool Blob::isBelow(const Blob &other) const {
-    return !isAbove(other);
+    return isOnSameCamera(other) && !isAbove(other);
   }
 
   bool Blob::isIn(const Blob &other) const {
     // Based on the box areas
-    return minX >= other.getMinX() && maxX <= other.getMaxX() && minY >= other.getMinY() && maxY <= other.getMaxY();
+    return isOnSameCamera(other) && minX >= other.getMinX() && maxX <= other.getMaxX() && minY >= other.getMinY() && maxY <= other.getMaxY();
   }
 
   bool Blob::contains(const Blob &other) const {
-    return other.isIn(*this);
+    return isOnSameCamera(other) && other.isIn(*this);
   }
 
   bool Blob::overlaps(const Blob &other) const {
-    return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+    return isOnSameCamera(other) && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
   bool Blob::isClose(const Blob &other, const double &maxError) const {
     //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
+    if (!isOnSameCamera(other))
+      return false;
     if (!(minX <= other.getMaxX() && maxX >= other.getMinX() || minY <= other.getMaxY() && maxY >= other.getMinY()))
       return false;
     std::pair<unsigned int, unsigned int> expectedSize;

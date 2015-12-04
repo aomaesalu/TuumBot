@@ -22,8 +22,8 @@ namespace rtx {
 
     public:
       Blob(const Blob&);
-      Blob(const std::vector<Point2D*>&, const Color&);
-      Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&);
+      Blob(const std::vector<Point2D*>&, const Color&, const unsigned int&);
+      Blob(const std::vector<std::pair<unsigned int, unsigned int>>&, const Color&, const unsigned int&);
       ~Blob();
 
       const std::vector<std::pair<unsigned int, unsigned int>>& getPoints() const;
@@ -42,6 +42,7 @@ namespace rtx {
       double getBoxRatio() const;
       double getDensity() const;
       std::pair<unsigned int, unsigned int> getExpectedVirtualSize() const;
+      unsigned int getCameraID() const;
 
       bool isOrange() const;
       bool isBlue() const;
@@ -52,6 +53,7 @@ namespace rtx {
       bool isFullyVisible() const;
 
       bool isSameColor(const Blob&) const;
+      bool isOnSameCamera(const Blob&) const;
       bool isAbove(const Blob&) const;
       bool isBelow(const Blob&) const;
 
@@ -73,6 +75,7 @@ namespace rtx {
       unsigned int maxY;
       unsigned int numberOfPoints;
       Color color;
+      unsigned int cameraID;
 
   };
 
