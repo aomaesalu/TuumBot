@@ -31,13 +31,16 @@ namespace rtx { namespace TFBLogic {
 
   void setup() {
     stop();
-    updateGameState(GameState::STOP);
-    updateGamePhase(GamePhase::NONE);
     init_referee_signals();
     load_logic();
+
+    updateGameState(GameState::STOP);
+    updateGamePhase(GamePhase::KICKOFF, true);
   }
 
   void process() {
+    if(logicProcess != nullptr) logicProcess->process();
+
     switch(gmState) {
       case GameState::STOP:
         break;
@@ -45,7 +48,6 @@ namespace rtx { namespace TFBLogic {
         //TODO: prepare for game phase?
         break;
       case GameState::START:
-        if(logicProcess != nullptr) logicProcess->process();
         break;
     }
   }
@@ -85,9 +87,9 @@ namespace rtx { namespace TFBLogic {
     std::string v;
 
     v = gC.getStr("Robot.Role");
-    if(v == "Goalee")
+    if(v == "Attacker")
       lg_preKickoff = LogicManager::loadKickoffReceiverPrepare();
-    else if(v == "Attacker") {
+    else if(v == "Goalee") {
       lg_preKickoff = LogicManager::loadKickoffPasserPrepare();
       lg_kickoff = LogicManager::loadKickoffPasser();
      }
@@ -104,15 +106,14 @@ namespace rtx { namespace TFBLogic {
         if(to_our_team) {
           std::cout << "our";
           logicProcess = lg_kickoff;
-          logicProcess->init();
+          logicProcess->setup();
 
         } else {
           std::cout << "opposing";
           //TODO
         }
-        std::cout << " team's kickoff." << std::endl;
 
-        logicProcess->registerEventListener(logicProcess->getEvent("DONE"), [=](){
+        logicProcess->registerEventListener(logicProcess->getEventID("DONE"), [=](){
           updateGamePhase(GamePhase::GAME);
         });
 

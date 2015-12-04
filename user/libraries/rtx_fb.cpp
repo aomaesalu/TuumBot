@@ -30,7 +30,7 @@ namespace rtx { namespace FBLogic {
 
 
   // Preload logic
-  STM lg_offense = LogicManager::loadOffensivePlay();
+  STM* lg_offense = LogicManager::loadOffensivePlay();
 
 
   STM* logicProcess = nullptr;
@@ -53,7 +53,7 @@ namespace rtx { namespace FBLogic {
 
     switch(gmPhase) {
       case GamePhase::GAME:
-        logicProcess = &lg_offense;
+        logicProcess = lg_offense;
         //FIXME: reset state machine
         //logicProcess.init();
         break;
