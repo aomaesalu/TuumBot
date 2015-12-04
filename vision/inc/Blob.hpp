@@ -30,6 +30,7 @@ namespace rtx {
       Point2D* getCentroid() const;
       Point2D* getMidPoint() const;
       Point2D* getPosition() const;
+      std::pair<double, double> getRealPosition() const;
       unsigned int getWidth() const;
       unsigned int getHeight() const;
       unsigned int getMinX() const;

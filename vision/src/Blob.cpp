@@ -109,6 +109,11 @@ namespace rtx {
     return new Point2D(centroid->getX(), maxY);
   }
 
+  std::pair<double, double> Blob::getRealPosition() const {
+    Point2D *position = getPosition();
+    return Perspective::virtualToReal(position, cameraID);
+  }
+
   unsigned int Blob::getWidth() const {
     return maxX - minX + 1;
   }
@@ -167,8 +172,8 @@ namespace rtx {
   }
 
   double Blob::getAngle() const {
-    Point2D *position = getPosition();
-    return -atan2(position->getX(), position->getY()) + cameraID * M_PI; // TODO: Test
+    std::pair<double, double> realPosition = getRealPosition();
+    return -atan2(realPosition->getX(), realPosition->getY()) + cameraID * M_PI; // TODO: Test
   }
 
   bool Blob::isOrange() const {
