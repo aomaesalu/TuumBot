@@ -17,7 +17,7 @@
 
 namespace rtx {
 
-
+  //TODO: Refactor into separate module.
   namespace Motion {
 
     void TwitchScan::_init() {
@@ -39,21 +39,21 @@ namespace rtx {
 
     void TwitchScan::run() {
       if(!wait_for_vision) {
-	if(motionTimer.isTime()) {
+        if(motionTimer.isTime()) {
           Motion::setAimTarget(Vec2i({0, 1}));
-	  motionData.manualRotGear = {m_spv, 3.14};
-	  Motion::start();
-	  wait_for_vision = true;
-	  visionTimer.start();
-	}
+          motionData.manualRotGear = {m_spv, 3.14};
+          Motion::start();
+          wait_for_vision = true;
+          visionTimer.start();
+        }
       } else {
-	if(visionTimer.isTime()) {
-	  Motion::setAimTarget(Vec2i({0, 1}));
-	  motionData.manualRotGear = {m_sps, 3.14};
-	  Motion::start();
-	  wait_for_vision = false;
-	  motionTimer.start();
-	}
+        if(visionTimer.isTime()) {
+          Motion::setAimTarget(Vec2i({0, 1}));
+          motionData.manualRotGear = {m_sps, 3.14};
+          Motion::start();
+          wait_for_vision = false;
+          motionTimer.start();
+        }
       }
     }
 
@@ -208,6 +208,8 @@ ERR:
   }
 
   bool LSBallPicker::isRunnable() {
+    if(mb->getBallSensorState()) return true;
+
     Ball* b = Navigation::getNearestBall();
     if(b == nullptr) return false;
 
