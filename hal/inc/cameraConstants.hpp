@@ -11,6 +11,7 @@
 #define CAMERA_CONSTANTS_H
 
 #define CAMERA_DEVICE "/dev/video0"
+#define CAMERA_DEVICE_2 "/dev/video1"
 #define CAMERA_HEIGHT 480
 #define CAMERA_WIDTH 640
 

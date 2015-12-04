@@ -15,8 +15,8 @@ namespace rtx { namespace hal {
   const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
-    m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT)//,
-    //m_backCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT) // TODO: Detect correct camera device for back camera; currently the cameras are the same.
+    m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT),
+    m_backCamera(CAMERA_DEVICE_2, CAMERA_WIDTH, CAMERA_HEIGHT)
   {
 
   }
