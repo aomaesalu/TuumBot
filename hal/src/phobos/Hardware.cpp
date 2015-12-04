@@ -43,7 +43,7 @@ namespace rtx { namespace hal {
   }
 
   Camera* Hardware::getBackCamera() {
-    return nullptr; //&m_backCamera;
+    return &m_backCamera;
   }
 
   MainBoard* Hardware::getMainBoard() {
