@@ -34,7 +34,9 @@ int main(int argc, char *argv[]) {
 
     Visioning::process();
     Navigation::preProcess();
+
     Localization::process();
+
     Motion::process();
 
     FBLogic::process();

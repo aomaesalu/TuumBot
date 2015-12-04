@@ -115,6 +115,7 @@ namespace rtx { namespace Navigation {
     double d = 1000000.0, _d;
 
     for(auto b : *Visioning::ballDetect.getEntities()) {
+      if(!b->isValid()) continue;
       _d = t->distanceTo(b->getTransform()->getPosition());
 
       if(_d < d) {

@@ -124,6 +124,7 @@ namespace rtx { namespace Motion {
   }
 
   void stop() {
+    if(!Motion::isRunning()) return;
     hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
     motionData.clear();
     motionCtx.phase = MOP_STANDBY;
