@@ -15,6 +15,9 @@
 
 #include "rtx_ctl.hpp"
 
+using namespace rtx::comm;
+using namespace rtx::hal;
+
 namespace rtx {
 
   //TODO: Refactor into separate module.
@@ -322,8 +325,8 @@ ERR:
    *
    */
   bool LSAllyLocate::isRunnable() {
-    //if(mb->getBallSensorState()) {
-    return true;
+    if(mb->getBallSensorState()) return true;
+    return false;
   }
 
   void LSAllyLocate::init() {
@@ -349,14 +352,46 @@ ERR:
   // Shoot to opposing goal
   void LSAllyPass::init() {
     Motion::stop();
+    commTimeout.setPeriod(5000);
+    finish = false;
   }
 
   int LSAllyPass::run() {
+    if(finish) return 0;
+
+    if(mb->getBallSensorState()) {
+      mb->startDribbler();
+    } else {
+      //FIXME: Ball lost Tuum signal?
+      return -1;
+    }
+
+    if(commTimeout.isTime()) {
+      tms = TuumMessage::toAlly(TuumSignal::PASS);
+      hal::hw.getRefListener()->sendTuumMessage(tms);
+      commTimeout.start();
+    } else {
+      if(comm::pollResponse(tms.id)) {
+	tms = comm::popResponse(tms.id);
+	finish = true;
+        Motion::stop();
+
+	MainBoard* mb = hal::hw.getMainBoard();
+	mb->stopDribbler();
+	mb->doWeakCoilKick();
+
+	emit("done");
+      }
+    }
     return 0;
   }
 
   bool LSAllyPass::isRunnable() {
-    return false;
+    if(finish) return true;
+
+    if(Navigation::getAlly() == nullptr) return false;
+    if(!mb->getBallSensorState()) return false;
+    return true;
   }
 
 }}

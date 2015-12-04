@@ -41,6 +41,7 @@ namespace rtx { namespace TFBLogic {
   void process() {
     switch(gmState) {
       case GameState::STOP:
+        if(Motion::isRunning()) Motion::stop();
         break;
       case GameState::PLACEDBALL:
         //TODO: prepare for game phase?
@@ -74,6 +75,10 @@ namespace rtx { namespace TFBLogic {
 
     ref->registerCallback(REF_STOP, [=](RefCommand rcmd){
       stop();
+      Motion::stop();
+      hw.getMotorControl()->OmniDrive(0, 0.0, 0);
+      MainBoard* mb = hw.getMainBoard();
+      mb->stopDribbler();
     });
 
     ref->registerCallback(REF_KICKOFF, [=](RefCommand rcmd){
@@ -112,7 +117,7 @@ namespace rtx { namespace TFBLogic {
           //TODO
         }
 
-        logicProcess->registerEventListener(logicProcess->getEventID("DONE"), [=](){
+        logicProcess->registerEventListener(logicProcess->getEventID("done"), [=](){
           updateGamePhase(GamePhase::GAME);
         });
 

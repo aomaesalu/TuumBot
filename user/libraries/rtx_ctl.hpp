@@ -9,7 +9,9 @@
 #ifndef RTX_CTL_H
 #define RTX_CTL_H
 
-#include "__future__.hpp"
+#include "rtxmath.hpp"
+#include "tuum_communication.hpp"
+
 #include "hal.hpp"
 
 #include "STM.hpp"
@@ -178,6 +180,10 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
+
+      comm::TuumMessage tms;
+      Timer commTimeout;
+      bool finish;
   };
 
   class LSAllyReceive : public Controller {
