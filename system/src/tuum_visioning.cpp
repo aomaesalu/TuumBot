@@ -243,7 +243,7 @@ namespace rtx { namespace Visioning {
       //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
 
       // STEP 2: Calculate relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID);
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
@@ -319,7 +319,7 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // Relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID);
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // std::cout << "Goal: " << distance << " " << angle << std::endl;
@@ -374,7 +374,7 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // STEP 2: Calculate relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID);
+      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID());
       double distance = sqrt(position.second * position.second + position.first * position.first);
       double angle = -atan2(position.first, position.second);
       // std::cout << "Robot: " << distance << " " << angle << std::endl;
