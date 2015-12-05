@@ -17,6 +17,12 @@ int main(){
   //test->forward(19);
   //test->turn(180);
   rtx::hal::setup();
-  rtx::hal::hw.getMotorControl()->testSequence();
+  //rtx::hal::hw.getMotorControl()->testSequence();
+
+  bool running = true;
+  while(running) {
+    rtx::hal::process();
+  }
+
   return 0;
 }

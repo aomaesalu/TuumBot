@@ -1,8 +1,10 @@
 /** @file Entity.cpp
  *  Entity class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
- *  @version 0.2
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
+ *  @version 0.3
+ *  @date 3 December 2015
  */
 
 #include <iostream>
@@ -21,6 +23,7 @@ namespace rtx {
 
   Entity::Entity() {
     id = Entity::newID();
+    blob = nullptr;
   }
 
   Entity::Entity(const Entity& entity) {
@@ -28,27 +31,44 @@ namespace rtx {
     id = Entity::newID();
   }
 
-  Entity::Entity(const Vec2i pos):
+  Entity::Entity(const Vec2i pos, Blob *blob):
     m_transform(pos)
   {
     id = Entity::newID();
+    this->blob = blob;
   }
 
-  Entity::Entity(const int x, const int y):
+  Entity::Entity(const int x, const int y, Blob *blob):
     m_transform(x, y)
   {
     id = Entity::newID();
+    this->blob = blob;
   }
 
-  Entity::Entity(Transform transform) {
+  Entity::Entity(Transform transform, Blob *blob) {
     id = Entity::newID();
     m_transform = transform;
+    this->blob = blob;
   }
 
-  Entity::Entity(const int x, const int y, const double o):
+  Entity::Entity(Transform transform, Blob &blob) {
+    id = Entity::newID();
+    m_transform = transform;
+    this->blob = &blob;
+  }
+
+  Entity::Entity(Transform transform, bool recv_id, Blob *blob) {
+    if(recv_id) id = Entity::newID();
+    else id = 0;
+    m_transform = transform;
+    this->blob = blob;
+  }
+
+  Entity::Entity(const int x, const int y, const double o, Blob *blob):
     m_transform(x, y, o)
   {
     id = Entity::newID();
+    this->blob = blob;
   }
 
   unsigned int Entity::getID() {
@@ -68,7 +88,15 @@ namespace rtx {
     int y = m_transform.getY()*0.2 + transform.getY()*0.8;
     m_transform.setPosition(x, y);
 
-    if(m_health < 30) m_health += 2;
+    if(m_health < 35) m_health += 2;
+  }
+
+  void Entity::update(Blob *blob) {
+    this->blob = blob;
+  }
+
+  void Entity::update(Blob &blob) {
+    this->blob = &blob;
   }
 
   void Entity::update() {
@@ -87,4 +115,24 @@ namespace rtx {
     return output.str();
   }
 
-};
+  Blob* Entity::getBlob() const {
+    return blob;
+  }
+
+  Color Entity::getColor() const {
+    return blob->getColor();
+  }
+
+  bool Entity::isBall() const {
+    return blob->isOrange();
+  }
+
+  bool Entity::isGoal() const {
+    return blob->isYellow() || blob->isBlue();
+  }
+
+  bool Entity::isRobot() const {
+    return blob->isYellowBlue() || blob->isBlueYellow();
+  }
+
+}

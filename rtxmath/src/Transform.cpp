@@ -68,10 +68,6 @@ namespace rtx {
     return sqrt(pow(target.x - pos.x, 2) + pow(target.y - pos.y, 2));
   }
 
-  Vec2i Transform::operator-(int val) {
-    return pos - val;
-  }
-
   Transform Transform::operator-(Transform t) {
     return Transform({{pos.x - t.getX(), pos.y - t.getY()}, o - t.o});
   }

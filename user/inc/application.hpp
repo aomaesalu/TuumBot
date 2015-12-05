@@ -9,9 +9,12 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "tuum_platform.hpp"
+
 #include "rtxhal.hpp"
 
 #include "tuum_visioning.hpp"
+#include "tuum_navigation.hpp"
 #include "tuum_localization.hpp"
 #include "tuum_motion.hpp"
 

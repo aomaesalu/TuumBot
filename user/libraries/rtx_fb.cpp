@@ -7,57 +7,96 @@
  */
 
 #include "STM.hpp"
+#include "LogicManager.hpp"
 
-#include "rtx_ctl.hpp"
 #include "rtx_fb.hpp"
 
-namespace rtx { namespace Logic {
+using namespace rtx::hal;
 
-  STM stm;
+namespace rtx { namespace FBLogic {
+
+  enum GameState {
+    STOP,
+    RUN,
+  };
+
+  enum GamePhase {
+    GAME,
+    PENALTY,
+  };
+
+  GameState gmState;
+  GamePhase gmPhase;
+
+
+  // Preload logic
+  STM* lg_offense = LogicManager::loadOffensivePlay();
+
+
+  STM* logicProcess = nullptr;
+
+
+  void start() {
+    std::cout << "Start game." << std::endl;
+    gmState = GameState::RUN;
+  }
+
+  void stop() {
+    std::cout << "Stop game." << std::endl;
+    Motion::stop();
+    hw.getMainBoard()->stopDribbler();
+    gmState = GameState::STOP;
+  }
+
+  void updateGamePhase(GamePhase gp, bool to_our_team=false) {
+    gmPhase = gp;
+
+    switch(gmPhase) {
+      case GamePhase::GAME:
+        logicProcess = lg_offense;
+        //FIXME: reset state machine
+        //logicProcess.init();
+        break;
+      case GamePhase::PENALTY:
+      default:
+        logicProcess = nullptr;
+        break;
+    }
+  }
+
+  void updateGameState(GameState gs) {
+    gmState = gs;
+  }
+
+  void init_referee_signals() {
+    RefereeListener* ref = hw.getRefListener();
+
+    ref->registerCallback(REF_START, [=](RefCommand rcmd){
+      start();
+    });
+
+    ref->registerCallback(REF_STOP, [=](RefCommand rcmd){
+      stop();
+    });
+  }
 
   void setup() {
-    State* st, *st2;
-    Context ctx;
-
-    st = stm.createState("STInit");
-    stm.setState(st);
-    ctx.st = st;
-    st->addController(new ctl::LSInit(ctx));
-
-    /*
-    st2 = stm.createState("STBallLocate");
-    st->setNextState(st2);
-    st = st2;
-    ctx.st = st;
-    st->addController(new ctl::LSBallLocate(ctx));
-
-    st2 = stm.createState("STBallRetrieve");
-    st2->setLastState(st);
-    st->setNextState(st2);
-    st = st2;
-    ctx.st = st;
-    st->addController(new ctl::LSBallRetrieve(ctx));
-    */
-
-    st2 = stm.createState("STGoalLocate");
-    //st2->setLastState(st);
-    st->setNextState(st2);
-    st = st2;
-    ctx.st = st;
-    st->addController(new ctl::LSGoalLocate(ctx));
-
-    st2 = stm.createState("STGoalShoot");
-    st2->setLastState(st);
-    st->setNextState(st2);
-    st = st2;
-    ctx.st = st;
-    st->addController(new ctl::LSGoalShoot(ctx));
-
-    //stm.addRootState(st);
+    stop();
+    updateGameState(GameState::STOP);
+    updateGamePhase(GamePhase::GAME);
+    init_referee_signals();
   }
 
   void process() {
-    stm.process();
+    switch(gmState) {
+      case GameState::STOP:
+        break;
+      case GameState::RUN:
+        if(logicProcess != nullptr) logicProcess->process();
+        break;
+      default:
+        break;
+    }
   }
 
 }}

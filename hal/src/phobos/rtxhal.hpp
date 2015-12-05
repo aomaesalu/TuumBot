@@ -6,6 +6,9 @@
  */
 
 #include "hal.hpp"
+
+#include "MainBoard.hpp"
+
 #include "Hardware.hpp"
 
 #ifndef RTX_HAL_H

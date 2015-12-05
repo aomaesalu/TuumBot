@@ -17,7 +17,7 @@
 #define BLUE_GOAL_POSITION_Y -1         // Blue goal's position y-coordinate            // Wrong
 #define YELLOW_GOAL_POSITION_X -1       // Yellow goal's position x-coordinate          // Wrong
 #define YELLOW_GOAL_POSITION_Y -1       // Yellow goal's position y-coordinate          // Wrong
-#define BALL_RADIUS 43                  // Ball radius
+#define BALL_DIAMETER 43                // Ball radius
 #define ROBOT_MARKER_WIDTH 20           // Single robot ally/enemy marker width         // Unused
 #define ROBOT_MARKER_MAX_HEIGHT 20      // Lower marker edge maximum height from ground // Unused
 

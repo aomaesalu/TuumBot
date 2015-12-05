@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 24 November 2015
  */
 
 #ifndef RTX_APPLICATIONS_CALIBRATION_PERSPECTIVE_MAIN_WINDOW_H
@@ -34,6 +34,10 @@ namespace rtx {
 
       ImageArea* getImageArea();
 
+      Gtk::Scale *getAScale();
+      Gtk::Scale *getBScale();
+      Gtk::Scale *getCScale();
+
     protected:
       Gtk::Grid grid;
 
@@ -62,6 +66,8 @@ namespace rtx {
       void constructImageAreaFrame();
       void constructScalesBox();
       void constructScale(Gtk::Container&, Gtk::Scale&, Gtk::Label&, const std::string&);
+
+      void on_scale_value_changed();
 
   };
 

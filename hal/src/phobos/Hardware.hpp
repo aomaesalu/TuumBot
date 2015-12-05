@@ -3,18 +3,20 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 4 December 2015
  */
 
 #ifndef HAL_HARDWARE_H
 #define HAL_HARDWARE_H
+
+#include "tuum_platform.hpp"
 
 #include "RTX485.hpp"
 
 #include "Camera.hpp"
 #include "MotorControl.hpp"
 #include "MainBoard.hpp"
-// #include "RefereeListener.hpp"
+#include "RefereeListener.hpp"
 
 namespace rtx { namespace hal {
 
@@ -30,18 +32,6 @@ namespace rtx { namespace hal {
   }
 
   class Hardware {
-    private:
-      MotorControl m_motorControl;
-
-      Camera m_frontCamera;
-      //Camera m_backCamera;
-
-      int m_dribbler;
-      int m_coilGun;
-      int m_ballSensor;
-
-      MainBoard m_mainBoard;
-
     public:
       Hardware();
 
@@ -54,10 +44,22 @@ namespace rtx { namespace hal {
       MotorControl* getMotorControl();
       MainBoard* getMainBoard();
 
-      //RefereeListener refereeListener;
-      //RefereeListener refereeListener2;
+      RefereeListener* getRefListener();
 
-      //...?
+    private:
+      MotorControl m_motorControl;
+
+      Camera *m_frontCamera;
+      Camera *m_backCamera;
+
+      int m_dribbler;
+      int m_coilGun;
+      int m_ballSensor;
+
+      MainBoard m_mainBoard;
+
+      RefereeListener m_refereeListener;
+
   };
 
 }}

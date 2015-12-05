@@ -2,8 +2,9 @@
  *  Robotex Teamfootball application.
  *
  *  @authors Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 2. November 2015
+ *  @date 3 December 2015
  */
 
 #include <thread>
@@ -18,24 +19,27 @@ using namespace rtx;
 
 int main(int argc, char *argv[]) {
   printf("main(): Tuum Robotex 1vs1 application.\n");
-
+  rtx::init(argc, argv);
   rtx::hal::setup();
 
   Visioning::setup();
   Localization::setup();
   Motion::setup();
 
-  Logic::setup();
+  FBLogic::setup();
 
   bool running = true;
   while(running) {
     hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
+
     Localization::process();
+
     Motion::process();
 
-    Logic::process();
+    FBLogic::process();
   }
 
   return 0;

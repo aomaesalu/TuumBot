@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "tuum_communication.hpp"
+
 #include "SerialPort.hpp"
 
 namespace rtx { namespace hal {
@@ -49,6 +51,7 @@ namespace rtx { namespace hal {
   // Field, Robot ID, Team
   struct RefTarget {
     char field;
+    char teams;
     char team;
     char id;
   };
@@ -61,33 +64,33 @@ namespace rtx { namespace hal {
   typedef void (*VoidFn)(RefCommand);
   typedef std::pair<RefereeSignal, VoidFn> SignalCallback;
 
-  inline void test(RefereeSignal s) {
-
-  }
-
   //FIXME: This is not regularly working over different threads.
   static std::map<RefereeSignal, VoidFn> callbacks;
 
   class RefereeListener : public SerialPort {
+  public:
+    char m_field;
+    char m_team;
+    char m_robot;
+
   private:
 
   public:
     RefereeListener();
 
-    void init(std::string portname);
+    void init(std::string, int);
 
-    void on_receive_(const std::string &data);
+    void on_receive_(const std::string&);
 
     void registerCallback(const RefereeSignal, VoidFn);
     void signal(RefCommand);
 
     RefCommand parseCommand(std::string);
 
-    void sendAck();
+    void sendTuumMessage(comm::TuumMessage);
+    void handleTuumMessage(std::string);
 
-    const char FIELD = 'A';
-    const char ID = 'B';
-    const char TEAM = 'A';
+    void sendAck();
   };
 
 }}

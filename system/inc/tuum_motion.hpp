@@ -1,30 +1,20 @@
 
-#ifndef RTX_MOTION_H
-#define RTX_MOTION_H
+#ifndef RTX_MOTIONING_H
+#define RTX_MOTIONING_H
 
 #include "rtxmath.hpp"
-#include "__future__.hpp"
+
+#include "syscore/MotionData.hpp"
+
+#include "tuum_platform.hpp"
 
 namespace rtx { namespace Motion {
-
-  const int LONG_RANGE = 600;
-  const int MID_RANGE = 300;
-  const int CLOSE_RANGE = 150;
-  const int PROXIMITY = 40;
-
-  const int MIN_SPEED = 5;
-  const int MIN_ROT_SPEED = 5;
-
-  const int MN_DIST_STEP = 15;
-  const double MN_ROT_STEP = 0.05;
 
   enum MotionType {
     MOT_SCAN,   // In-place rotation
     MOT_NAIVE,  // Turn and move
     MOT_CURVED, // Drive to target in 1 motion
-
-    // Moves without orientation change
-    MOT_STATIC,
+    MOT_COMPLEX,
 
     // Variables curve to achieve given end orientation
     MOT_COMPLEX_CURVED,
@@ -34,30 +24,59 @@ namespace rtx { namespace Motion {
     MOT_AIM,
   };
 
+  enum MotionPhase {
+    MOP_STANDBY,
+    MOP_INIT,
+    MOP_RUN,
+    MOP_DONE
+  };
+
+  struct MotionContext {
+    MotionPhase phase;
+  };
+
+  extern MotionData motionData;
+
+  const double targetDistanceCondition = GRS_MOV.low.step;
+  const double targetOrientationCondition = GRS_ROT.low.step;
+
   void setup();
   void process();
 
-  void setTarget(Transform target);
+  // Motion target API
+  void setPositionTarget(Vec2i);
+  void setAimTarget(Vec2i);
+  void setTarget(Transform);
 
-  int getTargetRange();
-  double getOrientError();
 
-  void setSpeed(int v);
-
+  // State control API
   void start();
   void stop();
 
-  bool isRunning();
-
+  void setSpeed(int v);
   void setBehaviour(MotionType mt);
 
-  double targetDistance();
-  double targetAngle();
+
+  // State response API
+  bool isRunning();
+
+  Vec2i getTargetPosition();
+  double getTargetOrientation();
+  Transform getTargetTransform();
 
   bool isTargetAchieved();
-  bool orientationAchieved();
+  bool isOrientationAchieved();
 
+
+  // State offset getters
+  double getDeltaDistance();
+  double getDeltaOrientation();
+
+  Transform getDeltaTransform();
+  double getOrientError();
+
+  int getTargetRange();
 
 }}
 
-#endif // RTX_MOTION_H
+#endif // RTX_MOTIONING_H

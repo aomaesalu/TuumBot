@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 24 November 2015
  */
 
 #include <vector>
@@ -15,7 +15,7 @@ namespace rtx {
   class Checkerboard {
 
     public:
-      Checkerboard(const unsigned int&, const unsigned int&, const unsigned int&);
+      Checkerboard(const unsigned int&, const unsigned int&, const unsigned int&, const double&, const double&, const double&);
 
       const std::vector<std::vector<std::pair<unsigned int, unsigned int>>>& getPoints() const;
       unsigned int getWidth() const;
@@ -24,8 +24,17 @@ namespace rtx {
       unsigned int getSquareWidth() const;
       unsigned int getNumberOfPointsFilled() const;
 
+      double getA() const;
+      double getB() const;
+      double getC() const;
+
       bool isEmpty() const;
       bool isFilled() const;
+
+      void setA(const double&);
+      void setB(const double&);
+      void setC(const double&);
+      void setConstants(const double&, const double&, const double&);
 
       void addPoint(const unsigned int&, const unsigned int&);
 
