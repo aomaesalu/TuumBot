@@ -52,9 +52,9 @@ namespace rtx { namespace Visioning {
     Camera *backCamera = hal::hw.getBackCamera();
 
     if (frontCamera != nullptr)
-      readFilterFromFile("../data/colors/1.txt");
+      readFilterFromFile(gC.getStr("Vision.FirstColors"));
     if (backCamera != nullptr)
-      readFilterFromFile("../data/colors/2.txt");
+      readFilterFromFile(gC.getStr("Vision.SecondColors"));
 
     if (frontCamera != nullptr)
       Vision::setup(0);

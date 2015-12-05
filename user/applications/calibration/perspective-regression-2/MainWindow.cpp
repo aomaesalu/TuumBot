@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 20 November 2015
+ *  @date 5 December 2015
  */
 
 #include "MainWindow.hpp"
@@ -25,7 +25,7 @@ namespace rtx {
     filter("")
   {
     setProperties();
-    readFilterFromFile("../data/colors/1.txt");
+    readFilterFromFile(gC.getStr("Vision.FirstColors"));
     construct();
     show_all_children();
     updateFrame();
