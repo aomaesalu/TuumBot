@@ -38,6 +38,8 @@ namespace rtx {
     EventHandler getEventHandler(EventID);
 
     void registerEventListener(EventID, EventHandler);
+    void deregisterEventListener(EventID);
+
     void emitEvent(EventName);
   };
 
@@ -145,8 +147,8 @@ namespace rtx {
       if(m_stm != nullptr) m_stm->emitEvent(evn);
     }
 
-    virtual void registerEvent(EventName evn) {
-      if(m_stm != nullptr) m_stm->registerEvent(evn);
+    virtual void addHandler(EventName evn, EventHandler evh) {
+      m_stm->registerEventListener(m_stm->getEventID(evn), evh);
     }
   };
 
