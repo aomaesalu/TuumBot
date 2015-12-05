@@ -11,10 +11,12 @@
 #include "entityConstants.hpp"
 
 #include "Blob.hpp"
+#include "Perspective.hpp"
 
 #include <algorithm>
 #include <iostream> // TODO: Remove
 #include <utility>
+#include <cmath>
 
 
 namespace rtx {
@@ -26,14 +28,16 @@ namespace rtx {
     minY{other.getMinY()},
     maxY{other.getMaxY()},
     numberOfPoints{other.getNumberOfPoints()},
-    color{other.getColor()}
+    color{other.getColor()},
+    cameraID{other.getCameraID()}
   {
     // Nothing to do here
   }
 
-  Blob::Blob(const std::vector<Point2D*> &points, const Color &color) {
+  Blob::Blob(const std::vector<Point2D*> &points, const Color &color, const unsigned int &cameraID) {
     // TODO: Add points
     this->color = color;
+    this->cameraID = cameraID;
     minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
@@ -58,9 +62,10 @@ namespace rtx {
     centroid = new Point2D(xSum / numberOfPoints, ySum / numberOfPoints);
   }
 
-  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color) {
+  Blob::Blob(const std::vector<std::pair<unsigned int, unsigned int>> &points, const Color &color, const unsigned int &cameraID) {
     this->points = points;
     this->color = color;
+    this->cameraID = cameraID;
     minX = CAMERA_WIDTH - 1, minY = CAMERA_HEIGHT - 1;
     maxX = 0, maxY = 0;
     unsigned int xSum = 0, ySum = 0;
@@ -103,6 +108,11 @@ namespace rtx {
 
   Point2D* Blob::getPosition() const {
     return new Point2D(centroid->getX(), maxY);
+  }
+
+  std::pair<double, double> Blob::getRealPosition() const {
+    Point2D *position = getPosition();
+    return Vision::Perspective::virtualToReal(position, cameraID);
   }
 
   unsigned int Blob::getWidth() const {
@@ -150,7 +160,21 @@ namespace rtx {
   }
 
   std::pair<unsigned int, unsigned int> Blob::getExpectedVirtualSize() const {
-    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY()));
+    return getBlobExpectedVirtualSize(color, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY()), cameraID);
+  }
+
+  unsigned int Blob::getCameraID() const {
+    return cameraID;
+  }
+
+  double Blob::getDistance() const {
+    std::pair<double, double> position = getRealPosition();
+    return sqrt(position.first * position.first + position.second * position.second);
+  }
+
+  double Blob::getAngle() const {
+    std::pair<double, double> position = getRealPosition();
+    return -atan2(position.first, position.second) + cameraID * M_PI; // TODO: Test
   }
 
   bool Blob::isOrange() const {
@@ -182,30 +206,36 @@ namespace rtx {
     return color == other.getColor();
   }
 
+  bool Blob::isOnSameCamera(const Blob &other) const {
+    return cameraID == other.getCameraID();
+  }
+
   bool Blob::isAbove(const Blob &other) const {
-    return centroid->getY() < other.getCentroid()->getY();
+    return isOnSameCamera(other) && centroid->getY() < other.getCentroid()->getY();
   }
 
   bool Blob::isBelow(const Blob &other) const {
-    return !isAbove(other);
+    return isOnSameCamera(other) && !isAbove(other);
   }
 
   bool Blob::isIn(const Blob &other) const {
     // Based on the box areas
-    return minX >= other.getMinX() && maxX <= other.getMaxX() && minY >= other.getMinY() && maxY <= other.getMaxY();
+    return isOnSameCamera(other) && minX >= other.getMinX() && maxX <= other.getMaxX() && minY >= other.getMinY() && maxY <= other.getMaxY();
   }
 
   bool Blob::contains(const Blob &other) const {
-    return other.isIn(*this);
+    return isOnSameCamera(other) && other.isIn(*this);
   }
 
   bool Blob::overlaps(const Blob &other) const {
-    return minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
+    return isOnSameCamera(other) && minX <= other.getMaxX() && maxX >= other.getMinX() && minY <= other.getMaxY() && maxY >= other.getMinY();
   }
 
   bool Blob::isClose(const Blob &other, const double &maxError) const {
     //if (overlaps(other)) // DEBUG! TODO: Check if is needed
     //  return true;
+    if (!isOnSameCamera(other))
+      return false;
     if (!(minX <= other.getMaxX() && maxX >= other.getMinX() || minY <= other.getMaxY() && maxY >= other.getMinY()))
       return false;
     std::pair<unsigned int, unsigned int> expectedSize;
@@ -214,7 +244,7 @@ namespace rtx {
     } else {
       if ((isBlue() && other.isYellow()) || (isYellow() && other.isBlue()) || ((isYellowBlue() || isBlueYellow()) && (other.isYellow() || other.isBlue())) || ((isYellow() || isBlue()) && (other.isYellowBlue() || other.isBlueYellow()))) {
         // The expected sizes for both robot color combinations are the same
-        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT));
+        expectedSize = getBlobExpectedVirtualSize(ROBOT_YELLOW_BLUE, std::pair<unsigned int, unsigned int>(centroid->getX(), getMaxY() + ROBOT_MARKER_MAX_HEIGHT), cameraID);
       } else {
         expectedSize = std::pair<unsigned int, unsigned int>(0, 0);
       }

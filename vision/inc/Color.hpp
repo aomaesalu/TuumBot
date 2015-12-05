@@ -36,8 +36,8 @@ namespace rtx {
   void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
   std::pair<double, double> getBlobExpectedRealSize(const Color&);
-  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&);
-  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const Point2D*);
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&, const unsigned int&);
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const Point2D*, const unsigned int&);
 
 };
 

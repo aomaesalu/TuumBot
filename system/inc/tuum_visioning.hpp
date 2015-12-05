@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 3 December 2015
+ *  @date 4 December 2015
  */
 
 #ifndef RTX_VISIONING_H
@@ -140,7 +140,7 @@ namespace rtx { namespace Visioning {
 
   };
 
-  extern std::string filter;
+  extern std::vector<std::string> filters;
 
   extern EDS<Ball> ballDetect;
   extern EDS<Robot> robotDetect;
@@ -158,9 +158,9 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string&);
 
-  void ballDetection(const Frame&);
-  void goalDetection(const Frame&);
-  void robotDetection(const Frame&);
+  void ballDetection();
+  void goalDetection();
+  void robotDetection();
 
 }}
 
