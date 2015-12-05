@@ -7,6 +7,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 
 #include "Hardware.hpp"
 #include "tuum_platform.hpp"
@@ -23,8 +24,14 @@ namespace rtx { namespace hal {
   }
 
   void Hardware::init() {
-    m_frontCamera = new Camera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
-    m_backCamera = new Camera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+    std::ifstream frontCameraDevice(gC.getStr("Vision.FirstCamera"));
+    if (frontCameraDevice.good())
+      m_frontCamera = new Camera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+
+    std::ifstream backCameraDevice(gC.getStr("Vision.SecondCamera"));
+    if (backCameraDevice.good())
+      m_backCamera = new Camera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+
     if(gC.getStr("HW.Active") == "Y") {
       printf("[Hardware::init]Loading hardware...\n");
       HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
