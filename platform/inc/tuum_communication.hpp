@@ -9,10 +9,13 @@
 namespace rtx { namespace comm {
 
   enum TuumSignal {
+    // Request signals
     PING,
-    PONG,
     PASS,
-    RECV
+
+    // Response signals
+    PONG,
+    RECV,
   };
 
   typedef std::map<std::string, TuumSignal> SignalMap;
@@ -67,14 +70,19 @@ namespace rtx { namespace comm {
 
   typedef void (*Handler)(TuumMessage);
   typedef std::map<uint32_t, TuumMessage> TMSResponseMap;
+  typedef std::map<TuumSignal, Handler> TMSListenerMap;
 
   //TODO: cleanup old responses
   extern TMSResponseMap g_TuumCommData;
+  extern TMSListenerMap g_TuumCommCallbacks;
 
   void handleTuumMessage(std::string);
 
   bool pollResponse(uint32_t);
   TuumMessage popResponse(uint32_t);
+
+  void registerListener(TuumSignal, Handler);
+  void deregisterListener(TuumSignal);
 }}
 
 #endif // RTX_TUUM_COMMUNICATION_H

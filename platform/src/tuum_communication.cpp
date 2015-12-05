@@ -14,6 +14,7 @@ namespace rtx { namespace comm {
 
   std::string comm_buffer = "";
   TMSResponseMap g_TuumCommData;
+  TMSListenerMap g_TuumCommCallbacks;
 
   TuumMessage::TuumMessage() {
     aquireID();
@@ -117,8 +118,24 @@ PROC:   segment = buf.str();
       TuumMessage tms(data);
 
       //TODO: Check target condition
-      g_TuumCommData[tms.id] = tms;
       std::cout << "[rtx::comm::handleTuumMessage]Message " << tms.id << " received." << std::endl;
+
+      switch(tms.sig) {
+        case TuumSignal::PING:
+        case TuumSignal::PASS:
+          {
+            auto it = g_TuumCommCallbacks.find(tms.sig);
+            if(it != g_TuumCommCallbacks.end()) it->second(tms);
+          }
+          break;
+        case TuumSignal::PONG:
+        case TuumSignal::RECV:
+          g_TuumCommData[tms.id] = tms;
+          break;
+        default:
+          break;
+      }
+
       comm_buffer.clear();
     } catch (int err) {
       std::cout << "[rtx::comm::handleTuumMessage]Error "
@@ -138,6 +155,14 @@ PROC:   segment = buf.str();
     TuumMessage tms = it->second;
     g_TuumCommData.erase(tms.id);
     return tms;
+  }
+
+  void registerListener(TuumSignal sig, Handler h) {
+    g_TuumCommCallbacks[sig] = h;
+  }
+
+  void deregisterListener(TuumSignal sig) {
+    g_TuumCommCallbacks.erase(sig);
   }
 
 }}
