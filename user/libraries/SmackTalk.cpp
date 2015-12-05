@@ -13,8 +13,8 @@ namespace rtx { namespace Smacktalk {
   void init(){
     srand (time(NULL));
     cooldownTimer.setPeriod(5000);
-    audiosink = "alsa_output.pci-0000_00_1b.0.analog-stereo";//gC.getStr("Sound.Sink");
-    std::string sounddir = "/home/kristjan/Desktop/Soundid_Futurama/Bender/";//gC.getStr("Sound.Directory");
+    audiosink = gC.getStr("Sound.Sink");//"alsa_output.pci-0000_00_1b.0.analog-stereo";
+    std::string sounddir = gC.getStr("Sound.Directory");// "/home/tuum/TuumBot/sounds/Bender/";
     std::string rsounds = sounddir + "randomsounds/";
     std::string hsounds = sounddir + "hitsounds/";
     std::string msounds = sounddir + "misssounds/";
