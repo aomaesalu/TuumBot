@@ -175,19 +175,20 @@ namespace rtx { namespace Motion {
 
     //FIXME: These should be taken from gear step
     const int d = 50;
-    const double d_o = 0.08;
+    const double d_o = 0.085;
 
     //TODO: Get relative target vectors
     Vec2i v = data->getTargetPos();
     double O = data->getTargetOrient();
 
     if(data->posTargetSet) {
+	    std::cout << "POS SET" << std::endl;
       if(fabs(t->getX() - v.x) > d ||
 	 fabs(t->getY() - v.y) > d) return 0.0;
     }
 
     if(data->aimTargetSet) {
-      if(fabs(t->o - O) > d_o) return 0.0;
+      if(fabs(data->getDeltaOrient()) > d_o) return 0.0;
     }
 
     return 1.0;

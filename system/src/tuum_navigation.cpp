@@ -108,6 +108,16 @@ namespace rtx { namespace Navigation {
     return target;*/
   }
 
+  //TODO: Take into account orientation
+  Vec2i calcCenterFieldPos(Goal* g) {
+    Transform* gt = g->getTransform();
+
+    Vec2f avf = (gt->getPosition() - Localization::getTransform()->getPosition()).getNormalized();
+    Transform t((*gt) - (avf*2500).toInt());
+
+    return t.getPosition();   
+  }
+
   Ball* getNearestBall() {
     Ball* ball = nullptr;
     Transform* t = Localization::getTransform();
@@ -124,6 +134,21 @@ namespace rtx { namespace Navigation {
       }
     }
     return ball;
+  }
+
+  Goal* getNearestGoal() {
+    unsigned int blg_d = 0, ylg_d = 0;
+    Transform* t = Localization::getTransform();
+
+    if(Visioning::blueGoal != nullptr)
+      blg_d = t->distanceTo(Visioning::blueGoal->getTransform()->getPosition());
+    if(Visioning::yellowGoal != nullptr)
+      ylg_d = t->distanceTo(Visioning::yellowGoal->getTransform()->getPosition());
+
+    if(blg_d > ylg_d) return Visioning::blueGoal;
+    else if(ylg_d > blg_d) return Visioning::yellowGoal;
+
+    return Visioning::blueGoal;
   }
 
   Goal* getOpponentGoal() {
