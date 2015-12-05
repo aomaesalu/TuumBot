@@ -45,7 +45,7 @@ namespace rtx {
       resolution dimensions as parameters.
       Opens and initialises the device, and starts capturing.
     */
-    Camera(const std::string& = CAMERA_DEVICE, const int& = CAMERA_WIDTH,
+    Camera(const std::string& = rtx::gC.getString("FirstCamera"), const int& = CAMERA_WIDTH,
            const int& = CAMERA_HEIGHT);
 
     /**
