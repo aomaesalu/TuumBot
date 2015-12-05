@@ -25,6 +25,15 @@ int main(int argc, char* argv[]) {
 
   bool running = true;
 
+
+  std::cout << "Registering ping callback..." << std::endl;
+  comm::registerListener(TuumSignal::PING, [=](TuumMessage _tms){
+    std::cout << "PING SIG" << std::endl;
+    TuumMessage tms = TuumMessage::toAlly(TuumSignal::PONG);
+    tms.id = _tms.id;
+    hal::hw.getRefListener()->sendTuumMessage(tms);
+  });
+
   TuumMessage tmsPass = TuumMessage::toAlly(TuumSignal::PASS);
   std::cout << "Sending pass message..." << std::endl;
   hal::hw.getRefListener()->sendTuumMessage(tmsPass);
