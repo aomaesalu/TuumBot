@@ -8,6 +8,7 @@
 
 #include "application.hpp"
 #include "GUI.hpp"
+#include "tuum_platform.hpp"
 
 #include <thread>
 #include <iostream> // TODO: Remove
@@ -24,6 +25,9 @@ static void run(GUI *gui) {
 
 int main(int argc, char *argv[]) {
   printf("main(): Perspective calibration application.\n");
+
+  // Initialise constants
+  rtx::init(argc, argv);
 
   // Initialize hardware
   rtx::hal::setup();
