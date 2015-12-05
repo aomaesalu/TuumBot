@@ -46,12 +46,13 @@ namespace rtx {
     st->addController(new ctl::LSAllyFind(ctx));
 
 
-    st2 = stm->createState("STAllyAim");
+    st2 = stm->createState("STAllyBallReceive");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSAllyAim(ctx));
+    st->addController(new ctl::LSAllyReceive(ctx));
 
     return stm;
   }
