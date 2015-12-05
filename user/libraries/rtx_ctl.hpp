@@ -219,9 +219,12 @@ namespace rtx { namespace ctl {
       int run();
       bool isRunnable();
 
+      void onPassSignal(comm::TuumMessage);
+
     private:
       Context ctx;
 
+    public:
       bool finish;
   };
 

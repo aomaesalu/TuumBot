@@ -118,7 +118,7 @@ namespace rtx { namespace TFBLogic {
           //TODO
         }
 
-        logicProcess->registerEventListener(logicProcess->getEventID("done"), [=](){
+        logicProcess->registerEventListener(logicProcess->getEventID("LSDone"), [=](){
           updateGamePhase(GamePhase::GAME);
         });
 
