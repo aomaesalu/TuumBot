@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.3
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #ifndef RTX_VISION_BLOB_H
@@ -63,7 +63,7 @@ namespace rtx {
       bool isIn(const Blob&) const;
       bool contains(const Blob&) const;
       bool overlaps(const Blob&) const;
-      bool isClose(const Blob&, const double &maxError = 0.05) const;
+      bool isClose(const Blob&, const double &maxError = 0.075) const;
       void join(Blob&);
 
       void setColor(const Color&);
