@@ -20,12 +20,12 @@ namespace rtx { namespace Vision { namespace Perspective {
   std::vector<double> C;
 
   void setup() {
-    A.push_back((double) rtx::gC.getInt("Perspective.First.A"));
-    A.push_back((double) rtx::gC.getInt("Perspective.Second.A"));
-    B.push_back((double) rtx::gC.getInt("Perspective.First.B"));
-    B.push_back((double) rtx::gC.getInt("Perspective.Second.B"));
-    C.push_back((double) rtx::gC.getInt("Perspective.First.C"));
-    C.push_back((double) rtx::gC.getInt("Perspective.Second.C"));
+    A.push_back((double) rtx::gC.getInt("PerspectiveFirst.A"));
+    A.push_back((double) rtx::gC.getInt("PerspectiveSecond.A"));
+    B.push_back((double) rtx::gC.getInt("PerspectiveFirst.B"));
+    B.push_back((double) rtx::gC.getInt("PerspectiveSecond.B"));
+    C.push_back((double) rtx::gC.getInt("PerspectiveFirst.C"));
+    C.push_back((double) rtx::gC.getInt("PerspectiveSecond.C"));
   }
 
   std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y, const unsigned int &cameraID) {

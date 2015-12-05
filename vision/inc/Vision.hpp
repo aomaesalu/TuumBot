@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #ifndef RTX_VISION_VISION_H
