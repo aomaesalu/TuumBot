@@ -54,11 +54,23 @@ int main(int argc, char* argv[]) {
       if(Visioning::ballDetect.size() > 0) {
 	std::cout << "Balls: " << std::endl;
 	for(auto& b : *Visioning::ballDetect.getEntities()) {
-          std::cout << b->toString() << " : isValid() == " << (b->isValid()) << std::endl;
-	}
+          //std::cout << b->toString() << " : isValid() == " << (b->isValid()) << std::endl;
+	
       }
 
       debugTimer.start();
+    }
+
+    }
+    auto b = Navigation::getNearestBall();
+    if(b != nullptr) {
+      Motion::setAimTarget(b->getTransform()->getPosition());
+      Vec2i pos = Navigation::calcBallPickupPos(b->getTransform()).getPosition();
+      Motion::setPositionTarget(pos);
+
+      if(!Motion::isRunning()) Motion::start();
+    } else {
+      Motion::stop();
     }
   }
 
