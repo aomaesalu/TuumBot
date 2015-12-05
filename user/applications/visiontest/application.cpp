@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 21 November 2015
+ *  @date 5 December 2015
  */
 
 #include "application.hpp"
@@ -42,10 +42,22 @@ int main(int argc, char *argv[]) {
   Visioning::setup();
   Localization::setup();
 
-  GUI gui(argc, argv, hal::hw.getFrontCamera());
+  int returnValue = 0;
+  if (hal::hw.getFrontCamera() != nullptr) {
+    GUI guiFront(argc, argv, hal::hw.getFrontCamera());
+    returnValue = guiFront.run();
 
-  std::thread applicationThread(run, &gui);
-  applicationThread.detach();
+    std::thread applicationThread(run, &guiFront);
+    applicationThread.detach();
+  }
 
-  return gui.run();
+  if (hal::hw.getBackCamera() != nullptr) {
+    GUI guiBack(argc, argv, hal::hw.getBackCamera());
+    returnValue = guiBack.run();
+
+    std::thread applicationThread(run, &guiBack);
+    applicationThread.detach();
+  }
+
+  return returnValue;
 }
