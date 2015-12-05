@@ -3,7 +3,7 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 4 December 2015
  */
 
 #ifndef HAL_HARDWARE_H
@@ -36,7 +36,7 @@ namespace rtx { namespace hal {
       MotorControl m_motorControl;
 
       Camera m_frontCamera;
-      //Camera m_backCamera;
+      Camera m_backCamera;
 
       int m_dribbler;
       int m_coilGun;

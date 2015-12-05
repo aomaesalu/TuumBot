@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 3 December 2015
+ *  @date 4 December 2015
  */
 
 #include <algorithm>
@@ -23,7 +23,7 @@ using namespace rtx;
 
 namespace rtx { namespace Visioning {
 
-  std::string filter;
+  std::vector<std::string> filters;
 
   Timer debugTimer;
 
@@ -47,12 +47,19 @@ namespace rtx { namespace Visioning {
   bool editingRobots = false; // Unused
 
   void setup() {
+
     Camera *frontCamera = hal::hw.getFrontCamera();
     Camera *backCamera = hal::hw.getBackCamera();
 
-    readFilterFromFile("../data/colors/1.txt");
+    if (frontCamera != nullptr)
+      readFilterFromFile("../data/colors/1.txt");
+    if (backCamera != nullptr)
+      readFilterFromFile("../data/colors/2.txt");
 
-    Vision::setup();
+    if (frontCamera != nullptr)
+      Vision::setup(0);
+    if (backCamera != nullptr)
+      Vision::setup(1);
 
     debugTimer.setPeriod(1000);
     debugTimer.start();
@@ -63,38 +70,52 @@ namespace rtx { namespace Visioning {
   }
 
   void process() {
-    if (filter.size() == 0) {
-      std::cout << "Process: Filter is empty" << std::endl;
+    if (filters.size() == 0) {
+      std::cout << "Process: Filters are empty" << std::endl;
       return;
+    } else {
+      for (std::vector<std::string>::iterator filter = filters.begin(); filter != filters.end(); ++filter) {
+        if (filter->size() == 0) {
+          std::cout << "Process: A filter is empty" << std::endl;
+        }
+      }
     }
 
     Camera *frontCamera = hal::hw.getFrontCamera();
-    Camera *backCamera = hal::hw.getBackCamera(); // TODO: Use
+    Camera *backCamera = hal::hw.getBackCamera();
 
     Frame frontFrame, backFrame;
     if (frontCamera)
       frontFrame = frontCamera->getFrame();
-    //if (backCamera)
-    //  backFrame = backCamera->getFrame();
+    if (backCamera)
+      backFrame = backCamera->getFrame();
 
-    if (frontCamera)
-      Vision::process(frontFrame, filter);
-    //if (backCamera)
-    //  Vision::process(backFrame, filter);
-
-    if (frontCamera) {
-      ballDetection(frontFrame);
-      goalDetection(frontFrame);
-      robotDetection(frontFrame);
+    if (frontCamera != nullptr) {
+      std::cout << "Front camera available" << std::endl;
+      if (backCamera != nullptr) {
+        std::cout << "Both cameras available" << std::endl;
+        Vision::process({&frontFrame, &backFrame}, filters);
+      } else {
+        Vision::process({&frontFrame}, filters);
+      }
     }
 
-    // TODO: Add back camera frame processing
+    ballDetection();
+    goalDetection();
+    robotDetection();
+
   }
 
   void processCheckerboard() {
-    if (filter.size() == 0) {
-      std::cout << "Process: Filter is empty" << std::endl;
+    if (filters.size() == 0) {
+      std::cout << "Process: Filters are empty" << std::endl;
       return;
+    } else {
+      for (std::vector<std::string>::iterator filter = filters.begin(); filter != filters.end(); ++filter) {
+        if (filter->size() == 0) {
+          std::cout << "Process: A filter is empty" << std::endl;
+        }
+      }
     }
 
     Camera *frontCamera = hal::hw.getFrontCamera();
@@ -107,18 +128,19 @@ namespace rtx { namespace Visioning {
       backFrame = backCamera->getFrame();
 
     if (frontCamera)
-      Vision::processCheckerboard(frontFrame, filter);
+      Vision::processCheckerboard(frontFrame, filters, 0);
     if (backCamera)
-      Vision::processCheckerboard(backFrame, filter);
+      Vision::processCheckerboard(backFrame, filters, 1);
 
     // TODO: Add back camera frame processing
   }
 
   void readFilterFromFile(const std::string &fileName) {
+    std::cout << "Reading filter from " << fileName << std::endl;
     std::ifstream inputFile(fileName);
     std::stringstream buffer;
     buffer << inputFile.rdbuf();
-    filter = buffer.str();
+    filters.push_back(buffer.str());
     inputFile.close();
   }
 
@@ -200,7 +222,7 @@ namespace rtx { namespace Visioning {
     return 2*px*py / (px+py);
   }
 
-  void ballDetection(const Frame &frame) {
+  void ballDetection() {
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
@@ -230,9 +252,9 @@ namespace rtx { namespace Visioning {
       //std::cout << "Dim: " << blobs[i]->getDensity() << " " << blobs[i]->getBoxArea() << std::endl;
 
       // STEP 2: Calculate relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = -atan2(position.first, position.second);
+      //std::pair<double, double> position = blobs[i]->getRealPosition();
+      double distance = blobs[i]->getDistance();
+      double angle = blobs[i]->getAngle();
       // Debug: std::cout << "Ball: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
@@ -282,7 +304,7 @@ namespace rtx { namespace Visioning {
     }
   }
 
-  void goalDetection(const Frame &frame) {
+  void goalDetection() {
     // TODO: Remove casting to null pointers when localisation is working
     blueGoalBuffer = nullptr;
     yellowGoalBuffer = nullptr;
@@ -306,9 +328,9 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // Relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = -atan2(position.first, position.second);
+      //std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID());
+      double distance = blobs[i]->getDistance();
+      double angle = blobs[i]->getAngle();
       // std::cout << "Goal: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
@@ -340,7 +362,7 @@ namespace rtx { namespace Visioning {
     translateGoalsBuffer();
   }
 
-  void robotDetection(const Frame &frame) {
+  void robotDetection() {
 
     Vision::BlobSet blobs = Vision::getBlobs();
 
@@ -361,9 +383,9 @@ namespace rtx { namespace Visioning {
       /* && density > 0.6*/
 
       // STEP 2: Calculate relative position
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = -atan2(position.first, position.second);
+      //std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition(), blobs[i]->getCameraID());
+      double distance = blobs[i]->getDistance();
+      double angle = blobs[i]->getAngle();
       // std::cout << "Robot: " << distance << " " << angle << std::endl;
       //unsigned int distance = CAMERA_HEIGHT - point->getY();
       //double angle = (1 - point->getX() / (CAMERA_WIDTH / 2.0)) * 20 * PI / 180;
