@@ -16,13 +16,15 @@ namespace rtx { namespace hal {
   const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
-    m_frontCamera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT),
-    m_backCamera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT)
+    m_frontCamera(nullptr),
+    m_backCamera(nullptr)
   {
 
   }
 
   void Hardware::init() {
+    m_frontCamera = new Camera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+    m_backCamera = new Camera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
     if(gC.getStr("HW.Active") == "Y") {
       printf("[Hardware::init]Loading hardware...\n");
       HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
@@ -40,11 +42,11 @@ namespace rtx { namespace hal {
   }
 
   Camera* Hardware::getFrontCamera() {
-    return &m_frontCamera;
+    return m_frontCamera;
   }
 
   Camera* Hardware::getBackCamera() {
-    return &m_backCamera;
+    return m_backCamera;
   }
 
   MainBoard* Hardware::getMainBoard() {
