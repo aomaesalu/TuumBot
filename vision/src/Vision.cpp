@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #include "Vision.hpp"
@@ -49,6 +49,7 @@ namespace rtx {
     }*/
 
     void setup(const unsigned int &cameraID) {
+      Perspective::setup();
       initialiseFlatSamples(cameraID);
       initialiseMeshSamples(cameraID);
       initialiseRadialSamples(cameraID);

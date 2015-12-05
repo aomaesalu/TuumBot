@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #include "Perspective.hpp"
@@ -15,12 +15,18 @@
 
 namespace rtx { namespace Vision { namespace Perspective {
 
-  std::vector<double> A = {2, 2};//{(double) rtx::gC.getInt("Perspective.First.A"),
-                           //(double) rtx::gC.getInt("Perspective.Second.A")};
-  std::vector<double> B = {105436, 105436};//{(double) rtx::gC.getInt("Perspective.First.B"),
-                           //(double) rtx::gC.getInt("Perspective.Second.B")};
-  std::vector<double> C = {169, 169};//{(double) rtx::gC.getInt("Perspective.First.C"),
-                           //(double) rtx::gC.getInt("Perspective.Second.C")};
+  std::vector<double> A;
+  std::vector<double> B;
+  std::vector<double> C;
+
+  void setup() {
+    A.push_back((double) rtx::gC.getInt("Perspective.First.A"));
+    A.push_back((double) rtx::gC.getInt("Perspective.Second.A"));
+    B.push_back((double) rtx::gC.getInt("Perspective.First.B"));
+    B.push_back((double) rtx::gC.getInt("Perspective.Second.B"));
+    C.push_back((double) rtx::gC.getInt("Perspective.First.C"));
+    C.push_back((double) rtx::gC.getInt("Perspective.Second.C"));
+  }
 
   std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y, const unsigned int &cameraID) {
     // ActualDistance = A + B / PixelVerticalCoord
