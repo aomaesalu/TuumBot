@@ -3,7 +3,7 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #include <iostream>
@@ -16,8 +16,8 @@ namespace rtx { namespace hal {
   const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
-    m_frontCamera(gC.getStr("FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT),
-    m_backCamera(gC.getStr("SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT)
+    m_frontCamera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT),
+    m_backCamera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT)
   {
 
   }

@@ -1,12 +1,13 @@
 /**
- * @file V4L2Camera.hpp
- * Camera class
- * Class for communication with the robot's cameras, based on the V4L2 API.
- * The video capture example provided with the V4L2 API has been used as a
- * model for the class.
+ *  @file V4L2Camera.hpp
+ *  Camera class
+ *  Class for communication with the robot's cameras, based on the V4L2 API.
+ *  The video capture example provided with the V4L2 API has been used as a
+ *  model for the class.
  *
- * @authors Ants-Oskar Mäesalu
- * @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.1
+ *  @date 5 December 2015
  */
 
 #ifndef RTX_V4L2_CAMERA_H
@@ -46,7 +47,7 @@ namespace rtx {
       resolution dimensions as parameters.
       Opens and initialises the device, and starts capturing.
     */
-    Camera(const std::string& = gC.getStr("FirstCamera"), const int& = CAMERA_WIDTH,
+    Camera(const std::string& = gC.getStr("Vision.FirstCamera"), const int& = CAMERA_WIDTH,
            const int& = CAMERA_HEIGHT);
 
     /**
