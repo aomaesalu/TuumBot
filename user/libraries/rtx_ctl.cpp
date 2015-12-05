@@ -324,6 +324,30 @@ ERR:
    *  Team interaction logic controllers
    *
    */
+  bool LSAllyFind::isRunnable() {
+    return true;
+  }
+
+  void LSAllyFind::init() {
+    Motion::stop();
+    twitchScanner.init(10, 30);
+  }
+
+  int LSAllyFind::run() {
+    if(Navigation::getAlly() != nullptr) goto OK;
+
+    twitchScanner.run();
+
+    return 0;
+OK:
+    Motion::stop();
+    return 1;
+ERR:
+    Motion::stop();
+    return -1;
+  }
+
+
   bool LSAllyLocate::isRunnable() {
     if(mb->getBallSensorState()) return true;
     return false;
@@ -349,7 +373,31 @@ ERR:
   }
 
 
-  // Shoot to opposing goal
+  bool LSAllyAim::isRunnable() {
+    return Navigation::getAlly() != nullptr;
+  }
+
+  void LSAllyAim::init() {
+    Motion::stop();
+  }
+
+  int LSAllyAim::run() {
+    if(Navigation::getAlly() == nullptr) goto ERR;
+
+    Motion::setAimTarget(Navigation::getAlly()->getTransform()->getPosition());
+    if(!Motion::isRunning()) Motion::start();
+
+    return 0;
+OK:
+    Motion::stop();
+    return 1;
+ERR:
+    Motion::stop();
+    return -1;
+  }
+
+
+  // Pass ball to ally
   void LSAllyPass::init() {
     Motion::stop();
     commTimeout.setPeriod(5000);
@@ -393,5 +441,25 @@ ERR:
     if(!mb->getBallSensorState()) return false;
     return true;
   }
+
+
+  // Receive ball from ally
+  void LSAllyReceive::init() {
+    Motion::stop();
+    finish = false;
+  }
+
+  int LSAllyReceive::run() {
+    if(finish) return 0;
+
+    return 0;
+  }
+
+  bool LSAllyReceive::isRunnable() {
+    if(finish) return true;
+
+    return true;
+  }
+
 
 }}

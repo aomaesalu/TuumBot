@@ -156,6 +156,19 @@ namespace rtx { namespace ctl {
    *  Team interaction logic controllers
    *
    */
+  class LSAllyFind : public Controller {
+    public:
+      LSAllyFind(Context _ctx) : ctx(_ctx) {}
+
+      void init();
+      int run();
+      bool isRunnable();
+
+    private:
+      Context ctx;
+      Motion::TwitchScan twitchScanner;
+  };
+
   class LSAllyLocate : public Controller {
     public:
       LSAllyLocate(Context _ctx) : ctx(_ctx) {}
@@ -169,6 +182,18 @@ namespace rtx { namespace ctl {
       Motion::TwitchScan twitchScanner;
   };
 
+  class LSAllyAim : public Controller {
+    public:
+      LSAllyAim(Context _ctx) : ctx(_ctx) {}
+
+      void init();
+      int run();
+      bool isRunnable();
+
+    private:
+      Context ctx;
+      Motion::TwitchScan twitchScanner;
+  };
 
   class LSAllyPass : public Controller {
     public:
@@ -196,6 +221,8 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
+
+      bool finish;
   };
 
 }}
