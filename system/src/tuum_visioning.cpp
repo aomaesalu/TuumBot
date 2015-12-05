@@ -239,9 +239,8 @@ namespace rtx { namespace Visioning {
       if(fabs(1 - ratio) > 0.3) continue;
       /* && density > 0.6*/
 
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = -atan2(position.first, position.second);
+      double distance = blobs[i]->getDistance();
+      double angle = blobs[i]->getAngle();
 
       n_balls.push_back(new Ball(Localization::toAbsoluteTransform(distance, angle), blobs[i], false));
     }
@@ -327,9 +326,8 @@ namespace rtx { namespace Visioning {
       if (boxArea > CAMERA_WIDTH * CAMERA_HEIGHT) continue;
       if (density > 1.0) continue;
 
-      std::pair<double, double> position = Vision::Perspective::virtualToReal(blobs[i]->getPosition());
-      double distance = sqrt(position.second * position.second + position.first * position.first);
-      double angle = -atan2(position.first, position.second);
+      double distance = blobs[i]->getDistance();
+      double angle = blobs[i]->getAngle();
 
       n_robots.push_back(new Robot(Localization::toAbsoluteTransform(distance, angle), blobs[i]));
     }

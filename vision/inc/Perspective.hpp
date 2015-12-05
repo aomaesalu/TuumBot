@@ -25,6 +25,8 @@ namespace rtx { namespace Vision { namespace Perspective {
 
   // TODO: Use point class
 
+  void setup();
+
   std::pair<double, double> virtualToReal(const unsigned int&, const unsigned int&, const unsigned int&);
   std::pair<double, double> virtualToReal(const std::pair<unsigned int, unsigned int>&, const unsigned int&);
   std::pair<double, double> virtualToReal(const Point2D*, const unsigned int&);
