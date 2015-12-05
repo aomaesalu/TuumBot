@@ -15,12 +15,12 @@
 
 namespace rtx { namespace Vision { namespace Perspective {
 
-  std::vector<double> A = {(double) rtx::gC.getInt("Perspective.First.A"),
-                           (double) rtx::gC.getInt("Perspective.Second.A")};
-  std::vector<double> B = {(double) rtx::gC.getInt("Perspective.First.B"),
-                           (double) rtx::gC.getInt("Perspective.Second.B")};
-  std::vector<double> C = {(double) rtx::gC.getInt("Perspective.First.C"),
-                           (double) rtx::gC.getInt("Perspective.Second.C")};
+  std::vector<double> A = {2, 2};//{(double) rtx::gC.getInt("Perspective.First.A"),
+                           //(double) rtx::gC.getInt("Perspective.Second.A")};
+  std::vector<double> B = {105436, 105436};//{(double) rtx::gC.getInt("Perspective.First.B"),
+                           //(double) rtx::gC.getInt("Perspective.Second.B")};
+  std::vector<double> C = {169, 169};//{(double) rtx::gC.getInt("Perspective.First.C"),
+                           //(double) rtx::gC.getInt("Perspective.Second.C")};
 
   std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y, const unsigned int &cameraID) {
     // ActualDistance = A + B / PixelVerticalCoord
