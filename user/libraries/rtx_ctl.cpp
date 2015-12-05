@@ -6,6 +6,8 @@
  *  @date 17. November 2015
  */
 
+#include <boost/bind.hpp>
+
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
 #include "tuum_navigation.hpp"
@@ -420,15 +422,15 @@ ERR:
       commTimeout.start();
     } else {
       if(comm::pollResponse(tms.id)) {
-	tms = comm::popResponse(tms.id);
-	finish = true;
-        Motion::stop();
+        tms = comm::popResponse(tms.id);
+        finish = true;
+              Motion::stop();
 
-	MainBoard* mb = hal::hw.getMainBoard();
-	mb->stopDribbler();
-	mb->doWeakCoilKick();
+        MainBoard* mb = hal::hw.getMainBoard();
+        mb->stopDribbler();
+        mb->doWeakCoilKick();
 
-	emit("done");
+        emit("done");
       }
     }
     return 0;
@@ -447,6 +449,13 @@ ERR:
   void LSAllyReceive::init() {
     Motion::stop();
     finish = false;
+
+    auto cb = std::bind1st(std::mem_fun(&LSAllyReceive::onPassSignal), this);
+    comm::registerListener(TuumSignal::PASS, cb);
+
+    addHandler("STExit", [](){
+      comm::deregisterListener(TuumSignal::PASS);
+    });
   }
 
   int LSAllyReceive::run() {
@@ -461,5 +470,10 @@ ERR:
     return true;
   }
 
+  void LSAllyReceive::onPassSignal(TuumMessage tms) {
+    std::cout << "LSAllyReceive DONE" << std::endl;
+    emit("LSDone");
+    finish = true;
+  }
 
 }}
