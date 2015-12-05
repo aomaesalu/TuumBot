@@ -3,7 +3,7 @@
  *  Perspective class for coordinate mapping.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.1
+ *  @version 0.2
  *  @date 4 December 2015
  */
 
@@ -14,9 +14,12 @@
 
 namespace rtx { namespace Vision { namespace Perspective {
 
-  std::vector<double> A = {2, 2};//21;
-  std::vector<double> B = {105436, 105436};//93048;
-  std::vector<double> C = {169, 169};//150;
+  std::vector<double> A = {rtx::gC.getInt("Perspective.First.A"),
+                           rtx::gC.getInt("Perspective.Second.A")};
+  std::vector<double> B = {rtx::gC.getInt("Perspective.First.B"),
+                           rtx::gC.getInt("Perspective.Second.B")};
+  std::vector<double> C = {rtx::gC.getInt("Perspective.First.C"),
+                           rtx::gC.getInt("Perspective.Second.C")};
 
   std::pair<double, double> virtualToReal(const unsigned int &x, const unsigned int &y, const unsigned int &cameraID) {
     // ActualDistance = A + B / PixelVerticalCoord
