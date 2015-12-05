@@ -16,6 +16,7 @@ namespace rtx {
   class LogicManager {
   public:
     static STM* loadKickoffReceiverPrepare();
+    static STM* loadKickoffReceiver();
 
     static STM* loadKickoffPasserPrepare();
     static STM* loadKickoffPasser();

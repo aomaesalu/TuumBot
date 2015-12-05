@@ -41,12 +41,21 @@ namespace rtx {
     State *st, *st2;
     Context ctx;
 
-    st = stm->createState("STAllyLocate");
+    st = stm->createState("STAllyFind");
     ctx.st = st;
-    st->addController(new ctl::LSBallLocate(ctx));
+    st->addController(new ctl::LSAllyFind(ctx));
+
+
+    st2 = stm->createState("STAllyAim");
+    st2->setLastState(st);
+    st->setNextState(st2);
+    st = st2;
+    ctx.st = st;
+    st->addController(new ctl::LSAllyAim(ctx));
 
     return stm;
   }
+
 
   /**
    *  Controllers:
@@ -78,6 +87,20 @@ namespace rtx {
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSAllyPass(ctx));
+
+    return stm;
+  }
+
+
+  /**
+   *  Controllers:
+   *    LSAllyLocate: Find ally robot
+   *    LSAllyRecv: Pass to ally robot
+   */
+  STM* LogicManager::loadKickoffReceiver() {
+    STM* stm = LogicManager::loadKickoffReceiverPrepare();
+    State *st2, *st = stm->stateStackPeek();
+    Context ctx;
 
     return stm;
   }

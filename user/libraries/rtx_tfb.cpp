@@ -91,9 +91,10 @@ namespace rtx { namespace TFBLogic {
     std::string v;
 
     v = gC.getStr("Robot.Role");
-    if(v == "Attacker")
+    if(v == "Attacker") {
       lg_preKickoff = LogicManager::loadKickoffReceiverPrepare();
-    else if(v == "Goalee") {
+      lg_kickoff = LogicManager::loadKickoffReceiver();
+    } else if(v == "Goalee") {
       lg_preKickoff = LogicManager::loadKickoffPasserPrepare();
       lg_kickoff = LogicManager::loadKickoffPasser();
      }
