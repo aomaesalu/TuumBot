@@ -16,7 +16,11 @@
 using namespace std;
 using namespace rtx;
 
-static void run(GUI *gui) {
+static void runGUI(int argc, char *argv[], GUI *gui) {
+  gui->run();
+}
+
+static void run(GUI *guiFront, GUI *guiBack) {
   bool running = true;
   while(running) {
     rtx::hal::process();
@@ -25,7 +29,11 @@ static void run(GUI *gui) {
     Navigation::preProcess();
     Localization::process();
 
-    gui->updateFrame();
+    if (guiFront != nullptr)
+      guiFront->updateFrame();
+    if (guiBack != nullptr)
+      guiBack->updateFrame();
+
   }
 }
 
@@ -42,22 +50,34 @@ int main(int argc, char *argv[]) {
   Visioning::setup();
   Localization::setup();
 
-  int returnValue = 0;
   if (hal::hw.getFrontCamera() != nullptr) {
-    GUI guiFront(argc, argv, hal::hw.getFrontCamera());
-    returnValue = guiFront.run();
-
-    std::thread applicationThread(run, &guiFront);
-    applicationThread.detach();
+    if (hal::hw.getBackCamera() != nullptr) {
+      GUI guiFront(argc, argv, hal::hw.getFrontCamera());
+      std::thread guiFrontThread(runGUI, argc, argv, &guiFront);
+      guiFrontThread.detach();
+      GUI guiBack(argc, argv, hal::hw.getBackCamera());
+      std::thread guiBackThread(runGUI, argc, argv, &guiBack);
+      guiBackThread.detach();
+      std::thread applicationThread(run, &guiFront, &guiBack);
+      applicationThread.detach();
+    } else {
+      GUI guiFront(argc, argv, hal::hw.getFrontCamera());
+      std::thread guiFrontThread(runGUI, argc, argv, &guiFront);
+      guiFrontThread.detach();
+      std::thread applicationThread(run, &guiFront, nullptr);
+      applicationThread.detach();
+    }
+  } else {
+    if (hal::hw.getBackCamera() != nullptr) {
+      GUI guiBack(argc, argv, hal::hw.getBackCamera());
+      std::thread guiBackThread(runGUI, argc, argv, &guiBack);
+      guiBackThread.detach();
+      std::thread applicationThread(run, nullptr, &guiBack);
+      applicationThread.detach();
+    }
   }
 
-  if (hal::hw.getBackCamera() != nullptr) {
-    GUI guiBack(argc, argv, hal::hw.getBackCamera());
-    returnValue = guiBack.run();
+  std::cin.get();
 
-    std::thread applicationThread(run, &guiBack);
-    applicationThread.detach();
-  }
-
-  return returnValue;
+  return 0;
 }
