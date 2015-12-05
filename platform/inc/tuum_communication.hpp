@@ -6,6 +6,9 @@
 #include <map>
 #include <stdint.h>
 
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+
 namespace rtx { namespace comm {
 
   enum TuumSignal {
@@ -68,7 +71,7 @@ namespace rtx { namespace comm {
   };
 
 
-  typedef void (*Handler)(TuumMessage);
+  typedef boost::function<void (TuumMessage)> Handler;
   typedef std::map<uint32_t, TuumMessage> TMSResponseMap;
   typedef std::map<TuumSignal, Handler> TMSListenerMap;
 

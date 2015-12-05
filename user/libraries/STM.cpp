@@ -23,13 +23,8 @@ namespace rtx {
     m_priority = State::priority_seq++;
   }
 
-  State* State::getLastState() {
-    return m_last;
-  }
-
-  State* State::getNextState() {
-    return m_next;
-  }
+  State* State::getLastState() { return m_last; }
+  State* State::getNextState() { return m_next; }
 
   void State::addController(Controller* ctrl) {
     m_controllers.push_back(ctrl);
@@ -78,6 +73,7 @@ namespace rtx {
     }
     std::cout << st->getName() << std::endl;
 
+    emitEvent("STExit");
     m_state = st;
     st->setup();
   }
@@ -177,6 +173,11 @@ namespace rtx {
     m_eventListeners[id] = evh;
   }
 
+  void EventEmitter::deregisterEventListener(EventID id) {
+    auto it = m_eventListeners.find(id);
+    if(it != m_eventListeners.end()) m_eventListeners.erase(id);
+  }
+
   void EventEmitter::emitEvent(EventName evn) {
     EventID id = getEventID(evn);
     if(id == 0) return;
@@ -184,8 +185,8 @@ namespace rtx {
     EventHandler evh;
     try { evh = getEventHandler(id); }
     catch (int err) {
-      std::cout << "[EventEmitter]Error " << err
-                << ": Unknown handler id " << id << std::endl;
+      //std::cout << "[EventEmitter]Warning " << err
+      //          << ": Unknown handler id " << id << std::endl;
       return;
     }
 
