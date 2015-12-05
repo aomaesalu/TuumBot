@@ -102,7 +102,13 @@ namespace rtx { namespace ctl {
   void LSBallLocate::init() {
     Motion::stop();
     Motion::setBehaviour(Motion::MOT_COMPLEX);
+
     twitchScanner.init(5, 30);
+
+    positionTimeout.setPeriod(5000);
+    positionTimeout.start();
+    scan = true;
+
     mb->stopDribbler();
   }
 
@@ -112,7 +118,25 @@ namespace rtx { namespace ctl {
       Motion::stop();
       return 0;
     } else {
-      twitchScanner.run();
+      if(positionTimeout.isTime()) {
+        Goal* g = Navigation::getNearestGoal();
+	if(g != nullptr) {
+	  if(scan) {
+	    scan = false;
+	    Motion::stop();
+	  }
+	  std::cout << "POSITION TIMEOUT TODO" << std::endl;
+	  Motion::setPositionTarget(Navigation::calcCenterFieldPos(g));
+	  if(!Motion::isRunning()) Motion::start();
+
+	  if(Motion::isTargetAchieved()) {
+	    std::cout << "CONTINUE SCAN" << std::endl;
+            Motion::stop();
+	    positionTimeout.start();
+	    scan = true;
+	  }
+	} else twitchScanner.run();
+      } else twitchScanner.run();
     }
 
     return 0;

@@ -77,7 +77,11 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
+
       Motion::TwitchScan twitchScanner;
+
+      Timer positionTimeout;
+      bool scan;
   };
 
 
