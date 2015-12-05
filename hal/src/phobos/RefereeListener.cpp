@@ -85,7 +85,7 @@ namespace rtx { namespace hal {
 
   void RefereeListener::on_receive_(const std::string &data) {
     std::string message = data.substr(0, 12);
-    std::cout << "Received " << data << std::endl;
+    //std::cout << "Received " << data << std::endl;
     if(message[0] == 'a') {
       if(message[1] == m_field) {
         std::cout << data << std::endl;
@@ -99,7 +99,7 @@ namespace rtx { namespace hal {
   void RefereeListener::sendTuumMessage(comm::TuumMessage tms) {
     try { comm::popResponse(tms.id); } catch (int) {}
     std::string data = tms.str();
-    std::cout << "Sending " << data << std::endl;
+    //std::cout << "Sending " << data << std::endl;
     this->write_some(data.c_str(), data.size());
   }
 
