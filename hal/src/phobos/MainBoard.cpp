@@ -20,7 +20,7 @@ namespace rtx { namespace hal {
     m_dribblerState = 0;
     m_coilKickActive = 0;
 
-    m_coilKickCharge.setPeriod(300);
+    m_coilKickCharge.setPeriod(100);
     m_coilKickCooldown.setPeriod(1500);
 
     m_updateTimer.setPeriod(300);
