@@ -431,8 +431,8 @@ namespace rtx {
       for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
         // If the current blob is a goal or ball blob
         if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow() || blobsBuffer[i]->isOrange()) {
-          // If the blob's height is smaller than half of the expected height at that position, remove the blob from the blob list.
-          if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), blobsBuffer[i]->getPosition(), blobsBuffer[i]->getCameraID()).second) {
+          // If the blob's height is smaller than a quarter of the expected height at that position, remove the blob from the blob list.
+          if (blobsBuffer[i]->getHeight() < 0.25 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), blobsBuffer[i]->getPosition(), blobsBuffer[i]->getCameraID()).second) {
             toBeRemoved.insert(i);
           }
         }
