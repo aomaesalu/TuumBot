@@ -537,7 +537,7 @@ namespace rtx { namespace Vision {
 
   }
 
-  void separateLines(const std::vector<std::pair<double, double>> &points) {
+  void separateLines(const std::vector<std::pair<double, double>> &points, const unsigned int &cameraID) {
     // New algorithm
 
     // If there are not enough points to form a line, return without creating
@@ -781,8 +781,8 @@ namespace rtx { namespace Vision {
         //std::cout << "W:" << "(" << farthestWhite.first << ", " << farthestWhite.second << ")" << std::endl;
         // DEBUG:
         //std::cout << "B:" << "(" << closestBlack.first << ", " << closestBlack.second << ")" << std::endl;
-        std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite);
-        std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack);
+        std::pair<double, double> whitePoint = Perspective::virtualToReal(farthestWhite, cameraID);
+        std::pair<double, double> blackPoint = Perspective::virtualToReal(closestBlack, cameraID);
         transitionPoints.push_back(std::pair<double, double>((whitePoint.first + blackPoint.first) / 2, (whitePoint.second + blackPoint.second) / 2));
       }
 
@@ -802,6 +802,9 @@ namespace rtx { namespace Vision {
     }
     std::cout << std::endl << std::endl << std::endl;*/
 
+    // Separate lines based on the differences in the slopes
+    separateLines(transitionPoints, cameraID);
+
   }
 
   void lineDetection(const std::vector<Frame*> &frames, const std::vector<std::string> &filters, const std::vector<Samples> &samples) {
@@ -813,9 +816,6 @@ namespace rtx { namespace Vision {
       lineDetection(*frames[cameraID], filters, cameraID, samples);
 
     }
-
-    // Separate lines based on the differences in the slopes
-    separateLines(transitionPoints);
 
     translateLinesBuffer();
   }
