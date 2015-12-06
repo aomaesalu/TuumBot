@@ -74,7 +74,7 @@ namespace rtx { namespace Motion {
           }
         } else {
 	  stop();
-          printf("[Motion]Target achieved.\n");
+          //printf("[Motion]Target achieved.\n");
           motionCtx.phase = MOP_DONE;
         }
 
@@ -130,6 +130,10 @@ namespace rtx { namespace Motion {
     motionCtx.phase = MOP_STANDBY;
   }
 
+  void run() {
+    if(!Motion::isRunning()) Motion::start();
+  }
+
   void setSpeed(int v) {
     motionData.baseVelocity = v;
     // Recalculate velocity parameters?
@@ -182,7 +186,6 @@ namespace rtx { namespace Motion {
     double O = data->getTargetOrient();
 
     if(data->posTargetSet) {
-	    std::cout << "POS SET" << std::endl;
       if(fabs(t->getX() - v.x) > d ||
 	 fabs(t->getY() - v.y) > d) return 0.0;
     }

@@ -58,6 +58,7 @@ namespace rtx { namespace Motion {
   // State control API
   void start();
   void stop();
+  void run();
 
   void setSpeed(int v);
   void setBehaviour(MotionType mt);

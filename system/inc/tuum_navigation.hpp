@@ -44,6 +44,8 @@ namespace rtx { namespace Navigation {
 
   Robot* getAlly();
 
+
+  int toShootPosition(Vec2i);
 }}
 
 #endif // RTX_NAVIGATION_H
