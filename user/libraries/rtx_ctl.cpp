@@ -291,7 +291,8 @@ ERR:
   }
 
   int LSGoalShoot::run() {
-    if(aimTimeout.isTime() || timeout) {
+    if(aimTimeout.isTime() && !timeout) {
+      mb->doCoilKick();
       timeout = true;
       return -1;
     }
