@@ -44,6 +44,7 @@ namespace rtx { namespace FBLogic {
   void stop() {
     std::cout << "Stop game." << std::endl;
     Motion::stop();
+    hw.getMotorControl()->OmniDrive(0, 0.0, 0);
     hw.getMainBoard()->stopDribbler();
     gmState = GameState::STOP;
   }
