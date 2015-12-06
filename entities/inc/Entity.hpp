@@ -45,14 +45,14 @@ namespace rtx {
       Entity(const Entity&);
 
       // By position
-      Entity(const Vec2i, Blob*);
-      Entity(const int, const int, Blob*);
+      Entity(const Vec2i, Vision::Blob*);
+      Entity(const int, const int, Vision::Blob*);
 
       // By position & orientation
-      Entity(Transform, Blob*);
-      Entity(Transform, Blob&);
-      Entity(Transform, bool, Blob*);
-      Entity(const int, const int, const double, Blob*);
+      Entity(Transform, Vision::Blob*);
+      Entity(Transform, Vision::Blob&);
+      Entity(Transform, bool, Vision::Blob*);
+      Entity(const int, const int, const double, Vision::Blob*);
 
       unsigned int getID();
       int getHealth();
@@ -60,12 +60,12 @@ namespace rtx {
       Transform* getTransform();
 
       void update(Transform); // Heal
-      void update(Blob*);
-      void update(Blob&);
+      void update(Vision::Blob*);
+      void update(Vision::Blob&);
       void update(); // Decay
 
-      Blob* getBlob() const;
-      Color getColor() const;
+      Vision::Blob* getBlob() const;
+      Vision::Color getColor() const;
 
       bool isBall() const;
       bool isGoal() const;
