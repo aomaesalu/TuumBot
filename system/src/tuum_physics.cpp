@@ -44,19 +44,20 @@ namespace rtx { namespace Physics {
     entities.insert(entities.end(), balls.begin(), balls.end());
 
     // Add goals to the entities list if they exist
-    if (Visioning::yellowGoal != nullptr)
+    /*if (Visioning::yellowGoal != nullptr)
       entities.push_back(Visioning::yellowGoal);
     if (Visioning::blueGoal != nullptr)
       entities.push_back(Visioning::blueGoal);
+      */
 
     // Add robots to the entities list
     Visioning::RobotSet robots = *(Visioning::robotDetect.getEntities());
     entities.insert(entities.end(), robots.begin(), robots.end());
 
     // DEBUG:
-    std::cout << "Ray: " << std::endl;
-    std::cout << "(" << radius << ", " << angle << "), (" << slope << ", " << perpendicularSlope << "), (" << radiusVectorX << ", " << radiusVectorY << ")" << std::endl;
-    std::cout << std::endl;
+    //std::cout << "Ray: " << std::endl;
+    //std::cout << "(" << radius << ", " << angle << "), (" << slope << ", " << perpendicularSlope << "), (" << radiusVectorX << ", " << radiusVectorY << ")" << std::endl;
+    //std::cout << std::endl;
 
     // Check for entity blobs overlapping the ray area
     for (std::vector<Entity*>::iterator entity = entities.begin(); entity != entities.end(); ++entity) {
@@ -74,20 +75,20 @@ namespace rtx { namespace Physics {
         std::cout << "Entity blob is not null" << std::endl;*/
 
       // DEBUG:
-      std::cout << "Entity: " << std::endl;
+      //std::cout << "Entity: " << std::endl;
       std::pair<double, double> pos = Vision::Perspective::virtualToReal((*entity)->getBlob()->getPosition(), (*entity)->getBlob()->getCameraID());
       double dis = sqrt(pos.second * pos.second + pos.first * pos.first);
-      std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << dis << " " << pos.first << " " << pos.second << std::endl;
+      //std::cout << intToColor((*entity)->getBlob()->getColor()) << " " << dis << " " << pos.first << " " << pos.second << std::endl;
       if ((*entity)->isBall()) {
         if (((Ball*) *entity)->isValid()) {
-          std::cout << "  The ball is valid." << std::endl;
+          //std::cout << "  The ball is valid." << std::endl;
         } else {
-          std::cout << "  The ball is not valid." << std::endl;
+          //std::cout << "  The ball is not valid." << std::endl;
         }
       } else if ((*entity)->isGoal()) {
-        std::cout << "  Blob height: " << ((*entity)->getBlob()->getHeight()) << std::endl;
-        std::cout << "  Blob width: " << ((*entity)->getBlob()->getWidth()) << std::endl;
-        std::cout << "  " << (double) ((*entity)->getBlob()->getWidth()) / (double) ((*entity)->getBlob()->getHeight()) << std::endl;
+        //std::cout << "  Blob height: " << ((*entity)->getBlob()->getHeight()) << std::endl;
+        //std::cout << "  Blob width: " << ((*entity)->getBlob()->getWidth()) << std::endl;
+        //std::cout << "  " << (double) ((*entity)->getBlob()->getWidth()) / (double) ((*entity)->getBlob()->getHeight()) << std::endl;
       }
 
       // If the entity is a ball, ensure that it is valid. Otherwise, continue
@@ -118,10 +119,11 @@ namespace rtx { namespace Physics {
         double topRightAngle = -atan2(topRightCorner.first, topRightCorner.second);
 
         // DEBUG:
-        std::cout << (*entity)->getBlob()->getPosition()->getX() << " " << (*entity)->getBlob()->getPosition()->getY() << " " << -atan2((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getPosition()->getY()) << std::endl;
+        /*std::cout << (*entity)->getBlob()->getPosition()->getX() << " " << (*entity)->getBlob()->getPosition()->getY() << " " << -atan2((*entity)->getBlob()->getPosition()->getX(), (*entity)->getBlob()->getPosition()->getY()) << std::endl;
         std::cout << (*entity)->getBlob()->getMinX() << " " << (*entity)->getBlob()->getMaxY() << " " << -atan2((*entity)->getBlob()->getMinX(), (*entity)->getBlob()->getMaxY()) << std::endl;
         std::cout << (*entity)->getBlob()->getMaxX() << " " << (*entity)->getBlob()->getMinY() << " " << -atan2((*entity)->getBlob()->getMaxX(), (*entity)->getBlob()->getMinY()) << std::endl;
         std::cout << "(" << bottomLeftAngle << ", " << topRightAngle << ")" << std::endl;
+	*/
 
         // If the angle is smaller than the bottom left corner's angle and
         // larger than the top right corner's angle, the blob is in the way of
@@ -145,7 +147,7 @@ namespace rtx { namespace Physics {
         double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
 
         // DEBUG:
-        std::cout << "(" << topLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
+        //std::cout << "(" << topLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
 
         // If the angle is smaller than the top left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
@@ -168,7 +170,7 @@ namespace rtx { namespace Physics {
         double bottomRightAngle = -atan2(bottomRightCorner.first, bottomRightCorner.second);
 
         // DEBUG:
-        std::cout << "(" << bottomLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
+        //std::cout << "(" << bottomLeftAngle << ", " << bottomRightAngle << ")" << std::endl;
 
         // If the angle is smaller than the bottom left corner's angle and larger
         // than the bottom right corner's angle, the blob is in the way of the
@@ -184,7 +186,7 @@ namespace rtx { namespace Physics {
       }
 
       // DEBUG:
-      std::cout << std::endl;
+      //std::cout << std::endl;
 
     }
 
@@ -193,7 +195,6 @@ namespace rtx { namespace Physics {
     // TODO
 
     return closestEntity;
-
   }
 
 }}
