@@ -1,5 +1,4 @@
-/**
- *  @file tuum_physics.hpp
+/** @file tuum_physics.hpp
  *  Physics system interface
  *
  *  @authors Ants-Oskar Mäesalu
@@ -16,6 +15,10 @@
 
 namespace rtx { namespace Physics {
 
+  /** Returns all detected objects which lie
+   *  on the line which parameters are given
+   *  as inputs to this method.
+   */
   Entity* rayCast(const double&, const double& = 0);
 
 }}

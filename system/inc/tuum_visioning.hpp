@@ -1,8 +1,7 @@
 /** @file tuum_visioning.hpp
  *  Visioning interface declaration.
  *
- *  @authors Ants-Oskar Mäesalu
- *  @authors Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu, Meelik Kiik
  *  @version 0.1
  *  @date 4 December 2015
  */
@@ -33,7 +32,12 @@ namespace rtx { namespace Visioning {
   typedef std::vector<Ball*> BallSet;
   typedef std::vector<Robot*> RobotSet;
 
-  // Entity Detection State
+
+  /** Entity Detection State.
+   *  Monitors and updates objects health and
+   *  transforms. Enables to reliably detect
+   *  objects by filtering out any false-positives.
+   */
   template<class T>
   struct EDS {
     int mn_h = -5; // Entity removal health condition
@@ -66,6 +70,11 @@ namespace rtx { namespace Visioning {
       return routine;
     }
 
+    /** Calculates the parameter object's correlation
+     *  to currently detected objects and unites them
+     *  or creates a newly detected object based on the
+     *  correlation values.
+     */
     void processProbableEntity(T* obj) {
       // Calculate entity similarity probabilities
       T* probable_entity = nullptr;
@@ -158,10 +167,14 @@ namespace rtx { namespace Visioning {
 
   void readFilterFromFile(const std::string&);
 
+
+  /** Entities detection methods.
+   *  @{
+   */
   void ballDetection();
   void goalDetection();
   void robotDetection();
-
+  // @}
 }}
 
 #endif // RTX_VISIONING_H

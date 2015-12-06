@@ -1,3 +1,11 @@
+/** @file MotionData.hpp
+ *  Helper structure for calculating velocity information
+ *  based on motion target transform.
+ *
+ *  @authors Meelik Kiik
+ *  @version 0.2
+ *  @date 2 .December 2015
+ */
 
 #ifndef RTX_MOTION_DATA_H
 #define RTX_MOTION_DATA_H
