@@ -186,7 +186,6 @@ namespace rtx { namespace Motion {
     double O = data->getTargetOrient();
 
     if(data->posTargetSet) {
-	    std::cout << "POS SET" << std::endl;
       if(fabs(t->getX() - v.x) > d ||
 	 fabs(t->getY() - v.y) > d) return 0.0;
     }
