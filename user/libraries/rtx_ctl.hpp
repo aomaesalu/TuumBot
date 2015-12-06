@@ -81,7 +81,9 @@ namespace rtx { namespace ctl {
       Motion::TwitchScan twitchScanner;
 
       Timer positionTimeout;
-      bool scan;
+      Timer positionUpdate;
+      Vec2i positionOffset;
+      bool move;
   };
 
 

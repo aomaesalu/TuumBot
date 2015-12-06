@@ -107,7 +107,11 @@ namespace rtx { namespace ctl {
 
     positionTimeout.setPeriod(5000);
     positionTimeout.start();
-    scan = true;
+    positionUpdate.setPeriod(300);
+    positionUpdate.start();
+    move = false;
+
+    positionOffset = {0, 0};
 
     mb->stopDribbler();
   }
@@ -119,24 +123,22 @@ namespace rtx { namespace ctl {
       return 0;
     } else {
       if(positionTimeout.isTime()) {
-        Goal* g = Navigation::getNearestGoal();
-	if(g != nullptr) {
-	  if(scan) {
-	    scan = false;
-	    Motion::stop();
+	if(!move) {
+	  Goal* g = Navigation::getNearestGoal();
+	  move = true;
+	} else {
+	  if(positionUpdate.isTime() && positionOffset.getMagnitude() < 150) {
+	    positionOffset.y += 20;
+	    positionUpdate.start();
 	  }
-	  std::cout << "POSITION TIMEOUT TODO" << std::endl;
-	  Motion::setPositionTarget(Navigation::calcCenterFieldPos(g));
-	  if(!Motion::isRunning()) Motion::start();
 
-	  if(Motion::isTargetAchieved()) {
-	    std::cout << "CONTINUE SCAN" << std::endl;
-            Motion::stop();
-	    positionTimeout.start();
-	    scan = true;
-	  }
-	} else twitchScanner.run();
-      } else twitchScanner.run();
+	  Motion::setPositionTarget(positionOffset);
+	  std::cout << positionOffset.toString() << std::endl;
+	  if(!Motion::isRunning()) Motion::start();
+	}
+      }
+      
+      twitchScanner.run();
     }
 
     return 0;
