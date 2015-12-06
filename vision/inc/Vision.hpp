@@ -29,14 +29,12 @@ namespace rtx { namespace Vision {
   typedef std::vector<SampleRay> Samples;
 
   // Vector of rays
-  extern Samples flatSamples;
-  extern Samples meshSamples;
-  extern Samples radialSamples;
-
-  // Vector of rays
   extern std::vector<Samples> flatSamples;
   extern std::vector<Samples> meshSamples;
   extern std::vector<Samples> radialSamples;
+
+  extern BlobSet blobs;
+  extern BlobSet blobsBuffer;
 
   extern LineSet lines;
   extern LineSet linesBuffer;
