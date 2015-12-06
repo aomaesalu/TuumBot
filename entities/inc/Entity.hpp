@@ -74,7 +74,7 @@ namespace rtx {
       std::string toString();
 
     protected:
-      Blob *blob;
+      Vision::Blob *blob;
 
     private:
       static unsigned int id_seq;
