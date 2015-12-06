@@ -301,6 +301,8 @@ ERR:
 ;
     //if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
 
+    if(Motion::getDeltaOrientation() < 0.1) mb->doCoilKick();
+
     if(!Motion::isTargetAchieved()) {
       if(!Motion::isRunning()) Motion::start();
     } else {
