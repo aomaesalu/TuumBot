@@ -107,7 +107,7 @@ namespace rtx {
     for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
       double realY = Vision::Perspective::virtualToReal(0, y).second;
       double realX = (realY - point.second) / slope + point.first;
-      unsigned int x = Vision::Perspective::realToVirtual(realX, realY).first;
+      unsigned int x = Vision::Perspective::realToVirtual(realX, realY, line->getCameraID()).first;
       if (x >= CAMERA_WIDTH)
         continue;
       guint8 *pixel = pixels + x * channels + y * stride;
@@ -127,7 +127,7 @@ namespace rtx {
     // Color the transition points // TODO: Remove (from the Line class, too)
     std::vector<std::pair<double, double>> linePoints = line->getPoints();
     for (std::vector<std::pair<double, double>>::iterator point = linePoints.begin(); point != linePoints.end(); ++point) {
-      std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point);
+      std::pair<unsigned int, unsigned int> vPoint = Vision::Perspective::realToVirtual(*point, line->getCameraID());
       if (vPoint.first >= CAMERA_WIDTH || vPoint.second >= CAMERA_HEIGHT)
         continue;
       for (int dx = -2; dx <= 2; ++dx) {
