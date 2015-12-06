@@ -74,7 +74,7 @@ namespace rtx { namespace Motion {
           }
         } else {
 	  stop();
-          printf("[Motion]Target achieved.\n");
+          //printf("[Motion]Target achieved.\n");
           motionCtx.phase = MOP_DONE;
         }
 
@@ -128,6 +128,10 @@ namespace rtx { namespace Motion {
     hal::hw.getMotorControl()->OmniDrive(0, 0, 0);
     motionData.clear();
     motionCtx.phase = MOP_STANDBY;
+  }
+
+  void run() {
+    if(!Motion::isRunning()) Motion::start();
   }
 
   void setSpeed(int v) {

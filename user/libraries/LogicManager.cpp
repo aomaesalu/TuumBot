@@ -154,13 +154,13 @@ namespace rtx {
     st->addController(new ctl::LSGoalLocate(ctx));
     stm->addRootState(st);
 
-
     st2 = stm->createState("STGoalShoot");
     st2->setLastState(st);
     st->setNextState(st2);
     st = st2;
     ctx.st = st;
     st->addController(new ctl::LSGoalShoot(ctx));
+
 
     return stm;
   }

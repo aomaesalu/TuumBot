@@ -15,6 +15,7 @@ typedef boost::shared_ptr<boost::asio::serial_port> serial_port_ptr;
 
 #define SERIAL_PORT_READ_BUF_SIZE 256
 
+
 class SerialPort {
   protected:
     boost::asio::io_service io_service_;
@@ -49,4 +50,4 @@ class SerialPort {
     virtual void on_receive_(const std::string &data) {};
 };
 
-#endif
+#endif // SERIALPORT_H

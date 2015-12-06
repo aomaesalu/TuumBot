@@ -142,7 +142,8 @@ namespace rtx { namespace ctl {
     private:
       Context ctx;
 
-      Goal* targetGoal;
+      Timer aimTimeout;
+      bool timeout = false;
   };
 
   class LSGoalee : public Controller {
@@ -154,7 +155,7 @@ namespace rtx { namespace ctl {
 
     private:
       Context ctx;
-  };
+ };
 
 
   /**

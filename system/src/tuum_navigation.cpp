@@ -14,6 +14,7 @@
 #include "tuum_visioning.hpp"
 #include "tuum_localization.hpp"
 #include "tuum_motion.hpp"
+#include "tuum_physics.hpp"
 
 // TODO: Obstacle avoidance
 // TODO: Pathfinding
@@ -163,6 +164,27 @@ namespace rtx { namespace Navigation {
       if(r->isAlly()) return r;
 
     return nullptr;
+  }
+
+  int toShootPosition(Vec2i tPos) {
+    Motion::setAimTarget(tPos);
+
+    auto o = Physics::rayCast(0.0, 10);
+    if(o != nullptr) {
+      std::cout << "toShootPosition blocked: ";
+      std::cout << o->toString() << std::endl;
+      Motion::setPositionTarget({0, 200});
+      Motion::run();
+      return -1;
+    } else {
+      Motion::setPositionTarget({0, 0});
+      Motion::run();
+    }
+
+    Motion::run();
+    if(!Motion::isTargetAchieved() || Motion::getDeltaOrientation() > 0.02) return -1;
+
+    return 0;
   }
 
 }}

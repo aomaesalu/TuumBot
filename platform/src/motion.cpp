@@ -9,6 +9,6 @@ namespace rtx { namespace Motion {
 
   //TODO: Movement gears
   const Gears GRS_MOV = {{100, 200}, {60, 175}, {40, 100}, {35, 50}, {30, 50}};
-  const Gears GRS_ROT = {{5, 0.25}, {5, 0.25}, {10, 0.15}, {15, 0.05}, {12, 0.08}};
+  const Gears GRS_ROT = {{5, 0.25}, {5, 0.25}, {10, 0.15}, {15, 0.05}, {18, 0.09}};
 
 }}

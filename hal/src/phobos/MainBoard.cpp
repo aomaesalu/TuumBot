@@ -61,7 +61,7 @@ namespace rtx { namespace hal {
       } else {
       	chargeCoil();
         m_coilChargeLevel++;
-	if(m_coilChargeLevel == 1) releaseCoil();
+	if(m_coilChargeLevel == 2) releaseCoil();
 	else chargeCoil();
 	m_coilKickCharge.start();
       }

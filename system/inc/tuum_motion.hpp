@@ -1,3 +1,9 @@
+/** @file tuum_motion.hpp
+ *  Motion subsystem interface.
+ *
+ *  @author Meelik Kiik
+ *  @version 0.3
+ */
 
 #ifndef RTX_MOTIONING_H
 #define RTX_MOTIONING_H
@@ -52,6 +58,7 @@ namespace rtx { namespace Motion {
   // State control API
   void start();
   void stop();
+  void run();
 
   void setSpeed(int v);
   void setBehaviour(MotionType mt);
