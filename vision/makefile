@@ -6,6 +6,6 @@ WIRING_MODULE_PATH=.
 TARGET_TYPE = a
 BUILD_PATH_EXT = $(BUILD_TARGET_PLATFORM)
 
-DEPENDENCIES = hal geometry entities
+DEPENDENCIES = platform hal geometry entities
 
 include ../build/tlm.mk

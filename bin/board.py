@@ -3,7 +3,7 @@ from serial import Serial
 
 id = 255
 
-s = Serial("/dev/ttyUSB1", 19200)
+s = Serial("/dev/ttyUSB0", 19200)
 s.setStopbits(2)
 
 def clear():
@@ -11,7 +11,7 @@ def clear():
     s.read()
 
 def write(cmd):
-  s.write("255:{0}\n".format(cmd)) 
+  s.write("{0}:{1}\n".format(id, cmd)) 
   
 def read(cmd):
   write(cmd)

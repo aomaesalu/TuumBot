@@ -3,8 +3,8 @@
  *  Computer vision class using YUYV.
  *
  *  @authors Ants-Oskar Mäesalu
- *  @version 0.3
- *  @date 1 December 2015
+ *  @version 0.2
+ *  @date 5 December 2015
  */
 
 #include "Vision.hpp"
@@ -22,9 +22,9 @@
 
 namespace rtx { namespace Vision {
 
-  Samples flatSamples;
-  Samples meshSamples;
-  Samples radialSamples;
+  std::vector<Samples> flatSamples;
+  std::vector<Samples> meshSamples;
+  std::vector<Samples> radialSamples;
 
   BlobSet blobs;
   BlobSet blobsBuffer;
@@ -39,41 +39,38 @@ namespace rtx { namespace Vision {
   bool editingLines = false;
   bool editingCorners = false;
 
-  /*void emptyVector(std::vector<Feature*> &vector) {
-    for (std::vector<Feature*>::iterator i = vector.begin(); i != vector.end();
-         ++i) {
-      delete *i;
-    }
-    vector.clear();
-  }*/
-
-  void setup() {
-    initialiseFlatSamples();
-    initialiseMeshSamples();
-    initialiseRadialSamples();
+  void setup(const unsigned int &cameraID) {
+    Perspective::setup();
+    initialiseFlatSamples(cameraID);
+    initialiseMeshSamples(cameraID);
+    initialiseRadialSamples(cameraID);
 
     printf("\033[1;32m");
     printf("[Vision::setup()]Ready.");
     printf("\033[0m\n");
   }
 
-  void initialiseFlatSamples() {
+  void initialiseFlatSamples(const unsigned int &cameraID) {
+    Samples samples;
+    flatSamples.push_back(samples);
     for (unsigned int y = 0; y < CAMERA_HEIGHT; ++y) {
       std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
       for (unsigned int x = 0; x < CAMERA_WIDTH; ++x) {
         pointsInRow.push_back(std::pair<unsigned int, unsigned int>(x, y));
       }
-      flatSamples.push_back(pointsInRow);
+      flatSamples[cameraID].push_back(pointsInRow);
     }
   }
 
-  void initialiseMeshSamples() {
+  void initialiseMeshSamples(const unsigned int &cameraID) {
+    Samples samples;
+    meshSamples.push_back(samples);
     double step = 20; // TODO: Calibrate separate steps for horisontal and vertical coordinates
     std::set<std::pair<unsigned int, unsigned int>> seenPoints;
     for (double y = 0; y < FIELD_LENGTH; y += step) {
       std::vector<std::pair<unsigned int, unsigned int>> pointsInRow;
       for (double x = -FIELD_LENGTH; x <= FIELD_LENGTH; x += step) {
-        std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y);
+        std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(x, y, cameraID);
         if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
           if (seenPoints.find(virtualPoint) == seenPoints.end()) {
             pointsInRow.push_back(virtualPoint);
@@ -82,12 +79,14 @@ namespace rtx { namespace Vision {
         }
       }
       if (!pointsInRow.empty()) {
-        meshSamples.push_back(pointsInRow);
+        meshSamples[cameraID].push_back(pointsInRow);
       }
     }
   }
 
-  void initialiseRadialSamples() {
+  void initialiseRadialSamples(const unsigned int &cameraID) {
+    Samples samples;
+    radialSamples.push_back(samples);
     double step = 20;
     double count = 200; //FIELD_LENGTH * PI / step; // TODO: Calibrate radial count
     std::set<std::pair<unsigned int, unsigned int>> seenPoints;
@@ -96,7 +95,7 @@ namespace rtx { namespace Vision {
       for (double distance = 0; distance <= FIELD_LENGTH; distance += step) {
         double realHorisontal = distance * sin(angle);
         double realVertical = distance * cos(angle);
-        std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical);
+        std::pair<unsigned int, unsigned int> virtualPoint = Perspective::realToVirtual(realHorisontal, realVertical, cameraID);
         if (virtualPoint.first < CAMERA_WIDTH && virtualPoint.second < CAMERA_HEIGHT) {
           if (seenPoints.find(virtualPoint) == seenPoints.end()) {
             pointsInRay.push_back(virtualPoint);
@@ -105,51 +104,37 @@ namespace rtx { namespace Vision {
         }
       }
       if (!pointsInRay.empty()) {
-        radialSamples.push_back(pointsInRay);
+        radialSamples[cameraID].push_back(pointsInRay);
       }
     }
-
-    // DEBUG:
-    /*unsigned int elementCount = 0, rayCount = 0;
-    for (Samples::iterator ray = radialSamples.begin(); ray != radialSamples.end(); ++ray) {
-      for (SampleRay::iterator sample = ray->begin(); sample != ray->end(); ++sample) {
-        std::cout << "(" << sample->first << ", " << sample->second << ")" << " ";
-        elementCount++;
-      }
-      rayCount++;
-      std::cout << std::endl << std::endl;
-    }
-    std::cout << std::endl << std::endl;
-    std::cout << "Points: " << elementCount << std::endl;
-    std::cout << "Actual rays: " << rayCount << std::endl;*/
   }
 
-  void process(const Frame &frame, const std::string &filter) {
-    blobDetection(frame, filter, {0, 1, 2}, meshSamples);
-    lineDetection(frame, filter, radialSamples);
-    cornerDetection(frame, filter, meshSamples);
+  void process(const std::vector<Frame*> &frames, const std::vector<std::string> &filters) {
+    blobDetection(frames, filters, {0, 1, 2}, meshSamples);
+    lineDetection(frames, filters, radialSamples);
+    cornerDetection();
   }
 
-  void processCheckerboard(const Frame &frame, const std::string &filter) {
+  void processCheckerboard(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID) {
     // TODO: Include other kind of samples (full board?)
-    blobDetection(frame, filter, {6, 7}, flatSamples);
-    lineDetection(frame, filter, flatSamples);
-    cornerDetection(frame, filter, flatSamples);
+    blobDetection(frame, filters, cameraID, {6, 7});
+    lineDetection(frame, filters, cameraID);
+    cornerDetection();
   }
 
-  bool isColored(const Frame &frame, const std::string &filter, const unsigned int &pixel, const unsigned int &mode) {
-    if (filter.size() > pixel) {
+  bool isColored(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const unsigned int &pixel, const unsigned int &mode) {
+    if (filters[cameraID].size() > pixel) {
       //std::cout << (7 - mode) << " " << pixel << " " << filter[pixel] << " " << (filter[pixel] >> (7 - mode)) << " " << ((filter[pixel] >> (7 - mode)) & 0x1) << std::endl;
-      return (filter[pixel] >> (7 - mode)) & 0x1;
+      return (filters[cameraID][pixel] >> (7 - mode)) & 0x1;
     } else {
       //std::cout << "Filter is empty" << std::endl;
       return false;
     }
   }
 
-  bool isColored(const Frame &frame, const std::string &filter, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
+  bool isColored(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const unsigned int &x, const unsigned int &y, const unsigned int &z, const unsigned int &mode) {
     //std::cout << x << " " << y << " " << z << " " << (x << 16 + y << 8 + z) << std::endl;
-    return isColored(frame, filter, (x << 16) + (y << 8) + z, mode);
+    return isColored(frame, filters, cameraID, (x << 16) + (y << 8) + z, mode);
   }
 
   BlobSet getBlobs() {
@@ -210,7 +195,7 @@ namespace rtx { namespace Vision {
   void joinBlobsInBuffer() {
     std::set<unsigned int> toBeRemoved;
 
-      unsigned int minimumNumberOfPoints = 6; // TODO: Add to constants
+    unsigned int minimumNumberOfPoints = 6; // TODO: Add to constants
 
     // Join blobs (robot blobs first) // TODO: Refactor hacky solution
     for (unsigned int i = 0; i < blobsBuffer.size(); ++i) {
@@ -335,6 +320,10 @@ namespace rtx { namespace Vision {
         if (std::find(toBeRemoved.begin(), toBeRemoved.end(), j) != toBeRemoved.end())
           continue;
 
+        // If the blobs are not detected on the same camera frame, continue
+        // with the next pair
+        if (blobsBuffer[i]->isOnSameCamera(*blobsBuffer[j]))
+
         // If the blob with the index j doesn't have enough points in it, remove it and move to the next one // TODO: Should we do it after blob joining operations? Or maybe both, with different constants?
         if (blobsBuffer[j]->getNumberOfPoints() < minimumNumberOfPoints) {
           toBeRemoved.insert(j);
@@ -420,7 +409,7 @@ namespace rtx { namespace Vision {
       // If the current blob is a goal or ball blob
       if (blobsBuffer[i]->isBlue() || blobsBuffer[i]->isYellow() || blobsBuffer[i]->isOrange()) {
         // If the blob's height is smaller than half of the expected height at that position, remove the blob from the blob list.
-        if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), std::pair<unsigned int, unsigned int>(blobsBuffer[i]->getPosition()->getX(), blobsBuffer[i]->getMaxY())).second) {
+        if (blobsBuffer[i]->getHeight() < 0.5 * getBlobExpectedVirtualSize(blobsBuffer[i]->getColor(), blobsBuffer[i]->getPosition(), blobsBuffer[i]->getCameraID()).second) {
           toBeRemoved.insert(i);
         }
       }
@@ -435,12 +424,11 @@ namespace rtx { namespace Vision {
     toBeRemoved.clear();
   }
 
-  void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList) {
-    blobDetection(frame, filter, modeList, meshSamples);
+  void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList) {
+    blobDetection(frame, filters, cameraID, modeList, flatSamples);
   }
 
-  void blobDetection(const Frame &frame, const std::string &filter, const std::vector<unsigned int> &modeList, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
-    blobsBuffer.clear();
+  void blobDetection(const Frame &frame, const std::vector<std::string >&filters, const unsigned int &cameraID, const std::vector<unsigned int> &modeList, const std::vector<Samples> &samples) {
 
     std::vector<std::vector<std::vector<bool>>> visited(8, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise
 
@@ -450,7 +438,7 @@ namespace rtx { namespace Vision {
 
     for (std::vector<unsigned int>::const_iterator mode = modeList.begin(); mode != modeList.end(); ++mode) {
 
-      for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+      for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples[cameraID].begin(); ray != samples[cameraID].end(); ++ray) {
         for (std::vector<std::pair<unsigned int, unsigned int>>::const_iterator sample = ray->begin(); sample != ray->end(); ++sample) {
 
           if (!visited[*mode][sample->first][sample->second]) {
@@ -466,22 +454,40 @@ namespace rtx { namespace Vision {
 
               unsigned char *pixel = pixels + point.first * channels + point.second * stride;
 
-              if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], *mode)) {
-                blobPoints.push_back(point);
-                for (int step = -1; step <= 1; step += 2) {
-                  if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
-                    if (!visited[*mode][newPoint.first][newPoint.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][newPoint.first][newPoint.second] = true;
-                    }
+              // If the pixel is not of the same colour as the mode, continue with the next point in the stac
+              if (!isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], *mode))
+                continue;
+
+              if (*mode == 0) { // Ball
+
+                // Subtract yellow goal color
+                if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 2))
+                  continue;
+
+                // Subtract white line color
+                if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 4))
+                  continue;
+
+                // Subtract black line color
+                if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], 5))
+                  continue;
+
+              }
+
+              blobPoints.push_back(point);
+              for (int step = -1; step <= 1; step += 2) {
+                if (point.first + step < CAMERA_WIDTH && point.first + step >= 0) {
+                  std::pair<unsigned int, unsigned int> newPoint(point.first + step, point.second);
+                  if (!visited[*mode][newPoint.first][newPoint.second]) {
+                    stack.push_back(newPoint);
+                    visited[*mode][newPoint.first][newPoint.second] = true;
                   }
-                  if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
-                    std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
-                    if (!visited[*mode][newPoint.first][newPoint.second]) {
-                      stack.push_back(newPoint);
-                      visited[*mode][newPoint.first][newPoint.second] = true;
-                    }
+                }
+                if (point.second + step < CAMERA_HEIGHT && point.second + step >= 0) {
+                  std::pair<unsigned int, unsigned int> newPoint(point.first, point.second + step);
+                  if (!visited[*mode][newPoint.first][newPoint.second]) {
+                    stack.push_back(newPoint);
+                    visited[*mode][newPoint.first][newPoint.second] = true;
                   }
                 }
               }
@@ -489,7 +495,7 @@ namespace rtx { namespace Vision {
             }
 
             if (!blobPoints.empty()) {
-              blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode)));
+              blobsBuffer.push_back(new Blob(blobPoints, intToColor(*mode), cameraID));
             }
 
           }
@@ -499,17 +505,36 @@ namespace rtx { namespace Vision {
 
     }
 
-    joinBlobsInBuffer();
-
-    filterBlobsInBufferBySize();
-
-    translateBlobsBuffer();
-
     // DEBUG:
     /*for (BlobSet::iterator blob = blobs.begin(); blob != blobs.end(); ++blob) {
       std::pair<unsigned int, unsigned int> expectedVirtualSize = (*blob)->getExpectedVirtualSize();
-      std::cout << "Blob: " << "(" << (*blob)->getPosition()->getX() << ", " << (*blob)->getMaxY() << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
-    }*/
+      std::cout << "Blob: " << "(" << (*blob)->getCentroid()->getX() << ", " << (*blob)->getCentroid()->getY() << ") " << "(" << ((*blob)->getMaxX() - (*blob)->getMinX()) << ", " << ((*blob)->getMaxY() - (*blob)->getMinY()) << ") " << "(" << expectedVirtualSize.first << ", " << expectedVirtualSize.second << ") " << std::endl;
+    }
+    std::cout << std::endl << std::endl;*/
+  }
+
+  void blobDetection(const std::vector<Frame*> &frames, const std::vector<std::string>&filters, const std::vector<unsigned int> &modeList, const std::vector<Samples> &samples) {
+
+    // Clear the previous blobs buffer
+    blobsBuffer.clear();
+
+    // Detect blobs from all camera frames
+    for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+
+      blobDetection(*frames[cameraID], filters, cameraID, modeList, samples);
+
+    }
+
+    // Join blobs (also takes into account that the blobs are on the same
+    // camera frame)
+    joinBlobsInBuffer();
+
+    // Filters blobs in the buffer by size
+    filterBlobsInBufferBySize();
+
+    // Translates the blobs buffer to the actual blob list
+    translateBlobsBuffer();
+
   }
 
   void separateLines(const std::vector<std::pair<double, double>> &points) {
@@ -537,8 +562,8 @@ namespace rtx { namespace Vision {
     std::vector<std::pair<unsigned int, double>> noPoints;
 
     // Repeat the following until there are no more points, or up to 3 different
-    // lines found. The constant 3 should be removed in the future (TODO) but is
-    // sufficient for this year's competition.
+    // lines found. The constant 3 should be removed in the future (TODO) but
+    // should be sufficient for this year's competition.
     while (!unused.empty() && linesBuffer.size() < 3) {
 
       // Form expected lines for every point pair
@@ -591,7 +616,7 @@ namespace rtx { namespace Vision {
       }
 
       // Add the best line to the lines buffer
-      linesBuffer.push_back(new Line({points[expectedLines[bestLine].first.first], points[expectedLines[bestLine].first.second]}));
+      linesBuffer.push_back(new Line({points[expectedLines[bestLine].first.first], points[expectedLines[bestLine].first.second]}, cameraID));
 
       // Regress over the line based on the point distances from the line to
       // make it even more exact
@@ -609,12 +634,11 @@ namespace rtx { namespace Vision {
 
   }
 
-  void lineDetection(const Frame &frame, const std::string &filter) {
-    lineDetection(frame, filter, radialSamples);
+  void lineDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID) {
+    lineDetection(frame, filters, cameraID, radialSamples);
   }
 
-  void lineDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) { // TODO: Refactor
-    linesBuffer.clear();
+  void lineDetection(const Frame &frame, const std::vector<std::string> &filters, const unsigned int &cameraID, const std::vector<Samples> &samples) { // TODO: Refactor
 
     /*// 0 is white, 1 is black
     std::vector<std::vector<std::vector<bool>>> visited(2, std::vector<std::vector<bool>>(CAMERA_WIDTH, std::vector<bool>(CAMERA_HEIGHT, false))); // TODO: Optimise*/ // TODO: Readd when relevant
@@ -627,7 +651,7 @@ namespace rtx { namespace Vision {
     std::vector<std::pair<double, double>> transitionPoints;
 
     // Find transition points from rays
-    for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples.begin(); ray != samples.end(); ++ray) {
+    for (std::vector<std::vector<std::pair<unsigned int, unsigned int>>>::const_iterator ray = samples[cameraID].begin(); ray != samples[cameraID].end(); ++ray) {
 
       /*// White line-segments in current ray
       std::vector<std::pair<std::pair<double, double>, std::pair<double, double>>> whiteSegments;
@@ -648,7 +672,7 @@ namespace rtx { namespace Vision {
 
         // If the point is white, continue along the ray in the positive
         // direction until the point is not white anymore
-        if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
+        if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], colorToInt(WHITE_LINE))) {
 
           // Find previous and next points, and compute the ray's slope (TODO: maybe a separate ray class should be implemented, so that the information would already be there) // TODO: Refactor
           double slope = 0;
@@ -669,7 +693,7 @@ namespace rtx { namespace Vision {
             for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
               std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
               unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
-              if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
+              if (!isColored(frame, filters, cameraID, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
                 farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample->second + slope * (dx - 1));
                 whiteExists = true;
                 break;
@@ -679,7 +703,7 @@ namespace rtx { namespace Vision {
             for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
               std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
               unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
-              if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
+              if (!isColored(frame, filters, cameraID, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(WHITE_LINE))) {
                 farthestWhite = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample->second + slope * (dx + 1));
                 whiteExists = true;
                 break;
@@ -692,7 +716,7 @@ namespace rtx { namespace Vision {
 
         // If the point is black, continue along the ray in the negative
         // direction until the point is not black anymore
-      } else if (isColored(frame, filter, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
+      } else if (isColored(frame, filters, cameraID, pixel[0], pixel[1], pixel[2], colorToInt(BLACK_LINE))) {
 
           // Only check for black points if a white point has already been found; otherwise, we could accidentally look at points from other robots.
           if (whiteExists) {
@@ -716,7 +740,7 @@ namespace rtx { namespace Vision {
               for (int dx = -1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; --dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                 unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
-                if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
+                if (!isColored(frame, filters, cameraID, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
                   closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx + 1), sample->second + slope * (dx + 1));
                   blackExists = true;
                   break;
@@ -726,7 +750,7 @@ namespace rtx { namespace Vision {
               for (int dx = 1; sample->first + dx < CAMERA_WIDTH && sample->second + slope * dx < CAMERA_HEIGHT; ++dx) {
                 std::pair<unsigned int, unsigned int> current(sample->first + dx, sample->second + slope * dx);
                 unsigned char *currentPixel = pixels + current.first * channels + current.second * stride;
-                if (!isColored(frame, filter, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
+                if (!isColored(frame, filters, cameraID, currentPixel[0], currentPixel[1], currentPixel[2], colorToInt(BLACK_LINE))) {
                   closestBlack = std::pair<unsigned int, unsigned int>(sample->first + (dx - 1), sample->second + slope * (dx - 1));
                   blackExists = true;
                   break;
@@ -778,17 +802,25 @@ namespace rtx { namespace Vision {
     }
     std::cout << std::endl << std::endl << std::endl;*/
 
+  }
+
+  void lineDetection(const std::vector<Frame*> &frames, const std::vector<std::string> &filters, const std::vector<Samples> &samples) {
+    linesBuffer.clear();
+
+    // Detect lines from all camera frames
+    for (unsigned int cameraID = 0; cameraID < frames.size(); ++cameraID) {
+
+      lineDetection(*frames[cameraID], filters, cameraID, samples);
+
+    }
+
     // Separate lines based on the differences in the slopes
     separateLines(transitionPoints);
 
     translateLinesBuffer();
   }
 
-  void cornerDetection(const Frame &frame, const std::string &filter) {
-    cornerDetection(frame, filter, meshSamples);
-  }
-
-  void cornerDetection(const Frame &frame, const std::string &filter, const std::vector<std::vector<std::pair<unsigned int, unsigned int>>> &samples) {
+  void cornerDetection() {
     cornersBuffer.clear();
 
     LineSet lineSet = getLines();
@@ -803,7 +835,7 @@ namespace rtx { namespace Vision {
         double slope2 = (*line2)->getSlope();
         double x = (point1.second - point2.second + slope2 * point2.first - slope1 * point1.first) / (slope2 - slope1);
         double y = slope1 * (x - point1.first) + point1.second;
-        cornersBuffer.push_back(new Corner(std::pair<double, double>(x, y)));
+        cornersBuffer.push_back(new Corner(std::pair<double, double>(x, y), (*line1)->getCameraID()));
       }
     }
 

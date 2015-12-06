@@ -22,6 +22,7 @@ static void run(GUI *gui) {
     rtx::hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
     Localization::process();
 
     gui->updateFrame();
@@ -30,6 +31,9 @@ static void run(GUI *gui) {
 
 int main(int argc, char *argv[]) {
   printf("main(): Tuum vision test application.\n");
+
+  // Initialise constants
+  rtx::init(argc, argv);
 
   // Initialize hardware
   rtx::hal::setup();

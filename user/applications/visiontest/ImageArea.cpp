@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 1 December 2015
+ *  @date 3 December 2015
  */
 
 #include "ImageArea.hpp"
@@ -13,6 +13,7 @@
 #include "GUI.hpp"
 
 #include "Perspective.hpp"
+#include "tuum_physics.hpp"
 
 #include <cairomm/context.h>
 #include <gdkmm/general.h>
@@ -53,8 +54,8 @@ namespace rtx {
 
   void ImageArea::colorBlob(const Vision::Blob *blob, guint8 *pixels, const unsigned int &channels, const unsigned int &stride) {
     // Get blob parameters
-    unsigned int x = blob->getPosition()->getX();
-    unsigned int y = blob->getPosition()->getY();
+    unsigned int x = blob->getCentroid()->getX();
+    unsigned int y = blob->getCentroid()->getY();
     unsigned int minX = blob->getMinX();
     unsigned int maxX = blob->getMaxX();
     unsigned int minY = blob->getMinY();
@@ -169,7 +170,7 @@ namespace rtx {
       if (minX >= CAMERA_WIDTH || maxX >= CAMERA_WIDTH || minY >= CAMERA_HEIGHT || maxY >= CAMERA_HEIGHT)
         continue;
 
-      //std::cout << (*blob)->getPosition()->getX() << " " << (*blob)->getPosition()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
+      //std::cout << (*blob)->getCentroid()->getX() << " " << (*blob)->getCentroid()->getY() << " " << minX << " " << maxX << " " << minY << " " << maxY << std::endl;
 
       double density = (*blob)->getDensity();
       unsigned int boxArea = (*blob)->getBoxArea();
@@ -208,6 +209,15 @@ namespace rtx {
         continue;
 
       colorLine(*line, pixels, channels, stride);
+    }
+
+    // DEBUG
+    // Analyse ray casting
+    Entity *entity = Physics::rayCast(0, BALL_DIAMETER);
+    if (entity != nullptr) {
+      std::cout << "Found " << intToColor(entity->getColor()) << " at (" << entity->getTransform()->getX() << ", " << entity->getTransform()->getY() << ")" << std::endl;
+    } else {
+      std::cout << "No entity found in the way" << std::endl;
     }
 
     return true;

@@ -7,6 +7,6 @@ HAL_MODULE_PATH=.
 TARGET_TYPE = a
 BUILD_PATH_EXT = $(HAL_BUILD_PATH_EXT)
 
-DEPENDENCIES = rtxmath
+DEPENDENCIES = platform rtxmath
 
 include ../build/tlm.mk

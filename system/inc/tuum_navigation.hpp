@@ -2,7 +2,9 @@
  *  Navigation system interface.
  *
  *  @authors Meelik Kiik
- *  @version 0.1
+ *  @authors Ants-Oskar Mäesalu
+ *  @version 0.2
+ *  @date 2 December 2015
  */
 
 #ifndef RTX_NAVIGATION_H
@@ -11,13 +13,23 @@
 #include "rtxmath.hpp"
 
 #include "Ball.hpp"
+#include "Goal.hpp"
+#include "Robot.hpp"
 
 namespace rtx { namespace Navigation {
 
+  void preProcess();
+
+  int countValidBalls();
+
   Transform calcBallPickupPos(Transform*);
-  Transform calcGoalShootPos(Transform*);
+  Vec2i calcGoalShootPos(Transform*);
 
   Ball* getNearestBall();
+
+  Goal* getOpponentGoal();
+
+  Robot* getAlly();
 
 }}
 

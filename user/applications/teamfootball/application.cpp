@@ -2,13 +2,14 @@
  *  Robotex Teamfootball application.
  *
  *  @authors Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 2. November 2015
+ *  @date 3 December 2015
  */
 
 #include "application.hpp"
 
-#include "tfb_logic.hpp"
+#include "rtx_tfb.hpp"
 
 #include <iostream> // TODO: Remove
 
@@ -16,9 +17,10 @@ using namespace std;
 using namespace rtx;
 
 int main(int argc, char *argv[]) {
-  printf("main(): Default tuum system application.\n");
+  printf("main(): Tuum team football application.\n");
 
   // Initialize hardware
+  rtx::init(argc, argv);
   rtx::hal::setup();
 
   // Initialize system modules
@@ -26,17 +28,18 @@ int main(int argc, char *argv[]) {
   Localization::setup();
   Motion::setup();
 
-  Logic::setup();
-  
+  TFBLogic::setup();
+
   bool running = true;
   while(running) {
     rtx::hal::process();
 
     Visioning::process();
+    Navigation::preProcess();
     Localization::process();
     Motion::process();
 
-    Logic::process();
+    TFBLogic::process();
   }
 
   return 0;

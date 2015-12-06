@@ -85,9 +85,10 @@
    void MainWindow::constructScale(Gtk::Container &parentContainer, Gtk::Scale &scale, Gtk::Label &label, const std::string &name) {
      label.set_text(name + ":");
      parentContainer.add(label);
-     scale.set_adjustment(Gtk::Adjustment::create(0, 0, 10, 1, 1));
-     scale.set_digits(0);
+     scale.set_adjustment(Gtk::Adjustment::create(1.0, -10000.0, 150000.0, 10.0, 1.0));
+     scale.set_digits(4);
      scale.set_size_request(100);
+     scale.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::on_scale_value_changed));
      parentContainer.add(scale);
    }
 
@@ -105,6 +106,13 @@
 
    Gtk::Scale* MainWindow::getCScale() {
      return &CScale;
+   }
+
+   void MainWindow::on_scale_value_changed() {
+     gui->getCheckerboard()->setA(AScale.get_value());
+     gui->getCheckerboard()->setB(BScale.get_value());
+     gui->getCheckerboard()->setC(CScale.get_value());
+     imageArea.queue_draw();
    }
 
  }

@@ -11,6 +11,7 @@ namespace rtx { namespace hal {
   const char CMD_DRIBBLER[] = "dm";
   const char CMD_COIL[] = "c";
   const char CMD_KICK[] = "k";
+  const char CMD_WKICK[] = "k3";
 
   MainBoard::MainBoard() {
     id = 255;
@@ -20,9 +21,12 @@ namespace rtx { namespace hal {
     m_coilKickActive = 0;
 
     m_coilKickCharge.setPeriod(300);
+    m_coilKickCooldown.setPeriod(1500);
 
     m_updateTimer.setPeriod(300);
     m_updateTimer.start();
+
+    senseBall();
   }
 
   void MainBoard::init(RTX485::WriteHandle wHandle, RTX485::SignalService sigRegister) {
@@ -47,21 +51,22 @@ namespace rtx { namespace hal {
       if(m_dribblerState) {
         startDribbler();
       }
-
       m_updateTimer.start();
     }
 
     if(m_coilKickActive && m_coilKickCharge.isTime()) {
-      if(m_coilChargeLevel >= 3) {
-        releaseCoil();
+      if(m_coilChargeLevel > 4) {
         m_coilKickActive = false;
+	m_coilKickCooldown.start();
       } else {
+      	chargeCoil();
         m_coilChargeLevel++;
-	chargeCoil();
+	if(m_coilChargeLevel == 1) releaseCoil();
+	else chargeCoil();
+	m_coilKickCharge.start();
       }
 
     }
-
   }
 
   bool MainBoard::getBallSensorState() {
@@ -69,29 +74,39 @@ namespace rtx { namespace hal {
   }
 
   void MainBoard::senseBall() {
-    if(write == nullptr) {
-      std::cout << "[MainBoard::senseBall]Error: No communication bus." << std::endl;
-      return;
-    }
-    write({id, CMD_BALL_SENSE});
+    send({id, CMD_BALL_SENSE});
   }
 
 
   void MainBoard::chargeCoil() {
-    write({id, CMD_COIL});
+    send({id, CMD_COIL});
   }
 
   void MainBoard::releaseCoil() {
-    write({id, CMD_KICK});
+    if(m_coilKickStrong)
+      send({id, CMD_KICK});
+    else
+      send({id, CMD_WKICK});
   }
 
-  void MainBoard::doCoilKick() {
-    if(!m_coilKickActive) {
+  void MainBoard::coilKick() {
+    if(!m_coilKickActive && m_coilKickCooldown.isTime()) {
+      senseBall();
       chargeCoil();
       m_coilKickActive = true;
       m_coilChargeLevel = 0;
       m_coilKickCharge.start();
     }
+  }
+
+  void MainBoard::doCoilKick() {
+    m_coilKickStrong = true;
+    coilKick();
+  }
+
+  void MainBoard::doWeakCoilKick() {
+    m_coilKickStrong = false;
+    coilKick();
   }
 
   std::string getDribblerCmd(int v) {
@@ -103,15 +118,14 @@ namespace rtx { namespace hal {
 
   void MainBoard::startDribbler() {
     m_dribblerState = 1;
-    write({id, getDribblerCmd(90)});
+    send({id, getDribblerCmd(140)});
   }
 
   void MainBoard::stopDribbler() {
     m_dribblerState = 0;
-    write({id, getDribblerCmd(0)});
+    send({id, getDribblerCmd(0)});
   }
 
 
 
 }}
-

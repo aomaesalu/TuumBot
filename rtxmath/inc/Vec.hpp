@@ -9,6 +9,9 @@
 #ifndef RTX_VEC_H
 #define RTX_VEC_H
 
+#include <iostream>
+#include <sstream>
+
 namespace rtx {
 
   template<typename T>
@@ -44,6 +47,12 @@ namespace rtx {
       return o;
     }
 
+    Vec2D<double> getNormalized() {
+      double s = abs(x) + abs(y);
+      if(s == 0) return Vec2D<double>({0, 0});
+      return Vec2D<double>({(double)x / s, (double)y / s});
+    }
+
     //FIXME:
     void extend(T val) {
       int sign = x < 0 ? -1 : 1;
@@ -52,12 +61,38 @@ namespace rtx {
       y += val*sign;
     }
 
-    Vec2D<T> operator*(double val) {
-      return Vec2D<T>({(int)(x*val), (int)(y*val)});
+    void scale(double val) {
+      x *= val; y*= val;
     }
 
-    Vec2D<T> operator-(double val) {
-      return (*this) * (1.0 - val / this->getMagnitude());
+    Vec2D<int> toInt() {
+      return Vec2D<int>({(int)x, (int)y});
+    }
+
+    Vec2D<T> operator+(Vec2D<T> vec) {
+      return Vec2D<T>({x + vec.x, y + vec.y});
+    }
+
+    Vec2D<T> operator-(Vec2D<T> vec) {
+      return Vec2D<T>({x - vec.x, y - vec.y});
+    }
+
+    Vec2D<T> operator*(T val) {
+      return Vec2D<T>({(T)(x*val), (T)(y*val)});
+    }
+
+
+    //FIXME:
+    static Vec2D<T> fromOrientation(double o, T mag = 100) {
+      return Vec2D<T>({mag*(T)acos(o), mag*(T)(asin(o))});
+    }
+
+    std::string toString() {
+      std::stringstream out;
+      out << "<Vec2D "
+          << x << ", "
+          << y << ">";
+      return out.str();
     }
   };
 

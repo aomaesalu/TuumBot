@@ -1,12 +1,15 @@
 /** @file Robot.cpp
  *  Robot class.
  *
- *  @authors Ants-Oskar Mäesalu, Meelik Kiik
+ *  @authors Ants-Oskar Mäesalu
+ *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 3 December 2015
  */
 
 #include "Robot.hpp"
+
+#include "tuum_platform.hpp"
 
 
 namespace rtx {
@@ -19,22 +22,29 @@ namespace rtx {
     (*this) = robot;
   }
 
-  Robot::Robot(const Transform transform, const double &radius):
-    Entity(transform), Circle(radius)
+  Robot::Robot(const Transform transform, Blob* blob, const double &radius):
+    Entity(transform, blob),
+    Circle(radius)
   {
-
+    // Nothing to do here
   }
 
-  Vision::Color Robot::getColor() const {
-    return color;
+  bool Robot::isAlly() const {
+    std::string pattern = rtx::gC.getStr("Pattern.Ally");
+    if (pattern == std::string("YB")) {
+      return blob->isYellowBlue();
+    } else {
+      return blob->isBlueYellow();
+    }
   }
 
-  bool Robot::isYellowBlue() const {
-    return color == Vision::ROBOT_YELLOW_BLUE;
-  }
-
-  bool Robot::isBlueYellow() const {
-    return color == Vision::ROBOT_BLUE_YELLOW;
+  bool Robot::isOpponent() const {
+    std::string pattern = rtx::gC.getStr("Pattern.Opponent");
+    if (pattern == std::string("YB")) {
+      return blob->isYellowBlue();
+    } else {
+      return blob->isBlueYellow();
+    }
   }
 
 }

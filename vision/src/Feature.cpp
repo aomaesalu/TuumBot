@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 6 December 2015
  */
 
 #include "Feature.hpp"
@@ -16,14 +16,16 @@ namespace rtx { namespace Vision {
 
   Feature::Feature(const Feature &other):
     distance(other.getDistance()),
-    angle(other.getAngle())
+    angle(other.getAngle()),
+    cameraID(other.getCameraID())
   {
     // Nothing to do here
   }
 
   Feature::Feature(const unsigned int &distance, const double &angle):
     distance(distance),
-    angle(angle)
+    angle(angle),
+    cameraID(cameraID)
   {
     // Nothing to do here
   }
@@ -38,6 +40,10 @@ namespace rtx { namespace Vision {
 
   double Feature::getAngle() const {
     return angle;
+  }
+
+  unsigned int Feature::getCameraID() const {
+    return cameraID;
   }
 
   std::pair<double, double> Feature::getRelativePoint() const {

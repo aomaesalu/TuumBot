@@ -25,6 +25,7 @@ namespace rtx {
   };
 
   long double gaussian_probability(double mu, double sig, double x);
+  long double gauss_prob2(double mu, double t, double x);
   long double random_gaussian(double mu, double sig);
 
 };

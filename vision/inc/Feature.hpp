@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 6 December 2015
  */
 
 #ifndef RTX_VISION_FEATURE_H
@@ -21,11 +21,12 @@ namespace rtx { namespace Vision {
 
     public:
       Feature(const Feature&);
-      Feature(const unsigned int&, const double&);
+      Feature(const unsigned int&, const double&, const unsigned int&);
       ~Feature();
 
       unsigned int getDistance() const;
       double getAngle() const;
+      unsigned int getCameraID() const;
 
       std::pair<double, double> getRelativePoint() const;
 
@@ -35,6 +36,7 @@ namespace rtx { namespace Vision {
     protected:
       unsigned int distance;
       double angle;
+      unsigned int cameraID;
 
   };
 

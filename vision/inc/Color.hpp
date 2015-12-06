@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "Perspective.hpp"
+#include "Point2D.hpp"
 
 
 namespace rtx { namespace Vision {
@@ -37,7 +38,8 @@ namespace rtx { namespace Vision {
   void getRGB(const Color&, unsigned int&, unsigned int&, unsigned int&);
 
   std::pair<double, double> getBlobExpectedRealSize(const Color&);
-  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&);
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const std::pair<unsigned int, unsigned int>&, const unsigned int&);
+  std::pair<unsigned int, unsigned int> getBlobExpectedVirtualSize(const Color&, const Point2D*, const unsigned int&);
 
 }}
 

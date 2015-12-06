@@ -3,38 +3,45 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 11. November 2015
+ *  @date 5 December 2015
  */
 
 #include <iostream>
+#include <fstream>
 
 #include "Hardware.hpp"
+#include "tuum_platform.hpp"
 
 namespace rtx { namespace hal {
 
   const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
-    m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT)//,
-    //m_backCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT) // TODO: Detect correct camera device for back camera; currently the cameras are the same.
+    m_frontCamera(nullptr),
+    m_backCamera(nullptr)
   {
-    //referee = new SerialPort();
-    //referee2 = new SerialPort();
+
   }
 
   void Hardware::init() {
-    printf("[Hardware::init]Loading hardware...\n");
-    HWBus.init("/dev/ttyUSB0", 19200);
+    std::ifstream frontCameraDevice(gC.getStr("Vision.FirstCamera"));
+    if (frontCameraDevice.good())
+      m_frontCamera = new Camera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
 
-    m_motorControl.init(hw_bus_write);
-    m_mainBoard.init(hw_bus_write, hw_bus_register);
+    std::ifstream backCameraDevice(gC.getStr("Vision.SecondCamera"));
+    if (backCameraDevice.good())
+      m_backCamera = new Camera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
 
-    //refereeListener.init("/dev/ttyACM0");
-    //refereeListener2.init("/dev/ttyACM1");
-    //refereeListener.write_some("aAXASTART----");
-    //referee->init("/dev/ttyACM0", 9600);
-    //referee2->init("/dev/ttyACM1", 9600);
-    //referee->write_some("aABKICKOFF----");
+    if(gC.getStr("HW.Active") == "Y") {
+      printf("[Hardware::init]Loading hardware...\n");
+      HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
+      m_refereeListener.init(gC.getStr("RefModule.Port").c_str(), gC.getInt("RefModule.Baud"));
+
+      m_motorControl.init(hw_bus_write);
+      m_mainBoard.init(hw_bus_write, hw_bus_register);
+    } else {
+      printf("[Hardware::init]Hardware not active.\n");
+    }
   }
 
   void Hardware::run() {
@@ -42,11 +49,11 @@ namespace rtx { namespace hal {
   }
 
   Camera* Hardware::getFrontCamera() {
-    return &m_frontCamera;
+    return m_frontCamera;
   }
 
   Camera* Hardware::getBackCamera() {
-    return nullptr; //&m_backCamera;
+    return m_backCamera;
   }
 
   MainBoard* Hardware::getMainBoard() {
@@ -55,6 +62,10 @@ namespace rtx { namespace hal {
 
   MotorControl* Hardware::getMotorControl() {
     return &m_motorControl;
+  }
+
+  RefereeListener* Hardware::getRefListener() {
+    return &m_refereeListener;
   }
 
 }}
