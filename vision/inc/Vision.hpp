@@ -56,6 +56,10 @@ namespace rtx { namespace Vision {
   bool isColored(const Frame&, const std::vector<std::string>&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&, const unsigned int&);
   bool isColored(const Frame&, const std::vector<std::string>&, const unsigned int&, const unsigned int&, const unsigned int&);
 
+  BlobSet getBlobs();
+  LineSet getLines();
+  CornerSet getCorners();
+
   void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&);
   void blobDetection(const Frame&, const std::vector<std::string>&, const unsigned int&, const std::vector<unsigned int>&, const std::vector<Samples>&);
   void blobDetection(const std::vector<Frame*>&, const std::vector<std::string>&, const std::vector<unsigned int>&, const std::vector<Samples>&);
