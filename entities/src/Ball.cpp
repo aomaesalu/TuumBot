@@ -19,7 +19,7 @@ namespace rtx {
     initialiseAttributes();
   }
 
-  Ball::Ball(const Transform transform, Blob *blob, const double &radius):
+  Ball::Ball(const Transform transform, Vision::Blob *blob, const double &radius):
     Entity(transform, blob),
     Circle(radius)
   {

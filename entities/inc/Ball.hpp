@@ -22,7 +22,7 @@ namespace rtx {
   class Ball: public Entity, public Circle {
     public:
       Ball(Ball&);
-      Ball(const Transform, Blob*, const double& = BALL_DIAMETER / 2.0);
+      Ball(const Transform, Vision::Blob*, const double& = BALL_DIAMETER / 2.0);
 
       void initialiseAttributes();
 
