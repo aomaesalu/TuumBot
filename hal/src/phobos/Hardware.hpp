@@ -32,19 +32,6 @@ namespace rtx { namespace hal {
   }
 
   class Hardware {
-    private:
-      MotorControl m_motorControl;
-
-      Camera m_frontCamera;
-      Camera m_backCamera;
-
-      int m_dribbler;
-      int m_coilGun;
-      int m_ballSensor;
-
-      MainBoard m_mainBoard;
-
-      RefereeListener m_refereeListener;
     public:
       Hardware();
 
@@ -58,6 +45,20 @@ namespace rtx { namespace hal {
       MainBoard* getMainBoard();
 
       RefereeListener* getRefListener();
+
+    private:
+      MotorControl m_motorControl;
+
+      Camera *m_frontCamera;
+      Camera *m_backCamera;
+
+      int m_dribbler;
+      int m_coilGun;
+      int m_ballSensor;
+
+      MainBoard m_mainBoard;
+
+      RefereeListener m_refereeListener;
 
   };
 

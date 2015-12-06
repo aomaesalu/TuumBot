@@ -3,25 +3,35 @@
  *
  *  @authors Ants-Oskar Mäesalu, Kristjan Kanarbik, Meelik Kiik
  *  @version 0.1
- *  @date 4 December 2015
+ *  @date 5 December 2015
  */
 
 #include <iostream>
+#include <fstream>
 
 #include "Hardware.hpp"
+#include "tuum_platform.hpp"
 
 namespace rtx { namespace hal {
 
   const RTX485::DeviceID RTX_MAIN_BOARD_ID = 0;
 
   Hardware::Hardware():
-    m_frontCamera(CAMERA_DEVICE, CAMERA_WIDTH, CAMERA_HEIGHT),
-    m_backCamera(CAMERA_DEVICE_2, CAMERA_WIDTH, CAMERA_HEIGHT)
+    m_frontCamera(nullptr),
+    m_backCamera(nullptr)
   {
 
   }
 
   void Hardware::init() {
+    std::ifstream frontCameraDevice(gC.getStr("Vision.FirstCamera"));
+    if (frontCameraDevice.good())
+      m_frontCamera = new Camera(gC.getStr("Vision.FirstCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+
+    std::ifstream backCameraDevice(gC.getStr("Vision.SecondCamera"));
+    if (backCameraDevice.good())
+      m_backCamera = new Camera(gC.getStr("Vision.SecondCamera"), CAMERA_WIDTH, CAMERA_HEIGHT);
+
     if(gC.getStr("HW.Active") == "Y") {
       printf("[Hardware::init]Loading hardware...\n");
       HWBus.init(gC.getStr("HWBus.Port").c_str(), gC.getInt("HWBus.Baud"));
@@ -39,11 +49,11 @@ namespace rtx { namespace hal {
   }
 
   Camera* Hardware::getFrontCamera() {
-    return &m_frontCamera;
+    return m_frontCamera;
   }
 
   Camera* Hardware::getBackCamera() {
-    return &m_backCamera;
+    return m_backCamera;
   }
 
   MainBoard* Hardware::getMainBoard() {
