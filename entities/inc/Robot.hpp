@@ -25,7 +25,7 @@ namespace rtx {
       Robot();
       Robot(const Robot&);
 
-      Robot(const Transform, Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
+      Robot(const Transform, Vision::Blob*, const double& = ROBOT_MAXIMUM_DIAMETER / 2);
 
       bool isAlly() const;
       bool isOpponent() const;

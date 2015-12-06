@@ -22,7 +22,7 @@ namespace rtx {
     (*this) = robot;
   }
 
-  Robot::Robot(const Transform transform, Blob* blob, const double &radius):
+  Robot::Robot(const Transform transform, Vision::Blob* blob, const double &radius):
     Entity(transform, blob),
     Circle(radius)
   {
