@@ -20,14 +20,14 @@ namespace rtx { namespace Vision {
     // Nothing to do here
   }
 
-  Corner::Corner(const double &distance, const double &angle):
-    Feature(distance, angle)
+  Corner::Corner(const double &distance, const double &angle, const unsigned int &cameraID):
+    Feature(distance, angle, cameraID)
   {
     // Nothing to do here
   }
 
-  Corner::Corner(const std::pair<double, double> &point):
-    Feature(0, 0)
+  Corner::Corner(const std::pair<double, double> &point, const unsigned int &cameraID):
+    Feature(0, 0, cameraID)
   {
     distance = sqrt(point.second * point.second + point.first + point.first);
     angle = -atan2(point.first, point.second);

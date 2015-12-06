@@ -21,8 +21,8 @@ namespace rtx { namespace Vision {
 
     public:
       Corner(const Corner&);
-      Corner(const double&, const double&);
-      Corner(const std::pair<double, double>&);
+      Corner(const double&, const double&, const unsigned int&);
+      Corner(const std::pair<double, double>&, const unsigned int&);
       ~Corner();
 
   };
