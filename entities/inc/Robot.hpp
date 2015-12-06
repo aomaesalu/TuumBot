@@ -5,7 +5,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.1
- *  @date 26 November 2015
+ *  @date 6 December 2015
  */
 
 #ifndef RTX_ENTITIES_ROBOT_H

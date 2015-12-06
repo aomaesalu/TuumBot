@@ -4,7 +4,7 @@
  *  @authors Ants-Oskar Mäesalu
  *  @authors Meelik Kiik
  *  @version 0.3
- *  @date 3 December 2015
+ *  @date 6 December 2015
  */
 
 #include <iostream>

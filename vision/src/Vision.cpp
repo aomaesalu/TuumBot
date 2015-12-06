@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.2
- *  @date 5 December 2015
+ *  @date 6 December 2015
  */
 
 #include "Vision.hpp"
