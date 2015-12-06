@@ -3,62 +3,67 @@
 
 using namespace boost::filesystem;
 namespace rtx { namespace Smacktalk {
-SmackTalk::SmackTalk(){
+  std::vector<std::string> random_sounds;
+  std::vector<std::string> hit_sounds;
+  std::vector<std::string> miss_sounds;
+  std::string audiosink;
+  Timer cooldownTimer;
 
-}
-void SmackTalk::init(){
-  srand (time(NULL));
-  started = time(NULL);
-  audiosink = gC.getStr("Sound.Sink");
-  std::string sounddir = gC.getStr("Sound.Directory");
-  std::string rsounds = sounddir + "/randomsounds";
-  std::string hsounds = sounddir + "/hitsounds";
-  std::string msounds = sounddir + "/misssounds";
-  if (is_directory(rsounds))
-  {
-    for (directory_iterator itr(rsounds); itr!=directory_iterator(); ++itr)
+
+  void init(){
+    srand (time(NULL));
+    cooldownTimer.setPeriod(5000);
+    audiosink = gC.getStr("Sound.Sink");//"alsa_output.pci-0000_00_1b.0.analog-stereo";
+    std::string sounddir = gC.getStr("Sound.Directory");// "/home/tuum/TuumBot/sounds/Bender/";
+    std::string rsounds = sounddir + "randomsounds/";
+    std::string hsounds = sounddir + "hitsounds/";
+    std::string msounds = sounddir + "misssounds/";
+
+    if (is_directory(rsounds))
     {
-      random_sounds.push_back(itr->path().string());
+      for (directory_iterator itr(rsounds); itr!=directory_iterator(); ++itr)
+      {
+        random_sounds.push_back(itr->path().string());
+      }
+    }
+    if (is_directory(hsounds))
+    {
+      for (directory_iterator itr(hsounds); itr!=directory_iterator(); ++itr)
+      {
+        hit_sounds.push_back(itr->path().string());
+      }
+    }
+    if (is_directory(msounds))
+    {
+      for (directory_iterator itr(msounds); itr!=directory_iterator(); ++itr)
+      {
+        miss_sounds.push_back(itr->path().string());
+      }
+    }
+
+  }
+
+  void play(std::string path){
+    if (cooldownTimer.isTime()) {
+      std::string cmd = "pacmd play-file " + path + " " + audiosink;
+      std::system(cmd.c_str());
+      cooldownTimer.start();
     }
   }
-  if (is_directory(hsounds))
-  {
-    for (directory_iterator itr(hsounds); itr!=directory_iterator(); ++itr)
-    {
-      hit_sounds.push_back(itr->path().string());
-    }
-  }
-  if (is_directory(msounds))
-  {
-    for (directory_iterator itr(msounds); itr!=directory_iterator(); ++itr)
-    {
-      miss_sounds.push_back(itr->path().string());
-    }
+
+  void random(){
+    int rnd = rand() % (random_sounds.size()-1) + 0;
+    play(random_sounds.at(rnd));
   }
 
-}
-
-void SmackTalk::play(std::string path){
-  if (difftime(time(NULL), started) > 5){
-    started = time(NULL);
-    std::string cmd = "pacmd play-file " + path + audiosink;
-    std::system(cmd.c_str());
+  void goalHit(){
+    int rnd = rand() % (hit_sounds.size()-1) + 0;
+    play(hit_sounds.at(rnd));
   }
-}
 
-void SmackTalk::random(){
-  int rnd = rand() % (random_sounds.size()-1) + 0;
-  this->play(random_sounds.at(rnd));
-}
-
-void SmackTalk::goalHit(){
-  int rnd = rand() % (hit_sounds.size()-1) + 0;
-  this->play(hit_sounds.at(rnd));
-}
-
-void SmackTalk::goalMiss(){
-  int rnd = rand() % (miss_sounds.size()-1) + 0;
-  this->play(miss_sounds.at(rnd));
-}
+  void goalMiss(){
+    int rnd = rand() % (miss_sounds.size()-1) + 0;
+    play(miss_sounds.at(rnd));
+  }
 
 }}
