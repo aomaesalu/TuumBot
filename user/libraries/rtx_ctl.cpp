@@ -124,7 +124,6 @@ namespace rtx { namespace ctl {
     } else {
       if(positionTimeout.isTime()) {
 	if(!move) {
-	  Goal* g = Navigation::getNearestGoal();
 	  move = true;
 	} else {
 	  if(positionUpdate.isTime() && positionOffset.getMagnitude() < 150) {
@@ -133,7 +132,6 @@ namespace rtx { namespace ctl {
 	  }
 
 	  Motion::setPositionTarget(positionOffset);
-	  std::cout << positionOffset.toString() << std::endl;
 	  if(!Motion::isRunning()) Motion::start();
 	}
       }
@@ -287,33 +285,32 @@ ERR:
   // Shoot to opposing goal
   void LSGoalShoot::init() {
     Motion::stop();
+    aimTimeout.setPeriod(6000);
+    aimTimeout.start();
+    timeout = false;
   }
 
   int LSGoalShoot::run() {
+    if(aimTimeout.isTime() || timeout) {
+      timeout = true;
+      return -1;
+    }
+
     if(!mb->getBallSensorState()) return -1;
 
     Goal* g = Navigation::getOpponentGoal();
     if(g == nullptr) return -1;
 
-    //Motion::setPositionTarget(Navigation::getGoalShootPosition(g));
-    Motion::setAimTarget(g->getTransform()->getPosition());
-    //std::cout << g->getTransform()->getPosition().toString() << std::endl;;
-;
-    //if(fabs(Motion::getDeltaOrientation()) < 0.030) mb->doCoilKick();
-
-    if(Motion::getDeltaOrientation() < 0.1) mb->doCoilKick();
-
-    if(!Motion::isTargetAchieved()) {
-      if(!Motion::isRunning()) Motion::start();
-    } else {
-      Motion::stop();
-      if(mb->getBallSensorState()) mb->doCoilKick();
+    //TODO: timeout
+    if(Navigation::toShootPosition(g->getTransform()->getPosition()) >= 0) {
+      mb->doCoilKick();
     }
 
     return 0;
   }
 
   bool LSGoalShoot::isRunnable() {
+    if(timeout) return false;
     return Navigation::getOpponentGoal() != nullptr && mb->getBallSensorState();
   }
 
