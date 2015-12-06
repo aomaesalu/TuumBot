@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 6 December 2015
  */
 
 #include "Line.hpp"
@@ -21,14 +21,14 @@ namespace rtx { namespace Vision {
     // Nothing to do here
   }
 
-  Line::Line(const double &distance, const double &angle):
-    Feature(distance, angle)
+  Line::Line(const double &distance, const double &angle, const unsigned int &cameraID):
+    Feature(distance, angle, cameraID)
   {
     // Nothing to do here
   }
 
-  Line::Line(const std::vector<std::pair<double, double>> &points):
-    Feature(0, 0)
+  Line::Line(const std::vector<std::pair<double, double>> &points, const unsigned int &cameraID):
+    Feature(0, 0, cameraID)
   {
     this->points = points;
     // DEBUG:

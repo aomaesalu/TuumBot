@@ -4,7 +4,7 @@
  *
  *  @authors Ants-Oskar Mäesalu
  *  @version 0.1
- *  @date 29 November 2015
+ *  @date 6 December 2015
  */
 
 #ifndef RTX_VISION_LINE_H
@@ -21,8 +21,8 @@ namespace rtx { namespace Vision {
 
     public:
       Line(const Line&);
-      Line(const double&, const double&);
-      Line(const std::vector<std::pair<double, double>>&);
+      Line(const double&, const double&, const unsigned int&);
+      Line(const std::vector<std::pair<double, double>>&, const unsigned int&);
       ~Line();
 
       double getSlope() const;
