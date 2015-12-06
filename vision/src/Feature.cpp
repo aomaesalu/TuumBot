@@ -22,7 +22,7 @@ namespace rtx { namespace Vision {
     // Nothing to do here
   }
 
-  Feature::Feature(const unsigned int &distance, const double &angle):
+  Feature::Feature(const unsigned int &distance, const double &angle, const unsigned int &cameraID):
     distance(distance),
     angle(angle),
     cameraID(cameraID)
