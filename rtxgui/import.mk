@@ -1,0 +1,5 @@
+RTXGUI_MODULE_PATH ?= $(PROJECT_ROOT)/rtxgui
+include $(call rwildcard,$(RTXGUI_MODULE_PATH)/,include.mk)
+
+RTXGUI_LIB_DIR = $(BUILD_PATH_BASE)/rtxgui/$(BUILD_TARGET_PLATFORM)
+RTXGUI_LIB_DEP = $(RTXGUI_LIB_DIR)/librtxgui.a

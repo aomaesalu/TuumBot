@@ -44,13 +44,5 @@ INCLUDE_DIRS += $(MODULE_PATH)/libraries
 
 CPPSRC += $(call target_files,libraries/,*.cpp)
 
-CPPFLAGS += -std=gnu++11
-
-CPPFLAGS += `pkg-config gtkmm-3.0 --cflags` # FIXME: Command added due to gtkmm usage
-
-CPPFLAGS += -L /lib64 # FIXME: Threading
-
-BUILTINS_EXCLUDE =
-CFLAGS += $(addprefix -fno-builtin-,$(BUILTINS_EXCLUDE))
-
-CFLAGS += $(EXTRA_CFLAGS)
+#`pkg-config gtkmm-3.0 --cflags` # FIXME: Command added due to gtkmm usage
+CPPFLAGS += -std=gnu++11 -L /lib64 # FIXME: Threading
