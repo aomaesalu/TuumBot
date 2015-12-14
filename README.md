@@ -3,6 +3,7 @@
 ## Dependencies
 
 sudo apt-get install libgtkmm-3.0-dev
+sudo apt-get install qt5-default qttools5-dev-tools
 
 
 ## Directory guide
